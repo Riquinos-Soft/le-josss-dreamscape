@@ -1,0 +1,48 @@
+[gd_scene load_steps=6 format=3]
+
+[sub_resource type="Environment" id="Environment_smoke"]
+background_mode = 1
+background_color = Color(0.12, 0.16, 0.23, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.65, 0.72, 0.85, 1)
+ambient_light_energy = 0.5
+
+[sub_resource type="StandardMaterial3D" id="Material_floor"]
+albedo_color = Color(0.3, 0.42, 0.43, 1)
+roughness = 1.0
+
+[sub_resource type="BoxMesh" id="Mesh_floor"]
+material = SubResource("Material_floor")
+size = Vector3(8, 0.2, 8)
+
+[sub_resource type="StandardMaterial3D" id="Material_block"]
+albedo_color = Color(0.85, 0.57, 0.32, 1)
+roughness = 1.0
+
+[sub_resource type="BoxMesh" id="Mesh_block"]
+material = SubResource("Material_block")
+size = Vector3(1.5, 1.5, 1.5)
+
+[node name="World" type="Node3D"]
+
+[node name="Environment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_smoke")
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.1, 0)
+mesh = SubResource("Mesh_floor")
+
+[node name="Block" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.75, 0)
+mesh = SubResource("Mesh_block")
+
+[node name="Light" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-55, -30, 0)
+light_energy = 1.0
+shadow_enabled = false
+
+[node name="Camera" type="Camera3D" parent="."]
+position = Vector3(7, 7, 9)
+rotation_degrees = Vector3(-30, 38, 0)
+current = true
+fov = 50.0

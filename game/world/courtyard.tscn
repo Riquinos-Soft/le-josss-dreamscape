@@ -1,0 +1,143 @@
+[gd_scene load_steps=18 format=3]
+
+[ext_resource type="PackedScene" path="res://player/player.tscn" id="1_player"]
+[ext_resource type="PackedScene" path="res://player/camera_rig.tscn" id="2_camera"]
+[ext_resource type="Script" path="res://items/item_loop.gd" id="3_items"]
+
+[sub_resource type="Environment" id="Environment_courtyard"]
+background_mode = 1
+background_color = Color(0.12, 0.16, 0.23, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.65, 0.72, 0.85, 1)
+ambient_light_energy = 0.5
+
+[sub_resource type="StandardMaterial3D" id="Material_floor"]
+albedo_color = Color(0.3, 0.42, 0.43, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="Material_wall"]
+albedo_color = Color(0.5, 0.55, 0.6, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="Material_obstacle"]
+albedo_color = Color(0.55, 0.35, 0.3, 1)
+roughness = 1.0
+
+[sub_resource type="BoxMesh" id="Mesh_floor"]
+material = SubResource("Material_floor")
+size = Vector3(20.8, 0.4, 16.8)
+
+[sub_resource type="BoxShape3D" id="Shape_floor"]
+size = Vector3(20.8, 0.4, 16.8)
+
+[sub_resource type="BoxMesh" id="Mesh_side_wall"]
+material = SubResource("Material_wall")
+size = Vector3(0.4, 0.75, 16.8)
+
+[sub_resource type="BoxShape3D" id="Shape_side_wall"]
+size = Vector3(0.4, 0.75, 16.8)
+
+[sub_resource type="BoxMesh" id="Mesh_end_wall"]
+material = SubResource("Material_wall")
+size = Vector3(20, 0.75, 0.4)
+
+[sub_resource type="BoxShape3D" id="Shape_end_wall"]
+size = Vector3(20, 0.75, 0.4)
+
+[sub_resource type="BoxMesh" id="Mesh_wide_obstacle"]
+material = SubResource("Material_obstacle")
+size = Vector3(2.6, 1.2, 1.4)
+
+[sub_resource type="BoxShape3D" id="Shape_wide_obstacle"]
+size = Vector3(2.6, 1.2, 1.4)
+
+[sub_resource type="BoxMesh" id="Mesh_long_obstacle"]
+material = SubResource("Material_obstacle")
+size = Vector3(1.2, 0.8, 3.2)
+
+[sub_resource type="BoxShape3D" id="Shape_long_obstacle"]
+size = Vector3(1.2, 0.8, 3.2)
+
+[node name="Courtyard" type="Node3D"]
+
+[node name="ItemLoop" type="Node" parent="."]
+script = ExtResource("3_items")
+
+[node name="Environment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_courtyard")
+
+[node name="Light" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-55, -30, 0)
+shadow_enabled = false
+
+[node name="Geometry" type="Node3D" parent="."]
+
+[node name="Floor" type="StaticBody3D" parent="Geometry"]
+position = Vector3(0, -0.2, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Geometry/Floor"]
+mesh = SubResource("Mesh_floor")
+
+[node name="Collision" type="CollisionShape3D" parent="Geometry/Floor"]
+shape = SubResource("Shape_floor")
+
+[node name="WestWall" type="StaticBody3D" parent="Geometry"]
+position = Vector3(-10.2, 0.375, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Geometry/WestWall"]
+mesh = SubResource("Mesh_side_wall")
+
+[node name="Collision" type="CollisionShape3D" parent="Geometry/WestWall"]
+shape = SubResource("Shape_side_wall")
+
+[node name="EastWall" type="StaticBody3D" parent="Geometry"]
+position = Vector3(10.2, 0.375, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Geometry/EastWall"]
+mesh = SubResource("Mesh_side_wall")
+
+[node name="Collision" type="CollisionShape3D" parent="Geometry/EastWall"]
+shape = SubResource("Shape_side_wall")
+
+[node name="NorthWall" type="StaticBody3D" parent="Geometry"]
+position = Vector3(0, 0.375, -8.2)
+
+[node name="Mesh" type="MeshInstance3D" parent="Geometry/NorthWall"]
+mesh = SubResource("Mesh_end_wall")
+
+[node name="Collision" type="CollisionShape3D" parent="Geometry/NorthWall"]
+shape = SubResource("Shape_end_wall")
+
+[node name="SouthWall" type="StaticBody3D" parent="Geometry"]
+position = Vector3(0, 0.375, 8.2)
+
+[node name="Mesh" type="MeshInstance3D" parent="Geometry/SouthWall"]
+mesh = SubResource("Mesh_end_wall")
+
+[node name="Collision" type="CollisionShape3D" parent="Geometry/SouthWall"]
+shape = SubResource("Shape_end_wall")
+
+[node name="WideObstacle" type="StaticBody3D" parent="Geometry"]
+position = Vector3(-3, 0.6, -2)
+
+[node name="Mesh" type="MeshInstance3D" parent="Geometry/WideObstacle"]
+mesh = SubResource("Mesh_wide_obstacle")
+
+[node name="Collision" type="CollisionShape3D" parent="Geometry/WideObstacle"]
+shape = SubResource("Shape_wide_obstacle")
+
+[node name="LongObstacle" type="StaticBody3D" parent="Geometry"]
+position = Vector3(3, 0.4, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Geometry/LongObstacle"]
+mesh = SubResource("Mesh_long_obstacle")
+
+[node name="Collision" type="CollisionShape3D" parent="Geometry/LongObstacle"]
+shape = SubResource("Shape_long_obstacle")
+
+[node name="Player" parent="." node_paths=PackedStringArray("movement_orientation") instance=ExtResource("1_player")]
+position = Vector3(0, 0.02, 3)
+movement_orientation = NodePath("../CameraRig/Camera")
+
+[node name="CameraRig" parent="." node_paths=PackedStringArray("target") instance=ExtResource("2_camera")]
+target = NodePath("../Player")

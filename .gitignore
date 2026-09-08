@@ -1,0 +1,12 @@
+.DS_Store
+# Godot's generated cache and local export credentials.
+game/.godot/
+game/.export_credentials.cfg
+# Reproducible exports, not source assets.
+/build/
+# Large local capture/reconstruction inputs and experiments.
+/assets/captures/
+/assets/work/
+# Blender recovery files; keep intentional .blend source files.
+*.blend1
+*.blend2
