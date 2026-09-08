@@ -10,10 +10,14 @@ func _initialize() -> void:
 
 func run() -> void:
 	var bindings := {
-		KEY_W: "move_forward", KEY_UP: "move_forward",
-		KEY_S: "move_back", KEY_DOWN: "move_back",
-		KEY_A: "move_left", KEY_LEFT: "move_left",
-		KEY_D: "move_right", KEY_RIGHT: "move_right",
+		KEY_W: "move_forward",
+		KEY_UP: "move_forward",
+		KEY_S: "move_back",
+		KEY_DOWN: "move_back",
+		KEY_A: "move_left",
+		KEY_LEFT: "move_left",
+		KEY_D: "move_right",
+		KEY_RIGHT: "move_right",
 	}
 	for device in [0, 1]:
 		for key in bindings:

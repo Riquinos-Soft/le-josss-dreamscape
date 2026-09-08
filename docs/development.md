@@ -44,6 +44,13 @@ python3 -m http.server 8000 --bind 127.0.0.1 --directory build/web
 
 Then open `http://127.0.0.1:8000/`. Use explicit IPv4: this machine previously resolved `localhost` to an unrelated IPv6 service that returned 404. If the server is no longer running, use the command above. Stop it with Ctrl+C when finished. Do not start a second server on the same address/port. Local HTTP is for development; choose an HTTPS static host later. Never open the export through `file://`.
 
+Install the pinned development linter with `python3 -m pip install -r requirements-dev.txt`.
+The repository `Makefile` provides the checks used by CI: `make lint`, `make test`,
+and `make export-web`. On macOS, pass the installed editor explicitly with
+`GODOT='/Applications/Godot.app/Contents/MacOS/Godot'` when running Godot targets.
+GitHub Actions runs the same checks on pushes and pull requests and retains the Web
+build as a seven-day artifact.
+
 Verification used the same commands with absolute project/output paths and `--log-file` paths under `build/verification/`. Normal native run added `--quit-after 600 --print-fps`. Godot interprets the relative export output path from `game/`, not the shell's working directory. No PATH/alias changes are required.
 
 Commit `export_presets.cfg`, source assets, import-setting sidecars, and generated UID sidecars when present; ignore `.godot/`, export credentials, and `build/`. No commits were made by this task.

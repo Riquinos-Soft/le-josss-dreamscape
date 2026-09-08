@@ -16,7 +16,7 @@ func run() -> void:
 	current_scene = courtyard
 	await frames(10)
 	var loop = courtyard.get_node("ItemLoop")
-	loop.set_physics_process(false) # Deterministic target instead of a real mouse.
+	loop.set_physics_process(false)  # Deterministic target instead of a real mouse.
 	var player = courtyard.get_node("Player")
 	var original = loop.world_item.item
 	var identity: int = original.session_id
@@ -25,31 +25,64 @@ func run() -> void:
 	var slot := Inventory.new()
 	check(slot.put(original), "slot accepts instance")
 	check(not slot.put(Item.new(2, definition)), "occupied slot rejects another instance")
-	check(slot.take(Item.new(3, definition)) == null and slot.item == original, "wrong removal leaves slot unchanged")
-	check(slot.take(original) == original and slot.item == null, "expected removal preserves reference")
+	check(
+		slot.take(Item.new(3, definition)) == null and slot.item == original,
+		"wrong removal leaves slot unchanged"
+	)
+	check(
+		slot.take(original) == original and slot.item == null,
+		"expected removal preserves reference"
+	)
 	for cycle in 3:
 		check(loop.pickup(), "pickup succeeds")
-		check(loop.inventory.item == original and loop.world_item == null, "pickup moves same reference")
+		check(
+			loop.inventory.item == original and loop.world_item == null,
+			"pickup moves same reference"
+		)
 		check(not loop.pickup(), "repeat pickup rejected")
 		check(loop.begin_placement(), "begin placement")
 		check(not loop.begin_placement(), "repeat begin rejected")
-		check(loop.inventory.item == original and loop.preview is MeshInstance3D, "preview leaves ownership in inventory")
+		check(
+			loop.inventory.item == original and loop.preview is MeshInstance3D,
+			"preview leaves ownership in inventory"
+		)
 		loop.cancel_placement()
-		check(loop.inventory.item == original and loop.preview == null and loop.world_item == null, "cancel conserves instance")
+		check(
+			loop.inventory.item == original and loop.preview == null and loop.world_item == null,
+			"cancel conserves instance"
+		)
 		loop.begin_placement()
 		loop.target = Vector3(100, 0.25, 100)
 		check(not loop.confirm_placement(), "out of reach rejected")
-		check(loop.inventory.item == original and loop.world_item == null and loop.placement_active, "invalid confirm conserves instance")
+		check(
+			loop.inventory.item == original and loop.world_item == null and loop.placement_active,
+			"invalid confirm conserves instance"
+		)
 		loop.target = Vector3(player.position.x, 0.25, player.position.z)
 		check(not loop.confirm_placement(), "player overlap rejected")
 		loop.target = Vector3(0, 0.25, 1.5)
 		loop.rotate_preview(cycle + 1)
 		var expected_yaw: float = loop.yaw
 		check(loop.confirm_placement(), "valid confirm succeeds")
-		check(loop.inventory.item == null and loop.world_item.item == original, "placement transfers same reference")
-		check(loop.world_item.item.session_id == identity and loop.world_item.item.definition == definition, "ID and definition survive")
-		check(loop.world_item.position.is_equal_approx(Vector3(0, 0.25, 1.5)), "confirmed position matches")
-		check(loop.world_item.basis.is_equal_approx(Basis(Vector3.UP, expected_yaw)), "confirmed rotation matches")
+		check(
+			loop.inventory.item == null and loop.world_item.item == original,
+			"placement transfers same reference"
+		)
+		check(
+			(
+				loop.world_item.item.session_id == identity
+				and loop.world_item.item.definition == definition
+			),
+			"ID and definition survive"
+		)
+		check(
+			loop.world_item.position.is_equal_approx(Vector3(0, 0.25, 1.5)),
+			"confirmed position matches"
+		)
+		check(
+			loop.world_item.basis.is_equal_approx(Basis(Vector3.UP, expected_yaw)),
+			"confirmed rotation matches"
+		)
 		check(not loop.confirm_placement(), "repeat confirm rejected")
 		var count := 0
 		for child in courtyard.get_children():

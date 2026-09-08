@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  static-checks:
+    name: GDScript lint and format
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+
+      - name: Set up Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install development tools
+        run: python -m pip install --requirement requirements-dev.txt
+
+      - name: Check GDScript
+        run: make lint
+
+  godot:
+    name: Godot tests and Web export
+    runs-on: ubuntu-24.04
+    container:
+      image: barichello/godot-ci:4.7.2@sha256:cdcca31e9194fd59a68a63f4b1b9c3981716819c520cd6f7966c5d72ca7246bd
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+
+      - name: Install export templates
+        shell: bash
+        run: |
+          mkdir -p "$HOME/.local/share/godot/export_templates"
+          cp -R /root/.local/share/godot/export_templates/4.7.2.stable \
+            "$HOME/.local/share/godot/export_templates/"
+          godot --version
+
+      - name: Import project
+        run: make import
+
+      - name: Run tests
+        run: make test
+
+      - name: Export Web build
+        run: make export-web
+
+      - name: Upload Web build
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: dreamscape-web-${{ github.sha }}
+          path: build/web
+          if-no-files-found: error
+          retention-days: 7

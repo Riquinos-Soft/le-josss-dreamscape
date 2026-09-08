@@ -1,9 +1,10 @@
 extends RefCounted
 ## One slot. Only explicit, expected-instance transfers may remove its contents.
 const Item = preload("res://items/item_instance.gd")
-var _item: Item
 var item: Item:
-	get: return _item
+	get:
+		return _item
+var _item: Item
 
 
 func put(value: Item) -> bool:

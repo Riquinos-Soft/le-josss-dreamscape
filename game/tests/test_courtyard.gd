@@ -25,12 +25,16 @@ func run() -> void:
 	Input.action_release("move_forward")
 	await frames(2)
 	var displacement := player.position - start
-	check(displacement.length() > 1.8 and displacement.length() < 2.2, "4 m/s movement over half a second")
+	check(
+		displacement.length() > 1.8 and displacement.length() < 2.2,
+		"4 m/s movement over half a second"
+	)
 	check(displacement.x < -0.5 and displacement.z < -0.5, "W follows diagonal camera heading")
 	var stopped := player.position
 	await frames(10)
 	check(player.position.distance_to(stopped) < 0.01, "clean input release")
-	# Isolate layout checks from view orientation; the same controller accepts another orientation node.
+	# Isolate layout checks from view orientation. The controller accepts another
+	# orientation node.
 	var orientation := Node3D.new()
 	courtyard.add_child(orientation)
 	player.movement_orientation = orientation
@@ -54,7 +58,10 @@ func run() -> void:
 			if player.get_slide_collision(index).get_collider().name == entry[3]:
 				hit_expected = true
 		check(hit_expected, "collision with " + entry[3])
-		check(absf(player.position.x) < 10 and absf(player.position.z) < 8, "inside bounds at " + entry[3])
+		check(
+			absf(player.position.x) < 10 and absf(player.position.z) < 8,
+			"inside bounds at " + entry[3]
+		)
 		check(player.is_on_floor() and absf(player.position.y) < 0.05, "grounded at " + entry[3])
 		Input.action_release(entry[1])
 		await frames(2)

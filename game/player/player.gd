@@ -8,6 +8,7 @@ var movement_enabled: bool = true
 
 @onready var visual: Node3D = $Visual
 
+
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
 		for action in ["move_left", "move_right", "move_forward", "move_back"]:

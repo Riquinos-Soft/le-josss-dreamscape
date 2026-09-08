@@ -45,7 +45,11 @@ func build_hud() -> void:
 	place_button.pressed.connect(func(): commands.append(&"begin"))
 	rows.add_child(place_button)
 	var help := Label.new()
-	help.text = "WASD / arrows: walk | E: pickup\nP: place | Mouse: aim | Q/E: rotate 90°\nLeft click: confirm | Esc: cancel"
+	help.text = (
+		"WASD / arrows: walk | E: pickup"
+		+ "\nP: place | Mouse: aim | Q/E: rotate 90°"
+		+ "\nLeft click: confirm | Esc: cancel"
+	)
 	rows.add_child(help)
 	update_hud()
 
@@ -53,10 +57,14 @@ func build_hud() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		match event.physical_keycode:
-			KEY_E: commands.append(&"right" if placement_active else &"pickup")
-			KEY_Q: commands.append(&"left")
-			KEY_P: commands.append(&"begin")
-			KEY_ESCAPE: commands.append(&"cancel")
+			KEY_E:
+				commands.append(&"right" if placement_active else &"pickup")
+			KEY_Q:
+				commands.append(&"left")
+			KEY_P:
+				commands.append(&"begin")
+			KEY_ESCAPE:
+				commands.append(&"cancel")
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		if placement_active:
 			commands.append(&"confirm")
@@ -70,22 +78,32 @@ func _notification(what: int) -> void:
 func _physics_process(_delta: float) -> void:
 	if placement_active:
 		var mouse := get_viewport().get_mouse_position()
-		var hit = Plane(Vector3.UP, 0).intersects_ray(camera.project_ray_origin(mouse), camera.project_ray_normal(mouse))
+		var hit = Plane(Vector3.UP, 0).intersects_ray(
+			camera.project_ray_origin(mouse), camera.project_ray_normal(mouse)
+		)
 		target = hit + Vector3.UP * 0.25 if hit != null else Vector3(1000, 0.25, 1000)
 	for command in commands:
 		match command:
-			&"pickup": pickup()
-			&"begin": begin_placement()
-			&"left": rotate_preview(-1)
-			&"right": rotate_preview(1)
-			&"cancel": cancel_placement()
-			&"confirm": confirm_placement()
+			&"pickup":
+				pickup()
+			&"begin":
+				begin_placement()
+			&"left":
+				rotate_preview(-1)
+			&"right":
+				rotate_preview(1)
+			&"cancel":
+				cancel_placement()
+			&"confirm":
+				confirm_placement()
 	commands.clear()
 	if placement_active:
 		preview.position = target
 		preview.rotation.y = yaw
 		target_valid = valid_pose(target, yaw)
-		preview.material_override.albedo_color = Color(0.3, 0.9, 0.65) if target_valid else Color(1, 0.22, 0.18)
+		preview.material_override.albedo_color = (
+			Color(0.3, 0.9, 0.65) if target_valid else Color(1, 0.22, 0.18)
+		)
 	update_hud()
 
 
@@ -97,10 +115,15 @@ func clear_path(point: Vector3) -> bool:
 
 
 func can_pickup() -> bool:
-	return not placement_active and inventory.item == null and is_instance_valid(world_item) \
-		and world_item.is_inside_tree() \
-		and world_item.item != null and player.global_position.distance_to(world_item.global_position) <= REACH \
+	return (
+		not placement_active
+		and inventory.item == null
+		and is_instance_valid(world_item)
+		and world_item.is_inside_tree()
+		and world_item.item != null
+		and player.global_position.distance_to(world_item.global_position) <= REACH
 		and clear_path(world_item.global_position)
+	)
 
 
 func pickup() -> bool:
@@ -188,8 +211,14 @@ func cancel_placement() -> void:
 func update_hud() -> void:
 	place_button.disabled = inventory.item == null or placement_active
 	if placement_active:
-		status.text = "Inventory: Dream block #%d\nPlacement: %s" % [inventory.item.session_id, "valid" if target_valid else "invalid"]
+		status.text = (
+			"Inventory: Dream block #%d\nPlacement: %s"
+			% [inventory.item.session_id, "valid" if target_valid else "invalid"]
+		)
 	elif inventory.item != null:
 		status.text = "Inventory: Dream block #%d" % inventory.item.session_id
 	else:
-		status.text = "Inventory: empty\n" + ("E: pick up Dream block" if can_pickup() else "Approach the purple block")
+		status.text = (
+			"Inventory: empty\n"
+			+ ("E: pick up Dream block" if can_pickup() else "Approach the purple block")
+		)
