@@ -31,7 +31,32 @@ func _initialize() -> void:
 		Vector3.FORWARD,
 		"overhead view"
 	)
-	print("Movement direction: 8 checks, %d failures" % failures)
+	check(
+		Direction.from_world_target(Vector3.ZERO, Vector3(3, 0, -4), 0.5, 2.5),
+		Vector3(0.6, 0, -0.8),
+		"world target direction"
+	)
+	check(
+		Direction.from_world_target(Vector3.ZERO, Vector3(0.2, 0, 0), 0.5, 2.5),
+		Vector3.ZERO,
+		"world target inside dead zone"
+	)
+	check(
+		Direction.from_world_target(Vector3.ZERO, Vector3(0.5, 0, 0), 0.5, 2.5),
+		Vector3.ZERO,
+		"world target at dead-zone edge"
+	)
+	check(
+		Direction.from_world_target(Vector3.ZERO, Vector3(1.5, 0, 0), 0.5, 2.5),
+		Vector3(0.5, 0, 0),
+		"world target scales nearby strength"
+	)
+	check(
+		Direction.from_world_target(Vector3(1, 4, 1), Vector3(1, -2, -4), 0.5, 2.5),
+		Vector3.FORWARD,
+		"world target stays on ground"
+	)
+	print("Movement direction: 13 checks, %d failures" % failures)
 	quit(0 if failures == 0 else 1)
 
 
