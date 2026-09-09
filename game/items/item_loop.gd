@@ -46,7 +46,7 @@ func build_hud() -> void:
 	rows.add_child(place_button)
 	var help := Label.new()
 	help.text = (
-		"WASD / arrows: walk | E: pickup"
+		"WASD / arrows or hold right mouse: walk | E: pickup"
 		+ "\nP: place | Mouse: aim | Q/E: rotate 90°"
 		+ "\nLeft click: confirm | Esc: cancel"
 	)
@@ -141,7 +141,6 @@ func begin_placement() -> bool:
 	if placement_active or inventory.item == null:
 		return false
 	placement_active = true
-	player.movement_enabled = false
 	yaw = 0.0
 	target = player.global_position - player.visual.global_basis.z * 1.3
 	target.y = 0.25
@@ -205,7 +204,6 @@ func cancel_placement() -> void:
 		preview.queue_free()
 	preview = null
 	placement_active = false
-	player.movement_enabled = true
 
 
 func update_hud() -> void:

@@ -46,6 +46,21 @@ func run() -> void:
 			loop.inventory.item == original and loop.preview is MeshInstance3D,
 			"preview leaves ownership in inventory"
 		)
+		if cycle == 0:
+			var position_before_movement: Vector3 = player.global_position
+			Input.action_press("move_right")
+			await frames(3)
+			Input.action_release("move_right")
+			check(
+				player.global_position.distance_to(position_before_movement) > 0.01,
+				"movement remains active during placement"
+			)
+			check(
+				loop.inventory.item == original and loop.preview is MeshInstance3D,
+				"movement during placement conserves instance"
+			)
+			player.global_position = position_before_movement
+			player.velocity = Vector3.ZERO
 		loop.cancel_placement()
 		check(
 			loop.inventory.item == original and loop.preview == null and loop.world_item == null,
