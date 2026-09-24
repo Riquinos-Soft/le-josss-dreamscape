@@ -1,6 +1,14 @@
 # Development setup and verified baseline
 
-Current state: the developer has accepted the Web baseline manually in Chrome and Safari and authorized the first ADR 003 implementation. The single-item pickup/inventory/placement loop is implemented. Native automated checks and Web export pass; browser acceptance of this new gameplay remains pending. Original static scene/export are preserved. Historical pending-baseline entries below are superseded by this developer report (2026-09-07); no new browser versions or console transcripts were supplied.
+Current state: the single-item pickup/inventory/placement loop is implemented. The developer reports completing the proposed Chrome/Safari gameplay playtest with everything working in principle (2026-09-24). This provides provisional manual gameplay acceptance and supersedes the browser-pending records below. Art and sustained performance validation remain pending; see the current [spec status](specs/001-vertical-slice.md). Original static scene/export are preserved.
+
+## Manual gameplay report — 2026-09-24
+
+Tester: the developer. In response to the proposed Chrome/Safari checklist, they reported having completed it and that everything works in principle. The checklist covered three pickup/place/rotate round trips, keyboard/right-mouse movement during placement, invalid targets, cancellation, tab switching, resizing, and comfort/readability. No issue was reported; this is a brief overall report, not a per-check result or automated browser run.
+
+Browser/OS versions, exact viewports, tested build identifier, console output, and measured timings were not supplied. Do not reuse historical versions as the versions tested today or infer the absence of console warnings. The report is sufficient to move the workflow beyond the initial gameplay playtest; it does not close every AC9/AC10 evidence requirement or the art/performance criteria. No new tests or export were run for this documentation update.
+
+The sections below retain earlier environment and verification evidence. Their pending browser statements describe those earlier runs and are superseded by this report.
 
 ## Local inspection — 2026-09-07
 
@@ -142,7 +150,7 @@ Check log text as well as process status: Godot may exit 0 on a startup script e
 
 An early script type-inference error and an Euler-angle test assertion were corrected. The old south-wall route hit the newly collidable item, so the route now avoids it. Some sandboxed test runs print a macOS certificate-access error; native authorized validation and isolated package startup are clean. No game/runtime or export warnings remain in those successful runs. Automated browser tooling was not retried; no browser gameplay pass is claimed.
 
-Controls are shown in the HUD: WASD/arrows walk, E picks up within 2 m, P or Place starts preview, mouse aims, Q/E rotates by 90°, left click confirms, Escape cancels. Movement pauses while placing. Green/red indicates validity. The instance stays held until a valid confirm. Floor targeting is deliberately limited to the authored flat courtyard; overlap/ray checks are not an arbitrary-surface placement system.
+Current controls are shown in the HUD: WASD/arrows or holding right mouse walks, E picks up within 2 m, P or Place starts preview, mouse aims, Q/E rotates by 90°, left click confirms, Escape cancels. Movement remains active while placing. Green/red indicates validity. The instance stays held until a valid confirm. Floor targeting is deliberately limited to the authored flat courtyard; overlap/ray checks are not an arbitrary-surface placement system.
 
 Developer playtest in Chrome and Safari at `http://127.0.0.1:8000/`:
 

@@ -1,6 +1,6 @@
 # Repository and vertical-slice architecture
 
-Status: the developer has accepted the browser baseline in Chrome and Safari. The approved single-item lifecycle is implemented; its new browser gameplay checks remain pending. The original static smoke-test scene is preserved.
+Status: the single-item lifecycle is implemented. On 2026-09-24 the developer reported completing the proposed Chrome/Safari gameplay playtest with everything working in principle; this is provisional manual acceptance. Detailed evidence and remaining art/performance criteria are tracked in [Spec 001](specs/001-vertical-slice.md). The original static smoke-test scene is preserved.
 
 ## World scale
 

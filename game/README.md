@@ -4,6 +4,6 @@ Open `project.godot` with standard Godot **4.7.2.stable.official.ed1daf0bf** and
 
 Scale: one unit is one meter; character height 1.8 m, speed 4 m/s, courtyard interior 20×16 m. `world/smoke_test.tscn` remains the unchanged original static scene; its old export is preserved locally in `build/web-smoke-baseline/`.
 
-`export_presets.cfg` contains the `Web` release preset for the courtyard and dependencies, using Compatibility rendering with thread and extension support disabled. See [reproducible commands, tests, and pending browser checks](../docs/development.md).
+`export_presets.cfg` contains the `Web` release preset for the courtyard and dependencies, using Compatibility rendering with thread and extension support disabled. See [reproducible commands, tests, and manual browser reports](../docs/development.md).
 
 Keep all shipped resources inside this directory. Keep original captures, Blender source, tooling, and exports outside it. See [the proposed layout](../docs/architecture.md).

@@ -1,6 +1,6 @@
 # Spec 001 — Vertical slice
 
-Status: Chrome and Safari Web baseline accepted manually by the developer. The approved single-item lifecycle is implemented and passes automated native checks. New browser gameplay acceptance, subjective feel, and remaining art/performance criteria are pending; the full spec is not marked complete.
+Status: the developer reports completing the proposed Chrome/Safari gameplay playtest with everything working in principle (2026-09-24). The single-item lifecycle is implemented and passes automated native checks. Gameplay has provisional manual acceptance; detailed browser evidence and remaining art/performance criteria are still incomplete, so the full spec is not marked complete.
 
 ## Objective
 
@@ -60,15 +60,18 @@ Crafting/recipes (deferred), stacking/splitting quantities, multi-slot inventory
 2. **Movement/collision/camera — implemented:** existing controls and constrained camera preserved.
 3. **One item and pickup — implemented:** one definition, one runtime instance, one world representation, one-slot inventory, reach/obstruction check, and HUD.
 4. **Return to world — implemented:** floor preview, 90° yaw, confirm/cancel, validity checks, and identity-preserving placement. Automated native tests cover three round trips and rejected operations.
-5. **Next: developer playtest of this loop:** perform new Chrome/Safari gameplay checks and review how pickup/placement feels before choosing further work. AC9–AC12 remain incomplete. No art expansion or further feature is authorized by this implementation.
+5. **Developer playtest — provisionally accepted:** the developer reports completing the proposed browser checklist with no issue reported in principle. Exact versions, console output, and per-check results were not supplied; AC9/AC10 are not individually certified by this brief report.
+6. **Recommended next step:** the scoped courtyard art pass in AC11, followed by AC12 performance measurements. This records the next recommendation; it does not start implementation or add features to the scope.
 
 Each step is a small reviewable change or a few atomic commits. No CI service is necessary now; preserve reproducible local commands so automation can reuse them later.
 
 ## Verification record
 
-Latest status (2026-09-08): the developer explicitly accepted the manual Web baseline in both Chrome and Safari and authorized ADR 003 implementation. This supersedes earlier pending-baseline entries below. No new browser versions or console transcripts were supplied; acceptance is developer-reported, not automated. The new item loop has not yet been accepted in browsers.
+Latest status (2026-09-24): in response to the proposed Chrome/Safari playtest covering item round trips, rotation, movement during placement, invalid targets, cancellation, tab switching, resizing, and subjective feel, the developer reported having done it and that everything works in principle. Record this as provisional developer-reported manual acceptance, with no issue reported. No browser/OS versions, exact viewports, timings, console transcript, or individual checklist results were supplied. Do not infer a clean console, measured performance, or complete AC9/AC10 evidence. No repeat of the same playtest is needed solely because automation is unavailable; regressions or changed gameplay may require targeted rechecking. Art (AC11) and performance (AC12) remain pending.
 
-### Single-item lifecycle
+Earlier status (2026-09-08): the developer accepted the manual Web baseline in Chrome and Safari and authorized ADR 003 implementation. The gameplay-pending records below are historical and superseded by the report above.
+
+### Single-item lifecycle — historical implementation verification
 
 - One purple striped block (0.8×0.5×0.45 m), ID 1 for this authored session, empty inventory at start. The same reference, session ID, and definition survive replacement. World representation is static; preview has no collision or instance ownership.
 - 61 item checks pass headless and in native Compatibility rendering: three round trips, identity/reference checks, one committed world representation, repeated actions, occupied slot, cancellation, invalid confirmation, range/obstruction, player/obstacle/wall overlap, pose, and midair rejection.
