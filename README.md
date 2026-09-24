@@ -31,6 +31,7 @@ Platform priority: Web, macOS development, Android, iOS, possibly other desktop 
 - [Repository and minimal architecture](docs/architecture.md)
 - [Spec 001: vertical slice](docs/specs/001-vertical-slice.md)
 - [Development environment and Web risks](docs/development.md)
+- [Agent workflow: context, continuity, and verification](docs/agent-workflow.md)
 - [ADR 001: engine and Web baseline](docs/adr/001-engine-and-web-baseline.md)
 - [ADR 002: offline asset boundary](docs/adr/002-offline-asset-boundary.md)
 - [ADR 003: item identity across world and inventory](docs/adr/003-item-identity-and-world-representation.md)
@@ -39,5 +40,7 @@ Platform priority: Web, macOS development, Android, iOS, possibly other desktop 
 ## Working method
 
 Keep a short spec with scope and observable acceptance criteria. Implement one small step, verify it, and record the result against that spec. Adjust a draft when playtesting changes the design. Use an ADR for a durable cross-cutting decision with a meaningful alternative, not filenames, button labels, or routine implementation details.
+
+Keep context focused on the active task and leave recoverable evidence in the spec, development notes, and Git history. The [agent workflow](docs/agent-workflow.md) adapts the supplied Jev engineering study to this repository's existing tools and small implementation steps.
 
 No framework, backend, dependency stack, or multiplayer abstraction is needed for Spec 001. No project license has been chosen; dependency licenses do not determine this project's license.
