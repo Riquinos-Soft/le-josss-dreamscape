@@ -10,7 +10,7 @@ permissions:
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   static-checks:
@@ -32,6 +32,9 @@ jobs:
 
       - name: Check GDScript
         run: make lint
+
+      - name: Test deployment safety
+        run: python3 -m unittest discover -s deploy/ovh -p 'test_*.py'
 
   godot:
     name: Godot tests and Web export
@@ -83,3 +86,58 @@ jobs:
           path: build/web
           if-no-files-found: error
           retention-days: 7
+
+  deploy:
+    name: Deploy Web to OVH
+    needs: [static-checks, godot]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    environment:
+      name: production
+      url: https://dreamscape.198.244.233.153.sslip.io/
+    concurrency:
+      group: dreamscape-production
+      cancel-in-progress: false
+    steps:
+      - name: Download tested Web export
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: dreamscape-web-${{ github.sha }}
+          path: build/web
+
+      - name: Configure restricted SSH access
+        env:
+          DEPLOY_KEY: ${{ secrets.OVH_DEPLOY_KEY }}
+          KNOWN_HOSTS: ${{ secrets.OVH_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          test -n "$DEPLOY_KEY"
+          test -n "$KNOWN_HOSTS"
+          install -d -m 700 ~/.ssh
+          umask 077
+          printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/dreamscape
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+      - name: Publish and verify release
+        env:
+          RELEASE_SHA: ${{ github.sha }}
+          RELEASE_RUN: ${{ github.run_id }}-${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          test -s build/web/index.html
+          test -s build/web/index.wasm
+          test -s build/web/index.pck
+          tar -C build/web -czf "$RUNNER_TEMP/web.tar.gz" .
+          ssh -i ~/.ssh/dreamscape -o IdentitiesOnly=yes -o BatchMode=yes \
+            -o StrictHostKeyChecking=yes -o ConnectTimeout=15 \
+            -o ServerAliveInterval=15 -o ServerAliveCountMax=3 \
+            dreamscape-deploy@198.244.233.153 \
+            "deploy $RELEASE_SHA $RELEASE_RUN" < "$RUNNER_TEMP/web.tar.gz"
+          actual=$(curl --fail --silent --show-error --retry 3 --max-time 30 \
+            https://dreamscape.198.244.233.153.sslip.io/release.txt)
+          test "$actual" = "$RELEASE_SHA"
+
+      - name: Remove SSH key
+        if: always()
+        run: rm -f ~/.ssh/dreamscape

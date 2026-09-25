@@ -3,7 +3,8 @@
 Host: `vps-543b5b89.vps.ovh.net` (`198.244.233.153`), SSH user `j0se`.
 IPv6: `2001:41d0:801:2000::50ec`.
 Public URL: https://dreamscape.198.244.233.153.sslip.io/ (temporary sslip.io hostname).
-Deployment directory: `/opt/dreamscape`, owned by `j0se`.
+Deployment directory: `/opt/dreamscape`, owned by `j0se`; `www` is owned by the
+restricted `dreamscape-deploy` account used by Actions.
 Use `sudo` for Docker administration; membership of the Docker group is unnecessary.
 Passwords are not stored in this repository. The old `ubuntu` password was
 replaced with a cryptographically random, unretained password; `j0se` can reset it
@@ -69,34 +70,51 @@ for IPv4 and IPv6. Do not open port 8083 publicly.
 
 ## Publish a Web export
 
-Use the pinned Godot 4.7.2 toolchain and checks in `docs/development.md`, or download
-the Web artifact from a successful CI run for the intended commit. The following
-commands use a POSIX shell locally and remotely. Choose a unique release name.
+The `CI` workflow publishes on pushes to `main` only, after both lint/safety checks
+and the Godot test/export job succeed. Pull requests, other branches and manual CI
+runs do not publish. Deployment downloads the artifact from that same workflow
+run; it does not rebuild the game. Production runs are serialized without
+cancelling an in-progress deployment.
+
+GitHub environment `production` requires these secrets:
+
+- `OVH_DEPLOY_KEY`: private ED25519 key for `dreamscape-deploy`.
+- `OVH_KNOWN_HOSTS`: the verified SSH host-key line for `198.244.233.153`.
+
+The deployment key is separate from administrator SSH access. Its server-side
+`authorized_keys` entry uses `restrict` and a forced command:
+`/usr/bin/timeout 300 /usr/local/bin/dreamscape-receive`. That root-owned Python
+script accepts only `deploy <40-character commit SHA> <run-id>-<attempt>`, reads a
+gzipped tar archive from stdin, rejects path traversal/links/oversized exports,
+and requires HTML, WebAssembly and PCK files before switching `current` atomically.
+It restores the previous symlink if local HTTP checks fail. Actions then verifies
+the commit at the public HTTPS `/release.txt` endpoint. A failure only in that
+external check marks the workflow failed; it does not revert a locally healthy
+release. The SSH account has no sudo, Docker or database permissions.
+
+The receiver is infrastructure, not part of each Web release. To update it:
 
 ```sh
-release=20260925-REPLACE_WITH_COMMIT
-test -s build/web/index.html && test -s build/web/index.wasm && test -s build/web/index.pck
-ssh j0se@198.244.233.153 "mkdir /opt/dreamscape/www/releases/$release"
-scp -r build/web/. "j0se@198.244.233.153:/opt/dreamscape/www/releases/$release/"
+scp deploy/ovh/receive-release.py j0se@198.244.233.153:/opt/dreamscape/
+ssh -t j0se@198.244.233.153 \
+  'sudo install -o root -g root -m 755 /opt/dreamscape/receive-release.py /usr/local/bin/dreamscape-receive'
 ```
 
-After confirming upload success, on the server:
+For emergency rollback, connect as `j0se`, choose a known-good release from
+`/opt/dreamscape/www/releases`, then switch it as the deployment account:
 
 ```sh
 cd /opt/dreamscape/www
-release=20260925-REPLACE_WITH_COMMIT
-test -s "releases/$release/index.html" &&
-test -s "releases/$release/index.wasm" &&
-test -s "releases/$release/index.pck" &&
-ln -s "releases/$release" "current-$release" &&
-mv -Tf "current-$release" current
-curl -fI http://127.0.0.1:8083/index.wasm
+release=REPLACE_WITH_EXISTING_RELEASE_DIRECTORY
+sudo -u dreamscape-deploy ln -s "releases/$release" current-rollback
+sudo -u dreamscape-deploy mv -Tf current-rollback current
+curl -f https://dreamscape.198.244.233.153.sslip.io/release.txt
 ```
 
-Keep the previous release for rollback; switch the symlink using the same sequence
-with that release name. Each export must contain all generated files. Revalidation
-avoids retaining an old cached build across visits, but players should reload after
-a release; this is not a seamless live-game update system.
+Old releases are retained for rollback; monitor disk usage and remove obsolete
+releases explicitly, preserving the active and previous versions. Revalidation
+avoids retaining an old cached build across visits, but players should reload
+after a release; this is not a seamless live-game update system.
 
 ## Database and backups
 
@@ -131,6 +149,14 @@ sudo docker compose exec -T db dropdb -U dreamscape_admin dreamscape_restore_che
 ```
 
 ## Recorded validation and outstanding work
+
+Actions deployment preparation: five receiver tests pass on the VPS, including
+archive rejection, size limits, successful activation and health-check rollback.
+The workflow YAML parses and all ten shell steps pass `bash -n`. The installed
+SSH key rejects arbitrary commands and malformed uploads without changing the
+active page. The account's home and authorized keys are root-owned. GitHub CLI
+authentication, environment secrets and the first Actions run remain pending;
+local validation is not a successful end-to-end Actions deployment.
 
 Public hostname enabled on 2026-09-25: DNS resolves to `198.244.233.153`, Caddy
 obtained a Let's Encrypt certificate, external HTTPS returned 200 with certificate

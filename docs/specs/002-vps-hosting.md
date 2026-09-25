@@ -15,6 +15,9 @@ developer subsequently authorized proceeding with the architectural preparation.
 - Configure the public HTTPS route at the developer-selected temporary hostname
   `dreamscape.198.244.233.153.sslip.io`.
 - Prepare isolated PostgreSQL with persistent storage and local backup/restore.
+- On pushes to `main`, Actions publishes the exact Web artifact after lint and
+  tests pass. Pull requests and other branches never deploy. Use restricted SSH,
+  verify the server host key, and restore the previous release on local HTTP failure.
 
 ## Boundaries
 
