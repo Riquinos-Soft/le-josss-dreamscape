@@ -4,6 +4,7 @@ game/.godot/
 game/.export_credentials.cfg
 # Reproducible exports, not source assets.
 /build/
+/tools/scaniverse_street/node_modules/
 # Large local capture/reconstruction inputs and experiments.
 /assets/captures/
 /assets/work/

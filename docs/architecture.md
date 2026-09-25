@@ -11,7 +11,7 @@ Blender authoring uses Metric, Unit Scale 1.0, and meter-sized dimensions with t
 ## Repository layout
 
 - `game/`: Godot project root; `res://` resolves here. Contains `project.godot` and the Web export preset.
-- `game/world/`: playable `courtyard.tscn` and preserved static `smoke_test.tscn`.
+- `game/world/`: playable `courtyard.tscn`, preserved static `smoke_test.tscn`, and an independent Scaniverse street geometry trial.
 - `game/player/`: player scene/controller, pure movement-direction helper, and dedicated camera rig. No interaction probe implemented yet.
 - `game/items/`: constant item definition, runtime instance, procedural world representation, and courtyard-local pickup/placement coordination.
 - `game/inventory/`: a holder of item instances, independent of scene nodes; not a dictionary of type counts as the authoritative state.

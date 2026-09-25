@@ -7,3 +7,5 @@ Scale: one unit is one meter; character height 1.8 m, speed 4 m/s, courtyard int
 `export_presets.cfg` contains the `Web` release preset for the courtyard and dependencies, using Compatibility rendering with thread and extension support disabled. See [reproducible commands, tests, and pending browser checks](../docs/development.md).
 
 Keep all shipped resources inside this directory. Keep original captures, Blender source, tooling, and exports outside it. See [the proposed layout](../docs/architecture.md).
+
+The separate geometry trial for Calle Jacobo Risa M opens with `godot --path game res://world/jacobo_risa_street.tscn` from the repository root, or by running that scene in the editor. It keeps the courtyard as the project's main scene. The trial uses the scan's simplified mesh and collision, a neutral study material, and the existing player/camera; see [asset provenance](assets/streets/jacobo_risa/README.md).

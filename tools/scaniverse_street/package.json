@@ -1,0 +1,13 @@
+{
+  "name": "dreamscape-scaniverse-street-authoring",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Offline conversion for the Jacobo Risa street geometry study",
+  "scripts": {
+    "build": "node convert.cjs"
+  },
+  "dependencies": {
+    "draco3d": "1.5.7",
+    "meshoptimizer": "1.2.0"
+  }
+}
