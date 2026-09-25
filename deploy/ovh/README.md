@@ -2,6 +2,7 @@
 
 Host: `vps-543b5b89.vps.ovh.net` (`198.244.233.153`), SSH user `j0se`.
 IPv6: `2001:41d0:801:2000::50ec`.
+Public URL: https://dreamscape.198.244.233.153.sslip.io/ (temporary sslip.io hostname).
 Deployment directory: `/opt/dreamscape`, owned by `j0se`.
 Use `sudo` for Docker administration; membership of the Docker group is unnecessary.
 Passwords are not stored in this repository. The old `ubuntu` password was
@@ -44,11 +45,11 @@ sudo docker compose ps
 curl -f http://127.0.0.1:8083/
 ```
 
-The existing `/opt/gateway/Caddyfile` serves other applications. Once the game's
-hostname has been chosen and its DNS points at this VPS, add a separate block:
+The existing `/opt/gateway/Caddyfile` serves other applications and includes the
+block recorded in `Caddyfile.fragment`:
 
 ```caddyfile
-GAME_HOSTNAME {
+dreamscape.198.244.233.153.sslip.io {
     reverse_proxy 127.0.0.1:8083
 }
 ```
@@ -62,8 +63,9 @@ sudo docker compose exec -T caddy caddy validate --config /etc/caddy/Caddyfile
 sudo docker compose exec -T caddy caddy reload --config /etc/caddy/Caddyfile
 ```
 
-Caddy handles HTTPS. Ports 22, 80 and 443 already have firewall rules for IPv4 and
-IPv6. Do not open port 8083 publicly. Test the public HTTPS URL after adding DNS.
+Caddy handles HTTPS and redirects HTTP to HTTPS. The temporary hostname resolves
+to the VPS IPv4 through sslip.io. Ports 22, 80 and 443 already have firewall rules
+for IPv4 and IPv6. Do not open port 8083 publicly.
 
 ## Publish a Web export
 
@@ -130,6 +132,14 @@ sudo docker compose exec -T db dropdb -U dreamscape_admin dreamscape_restore_che
 
 ## Recorded validation and outstanding work
 
+Public hostname enabled on 2026-09-25: DNS resolves to `198.244.233.153`, Caddy
+obtained a Let's Encrypt certificate, external HTTPS returned 200 with certificate
+verification enabled, and HTTP returned 308 to HTTPS. All three existing sites
+still returned 200. The public page currently reports that hosting is prepared;
+it is not a deployed game build. The prior gateway configuration is backed up at
+`/opt/gateway/Caddyfile.before-dreamscape-20260925`. Caddy validation succeeded
+with a non-blocking formatting warning for the shared Caddyfile.
+
 Verified on 2026-09-25: fresh password login and sudo as `j0se`, Compose and nginx
 configuration, both containers healthy, HTTP 200, `application/wasm` and gzip on a
 temporary probe (removed afterward), no published database port, and successful
@@ -142,8 +152,8 @@ is ignored in the pre-existing `xfs_scrub_all.service` and `system-xfs_scrub.sli
 the new backup units passed and the backup completed.
 
 See Spec 002 for scope. No gameplay code changes are needed for this host.
-Public HTTPS and browser gameplay validation require the chosen hostname and an
-actual export. Accounts, world persistence and simultaneous players require a
+Browser gameplay validation still requires an actual export. Accounts, world
+persistence and simultaneous players require a
 separate implementation spec following ADR 004. Restore tests must be expanded
 to real player/world data before launch. VPS capacity is shared with existing sites.
 The OS reports a pending restart; schedule it around those applications.

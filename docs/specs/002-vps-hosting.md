@@ -12,7 +12,8 @@ developer subsequently authorized proceeding with the architectural preparation.
 - Isolate the game's static Web host on loopback port 8083; preserve existing sites.
 - Serve WebAssembly with the correct MIME type, compression and revalidation.
 - Support separate release directories and an atomic `current` symlink switch.
-- Configure the public HTTPS route after the developer supplies its hostname.
+- Configure the public HTTPS route at the developer-selected temporary hostname
+  `dreamscape.198.244.233.153.sslip.io`.
 - Prepare isolated PostgreSQL with persistent storage and local backup/restore.
 
 ## Boundaries
