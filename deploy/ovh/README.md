@@ -154,8 +154,10 @@ Actions deployment preparation: five receiver tests pass on the VPS, including
 archive rejection, size limits, successful activation and health-check rollback.
 The workflow YAML parses and all ten shell steps pass `bash -n`. The installed
 SSH key rejects arbitrary commands and malformed uploads without changing the
-active page. The account's home and authorized keys are root-owned. GitHub CLI
-authentication, environment secrets and the first Actions run remain pending;
+active page. The account's home and authorized keys are root-owned. GitHub's
+`production` environment is configured with `OVH_DEPLOY_KEY` and
+`OVH_KNOWN_HOSTS` and permits deployments only from the `main` branch.
+The workflow still needs to be pushed to `main` and its first Actions run verified;
 local validation is not a successful end-to-end Actions deployment.
 
 Public hostname enabled on 2026-09-25: DNS resolves to `198.244.233.153`, Caddy
