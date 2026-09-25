@@ -157,14 +157,18 @@ SSH key rejects arbitrary commands and malformed uploads without changing the
 active page. The account's home and authorized keys are root-owned. GitHub's
 `production` environment is configured with `OVH_DEPLOY_KEY` and
 `OVH_KNOWN_HOSTS` and permits deployments only from the `main` branch.
-The workflow still needs to be pushed to `main` and its first Actions run verified;
-local validation is not a successful end-to-end Actions deployment.
+The first end-to-end Actions deployment succeeded on 2026-09-25 in run
+`36091727855`, attempt 2: lint, receiver tests, Godot tests, Web export, SSH
+publication and public HTTPS release verification all passed. The first attempt
+failed because the root-owned deployment home retained mode 750; setting it to
+755 lets SSH read authorized keys while keeping that configuration unmodifiable
+by the deployment account. Preserve root ownership and mode 755 when provisioning.
 
 Public hostname enabled on 2026-09-25: DNS resolves to `198.244.233.153`, Caddy
 obtained a Let's Encrypt certificate, external HTTPS returned 200 with certificate
 verification enabled, and HTTP returned 308 to HTTPS. All three existing sites
-still returned 200. The public page currently reports that hosting is prepared;
-it is not a deployed game build. The prior gateway configuration is backed up at
+still returned 200. The preparation page has since been replaced by the tested
+Godot Web export through Actions. The prior gateway configuration is backed up at
 `/opt/gateway/Caddyfile.before-dreamscape-20260925`. Caddy validation succeeded
 with a non-blocking formatting warning for the shared Caddyfile.
 
@@ -180,7 +184,7 @@ is ignored in the pre-existing `xfs_scrub_all.service` and `system-xfs_scrub.sli
 the new backup units passed and the backup completed.
 
 See Spec 002 for scope. No gameplay code changes are needed for this host.
-Browser gameplay validation still requires an actual export. Accounts, world
+Browser gameplay validation of the hosted export remains pending. Accounts, world
 persistence and simultaneous players require a
 separate implementation spec following ADR 004. Restore tests must be expanded
 to real player/world data before launch. VPS capacity is shared with existing sites.
