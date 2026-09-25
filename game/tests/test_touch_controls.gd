@@ -37,6 +37,13 @@ func check_scene(scene_path: String) -> void:
 	tap_action("begin")
 	await frames(2)
 	check(items.placement_active, "touch starts placement")
+	check(
+		controls.action_rects.keys() == ["right", "confirm"],
+		"only rotate and confirm while placing"
+	)
+	check(
+		items.target.is_equal_approx(items.initial_placement_target()), "preview defaults in front"
+	)
 	var mouse := InputEventMouseButton.new()
 	mouse.device = InputEvent.DEVICE_ID_EMULATION
 	mouse.button_index = MOUSE_BUTTON_LEFT
@@ -45,10 +52,28 @@ func check_scene(scene_path: String) -> void:
 	Input.flush_buffered_events()
 	await frames(2)
 	check(items.placement_active, "emulated mouse cannot confirm placement")
+	tap_action("confirm")
+	await frames(2)
+	check(
+		(
+			not items.placement_active
+			and is_instance_valid(items.world_item)
+			and items.world_item.item == original
+		),
+		"default front placement confirms without dragging"
+	)
+	tap_action("pickup")
+	await frames(2)
+	tap_action("begin")
+	await frames(2)
 	touch(0, controls.stick_center + Vector2(100, 0), true)
 	var start: Vector3 = player.position
 	await frames(5)
 	check(player.position.distance_to(start) > 0.1, "joystick moves actual player during placement")
+	check(
+		items.target.distance_to(items.initial_placement_target()) < 0.08,
+		"preview follows in front until dragged"
+	)
 	tap_action("right")
 	await frames(2)
 	check(is_equal_approx(items.yaw, PI / 2), "second finger rotates")
@@ -62,29 +87,68 @@ func check_scene(scene_path: String) -> void:
 	touch(0, Vector2.ZERO, false)
 	await frames(2)
 	check(player.touch_direction == Vector2.ZERO, "release outside joystick stops movement")
+	for turn in 3:
+		tap_action("right")
+		await frames(1)
+	check(is_zero_approx(items.yaw), "one rotate button reaches all four orientations")
+	tap_action("right")
+	await frames(1)
 	var aim: Vector2 = scene.get_node("CameraRig/Camera").unproject_position(
 		original_position - Vector3.UP * 0.25
 	)
 	touch(2, aim, true)
 	touch(2, aim, false)
 	await frames(2)
-	check(items.touch_aim_set, "world touch aims")
+	check(not items.touch_aim_set, "a floor tap does not move the preview")
+	aim = items.camera.unproject_position(original_position - Vector3.UP * 0.25)
+	var preview_point: Vector2 = items.camera.unproject_position(items.preview.global_position)
+	touch(2, preview_point, true)
+	drag.index = 2
+	drag.position = aim
+	root.push_input(drag, true)
+	Input.flush_buffered_events()
+	touch(2, aim, false)
+	await frames(2)
+	check(items.touch_aim_set, "dragging the preview aims")
 	check(
 		items.target.distance_to(original_position) < 0.05,
 		"touch ray reaches floor: %s expected %s" % [items.target, original_position]
 	)
+	var dragged_target: Vector3 = items.target
+	touch(0, controls.stick_center + Vector2(100, 0), true)
+	await frames(2)
+	touch(0, Vector2.ZERO, false)
+	check(items.target == dragged_target, "released preview stays at its world position")
+	# With no Cancel button, an invalid drag must remain visible and recoverable.
+	drag_preview(items, Vector2(440, 100))
+	await frames(2)
+	check(items.target.x != 1000 and not items.target_valid, "invalid preview stays visible")
 	tap_action("confirm")
 	await frames(2)
 	check(
-		not items.placement_active and items.world_item.item == original, "touch confirms same item"
+		items.placement_active and items.inventory.item == original, "invalid confirm retains item"
+	)
+	drag_preview(items, items.camera.unproject_position(original_position - Vector3.UP * 0.25))
+	await frames(2)
+	check(items.target_valid, "invalid placement can be dragged back to valid ground")
+	tap_action("confirm")
+	await frames(2)
+	check(
+		(
+			not items.placement_active
+			and is_instance_valid(items.world_item)
+			and items.world_item.item == original
+		),
+		"touch confirms same item"
 	)
 	tap_action("pickup")
 	await frames(2)
 	tap_action("begin")
 	await frames(2)
-	tap_action("cancel")
-	await frames(2)
-	check(not items.placement_active and items.inventory.item == original, "cancel retains item")
+	check(
+		items.placement_active and items.inventory.item == original,
+		"next placement retains item until confirm"
+	)
 	touch(0, controls.stick_center + Vector2(100, 0), true)
 	controls.notification(Node.NOTIFICATION_APPLICATION_FOCUS_OUT)
 	check(player.touch_direction == Vector2.ZERO, "focus loss clears joystick")
@@ -130,9 +194,20 @@ func tap_action(action: String) -> void:
 	touch(1, point, false)
 
 
+func drag_preview(items: Node, point: Vector2) -> void:
+	touch(2, items.camera.unproject_position(items.preview.global_position), true)
+	var event := InputEventScreenDrag.new()
+	event.index = 2
+	event.position = point
+	root.push_input(event, true)
+	Input.flush_buffered_events()
+	touch(2, point, false)
+
+
 func frames(count: int) -> void:
 	for i in count:
 		await physics_frame
+	await process_frame
 
 
 func check(condition: bool, description: String) -> void:

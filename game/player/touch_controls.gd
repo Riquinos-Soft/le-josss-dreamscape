@@ -7,7 +7,7 @@ var stick_finger: int = -1
 var stick_center := Vector2.ZERO
 var stick_value := Vector2.ZERO
 var action_rects: Dictionary = {}
-var action_fingers: Dictionary = {}
+var drag_finger: int = -1
 var portrait: bool = false
 var message: Label
 @onready var player = get_parent().get_parent().get_node("Player")
@@ -51,14 +51,7 @@ func update_layout() -> void:
 	get_tree().paused = portrait
 	stick_center = Vector2(170, viewport_size.y - 165)
 	action_rects.clear()
-	var names := ["pickup", "begin", "left", "right", "confirm", "cancel"]
-	for i in names.size():
-		var column := i % 2
-		var row := floori(i / 2.0)
-		action_rects[names[i]] = Rect2(
-			Vector2(viewport_size.x - 330 + column * 155, viewport_size.y - 320 + row * 100),
-			Vector2(145, 90)
-		)
+	update_actions()
 	message.position = Vector2(20, 20)
 	message.size = Vector2(viewport_size.x - 40, viewport_size.y - 40 if portrait else 90)
 	var font_size := 28
@@ -70,12 +63,12 @@ func update_layout() -> void:
 
 func reset_touch() -> void:
 	stick_finger = -1
-	action_fingers.clear()
+	drag_finger = -1
 	stick_value = Vector2.ZERO
 	player.touch_direction = Vector2.ZERO
 	player.mouse_steering_active = false
 	items.commands.clear()
-	items.touch_aim_set = false
+	items.touch_aim_pending = false
 	queue_redraw()
 
 
@@ -105,7 +98,8 @@ func _input(event: InputEvent) -> void:
 func handle_touch(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:
 		if not event.pressed or event.canceled:
-			action_fingers.erase(event.index)
+			if event.index == drag_finger:
+				drag_finger = -1
 			if event.index == stick_finger:
 				stick_finger = -1
 				set_stick(stick_center)
@@ -116,12 +110,15 @@ func handle_touch(event: InputEvent) -> void:
 			return
 		for action in action_rects:
 			if action_rects[action].has_point(event.position):
-				action_fingers[event.index] = true
 				items.commands.append(StringName(action))
 				return
+		if items.placement_active and drag_finger == -1:
+			var point: Vector2 = items.camera.unproject_position(items.preview.global_position)
+			if event.position.distance_to(point) <= 70.0:
+				drag_finger = event.index
 	if event.index == stick_finger:
 		set_stick(event.position)
-	elif items.placement_active and not action_fingers.has(event.index):
+	elif event is InputEventScreenDrag and event.index == drag_finger:
 		# Dragging over controls must never retarget the preview.
 		for rect in action_rects.values():
 			if rect.has_point(event.position):
@@ -129,6 +126,7 @@ func handle_touch(event: InputEvent) -> void:
 		if event.position.distance_to(stick_center) > RADIUS:
 			items.touch_aim = event.position
 			items.touch_aim_set = true
+			items.touch_aim_pending = true
 
 
 func set_stick(point: Vector2) -> void:
@@ -143,11 +141,29 @@ func _process(_delta: float) -> void:
 	if portrait:
 		message.text = "Gira el móvil\npara jugar en horizontal"
 	elif items.placement_active:
-		message.text = "Toca el suelo para apuntar · Verde: puedes colocar"
+		message.text = "Arrastra el objeto para moverlo · Verde: puedes confirmar"
 	elif items.inventory.item != null:
 		message.text = "Objeto recogido · Pulsa Colocar"
 	else:
 		message.text = "Acércate al bloque morado y pulsa Recoger"
+	update_actions()
+
+
+func update_actions() -> void:
+	var names := ["pickup"]
+	if items.placement_active:
+		names = ["right", "confirm"]
+	elif items.inventory.item != null:
+		names = ["begin"]
+	if action_rects.keys() == names:
+		return
+	action_rects.clear()
+	var viewport_size := get_viewport_rect().size
+	for i in names.size():
+		action_rects[names[i]] = Rect2(
+			Vector2(viewport_size.x - 345 + i * 160, viewport_size.y - 150), Vector2(150, 105)
+		)
+	queue_redraw()
 
 
 func _draw() -> void:
@@ -160,12 +176,7 @@ func _draw() -> void:
 	draw_arc(stick_center, RADIUS, 0, TAU, 64, Color("91c8ca"), 3, true)
 	draw_circle(stick_center + stick_value * RADIUS * 0.65, 38, Color("91c8ca"))
 	var labels := {
-		"pickup": "Recoger",
-		"begin": "Colocar",
-		"left": "Girar <",
-		"right": "Girar >",
-		"confirm": "Confirmar",
-		"cancel": "Cancelar"
+		"pickup": "Recoger", "begin": "Colocar", "right": "Girar", "confirm": "Confirmar"
 	}
 	var font := ThemeDB.fallback_font
 	for action in action_rects:

@@ -1,5 +1,8 @@
 # Spec 004 — Navegador móvil en horizontal
 
+La distribución de botones y el apuntado inicial se simplifican en
+[Beta 01](005-beta-controls-and-pixels.md); el resto de garantías se mantiene.
+
 Solicitud: jugar al prototipo publicado sin teclado, mando ni ratón.
 
 Integración de la escena pública: los controles se montan tanto en el patio como

@@ -28,6 +28,7 @@ var place_button: Button
 var touch_mode: bool = false
 var touch_aim := Vector2.ZERO
 var touch_aim_set: bool = false
+var touch_aim_pending: bool = false
 @onready var player = get_parent().get_node("Player")
 @onready var camera: Camera3D = get_parent().get_node("CameraRig/Camera")
 @onready var floor_body: StaticBody3D = get_node(floor_path)
@@ -85,8 +86,12 @@ func _notification(what: int) -> void:
 
 
 func _physics_process(_delta: float) -> void:
-	if placement_active and (not touch_mode or touch_aim_set):
-		target = placement_target_from_mouse()
+	if placement_active:
+		if not touch_mode or touch_aim_pending:
+			target = placement_target_from_mouse()
+			touch_aim_pending = false
+		elif not touch_aim_set:
+			target = initial_placement_target()
 	for command in commands:
 		match command:
 			&"pickup":
@@ -155,6 +160,7 @@ func begin_placement() -> bool:
 		return false
 	placement_active = true
 	touch_aim_set = false
+	touch_aim_pending = false
 	yaw = 0.0
 	target = initial_placement_target()
 	preview = WorldItem.make_visual(Color(0.3, 0.9, 0.65))

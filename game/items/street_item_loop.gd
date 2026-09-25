@@ -23,21 +23,40 @@ func placement_target_from_mouse() -> Vector3:
 	var origin := camera.project_ray_origin(mouse)
 	var direction := camera.project_ray_normal(mouse)
 	var end := origin + direction * 100.0
+	var point: Variant = Plane(Vector3.UP, player.global_position.y).intersects_ray(
+		origin, direction
+	)
 	# The camera sees through faded side walls. Skip their vertical collision faces
 	# when aiming; valid_pose still enforces the player's reach and clear path.
 	for attempt in 8:
 		var query := PhysicsRayQueryParameters3D.create(origin, end, 1)
 		var hit: Dictionary = player.get_world_3d().direct_space_state.intersect_ray(query)
 		if hit.is_empty() or hit.collider != floor_body:
-			return INVALID_TARGET
+			break
 		if hit.normal.y >= 0.9:
-			return supported_pose(hit.position, yaw)
+			point = hit.position
+			break
 		origin = hit.position + direction * 0.01
-	return INVALID_TARGET
+	return preview_pose(point) if point != null else INVALID_TARGET
 
 
 func initial_placement_target() -> Vector3:
-	return supported_pose(player.global_position - player.visual.global_basis.z * 1.3, yaw)
+	var point: Vector3 = player.global_position - player.visual.global_basis.z * 1.3
+	return preview_pose(point)
+
+
+func preview_pose(point: Vector3) -> Vector3:
+	var supported := supported_pose(point, yaw)
+	# An unsupported preview remains visible in red so it can still be dragged.
+	return point + Vector3.UP * 0.25 if supported == INVALID_TARGET else supported
+
+
+func rotate_preview(steps: int) -> void:
+	super(steps)
+	if placement_active:
+		var supported := supported_pose(target, yaw)
+		if supported != INVALID_TARGET:
+			target = supported
 
 
 func supported_pose(point: Vector3, angle: float) -> Vector3:
