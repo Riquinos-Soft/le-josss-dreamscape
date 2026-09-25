@@ -2,6 +2,7 @@ extends Node3D
 ## Authored pixel scenery follows the surveyed banks; it does not own collision.
 
 const FOLIAGE = preload("res://assets/art/vegetation/plant_jacobo_atlas_v02.png")
+const WOODLAND = preload("res://assets/art/vegetation/plant_jacobo_woodland_v01.png")
 const WALL = preload("res://assets/art/environments/wall_jacobo_stone_v02.svg")
 const MATERIAL = preload("res://world/street_decor.gdshader")
 const HEIGHTS: Array[float] = [
@@ -11,6 +12,7 @@ const HEIGHTS: Array[float] = [
 var sections: Array[Vector3] = []
 var fade_materials: Array[ShaderMaterial] = []
 var foliage_materials: Array[ShaderMaterial] = []
+var woodland_materials: Array[ShaderMaterial] = []
 
 
 func _ready() -> void:
@@ -20,6 +22,11 @@ func _ready() -> void:
 		material.set_shader_parameter("atlas_offset", Vector2(variant % 2, variant / 2) * 0.5)
 		material.set_shader_parameter("atlas_scale", Vector2(0.5, 0.5))
 		foliage_materials.append(material)
+	for variant in 4:
+		var material := make_material(WOODLAND, true)
+		material.set_shader_parameter("atlas_offset", Vector2(variant % 2, variant / 2) * 0.5)
+		material.set_shader_parameter("atlas_scale", Vector2(0.5, 0.5))
+		woodland_materials.append(material)
 	for side in 2:
 		var outward := Vector3(-1 if side == 0 else 1, 0, 0)
 		for index in 16:
@@ -33,10 +40,23 @@ func _ready() -> void:
 			var count := maxi(1, ceili(start.distance_to(end) / 1.7))
 			for plant in count:
 				var along := (plant + 0.5) / count
-				var position := start.lerp(end, along) + outward * 0.55
+				var position := start.lerp(end, along) + outward * (0.5 + 0.2 * (plant % 2))
 				position.y += height - 0.08
-				var variant := 1 if (index + plant) % 5 == 0 else (3 if side == 0 else 0)
-				add_foliage(position, variant, 0.045 if variant == 1 else 0.055)
+				if (index + plant) % 3 != 0:
+					add_woodland(position, 2 if side == 0 else 3, 0.045)
+				else:
+					add_foliage(position, 3 if side == 0 else 0, 0.045)
+	# Footage 55-85s: mesh fence and tree canopy on the garage side of the lane.
+	var fence_material := ShaderMaterial.new()
+	fence_material.shader = preload("res://world/street_fence.gdshader")
+	fade_materials.append(fence_material)
+	for index in range(5, 10):
+		add_fence(sections[index * 2 + 1], sections[index * 2 + 3], fence_material)
+	for index in [5, 7, 9]:
+		var base := sections[index * 2 + 1] + Vector3(0.95, HEIGHTS[index] * 0.7, 0)
+		add_woodland(base, 0 if index != 7 else 1, 0.09)
+	# A smaller tree opposite the garage, with its trunk safely outside the road.
+	add_woodland(sections[22] + Vector3(-0.95, HEIGHTS[11], 0), 1, 0.075)
 	# Ivy stays on the original garage face; the door apron stays clear.
 	add_foliage(Vector3(-0.1, 2.85, 17.2), 2, 0.025)
 	add_foliage(Vector3(-1.35, 2.4, 22.5), 2, 0.025)
@@ -54,12 +74,43 @@ func make_material(texture: Texture2D, billboard: bool = false) -> ShaderMateria
 func add_foliage(base: Vector3, variant: int, pixel_size: float) -> void:
 	var quad := QuadMesh.new()
 	quad.size = Vector2.ONE * 64.0 * pixel_size
+	quad.center_offset = Vector3.UP * 28.0 * pixel_size
 	var plant := MeshInstance3D.new()
 	plant.name = "Foliage"
 	plant.mesh = quad
-	plant.position = base + Vector3.UP * 28.0 * pixel_size
+	plant.position = base
 	plant.material_override = foliage_materials[variant]
 	add_child(plant)
+
+
+func add_woodland(base: Vector3, variant: int, pixel_size: float) -> void:
+	var quad := QuadMesh.new()
+	quad.size = Vector2.ONE * 64.0 * pixel_size
+	quad.center_offset = Vector3.UP * 28.0 * pixel_size
+	var plant := MeshInstance3D.new()
+	plant.name = "Tree" if variant < 2 else "WildPlant"
+	plant.mesh = quad
+	plant.position = base
+	plant.material_override = woodland_materials[variant]
+	add_child(plant)
+
+
+func add_fence(start: Vector3, end: Vector3, material: Material) -> void:
+	var surface := SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var a := start + Vector3(0.12, 0.65, 0)
+	var b := end + Vector3(0.12, 0.65, 0)
+	add_quad(
+		surface,
+		[a, a + Vector3.UP * 1.35, b, b + Vector3.UP * 1.35],
+		Vector2(a.distance_to(b), 1.35)
+	)
+	surface.generate_normals()
+	var fence := MeshInstance3D.new()
+	fence.name = "LateralFence"
+	fence.mesh = surface.commit()
+	fence.material_override = material
+	add_child(fence)
 
 
 func add_bank(

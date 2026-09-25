@@ -151,6 +151,20 @@ Deployment uses the existing tested-main Actions workflow; no hosting changes.
 
 ## Classic scenery iteration
 
+Follow-up reference: [developer's street video](https://photos.app.goo.gl/eYYUS9EuS1Gx6CTAA).
+Add varied roadside plants, a tree area and the lateral fence, using this footage
+to check placement. Break up flat asphalt with restrained wear, aggregate and
+edge litter while preserving dark asphalt and the clear garage apron. Preserve
+the current classic pixel scale, smooth occlusion and all traversal contracts.
+Do not treat unobserved details as surveyed facts.
+
+Video pass implemented: two tree silhouettes, fern and bramble supplement the
+four existing foliage variants. A wire fence follows the bank before the garage.
+World-anchored asphalt wear and dry leaves/moss at the edges replace the uniform
+black fill. Contact sheets of the full clip and the validation record are linked
+from [plan 007](../plans/007-street-video-decor.md). Placement is an interpretation
+of the footage against existing surveyed geometry, not a new survey.
+
 The noisy scanned visual is now hidden, retained as reference data. Authored
 retaining walls follow the same road cross sections; four flat foliage variants
 replace reconstructed leaf geometry. The garage opening and apron stay clear.

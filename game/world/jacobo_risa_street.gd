@@ -167,6 +167,8 @@ func build_walkway() -> void:
 			left[index + 1],
 			right[index + 1]
 		]:
+			var is_left: bool = vertex == left[index] or vertex == left[index + 1]
+			surface.set_uv(Vector2(0.0 if is_left else 1.0, vertex.z))
 			surface.add_vertex(vertex)
 		add_barrier(barrier_faces, left[index], left[index + 1])
 		add_barrier(barrier_faces, right[index + 1], right[index])
