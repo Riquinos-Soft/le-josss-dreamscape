@@ -11,7 +11,7 @@ Blender authoring uses Metric, Unit Scale 1.0, and meter-sized dimensions with t
 ## Repository layout
 
 - `game/`: Godot project root; `res://` resolves here. Contains `project.godot` and the Web export preset.
-- `game/world/`: playable `courtyard.tscn` and preserved static `smoke_test.tscn`.
+- `game/world/`: playable `courtyard.tscn`, preserved static `smoke_test.tscn`, and an independent Scaniverse street geometry trial.
 - `game/player/`: player scene/controller, pure movement-direction helper, and dedicated camera rig. No interaction probe implemented yet.
 - `game/items/`: constant item definition, runtime instance, procedural world representation, and courtyard-local pickup/placement coordination.
 - `game/inventory/`: a holder of item instances, independent of scene nodes; not a dictionary of type counts as the authoritative state.
@@ -35,6 +35,23 @@ Create gameplay subdirectories when they gain content. Keep scenes and their scr
 The player receives an exported `movement_orientation: Node3D`, currently assigned to the camera. The pure helper projects its basis onto XZ, including a straight-down-view fallback. A different future camera can supply a different orientation node; no fixed global angle, current-camera lookup, or camera framework is embedded in the controller.
 
 The camera rig is a sibling of the player, targets its interpolated position at 0.9 m height, and follows with delta-based exponential smoothing. Its local camera offset is (9, 12, 12) m, perspective FOV 45 degrees, fixed heading/elevation, and no orbit input. Physics interpolation is enabled for the player; the render-updated rig opts out to avoid double interpolation. Low walls and obstacles support visible character framing; generalized camera obstruction handling is not implemented.
+
+## Street trial and fall recovery
+
+The shared player now records its original global spawn transform per scene
+instance. Falling below the exported kill height restores that transform, clears
+velocity and interpolation, and signals the camera to snap to the spawn. Mouse
+steering projects onto the player's current elevation; item placement retains its
+separate courtyard-only ground-plane rule.
+
+The independent street trial follows [Spec 002](specs/002-street-trial.md). Its
+scan is visual decoration; wrapper-owned variable-width cross sections and
+side/end barriers define the route and garage apron. The street uses an
+orthographic camera, eight-direction Joss sprites, clean pixel-art garage faces,
+dark asphalt and local pixel-stipple wall cutaways. A world-only screen pass
+leaves the HUD at full resolution. Generated source art, prompts, normalized
+runtime sheets and metadata are retained. These remain draft visual assets.
+No travel, walk animation or location-menu system is present.
 
 ## Single-item implementation
 

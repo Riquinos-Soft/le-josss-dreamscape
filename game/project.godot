@@ -11,6 +11,10 @@ config_version=5
 [application]
 
 config/name="Le Joss's Dreamscape"
+boot_splash/bg_color=Color(0.0627451, 0.0627451, 0.12549, 1)
+boot_splash/image="res://assets/branding/boot-splash.png"
+boot_splash/fullsize=true
+boot_splash/use_filter=false
 run/main_scene="res://world/courtyard.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"

@@ -6,8 +6,14 @@ extends Node3D
 
 
 func _ready() -> void:
-	global_position = target.global_position + Vector3.UP * 0.9
+	snap_to_target()
 	$Camera.look_at(global_position)
+	target.respawned.connect(snap_to_target)
+
+
+func snap_to_target() -> void:
+	global_position = target.global_position + Vector3.UP * 0.9
+	reset_physics_interpolation()
 
 
 func _process(delta: float) -> void:

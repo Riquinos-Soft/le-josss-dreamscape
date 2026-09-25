@@ -32,6 +32,11 @@ Platform priority: Web, macOS development, Android, iOS, possibly other desktop 
 
 - [Repository and minimal architecture](docs/architecture.md)
 - [Spec 001: vertical slice](docs/specs/001-vertical-slice.md)
+- [Spec 003: branded boot splash](docs/specs/003-boot-branding.md)
+- [Spec 002: street traversal and pixel trial](docs/specs/002-street-trial.md)
+- [Spec 003: Astra and economical-agent workflow](docs/specs/003-agent-workflow.md)
+- [Delegable task template](docs/plans/task-template.md)
+- [Prepared plan: Joss animation and street art](docs/plans/004-joss-animation-and-street-art.md)
 - [Development environment and Web risks](docs/development.md)
 - [OVH deployment and operations](deploy/ovh/README.md)
 - [ADR 001: engine and Web baseline](docs/adr/001-engine-and-web-baseline.md)
