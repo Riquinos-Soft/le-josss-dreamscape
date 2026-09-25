@@ -1,0 +1,4 @@
+# Append to the existing gateway Caddyfile, preserving its other sites.
+dreamscape.198.244.233.153.sslip.io {
+    reverse_proxy 127.0.0.1:8083
+}

@@ -1,5 +1,7 @@
 # Le Joss's Dreamscape
 
+[Play the Web prototype](https://dreamscape.198.244.233.153.sslip.io/)
+
 ![Le Joss's Dreamscape concept art: a dreamlike plaza with a physical item placement preview](docs/images/dreamscape-concept.png)
 
 *Visual concept for the project's direction, not a screenshot of the current build.*
@@ -30,6 +32,7 @@ Platform priority: Web, macOS development, Android, iOS, possibly other desktop 
 
 - [Repository and minimal architecture](docs/architecture.md)
 - [Spec 001: vertical slice](docs/specs/001-vertical-slice.md)
+- [Spec 003: branded boot splash](docs/specs/003-boot-branding.md)
 - [Spec 002: street traversal and pixel trial](docs/specs/002-street-trial.md)
 - [Spec 003: Astra and economical-agent workflow](docs/specs/003-agent-workflow.md)
 - [Delegable task template](docs/plans/task-template.md)
@@ -40,6 +43,7 @@ smooth wall transparency, and a movable violet block near spawn. Press **E** to
 pick it up, **P** to place, aim with the mouse, **Q/E** to rotate, left-click to
 confirm, and **Esc** to cancel. Placement follows the supported street surface.
 - [Development environment and Web risks](docs/development.md)
+- [OVH deployment and operations](deploy/ovh/README.md)
 - [ADR 001: engine and Web baseline](docs/adr/001-engine-and-web-baseline.md)
 - [ADR 002: offline asset boundary](docs/adr/002-offline-asset-boundary.md)
 - [ADR 003: item identity across world and inventory](docs/adr/003-item-identity-and-world-representation.md)
