@@ -80,7 +80,7 @@ func _ready() -> void:
 	study_material.set_shader_parameter("walk_sections", PackedVector3Array(CROSS_SECTIONS))
 	build_walkway()
 	build_garage()
-	add_plant_accents()
+	build_pixel_decor()
 	$Player/Visual.hide()
 	$CameraRig/Camera.projection = Camera3D.PROJECTION_ORTHOGONAL
 	$CameraRig/Camera.size = 13.5
@@ -111,27 +111,13 @@ func build_garage() -> void:
 	)
 
 
-func add_plant_accents() -> void:
-	var plants := Node3D.new()
-	plants.name = "PlantAccents"
-	add_child(plants)
-	for section in [1, 3, 5, 7, 9, 11, 15]:
-		for side in 2:
-			if side == 1 and section == 11:
-				continue
-			var bush := Sprite3D.new()
-			bush.texture = preload(
-				"res://assets/art/vegetation/plant_jacobo_shrub_green_idle_v01.svg"
-			)
-			bush.pixel_size = 0.04
-			bush.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-			bush.alpha_cut = SpriteBase3D.ALPHA_CUT_DISCARD
-			bush.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
-			bush.position = (
-				CROSS_SECTIONS[section * 2 + side] + Vector3(-0.2 if side == 0 else 0.2, 0.35, 0)
-			)
-			bush.flip_h = section % 2 == side
-			plants.add_child(bush)
+func build_pixel_decor() -> void:
+	street_visual.hide()
+	var decor := preload("res://world/street_decor.gd").new()
+	decor.name = "PixelDecor"
+	decor.sections = CROSS_SECTIONS
+	add_child(decor)
+	facade_materials.append_array(decor.fade_materials)
 
 
 func add_facade(

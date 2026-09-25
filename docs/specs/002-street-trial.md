@@ -7,6 +7,14 @@ not complete. Spec 001 remains the separate courtyard milestone.
 
 ## Scope
 
+Latest art correction: the developer requests a substantially coarser, classic
+pixel RPG environment based on the README concept. Replace the visible noisy
+scan banks with authored low retaining walls and chunky foliage, following the
+existing surveyed cross sections. Preserve dark asphalt, garage footprint,
+traversal, movable item and continuous occlusion fade. Use a trial 240-row world
+sampling target and a restricted vegetation palette; keep HUD resolution intact.
+The scan remains an offline/reference source, not the final visible decoration.
+
 Design authority: [Game Bible](https://app.notion.com/p/3e678dc87e92819582a7e84c00e6678e),
 especially its art, asset, character and development pages, read on 2026-09-25.
 The street remains a bounded experiment inside this repository, not a replacement
@@ -140,3 +148,19 @@ That release still opened the courtyard. The subsequent developer request makes
 `world/jacobo_risa_street.tscn` the default scene for native and public Web builds,
 including Joss's eight-direction walking, soft wall occlusion and the movable block.
 Deployment uses the existing tested-main Actions workflow; no hosting changes.
+
+## Classic scenery iteration
+
+The noisy scanned visual is now hidden, retained as reference data. Authored
+retaining walls follow the same road cross sections; four flat foliage variants
+replace reconstructed leaf geometry. The garage opening and apron stay clear.
+Foliage uses 32px cells and 13 opaque colors, with offline prefiltering before
+palette reduction, hard sprite silhouettes and nearest runtime sampling. Wall
+and foliage occlusion share continuous alpha; the stippled effect is not restored.
+Only five decor materials are shared across the bank geometry and foliage.
+
+World sampling now targets 240 rows (3px blocks at 720p), while the HUD retains
+full resolution. Asphalt grain is coarser and sparse, the ground stays dark,
+and the original pale facade has warmer window accents. Collision, placement,
+eight-direction walking and respawn behavior are unchanged. This is a new draft
+art pass, not a claim of matching the finished README illustration.

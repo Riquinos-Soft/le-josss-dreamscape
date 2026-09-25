@@ -13,5 +13,5 @@ void vertex() {
 void fragment() {
 	ALPHA = wall_opacity(world_position, CAMERA_POSITION_WORLD);
 	vec3 paint = texture(facade_texture, UV).rgb;
-	ALBEDO = paint * vec3(0.86, 0.84, 1.0);
+	ALBEDO = paint * vec3(0.96, 0.9, 0.96);
 }

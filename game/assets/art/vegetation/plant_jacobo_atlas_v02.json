@@ -1,0 +1,18 @@
+{
+  "asset_id": "plant_jacobo_atlas_v02",
+  "production_status": "draft",
+  "frames": ["broad_hedge", "flowering_shrub", "hanging_ivy", "tall_hedge"],
+  "layout": [2, 2],
+  "frame_width": 32,
+  "frame_height": 32,
+  "pivot": [16, 30],
+  "maximum_opaque_size": [28, 24],
+  "palette_colors": 13,
+  "filter": "nearest",
+  "mipmaps": false,
+  "collision": "none; surveyed street collision is unchanged",
+  "source": "assets/source/ai/plant_jacobo_atlas_v02.png",
+  "prompt": "assets/source/ai/plant_jacobo_atlas_v02.md",
+  "normalizer": "tools/normalize_foliage.gd",
+  "reference": "docs/images/dreamscape-concept.png"
+}

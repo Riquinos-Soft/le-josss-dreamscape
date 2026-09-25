@@ -48,6 +48,9 @@ The public prototype opens the scanned street with eight-direction walking anima
 smooth wall transparency, and a movable violet block near spawn. Press **E** to
 pick it up, **P** to place, aim with the mouse, **Q/E** to rotate, left-click to
 confirm, and **Esc** to cancel. Placement follows the supported street surface.
+The current scenery pass uses coarse pixel foliage, simple stone banks and a
+reduced palette in place of the visible scan's noisy surfaces, preserving the
+dark asphalt and garage approach.
 
 ## Working method
 

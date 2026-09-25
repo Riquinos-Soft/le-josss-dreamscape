@@ -1,8 +1,9 @@
 # Plan delegable — Animación de Joss y normalización de la calle
 
 Estado: **ejecución parcial autorizada por el desarrollador el 2026-09-25**.
-D01/G01/G02/G04 e I01 completados para animación. G03 (vegetación)
-no se ejecuta en esta petición. R01 sigue pendiente de revisión artística del
+D01/G01/G02/G04 e I01 completados para animación. La petición posterior de un
+estilo más clásico activa G03: vegetación plana y muros pixel siguen los bordes
+medidos de toda la calle. R01 sigue pendiente de revisión artística del
 usuario. Ejecución secuencial por el agente disponible; Grok no está conectado.
 Base al activar: `9c0bd9f75259d669a763cddb965e695764219a68`; árbol limpio.
 
