@@ -131,7 +131,9 @@ emits its pre-existing pkg_resources deprecation warning.
 Push integration brought in the remote boot branding and OVH deployment workflow
 without conflicts. After that merge, both exports reached `savepack DONE`; the
 street payload including the new branding is 48,781,491 bytes (46.52 MiB), above
-the earlier 40 MiB prototype target. The Windows headless editor/export processes
-stalled during shutdown and were terminated after pack completion; this is not
-reported as a clean exit. The pre-merge runtime checks above remain the gameplay
-evidence, and the merged Linux CI/export/deployment result is tracked in Actions.
+the earlier 40 MiB prototype target. The Windows import processes stalled during
+shutdown and were terminated after importing. The subsequent exports were slow
+to exit but both eventually returned 0. The merged Linux checks, Web export and
+OVH deployment also passed in [Actions run 36094963803](https://github.com/Riquinos-Soft/le-josss-dreamscape/actions/runs/36094963803).
+This confirms the production build; the independent street preview remains on
+local port 8001, while the production/main scene is still the courtyard.
