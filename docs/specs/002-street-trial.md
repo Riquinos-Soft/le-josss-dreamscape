@@ -127,3 +127,11 @@ in the actual scene. Both release Web exports succeed; street payload is
 41,568,582 bytes (39.64 MiB). Preview responds HTTP 200 on port 8001. No manual
 Chrome/Safari gameplay acceptance is claimed. Format/lint pass; gdtoolkit still
 emits its pre-existing pkg_resources deprecation warning.
+
+Push integration brought in the remote boot branding and OVH deployment workflow
+without conflicts. After that merge, both exports reached `savepack DONE`; the
+street payload including the new branding is 48,781,491 bytes (46.52 MiB), above
+the earlier 40 MiB prototype target. The Windows headless editor/export processes
+stalled during shutdown and were terminated after pack completion; this is not
+reported as a clean exit. The pre-merge runtime checks above remain the gameplay
+evidence, and the merged Linux CI/export/deployment result is tracked in Actions.
