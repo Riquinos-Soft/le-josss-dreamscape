@@ -35,3 +35,11 @@ El HUD táctil se conecta a ambas escenas. La prueba táctil ejecuta ahora las d
 Las paredes transparentes bloqueaban el rayo de apuntado; se saltan sus caras
 verticales sin omitir la validación de alcance y obstáculos desde el jugador.
 Pruebas adicionales: objeto de calle 33 y ciclo de patio 63, sin fallos.
+
+Corrección publicada: `9842a9b`, ejecución del receptor `1790312053-1`.
+36 pruebas táctiles también pasan con renderizado nativo; lint/formato/export pasan.
+Comprobación en la URL pública con Edge 152 en emulación móvil: calle con joystick
+y botones, recogida mediante toque, aviso vertical y regreso a horizontal; sin
+errores de consola. `/release.txt` y HTML/WASM/PCK verificados por HTTPS.
+La rama de feature está subida; un futuro despliegue de `main` puede sustituir esta
+publicación temporal mientras la corrección no se integre allí.
