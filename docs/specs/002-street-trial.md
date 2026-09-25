@@ -11,7 +11,7 @@ Latest art correction: the developer requests a substantially coarser, classic
 pixel RPG environment based on the README concept. Replace the visible noisy
 scan banks with authored low retaining walls and chunky foliage, following the
 existing surveyed cross sections. Preserve dark asphalt, garage footprint,
-traversal, movable item and continuous occlusion fade. Use a trial 240-row world
+traversal, movable item and continuous occlusion fade. Use a trial 180-row world
 sampling target and a restricted vegetation palette; keep HUD resolution intact.
 The scan remains an offline/reference source, not the final visible decoration.
 
@@ -159,8 +159,12 @@ palette reduction, hard sprite silhouettes and nearest runtime sampling. Wall
 and foliage occlusion share continuous alpha; the stippled effect is not restored.
 Only five decor materials are shared across the bank geometry and foliage.
 
-World sampling now targets 240 rows (3px blocks at 720p), while the HUD retains
+World sampling now targets 180 rows (4px blocks at 720p), while the HUD retains
 full resolution. Asphalt grain is coarser and sparse, the ground stays dark,
 and the original pale facade has warmer window accents. Collision, placement,
 eight-direction walking and respawn behavior are unchanged. This is a new draft
 art pass, not a claim of matching the finished README illustration.
+
+The parallel mobile-controls beta was already published while this art pass was
+deploying. Integration preserves its touch interactions and 180-row sampling,
+alongside the new authored scenery, instead of replacing that published work.

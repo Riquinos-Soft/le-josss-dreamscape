@@ -32,10 +32,20 @@ void fragment() {
 	// Photograph sampled before mesh simplification: keep facade, door and plants.
 	vec3 captured = max(COLOR.rgb, vec3(0.0));
 	vec3 display_color = pow(captured, vec3(1.0 / 2.2));
-	vec3 palette = floor(display_color * 16.0 + 0.5) / 16.0;
+	vec3 palette = floor(display_color * 8.0 + 0.5) / 8.0;
 	// Flat painted tones, avoiding the scan's faceted dynamic lighting.
 	vec3 tint = mix(vec3(0.73, 0.72, 0.94), vec3(1.0, 0.92, 0.80), step(0.45, world_normal.y));
 	vec3 final_color = palette * tint;
+	// Give the scanned roadside foliage broad, stepped leaf tones for the beta.
+	float green_bias = min(display_color.g - display_color.r * 0.95,
+		display_color.g - display_color.b * 1.1);
+	float foliage = smoothstep(0.005, 0.045, green_bias);
+	float leaf_light = dot(display_color, vec3(0.299, 0.587, 0.114));
+	vec3 leaves = vec3(0.10, 0.18, 0.17);
+	leaves = mix(leaves, vec3(0.20, 0.31, 0.22), step(0.25, leaf_light));
+	leaves = mix(leaves, vec3(0.34, 0.45, 0.27), step(0.43, leaf_light));
+	leaves = mix(leaves, vec3(0.52, 0.61, 0.36), step(0.62, leaf_light));
+	final_color = mix(final_color, leaves, foliage);
 	for (int i = 0; i < 14; i++) {
 		vec2 segment = route[i + 1].xz - route[i].xz;
 		float along = clamp(dot(world_position.xz - route[i].xz, segment) / dot(segment, segment), 0.0, 1.0);

@@ -4,6 +4,13 @@ Open `project.godot` with standard Godot **4.7.2.stable.official.ed1daf0bf** and
 
 Scale: one unit is one meter; character height 1.8 m, speed 4 m/s, courtyard interior 20×16 m. `world/smoke_test.tscn` remains the unchanged original static scene; its old export is preserved locally in `build/web-smoke-baseline/`.
 
+Mobile browser: turn the phone horizontally. Use the left joystick to walk and
+the right button to pick up, then start placement. The preview appears in front
+of you until you drag it elsewhere; release to leave it at that world position.
+During placement only Rotate and Confirm appear. Another finger can keep walking. Portrait
+pauses the game behind a rotate-device message. Losing focus or rotating clears
+touch input. Native testing can force the mobile UI with `-- --touch`.
+
 `export_presets.cfg` contains the `Web` release preset for the courtyard and dependencies, using Compatibility rendering with thread and extension support disabled. See [reproducible commands, tests, and pending browser checks](../docs/development.md).
 
 Keep all shipped resources inside this directory. Keep original captures, Blender source, tooling, and exports outside it. See [the proposed layout](../docs/architecture.md).

@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://world/jacobo_risa_street.gd" id="1_street"]
 [ext_resource type="PackedScene" path="res://assets/streets/jacobo_risa/street.glb" id="2_scan"]
@@ -10,6 +10,7 @@
 [ext_resource type="SpriteFrames" path="res://assets/art/characters/char_joss_animations_v01.tres" id="8_character"]
 [ext_resource type="Script" path="res://player/street_character.gd" id="9_animation"]
 [ext_resource type="Script" path="res://items/street_item_loop.gd" id="10_item"]
+[ext_resource type="Script" path="res://player/touch_controls.gd" id="11_touch"]
 
 [sub_resource type="Environment" id="Environment_street"]
 background_mode = 1
@@ -97,3 +98,16 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="TouchHUD" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="TouchControls" type="Control" parent="TouchHUD"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("11_touch")
