@@ -100,7 +100,7 @@ Editable Blender assets, reusable props and authored pixel textures remain the
 production direction under ADR 002. This trial does not require a new asset
 framework, full character, interaction-menu system or a new architectural ADR.
 
-## Walk and smooth occlusion correction ? 2026-09-25
+## Walk and smooth occlusion correction — 2026-09-25
 
 `street_character.gd` isolates AnimatedSprite3D presentation from movement.
 Eight idle and eight walk clips use camera-relative resolved velocity. The

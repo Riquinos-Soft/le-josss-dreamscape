@@ -76,10 +76,10 @@ integrador modifica archivos compartidos o hace commits durante esa oleada.
    en sprites, cámara, UI y assets ya importados. No bloquear por esto tareas
    que sólo conservan el contrato existente.
 3. Ocho direcciones ya solicitadas por el desarrollador, incluyendo diagonales.
-   Propuesta local para walk: 6 frames por dirección, 8 FPS, loop; spritesheet de
+   Contrato local de walk: 4 frames por dirección, 8 FPS, loop; spritesheet de
    4 columnas por 8 filas, cada celda 64x64, orden de filas
    down/up/left/right/down_left/down_right/up_left/up_right, pivote (32,60),
-   altura máxima 48 px. El número de frames/FPS sigue siendo una propuesta.
+   altura máxima 48 px. Estos valores se limitan a la prueba actual.
 4. Precisar si se aprueba generar esos assets y con qué herramienta disponible.
    No prometer generación visual desde Grok si esa conexión no tiene herramienta.
 5. Mantener `interact` fuera de esta oleada; documentar que el slice completo de
@@ -112,7 +112,7 @@ No editar el idle aprobado para la prueba ni el controlador.
    body_height, producción=draft y rutas de fuente/runtime en JSON.
 6. Entregar hoja, metadata y evidencia. Un preview GIF es útil, no el maestro.
 
-**Aceptación:** 32 frames y orden exacto seg?n D01; pies en
+**Aceptación:** 32 frames y orden exacto según D01; pies en
 el mismo apoyo; silueta consistente; nearest; fuente reproducible; no runtime
 de vídeo ni atlas de resolución excesiva. No marcar approved sin revisión.
 
