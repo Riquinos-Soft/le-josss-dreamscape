@@ -33,7 +33,8 @@ resolved displacement, stop when blocked, and reset presentation on respawn.
 Use the developer's Scaniverse capture as the visual basis of an independent
 street trial. Preserve recognizable contours and decoration while providing a
 continuous, deliberately authored walking surface. Do not make scan holes or
-reconstruction noise into gameplay obstacles. Keep the courtyard as the main scene.
+reconstruction noise into gameplay obstacles. The developer has now authorized
+the street as the public/default main scene; retain the courtyard as a separate scene.
 
 The player must reach the scanned gateway/portal area without jumping. This
 does not introduce portal travel or another world. Normal movement must stay
@@ -135,5 +136,7 @@ the earlier 40 MiB prototype target. The Windows import processes stalled during
 shutdown and were terminated after importing. The subsequent exports were slow
 to exit but both eventually returned 0. The merged Linux checks, Web export and
 OVH deployment also passed in [Actions run 36094963803](https://github.com/Riquinos-Soft/le-josss-dreamscape/actions/runs/36094963803).
-This confirms the production build; the independent street preview remains on
-local port 8001, while the production/main scene is still the courtyard.
+That release still opened the courtyard. The subsequent developer request makes
+`world/jacobo_risa_street.tscn` the default scene for native and public Web builds,
+including Joss's eight-direction walking, soft wall occlusion and the movable block.
+Deployment uses the existing tested-main Actions workflow; no hosting changes.

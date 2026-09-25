@@ -44,7 +44,7 @@ Platform priority: Web, macOS development, Android, iOS, possibly other desktop 
 - [ADR 003: item identity across world and inventory](docs/adr/003-item-identity-and-world-representation.md)
 - [Asset workspace](assets/README.md)
 
-The independent street trial now includes eight-direction walking animation,
+The public prototype opens the scanned street with eight-direction walking animation,
 smooth wall transparency, and a movable violet block near spawn. Press **E** to
 pick it up, **P** to place, aim with the mouse, **Q/E** to rotate, left-click to
 confirm, and **Esc** to cancel. Placement follows the supported street surface.
