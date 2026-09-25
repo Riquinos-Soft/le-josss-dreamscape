@@ -29,11 +29,13 @@ func check_scene(scene_path: String) -> void:
 	var items = scene.get_node("ItemLoop")
 	var original = items.world_item.item
 	var original_position: Vector3 = items.world_item.position
+	await check_pickup_availability(scene, player, items)
 	if scene_path.ends_with("jacobo_risa_street.tscn"):
 		original_position = items.supported_pose(Vector3(2.25, 0, 1.1), PI / 2)
 	tap_action("pickup")
 	await frames(2)
 	check(items.inventory.item == original, "touch pickup preserves identity")
+	check(controls.action_rects.keys() == ["begin"], "held item exposes only placement")
 	tap_action("begin")
 	await frames(2)
 	check(items.placement_active, "touch starts placement")
@@ -120,10 +122,13 @@ func check_scene(scene_path: String) -> void:
 	touch(0, Vector2.ZERO, false)
 	check(items.target == dragged_target, "released preview stays at its world position")
 	# With no Cancel button, an invalid drag must remain visible and recoverable.
+	var confirm_point: Vector2 = controls.action_rects["confirm"].get_center()
 	drag_preview(items, Vector2(440, 100))
 	await frames(2)
 	check(items.target.x != 1000 and not items.target_valid, "invalid preview stays visible")
-	tap_action("confirm")
+	check(controls.action_rects.keys() == ["right"], "invalid placement hides confirm")
+	touch(1, confirm_point, true)
+	touch(1, confirm_point, false)
 	await frames(2)
 	check(
 		items.placement_active and items.inventory.item == original, "invalid confirm retains item"
@@ -131,6 +136,7 @@ func check_scene(scene_path: String) -> void:
 	drag_preview(items, items.camera.unproject_position(original_position - Vector3.UP * 0.25))
 	await frames(2)
 	check(items.target_valid, "invalid placement can be dragged back to valid ground")
+	check(controls.action_rects.has("confirm"), "valid placement restores confirm")
 	tap_action("confirm")
 	await frames(2)
 	check(
@@ -177,6 +183,38 @@ func check_scene(scene_path: String) -> void:
 	check(player.touch_direction == Vector2.ZERO, "rotation cannot leave movement stuck")
 	scene.queue_free()
 	await process_frame
+
+
+func check_pickup_availability(scene: Node, player: Node3D, items: Node) -> void:
+	check(controls.action_rects.keys() == ["pickup"], "reachable item exposes pickup")
+	var pickup_point: Vector2 = controls.action_rects["pickup"].get_center()
+	var start := player.global_position
+	player.global_position += Vector3(0, 0, 5)
+	await frames(2)
+	check(controls.action_rects.is_empty(), "no actions when item is too far away")
+	check(controls.message.text.is_empty(), "no pickup instruction when unavailable")
+	touch(1, pickup_point, true)
+	touch(1, pickup_point, false)
+	await frames(2)
+	check(items.inventory.item == null, "hidden pickup area does nothing")
+	player.global_position = start
+	player.velocity = Vector3.ZERO
+	await frames(5)
+	check(controls.action_rects.has("pickup"), "approaching restores pickup")
+	var barrier := StaticBody3D.new()
+	var collision := CollisionShape3D.new()
+	var shape := BoxShape3D.new()
+	shape.size = Vector3(0.4, 0.6, 0.4)
+	collision.shape = shape
+	barrier.add_child(collision)
+	scene.add_child(barrier)
+	barrier.global_position = (player.global_position + items.world_item.global_position) * 0.5
+	barrier.global_position.y += 0.2
+	await frames(3)
+	check(not controls.action_rects.has("pickup"), "obstacle blocks pickup action")
+	barrier.queue_free()
+	await frames(3)
+	check(controls.action_rects.has("pickup"), "clear path restores pickup")
 
 
 func touch(index: int, point: Vector2, pressed: bool) -> void:
