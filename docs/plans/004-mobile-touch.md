@@ -11,10 +11,16 @@
   revisar diff; commit local; publicar export mediante receptor restringido OVH.
 - Fuera de alcance: cambios de infraestructura, PR, nuevos sistemas de juego.
 - Push de la rama autorizado posteriormente por el desarrollador.
-- Estado: review; implementación validada, publicación pendiente. Coste/tokens: no disponible.
+- Estado: done (2026-09-25); commit funcional `6396a87`, publicado y subido a
+  `origin/feature-touchpad-movement-controls`. Coste/tokens: no disponible.
 - Validación: 320 comprobaciones headless, 18 táctiles nativas, lint/formato y export
   Web pasan. Edge 152 con emulación táctil arranca sin errores de consola y muestra
   la UI horizontal, recogida y bloqueo vertical. Capturas en `build/verification/`.
 - Avisos: importador del GLB existente asume byte stride; gdtoolkit avisa de
   pkg_resources obsoleto. Pruebas del receptor no ejecutables en Windows (`fcntl`).
-- Pendiente: prueba física en Chrome Android y Safari iOS; publicación HTTPS.
+- Publicación: receptor SSH restringido, release `6396a87305281afa207f9ca94d2000d6369c7881`,
+  ejecución `1790311373-1`. HTTPS `/release.txt` coincide; HTML/WASM/PCK responden
+  200 y WASM usa `application/wasm`. No cambios de infraestructura ni de `main`.
+- Revisión visual final: aviso vertical legible, etiquetas de giro compatibles
+  con la fuente exportada, objeto recogido mediante toque; consola sin errores.
+- Pendiente únicamente: prueba física en Chrome Android y Safari iOS.
