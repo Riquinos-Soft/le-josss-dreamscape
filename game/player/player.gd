@@ -10,6 +10,7 @@ const MovementDirection = preload("res://player/movement_direction.gd")
 @export var mouse_dead_zone: float = 0.35
 @export var mouse_full_speed_distance: float = 2.5
 var mouse_steering_active: bool = false
+var touch_direction := Vector2.ZERO
 var spawn_transform: Transform3D
 
 @onready var visual: Node3D = $Visual
@@ -31,6 +32,7 @@ func respawn() -> void:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
 		mouse_steering_active = false
+		touch_direction = Vector2.ZERO
 		for action in ["move_left", "move_right", "move_forward", "move_back"]:
 			Input.action_release(action)
 
@@ -45,6 +47,8 @@ func _physics_process(delta: float) -> void:
 		respawn()
 		return
 	var input := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+	if input.is_zero_approx():
+		input = touch_direction
 	var direction := MovementDirection.from_view(input, movement_orientation.global_basis)
 	# Keyboard has deterministic precedence so its existing behavior remains unchanged.
 	if direction.is_zero_approx() and mouse_steering_active:

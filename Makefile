@@ -1,6 +1,7 @@
 GODOT ?= godot
 
 TESTS := \
+	test_touch_controls.gd \
 	test_movement_direction.gd \
 	test_keyboard_input.gd \
 	test_item_lifecycle.gd \

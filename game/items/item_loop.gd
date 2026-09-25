@@ -16,6 +16,9 @@ var target_valid: bool = false
 var commands: Array[StringName] = []
 var status: Label
 var place_button: Button
+var touch_mode: bool = false
+var touch_aim := Vector2.ZERO
+var touch_aim_set: bool = false
 @onready var player = get_parent().get_node("Player")
 @onready var camera: Camera3D = get_parent().get_node("CameraRig/Camera")
 @onready var floor_body: StaticBody3D = get_parent().get_node("Geometry/Floor")
@@ -76,8 +79,10 @@ func _notification(what: int) -> void:
 
 
 func _physics_process(_delta: float) -> void:
-	if placement_active:
+	if placement_active and (not touch_mode or touch_aim_set):
 		var mouse := get_viewport().get_mouse_position()
+		if touch_mode:
+			mouse = touch_aim
 		var hit = Plane(Vector3.UP, 0).intersects_ray(
 			camera.project_ray_origin(mouse), camera.project_ray_normal(mouse)
 		)
@@ -141,6 +146,7 @@ func begin_placement() -> bool:
 	if placement_active or inventory.item == null:
 		return false
 	placement_active = true
+	touch_aim_set = false
 	yaw = 0.0
 	target = player.global_position - player.visual.global_basis.z * 1.3
 	target.y = 0.25
