@@ -7,6 +7,7 @@ game/.export_credentials.cfg
 /deploy/ovh/.secrets/
 /deploy/ovh/backups/
 /deploy/ovh/www/
+/tools/scaniverse_street/node_modules/
 # Large local capture/reconstruction inputs and experiments.
 /assets/captures/
 /assets/work/
