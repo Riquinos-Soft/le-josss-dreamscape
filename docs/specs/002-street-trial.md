@@ -108,3 +108,22 @@ character test covers all directions under two camera headings, sector edges,
 cycle progress, idle preservation, wall blocking and respawn (135 checks).
 Native occlusion capture shows a continuous soft cutaway, with no pixel pattern.
 Final art and manual browser acceptance remain pending.
+
+## Movable trial object
+
+The developer requested one movable object and a push after completion. Reuse
+the existing single-instance block pickup/inventory/placement loop in the street.
+Place it within reach of spawn without blocking the walking route. E picks up,
+P starts placement, mouse aims, Q/E rotates, click confirms and Escape cancels.
+Use the actual authored sloping floor: the complete footprint must be supported,
+within reach, unobstructed and clear of the player. Reject edges and empty space;
+preserve identity across repeated moves and keep cancellation lossless. This is
+repositioning, not rigid-body pushing, and introduces no new inventory system.
+
+Final validation of this correction: 472 checks pass (135 character, 33 street
+item, 166 street traversal, 138 existing). Native captures show the block before
+and after placement, the soft wall cutaway and all four walk frames advancing
+in the actual scene. Both release Web exports succeed; street payload is
+41,568,582 bytes (39.64 MiB). Preview responds HTTP 200 on port 8001. No manual
+Chrome/Safari gameplay acceptance is claimed. Format/lint pass; gdtoolkit still
+emits its pre-existing pkg_resources deprecation warning.

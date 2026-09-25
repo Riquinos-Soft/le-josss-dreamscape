@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource type="Script" path="res://world/jacobo_risa_street.gd" id="1_street"]
 [ext_resource type="PackedScene" path="res://assets/streets/jacobo_risa/street.glb" id="2_scan"]
@@ -9,6 +9,7 @@
 [ext_resource type="Shader" path="res://world/street_pixel.gdshader" id="7_pixel"]
 [ext_resource type="SpriteFrames" path="res://assets/art/characters/char_joss_animations_v01.tres" id="8_character"]
 [ext_resource type="Script" path="res://player/street_character.gd" id="9_animation"]
+[ext_resource type="Script" path="res://items/street_item_loop.gd" id="10_item"]
 
 [sub_resource type="Environment" id="Environment_street"]
 background_mode = 1
@@ -30,6 +31,13 @@ shader = ExtResource("7_pixel")
 script = ExtResource("1_street")
 study_material = SubResource("Material_study")
 paving_material = SubResource("Material_paving")
+
+[node name="ItemLoop" type="Node" parent="."]
+script = ExtResource("10_item")
+floor_path = NodePath("../StreetCollision")
+initial_item_position = Vector3(3.28, 1.84, 1.2)
+hud_position = Vector2(12, 88)
+control_help = "E: recoger · P: colocar · Ratón: elegir lugar\nQ/E: girar · Clic: confirmar · Esc: cancelar"
 
 [node name="Environment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_street")

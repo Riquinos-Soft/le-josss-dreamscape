@@ -1,15 +1,15 @@
 # Plan delegable — Animación de Joss y normalización de la calle
 
-Estado: **ejecuci?n parcial autorizada por el desarrollador el 2026-09-25**.
-D01/G01/G02/G04 implementados para animaci?n; I01 en validaci?n. G03 (vegetaci?n)
-no se ejecuta en esta petici?n. R01 sigue pendiente de revisi?n art?stica del
-usuario. Ejecuci?n secuencial por el agente disponible; Grok no est? conectado.
-Base al activar: `9c0bd9f75259d669a763cddb965e695764219a68`; ?rbol limpio.
+Estado: **ejecución parcial autorizada por el desarrollador el 2026-09-25**.
+D01/G01/G02/G04 e I01 completados para animación. G03 (vegetación)
+no se ejecuta en esta petición. R01 sigue pendiente de revisión artística del
+usuario. Ejecución secuencial por el agente disponible; Grok no está conectado.
+Base al activar: `9c0bd9f75259d669a763cddb965e695764219a68`; árbol limpio.
 
-Contrato ejecutado: cuatro frames por direcci?n a 8 FPS (32 celdas, 4?8),
-conservando tama?o, pivote y escala. Sustituye la propuesta inicial de seis frames
+Contrato ejecutado: cuatro frames por dirección a 8 FPS (32 celdas, 4×8),
+conservando tamaño, pivote y escala. Sustituye la propuesta inicial de seis frames
 tras inspeccionar las poses generadas. Los muros usan alfa continua suave:
-el desarrollador rechaz? expresamente el tramado de puntos.
+el desarrollador rechazó expresamente el tramado de puntos.
 
 ## Objetivo y contexto
 

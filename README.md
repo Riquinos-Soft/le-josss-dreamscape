@@ -33,7 +33,12 @@ Platform priority: Web, macOS development, Android, iOS, possibly other desktop 
 - [Spec 002: street traversal and pixel trial](docs/specs/002-street-trial.md)
 - [Spec 003: Astra and economical-agent workflow](docs/specs/003-agent-workflow.md)
 - [Delegable task template](docs/plans/task-template.md)
-- [Prepared plan: Joss animation and street art](docs/plans/004-joss-animation-and-street-art.md)
+- [Plan and execution status: Joss animation and street art](docs/plans/004-joss-animation-and-street-art.md)
+
+The independent street trial now includes eight-direction walking animation,
+smooth wall transparency, and a movable violet block near spawn. Press **E** to
+pick it up, **P** to place, aim with the mouse, **Q/E** to rotate, left-click to
+confirm, and **Esc** to cancel. Placement follows the supported street surface.
 - [Development environment and Web risks](docs/development.md)
 - [ADR 001: engine and Web baseline](docs/adr/001-engine-and-web-baseline.md)
 - [ADR 002: offline asset boundary](docs/adr/002-offline-asset-boundary.md)
