@@ -1,5 +1,7 @@
 # Le Joss's Dreamscape
 
+[Play the Web prototype](https://dreamscape.198.244.233.153.sslip.io/)
+
 ![Le Joss's Dreamscape concept art: a dreamlike plaza with a physical item placement preview](docs/images/dreamscape-concept.png)
 
 *Visual concept for the project's direction, not a screenshot of the current build.*
