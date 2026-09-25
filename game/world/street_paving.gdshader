@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode cull_disabled;
+render_mode unshaded, cull_disabled;
 
 varying vec3 world_position;
 
@@ -8,15 +8,14 @@ void vertex() {
 }
 
 void fragment() {
-	vec2 pixel = floor(world_position.xz * 24.0) / 24.0;
-	float row = floor(pixel.y * 2.5);
-	vec2 grid = vec2(pixel.x * 2.0 + mod(row, 2.0) * 0.5, pixel.y * 2.5);
-	vec2 cell = floor(grid);
-	vec2 edge = fract(grid);
-	float tone = fract(sin(dot(cell, vec2(12.9898, 78.233))) * 43758.5453);
-	tone = floor(tone * 4.0) / 3.0;
-	vec3 stone = mix(vec3(0.32, 0.27, 0.39), vec3(0.48, 0.38, 0.44), tone);
-	float grout = step(0.12, edge.x) * step(0.12, edge.y);
-	ALBEDO = mix(vec3(0.12, 0.10, 0.20), stone, grout);
+	vec2 grain = floor(world_position.xz * 32.0);
+	float tone = fract(sin(dot(grain, vec2(12.9898, 78.233))) * 43758.5453);
+	// Subtle asphalt grain; no invented paving joints or cobbles.
+	vec3 asphalt = mix(vec3(0.13, 0.145, 0.18), vec3(0.17, 0.18, 0.22), step(0.7, tone));
+	// The garage's original pale concrete apron is distinct from the road asphalt.
+	if (world_position.z > 23.4 && world_position.z < 27.4 && world_position.x > -3.2) {
+		asphalt = mix(vec3(0.33, 0.32, 0.37), vec3(0.37, 0.36, 0.40), step(0.78, tone));
+	}
+	ALBEDO = OUTPUT_IS_SRGB ? asphalt : pow(asphalt, vec3(2.2));
 	ROUGHNESS = 1.0;
 }

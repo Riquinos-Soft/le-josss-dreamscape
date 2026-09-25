@@ -45,9 +45,13 @@ steering projects onto the player's current elevation; item placement retains it
 separate courtyard-only ground-plane rule.
 
 The independent street trial follows [Spec 002](specs/002-street-trial.md). Its
-scan is visual decoration; a wrapper-owned strip and side/end barriers define
-the supported route. Procedural pixel materials and a world-only screen pass
-leave the HUD at full resolution. No travel or location-menu system is present.
+scan is visual decoration; wrapper-owned variable-width cross sections and
+side/end barriers define the route and garage apron. The street uses an
+orthographic camera, eight-direction Joss sprites, clean pixel-art garage faces,
+dark asphalt and local pixel-stipple wall cutaways. A world-only screen pass
+leaves the HUD at full resolution. Generated source art, prompts, normalized
+runtime sheets and metadata are retained. These remain draft visual assets.
+No travel, walk animation or location-menu system is present.
 
 ## Single-item implementation
 

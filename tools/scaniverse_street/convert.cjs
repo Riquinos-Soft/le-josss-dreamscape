@@ -2,6 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const draco3d = require('draco3d');
 const { MeshoptSimplifier } = require('meshoptimizer');
+const jpeg = require('jpeg-js');
 
 function decodeAttribute(draco, decoder, mesh, kind) {
   const attribute = decoder.GetAttributeByUniqueId(mesh, kind);
@@ -43,18 +44,33 @@ async function decodeMesh(file) {
   return { positions, uvs, indices };
 }
 
-function compact(indices, positions, uvs) {
+function compact(indices, positions, uvs, colors) {
   const outIndices = new Uint32Array(indices);
   const [remap, vertexCount] = MeshoptSimplifier.compactMesh(outIndices);
   const outPositions = new Float32Array(vertexCount * 3);
   const outUvs = new Float32Array(vertexCount * 2);
+  const outColors = new Float32Array(vertexCount * 3);
   for (let old = 0; old < remap.length; old++) {
     const next = remap[old];
     if (next === 0xffffffff) continue;
     outPositions.set(positions.subarray(old * 3, old * 3 + 3), next * 3);
     outUvs.set(uvs.subarray(old * 2, old * 2 + 2), next * 2);
+    outColors.set(colors.subarray(old * 3, old * 3 + 3), next * 3);
   }
-  return { positions: outPositions, uvs: outUvs, indices: outIndices };
+  return { positions: outPositions, uvs: outUvs, colors: outColors, indices: outIndices };
+}
+
+function sampleColors(uvs, image) {
+  const colors = new Float32Array(uvs.length / 2 * 3);
+  for (let vertex = 0; vertex < uvs.length / 2; vertex++) {
+    const x = Math.max(0, Math.min(image.width - 1, Math.floor(uvs[vertex * 2] * image.width)));
+    const y = Math.max(0, Math.min(image.height - 1, Math.floor(uvs[vertex * 2 + 1] * image.height)));
+    for (let channel = 0; channel < 3; channel++) {
+      const srgb = image.data[(y * image.width + x) * 4 + channel] / 255;
+      colors[vertex * 3 + channel] = srgb <= 0.04045 ? srgb / 12.92 : ((srgb + 0.055) / 1.055) ** 2.4;
+    }
+  }
+  return colors;
 }
 
 function normalsFor(positions, indices) {
@@ -90,7 +106,7 @@ function bounds(positions) {
   return { min, max };
 }
 
-function encodeGlb(mesh, output) {
+function encodeGlb(mesh, output, referenceTexture) {
   const normals = normalsFor(mesh.positions, mesh.indices);
   const blobs = [];
   const views = [];
@@ -112,6 +128,8 @@ function encodeGlb(mesh, output) {
   const normalView = add(normals, 34962);
   const uvView = add(mesh.uvs, 34962);
   const indexView = add(mesh.indices, 34963);
+  const imageView = referenceTexture ? add(referenceTexture) : null;
+  const colorView = mesh.colors ? add(mesh.colors, 34962) : null;
   const positionBounds = bounds(mesh.positions);
   const gltf = {
     asset: { version: '2.0', generator: 'Dreamscape Scaniverse street trial' },
@@ -131,6 +149,18 @@ function encodeGlb(mesh, output) {
       { bufferView: indexView, componentType: 5125, count: mesh.indices.length, type: 'SCALAR' },
     ],
   };
+  if (referenceTexture) {
+    gltf.images = [{ bufferView: imageView, mimeType: 'image/jpeg' }];
+    gltf.textures = [{ source: 0 }];
+    gltf.materials[0].pbrMetallicRoughness.baseColorFactor = [1, 1, 1, 1];
+    gltf.materials[0].pbrMetallicRoughness.baseColorTexture = { index: 0 };
+  }
+  if (mesh.colors) {
+    gltf.meshes[0].primitives[0].attributes.COLOR_0 = gltf.accessors.length;
+    gltf.accessors.push({ bufferView: colorView, componentType: 5126, count: mesh.colors.length / 3, type: 'VEC3' });
+    gltf.materials[0].name = 'CapturedSurfaceColors';
+    gltf.materials[0].pbrMetallicRoughness.baseColorFactor = [1, 1, 1, 1];
+  }
   const json = Buffer.from(JSON.stringify(gltf));
   const jsonPadding = (4 - json.length % 4) % 4;
   const bin = Buffer.concat([...blobs, Buffer.alloc((4 - binarySize % 4) % 4)]);
@@ -154,14 +184,21 @@ async function main() {
   const output = path.resolve(process.argv[3] || 'game/assets/streets/jacobo_risa/street.glb');
   const source = await decodeMesh(path.join(sourceDir, 'mesh.drc'));
   console.log(`decoded: ${source.positions.length / 3} vertices, ${source.indices.length / 3} triangles`);
+  if (process.argv.includes('--reference')) {
+    encodeGlb(source, output, fs.readFileSync(path.join(sourceDir, 'tex.jpg')));
+    return;
+  }
   await MeshoptSimplifier.ready;
+  const photograph = jpeg.decode(fs.readFileSync(path.join(sourceDir, 'tex.jpg')), { useTArray: true, maxMemoryUsageInMB: 1024 });
+  const colors = sampleColors(source.uvs, photograph);
+  console.log(`sampled original ${photograph.width}x${photograph.height} atlas into linear vertex colors`);
   MeshoptSimplifier.useExperimentalFeatures = true;
   const [simplified, error] = MeshoptSimplifier.simplifyWithAttributes(
-    source.indices, source.positions, 3, source.uvs, 2, [0.1, 0.1], null,
+    source.indices, source.positions, 3, colors, 3, [0.5, 0.5, 0.5], null,
     35000 * 3, 0.04, ['Prune', 'Permissive'],
   );
   console.log(`simplified: ${simplified.length / 3} triangles, relative error ${error}`);
-  const mesh = compact(simplified, source.positions, source.uvs);
+  const mesh = compact(simplified, source.positions, source.uvs, colors);
   fs.mkdirSync(path.dirname(output), { recursive: true });
   const resultBounds = encodeGlb(mesh, output);
   console.log(`GLB: ${output}, ${fs.statSync(output).size} bytes, ${mesh.positions.length / 3} vertices`);

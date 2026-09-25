@@ -7,6 +7,27 @@ not complete. Spec 001 remains the separate courtyard milestone.
 
 ## Scope
 
+Design authority: [Game Bible](https://app.notion.com/p/3e678dc87e92819582a7e84c00e6678e),
+especially its art, asset, character and development pages, read on 2026-09-25.
+The street remains a bounded experiment inside this repository, not a replacement
+for the Bible's longer-term Casa → Bar slice or an approval of its pending standards.
+
+Fidelity correction requested after the first art review: preserve the original
+dark asphalt, variable road edges, pale garage facade and its accessible entrance
+apron. The cobblestone replacement and fixed-width corridor were not accepted.
+Use the original scan's appearance and dimensions as evidence; atmosphere and
+pixel treatment must not replace recognizable materials or block side entrances.
+Add a controller traversal check from the road to the garage door and back.
+
+Second art correction: reduce the raw 3D reconstruction look with an orthographic
+street camera, a pixel sprite character and flatter color treatment. Keep the
+original materials recognizable. Scanned walls that cover the character must
+become locally transparent using pixel stippling, without changing collision.
+Check both the unobstructed view and a character behind the garage wall natively.
+Joss must display all eight movement directions, including four genuine diagonal
+views, and preserve the last orientation when idle. Walk animation is a separate
+planned task; directional idle art must not be described as an animated walk cycle.
+
 Use the developer's Scaniverse capture as the visual basis of an independent
 street trial. Preserve recognizable contours and decoration while providing a
 continuous, deliberately authored walking surface. Do not make scan holes or
@@ -37,30 +58,38 @@ initial treatment, not a claim of matching the finished reference illustration.
 
 ## References and deferred work
 
-Implementation: a 2.7 m wide sloping strip follows 15 surveyed points in the scan,
-with side and end collision barriers. The scan itself is decoration. The player
+Implementation: 17 variable-width cross sections follow the scanned road edges,
+junction and garage apron, with side/end barriers. The source texture is sampled
+into vertex colors offline. Two garage faces use clean geometry and pixel artwork
+at the surveyed footprint; small vegetation accents are sprites. The remaining
+scan is still draft art, not a finished RPG environment. The player
 records its instance spawn on ready and recovers below world Y=-8 m, resetting
 velocity/interpolation and notifying the camera. Mouse steering uses the player's
-current elevation. Procedural stone/paving materials and a nearest-sampled world
-pass (3 px at 720p) establish initial pixel detail; the HUD renders afterward.
-These procedural materials are not yet baked Blender texture assets.
+current elevation. Dark asphalt replaces invented cobbles. An orthographic camera,
+flat palette and nearest-sampled world pass (2 px at 720p) accompany Joss's sprites;
+the HUD renders afterward. Occluding scan/garage walls use a local pixel-stipple
+cutaway without changing collision. These assets are not Blender sources.
 
-Validation on Windows, Godot 4.7.2 Compatibility: all 261 headless checks pass
-(123 street, 138 existing). Street tests cover both directions, every side join,
-end caps and repeated falls. Native captures are under ignored
-`build/verification/street_{spawn,south_end,north_end}.png`; final endpoint
-material checks are `street_final_0.png` and `street_final_14.png`. Both courtyard and
-independent street release Web exports succeed. HTTP 200 is verified locally;
-this does not count as browser gameplay acceptance. The street payload is about
-39.43 MiB. Lint passes, with the existing gdtoolkit `pkg_resources` deprecation
-warning. An uncapped fixed-FPS test run produced a Jolt job-capacity warning;
-the normal-timing headless run passed without that warning.
+Trial-only normalization: Joss has a 48px body in a 64x64 frame, feet pivot (32,60),
+1.8m visual height, 0.0375m per sprite pixel. Original generated source, exact prompt,
+normalization script and JSON metadata are retained. Eight idle directions are
+requested; no animation, global tile standard or approved master palette is implied.
 
-The developer also supplied
-https://chatgpt.com/s/m_6ab5dfffd56c8191b75db5733b9caf0f for visual and contextual
-interaction-menu references. Its images were not accessible through the page
-reader; do not claim to have reviewed them. Proximity prompts and location menus
-are a direction to refine from those references, not implemented acceptance here.
+Validation on Windows, Godot 4.7.2 Compatibility: all 302 headless checks pass
+(164 street, 138 existing). Street tests cover both ends, variable-width boundaries,
+the garage route and return, repeated falls, eight directional choices and common
+sprite height/feet pivots. Native rendering inspected the garage and the same
+occluded character with/without wall fade: ignored `build/verification/` files
+`street_final_15.png`, `street_final_16.png`, `street_wall_solid_final.png`.
+Both courtyard and independent street release Web exports succeed without
+reported runtime/export errors. Street payload: 41,454,538 bytes (39.53 MiB).
+HTTP 200 and opening Chrome are verified; browser gameplay/Safari are not claimed.
+Lint/format pass with the existing gdtoolkit `pkg_resources` deprecation warning.
+
+The public image previews of the shared plaza and Joss character sheet were
+recovered from their pages' image metadata after the text-only reader failed.
+Both are saved in `references/` and visually inspected. Proximity prompts and
+location menus remain a direction to refine, not implemented acceptance here.
 
 Editable Blender assets, reusable props and authored pixel textures remain the
 production direction under ADR 002. This trial does not require a new asset

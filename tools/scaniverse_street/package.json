@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "draco3d": "1.5.7",
+    "jpeg-js": "0.4.4",
     "meshoptimizer": "1.2.0"
   }
 }
