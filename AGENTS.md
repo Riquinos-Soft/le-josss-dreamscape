@@ -47,6 +47,9 @@ For gameplay or runtime changes:
 
 ## Model and token efficiency
 
+- Follow `docs/specs/003-agent-workflow.md` for escalation, low-cost execution, file ownership, and integration. Prepare delegable plans with `docs/plans/task-template.md` before multi-agent implementation. Prefer Grok for bounded execution when available and authorized; never claim it is connected or selected without checking.
+- Request Astra before implementing unresolved consequential decisions described in that protocol. Continue routine work under already settled contracts without repeated confirmation. During parallel work, only the assigned integrator commits shared-workspace results; this refines the automatic commit rule without authorizing branches, pushes, or unrelated edits.
+
 - Treat expensive, high-reasoning models as an architectural resource, not the default implementation engine.
 - Use the session's normal, efficient implementation model for routine implementation, tests, local refactors, documentation, and straightforward fixes.
 - Do not request or recommend a higher-reasoning model for routine work.
