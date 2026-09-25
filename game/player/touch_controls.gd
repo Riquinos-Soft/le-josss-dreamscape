@@ -10,6 +10,8 @@ var action_rects: Dictionary = {}
 var drag_finger: int = -1
 var portrait: bool = false
 var message: Label
+var feedback_action := ""
+var feedback_time := 0.0
 @onready var player = get_parent().get_parent().get_node("Player")
 @onready var items = get_parent().get_parent().get_node("ItemLoop")
 
@@ -69,6 +71,7 @@ func reset_touch() -> void:
 	player.mouse_steering_active = false
 	items.commands.clear()
 	items.touch_aim_pending = false
+	feedback_time = 0.0
 	queue_redraw()
 
 
@@ -108,9 +111,13 @@ func handle_touch(event: InputEvent) -> void:
 			stick_finger = event.index
 			set_stick(event.position)
 			return
+		update_actions()
 		for action in action_rects:
 			if action_rects[action].has_point(event.position):
 				items.commands.append(StringName(action))
+				feedback_action = action
+				feedback_time = 0.16
+				queue_redraw()
 				return
 		if items.placement_active and drag_finger == -1:
 			var point: Vector2 = items.camera.unproject_position(items.preview.global_position)
@@ -135,26 +142,35 @@ func set_stick(point: Vector2) -> void:
 	queue_redraw()
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if not enabled:
 		return
+	if feedback_time > 0.0:
+		feedback_time = maxf(0.0, feedback_time - delta)
+		queue_redraw()
 	if portrait:
 		message.text = "Gira el móvil\npara jugar en horizontal"
 	elif items.placement_active:
 		message.text = "Arrastra el objeto para moverlo · Verde: puedes confirmar"
 	elif items.inventory.item != null:
 		message.text = "Objeto recogido · Pulsa Colocar"
+	elif items.can_pickup():
+		message.text = "Bloque al alcance · Pulsa Recoger"
 	else:
-		message.text = "Acércate al bloque morado y pulsa Recoger"
+		message.text = ""
 	update_actions()
 
 
 func update_actions() -> void:
-	var names := ["pickup"]
+	var names: Array[String] = []
 	if items.placement_active:
-		names = ["right", "confirm"]
+		names.append("right")
+		if items.target_valid:
+			names.append("confirm")
 	elif items.inventory.item != null:
 		names = ["begin"]
+	elif items.can_pickup():
+		names = ["pickup"]
 	if action_rects.keys() == names:
 		return
 	action_rects.clear()
@@ -181,12 +197,15 @@ func _draw() -> void:
 	var font := ThemeDB.fallback_font
 	for action in action_rects:
 		var rect: Rect2 = action_rects[action]
-		draw_style_box(button_style(), rect)
+		var pressed: bool = feedback_time > 0.0 and feedback_action == action
+		var accent := Color("9ee6ca") if action == "confirm" else Color("b6b1ef")
+		draw_style_box(button_style(action, pressed), rect)
+		draw_action_icon(action, rect.get_center() + Vector2(0, -18), accent)
 		var label: String = labels[action]
 		var width := font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1, 24).x
 		draw_string(
 			font,
-			rect.get_center() + Vector2(-width / 2, 8),
+			rect.get_center() + Vector2(-width / 2, 33),
 			label,
 			HORIZONTAL_ALIGNMENT_LEFT,
 			-1,
@@ -195,8 +214,63 @@ func _draw() -> void:
 		)
 
 
-func button_style() -> StyleBoxFlat:
+func draw_action_icon(action: String, center: Vector2, color: Color) -> void:
+	match action:
+		"confirm":
+			draw_polyline(
+				PackedVector2Array(
+					[center + Vector2(-16, 0), center + Vector2(-4, 11), center + Vector2(18, -13)]
+				),
+				color,
+				4.0,
+				true
+			)
+		"right":
+			draw_arc(center, 17, -PI * 0.8, PI * 0.65, 24, color, 3.0, true)
+			draw_polyline(
+				PackedVector2Array(
+					[center + Vector2(-20, 7), center + Vector2(-8, 16), center + Vector2(-5, 2)]
+				),
+				color,
+				3.0,
+				true
+			)
+		_:
+			var direction := -1.0 if action == "pickup" else 1.0
+			draw_line(center + Vector2(0, -16), center + Vector2(0, 12), color, 3, true)
+			var tip := center + Vector2(0, direction * 12)
+			draw_polyline(
+				PackedVector2Array(
+					[tip + Vector2(-9, -direction * 9), tip, tip + Vector2(9, -direction * 9)]
+				),
+				color,
+				3.0,
+				true
+			)
+			draw_polyline(
+				PackedVector2Array(
+					[
+						center + Vector2(-18, 10),
+						center + Vector2(-18, 20),
+						center + Vector2(18, 20),
+						center + Vector2(18, 10)
+					]
+				),
+				color,
+				3.0,
+				true
+			)
+
+
+func button_style(action: String, pressed: bool) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.08, 0.1, 0.18, 0.9)
-	style.set_corner_radius_all(16)
+	style.bg_color = Color("173e39") if action == "confirm" else Color("242139")
+	if pressed:
+		style.bg_color = style.bg_color.lightened(0.2)
+	style.border_color = Color("73c5a7") if action == "confirm" else Color("8278b6")
+	style.set_border_width_all(2)
+	style.set_corner_radius_all(20)
+	style.shadow_color = Color(0.02, 0.02, 0.06, 0.45)
+	style.shadow_size = 6
+	style.shadow_offset = Vector2(0, 5)
 	return style
