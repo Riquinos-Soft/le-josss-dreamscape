@@ -1,0 +1,34 @@
+{
+  "character_id": "joss",
+  "state": "walk",
+  "production_status": "draft",
+  "directions": [
+    "down",
+    "up",
+    "left",
+    "right",
+    "down_left",
+    "down_right",
+    "up_left",
+    "up_right"
+  ],
+  "frame_width": 64,
+  "frame_height": 64,
+  "frame_count": 32,
+  "frames_per_direction": 4,
+  "layout": [
+    4,
+    8
+  ],
+  "fps": 8,
+  "loop": true,
+  "pivot_x": 32,
+  "pivot_y": 60,
+  "body_height_pixels_max": 48,
+  "pixel_size_meters": 0.0375,
+  "filter": "nearest",
+  "source": "assets/source/ai/char_joss_walk_directions_v01.png",
+  "normalizer": "tools/normalize_walk.gd",
+  "reference": "references/joss-character-v2-reference.png",
+  "limitations": "Draft art pending developer review. Interact is not implemented. Trial dimensions remain provisional."
+}

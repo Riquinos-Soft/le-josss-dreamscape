@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="Script" path="res://world/jacobo_risa_street.gd" id="1_street"]
 [ext_resource type="PackedScene" path="res://assets/streets/jacobo_risa/street.glb" id="2_scan"]
@@ -7,7 +7,8 @@
 [ext_resource type="Shader" path="res://world/street_stone.gdshader" id="5_stone"]
 [ext_resource type="Shader" path="res://world/street_paving.gdshader" id="6_paving"]
 [ext_resource type="Shader" path="res://world/street_pixel.gdshader" id="7_pixel"]
-[ext_resource type="Texture2D" path="res://assets/art/characters/char_joss_idle_directions_v02.png" id="8_character"]
+[ext_resource type="SpriteFrames" path="res://assets/art/characters/char_joss_animations_v01.tres" id="8_character"]
+[ext_resource type="Script" path="res://player/street_character.gd" id="9_animation"]
 
 [sub_resource type="Environment" id="Environment_street"]
 background_mode = 1
@@ -50,16 +51,17 @@ collision_layer = 1
 position = Vector3(3, 1.62, 0)
 movement_orientation = NodePath("../CameraRig/Camera")
 
-[node name="PixelCharacter" type="Sprite3D" parent="Player"]
+[node name="PixelCharacter" type="AnimatedSprite3D" parent="Player" node_paths=PackedStringArray("movement_actor", "movement_view")]
 position = Vector3(0, 1.05, 0)
 texture_filter = 0
 pixel_size = 0.0375
 billboard = 1
 alpha_cut = 1
-texture = ExtResource("8_character")
-hframes = 4
-vframes = 2
-frame = 1
+sprite_frames = ExtResource("8_character")
+animation = &"idle_up"
+script = ExtResource("9_animation")
+movement_actor = NodePath("..")
+movement_view = NodePath("../../CameraRig/Camera")
 
 [node name="CameraRig" parent="." node_paths=PackedStringArray("target") instance=ExtResource("4_camera")]
 target = NodePath("../Player")

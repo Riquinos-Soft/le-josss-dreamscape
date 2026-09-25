@@ -90,14 +90,6 @@ func _process(_delta: float) -> void:
 	study_material.set_shader_parameter("player_position", $Player.global_position)
 	for material in facade_materials:
 		material.set_shader_parameter("player_position", $Player.global_position)
-	var horizontal_speed: float = $Player.velocity.dot($CameraRig/Camera.global_basis.x)
-	var forward: Vector3 = -$CameraRig/Camera.global_basis.z
-	forward.y = 0.0
-	var vertical_speed: float = $Player.velocity.dot(forward.normalized())
-	if Vector2(horizontal_speed, vertical_speed).length() > 0.1:
-		var angle := Vector2(horizontal_speed, -vertical_speed).angle()
-		var sector := posmod(roundi(angle / (PI / 4.0)), 8)
-		$Player/PixelCharacter.frame = [3, 5, 0, 4, 2, 6, 1, 7][sector]
 
 
 func build_garage() -> void:

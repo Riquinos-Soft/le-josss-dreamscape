@@ -1,8 +1,15 @@
 # Plan delegable — Animación de Joss y normalización de la calle
 
-Estado: **plan preparado, no ejecutado**. No autoriza por sí mismo implementar
-nuevas funciones. Se ofrece como primer paquete concreto para la próxima oleada
-de agentes económicos. Grok no está conectado en esta sesión.
+Estado: **ejecuci?n parcial autorizada por el desarrollador el 2026-09-25**.
+D01/G01/G02/G04 implementados para animaci?n; I01 en validaci?n. G03 (vegetaci?n)
+no se ejecuta en esta petici?n. R01 sigue pendiente de revisi?n art?stica del
+usuario. Ejecuci?n secuencial por el agente disponible; Grok no est? conectado.
+Base al activar: `9c0bd9f75259d669a763cddb965e695764219a68`; ?rbol limpio.
+
+Contrato ejecutado: cuatro frames por direcci?n a 8 FPS (32 celdas, 4?8),
+conservando tama?o, pivote y escala. Sustituye la propuesta inicial de seis frames
+tras inspeccionar las poses generadas. Los muros usan alfa continua suave:
+el desarrollador rechaz? expresamente el tramado de puntos.
 
 ## Objetivo y contexto
 
@@ -70,7 +77,7 @@ integrador modifica archivos compartidos o hace commits durante esa oleada.
    que sólo conservan el contrato existente.
 3. Ocho direcciones ya solicitadas por el desarrollador, incluyendo diagonales.
    Propuesta local para walk: 6 frames por dirección, 8 FPS, loop; spritesheet de
-   6 columnas por 8 filas, cada celda 64x64, orden de filas
+   4 columnas por 8 filas, cada celda 64x64, orden de filas
    down/up/left/right/down_left/down_right/up_left/up_right, pivote (32,60),
    altura máxima 48 px. El número de frames/FPS sigue siendo una propuesta.
 4. Precisar si se aprueba generar esos assets y con qué herramienta disponible.
@@ -105,7 +112,7 @@ No editar el idle aprobado para la prueba ni el controlador.
    body_height, producción=draft y rutas de fuente/runtime en JSON.
 6. Entregar hoja, metadata y evidencia. Un preview GIF es útil, no el maestro.
 
-**Aceptación:** 48 frames y orden exacto si D01 mantiene la propuesta; pies en
+**Aceptación:** 32 frames y orden exacto seg?n D01; pies en
 el mismo apoyo; silueta consistente; nearest; fuente reproducible; no runtime
 de vídeo ni atlas de resolución excesiva. No marcar approved sin revisión.
 

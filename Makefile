@@ -5,6 +5,7 @@ TESTS := \
 	test_keyboard_input.gd \
 	test_item_lifecycle.gd \
 	test_courtyard.gd \
+	test_street_character.gd \
 	test_street_scene.gd
 
 .PHONY: lint format import test export-web check

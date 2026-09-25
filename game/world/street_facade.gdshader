@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded, cull_disabled;
+render_mode unshaded, cull_disabled, depth_prepass_alpha;
 
 #include "res://world/street_wall_fade.gdshaderinc"
 
@@ -11,7 +11,7 @@ void vertex() {
 }
 
 void fragment() {
-	if (hides_character(world_position, CAMERA_POSITION_WORLD, FRAGCOORD.xy)) { discard; }
+	ALPHA = wall_opacity(world_position, CAMERA_POSITION_WORLD);
 	vec3 paint = texture(facade_texture, UV).rgb;
 	ALBEDO = paint * vec3(0.86, 0.84, 1.0);
 }
