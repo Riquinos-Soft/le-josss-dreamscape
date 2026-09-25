@@ -30,6 +30,7 @@ Platform priority: Web, macOS development, Android, iOS, possibly other desktop 
 
 - [Repository and minimal architecture](docs/architecture.md)
 - [Spec 001: vertical slice](docs/specs/001-vertical-slice.md)
+- [Spec 003: branded boot splash](docs/specs/003-boot-branding.md)
 - [Development environment and Web risks](docs/development.md)
 - [OVH deployment and operations](deploy/ovh/README.md)
 - [ADR 001: engine and Web baseline](docs/adr/001-engine-and-web-baseline.md)
