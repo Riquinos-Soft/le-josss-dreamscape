@@ -36,6 +36,19 @@ The player receives an exported `movement_orientation: Node3D`, currently assign
 
 The camera rig is a sibling of the player, targets its interpolated position at 0.9 m height, and follows with delta-based exponential smoothing. Its local camera offset is (9, 12, 12) m, perspective FOV 45 degrees, fixed heading/elevation, and no orbit input. Physics interpolation is enabled for the player; the render-updated rig opts out to avoid double interpolation. Low walls and obstacles support visible character framing; generalized camera obstruction handling is not implemented.
 
+## Street trial and fall recovery
+
+The shared player now records its original global spawn transform per scene
+instance. Falling below the exported kill height restores that transform, clears
+velocity and interpolation, and signals the camera to snap to the spawn. Mouse
+steering projects onto the player's current elevation; item placement retains its
+separate courtyard-only ground-plane rule.
+
+The independent street trial follows [Spec 002](specs/002-street-trial.md). Its
+scan is visual decoration; a wrapper-owned strip and side/end barriers define
+the supported route. Procedural pixel materials and a world-only screen pass
+leave the HUD at full resolution. No travel or location-menu system is present.
+
 ## Single-item implementation
 
 `items/item_loop.gd` coordinates pickup, inventory, floor preview, validity, and the small HUD directly. `inventory/inventory.gd` owns one data reference; its removal method requires the expected instance. `items/item_instance.gd` contains only session ID and definition. `items/item_definition.gd` provides immutable constants for this one prototype (type, display name, dimensions); a Resource asset/catalog would add no value yet. `items/world_item.gd` constructs a static collision box and striped rectangular mesh, retaining the instance reference. A recreated world node receives the original data object.

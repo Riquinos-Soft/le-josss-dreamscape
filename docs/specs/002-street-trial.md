@@ -1,8 +1,9 @@
 # Spec 002 — Scanned street and first pixel art pass
 
-Status: implementation in progress. The independent scan scene exists; its initial
-spawn test passes, but continuous traversal, fall recovery and the pixel art pass
-are not yet accepted. Spec 001 remains the separate courtyard milestone.
+Status: traversal and fall recovery implemented and covered by automated physics
+tests. The first pixel treatment is implemented and inspected natively. Browser
+gameplay acceptance and the developer's art review remain pending; this spec is
+not complete. Spec 001 remains the separate courtyard milestone.
 
 ## Scope
 
@@ -35,6 +36,25 @@ initial treatment, not a claim of matching the finished reference illustration.
   Record browser gameplay separately from export or HTTP checks.
 
 ## References and deferred work
+
+Implementation: a 2.7 m wide sloping strip follows 15 surveyed points in the scan,
+with side and end collision barriers. The scan itself is decoration. The player
+records its instance spawn on ready and recovers below world Y=-8 m, resetting
+velocity/interpolation and notifying the camera. Mouse steering uses the player's
+current elevation. Procedural stone/paving materials and a nearest-sampled world
+pass (3 px at 720p) establish initial pixel detail; the HUD renders afterward.
+These procedural materials are not yet baked Blender texture assets.
+
+Validation on Windows, Godot 4.7.2 Compatibility: all 261 headless checks pass
+(123 street, 138 existing). Street tests cover both directions, every side join,
+end caps and repeated falls. Native captures are under ignored
+`build/verification/street_{spawn,south_end,north_end}.png`; final endpoint
+material checks are `street_final_0.png` and `street_final_14.png`. Both courtyard and
+independent street release Web exports succeed. HTTP 200 is verified locally;
+this does not count as browser gameplay acceptance. The street payload is about
+39.43 MiB. Lint passes, with the existing gdtoolkit `pkg_resources` deprecation
+warning. An uncapped fixed-FPS test run produced a Jolt job-capacity warning;
+the normal-timing headless run passed without that warning.
 
 The developer also supplied
 https://chatgpt.com/s/m_6ab5dfffd56c8191b75db5733b9caf0f for visual and contextual

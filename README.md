@@ -30,6 +30,7 @@ Platform priority: Web, macOS development, Android, iOS, possibly other desktop 
 
 - [Repository and minimal architecture](docs/architecture.md)
 - [Spec 001: vertical slice](docs/specs/001-vertical-slice.md)
+- [Spec 002: street traversal and pixel trial](docs/specs/002-street-trial.md)
 - [Development environment and Web risks](docs/development.md)
 - [ADR 001: engine and Web baseline](docs/adr/001-engine-and-web-baseline.md)
 - [ADR 002: offline asset boundary](docs/adr/002-offline-asset-boundary.md)

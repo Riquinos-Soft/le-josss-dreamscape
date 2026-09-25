@@ -1,9 +1,12 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://world/jacobo_risa_street.gd" id="1_street"]
 [ext_resource type="PackedScene" path="res://assets/streets/jacobo_risa/street.glb" id="2_scan"]
 [ext_resource type="PackedScene" path="res://player/player.tscn" id="3_player"]
 [ext_resource type="PackedScene" path="res://player/camera_rig.tscn" id="4_camera"]
+[ext_resource type="Shader" path="res://world/street_stone.gdshader" id="5_stone"]
+[ext_resource type="Shader" path="res://world/street_paving.gdshader" id="6_paving"]
+[ext_resource type="Shader" path="res://world/street_pixel.gdshader" id="7_pixel"]
 
 [sub_resource type="Environment" id="Environment_street"]
 background_mode = 1
@@ -12,14 +15,19 @@ ambient_light_source = 3
 ambient_light_color = Color(0.62, 0.55, 0.76, 1)
 ambient_light_energy = 0.65
 
-[sub_resource type="StandardMaterial3D" id="Material_study"]
-albedo_color = Color(0.42, 0.36, 0.53, 1)
-roughness = 1.0
-cull_mode = 2
+[sub_resource type="ShaderMaterial" id="Material_study"]
+shader = ExtResource("5_stone")
+
+[sub_resource type="ShaderMaterial" id="Material_paving"]
+shader = ExtResource("6_paving")
+
+[sub_resource type="ShaderMaterial" id="Material_pixel"]
+shader = ExtResource("7_pixel")
 
 [node name="JacoboRisaStreet" type="Node3D"]
 script = ExtResource("1_street")
 study_material = SubResource("Material_study")
+paving_material = SubResource("Material_paving")
 
 [node name="Environment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_street")
@@ -38,13 +46,14 @@ collision_layer = 1
 [node name="Collision" type="CollisionShape3D" parent="StreetCollision"]
 
 [node name="Player" parent="." node_paths=PackedStringArray("movement_orientation") instance=ExtResource("3_player")]
-position = Vector3(2.5, 4.1, 0)
+position = Vector3(3, 1.62, 0)
 movement_orientation = NodePath("../CameraRig/Camera")
 
 [node name="CameraRig" parent="." node_paths=PackedStringArray("target") instance=ExtResource("4_camera")]
 target = NodePath("../Player")
 
 [node name="HUD" type="CanvasLayer" parent="."]
+layer = 1
 
 [node name="Panel" type="PanelContainer" parent="HUD"]
 offset_left = 12.0
@@ -53,4 +62,16 @@ offset_right = 357.0
 offset_bottom = 69.0
 
 [node name="Label" type="Label" parent="HUD/Panel"]
-text = "Calle Jacobo Risa M — prueba de geometría\nWASD / flechas o ratón derecho: caminar"
+text = "Calle Jacobo Risa M — estudio pixel\nWASD / flechas o ratón derecho: caminar"
+
+[node name="PixelPass" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="Screen" type="ColorRect" parent="PixelPass"]
+material = SubResource("Material_pixel")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
