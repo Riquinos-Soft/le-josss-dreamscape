@@ -1,0 +1,10 @@
+[Unit]
+Description=Dreamscape PostgreSQL local backup
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/opt/dreamscape/backup.sh
+User=root
+UMask=0077

@@ -31,6 +31,7 @@ Platform priority: Web, macOS development, Android, iOS, possibly other desktop 
 - [Repository and minimal architecture](docs/architecture.md)
 - [Spec 001: vertical slice](docs/specs/001-vertical-slice.md)
 - [Development environment and Web risks](docs/development.md)
+- [OVH deployment and operations](deploy/ovh/README.md)
 - [ADR 001: engine and Web baseline](docs/adr/001-engine-and-web-baseline.md)
 - [ADR 002: offline asset boundary](docs/adr/002-offline-asset-boundary.md)
 - [ADR 003: item identity across world and inventory](docs/adr/003-item-identity-and-world-representation.md)
