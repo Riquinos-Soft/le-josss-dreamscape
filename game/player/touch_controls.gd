@@ -30,6 +30,9 @@ func enable_touch() -> void:
 	visible = true
 	items.touch_mode = true
 	items.get_node("HUD").hide()
+	var scene_hud := get_parent().get_parent().get_node_or_null("HUD") as CanvasLayer
+	if scene_hud != null:
+		scene_hud.hide()
 	message = Label.new()
 	message.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	message.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

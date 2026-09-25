@@ -10,7 +10,14 @@ func _initialize() -> void:
 
 
 func run() -> void:
-	var scene = load("res://world/courtyard.tscn").instantiate()
+	await check_scene("res://world/courtyard.tscn")
+	await check_scene("res://world/jacobo_risa_street.tscn")
+	print("Touch controls: %d checks, %d failures" % [checks, failures])
+	quit(0 if failures == 0 else 1)
+
+
+func check_scene(scene_path: String) -> void:
+	var scene = load(scene_path).instantiate()
 	root.add_child(scene)
 	current_scene = scene
 	controls = scene.get_node("TouchHUD/TouchControls")
@@ -21,6 +28,9 @@ func run() -> void:
 	var player = scene.get_node("Player")
 	var items = scene.get_node("ItemLoop")
 	var original = items.world_item.item
+	var original_position: Vector3 = items.world_item.position
+	if scene_path.ends_with("jacobo_risa_street.tscn"):
+		original_position = items.supported_pose(Vector3(2.25, 0, 1.1), PI / 2)
 	tap_action("pickup")
 	await frames(2)
 	check(items.inventory.item == original, "touch pickup preserves identity")
@@ -52,12 +62,17 @@ func run() -> void:
 	touch(0, Vector2.ZERO, false)
 	await frames(2)
 	check(player.touch_direction == Vector2.ZERO, "release outside joystick stops movement")
-	var aim: Vector2 = scene.get_node("CameraRig/Camera").unproject_position(Vector3(0, 0, 1.5))
+	var aim: Vector2 = scene.get_node("CameraRig/Camera").unproject_position(
+		original_position - Vector3.UP * 0.25
+	)
 	touch(2, aim, true)
 	touch(2, aim, false)
 	await frames(2)
 	check(items.touch_aim_set, "world touch aims")
-	check(items.target.distance_to(Vector3(0, 0.25, 1.5)) < 0.05, "touch ray reaches floor")
+	check(
+		items.target.distance_to(original_position) < 0.05,
+		"touch ray reaches floor: %s expected %s" % [items.target, original_position]
+	)
 	tap_action("confirm")
 	await frames(2)
 	check(
@@ -96,8 +111,8 @@ func run() -> void:
 	controls.update_layout()
 	check(not paused and not controls.portrait, "landscape resumes")
 	check(player.touch_direction == Vector2.ZERO, "rotation cannot leave movement stuck")
-	print("Touch controls: %d checks, %d failures" % [checks, failures])
-	quit(0 if failures == 0 else 1)
+	scene.queue_free()
+	await process_frame
 
 
 func touch(index: int, point: Vector2, pressed: bool) -> void:

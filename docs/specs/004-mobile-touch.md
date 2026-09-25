@@ -2,6 +2,12 @@
 
 Solicitud: jugar al prototipo publicado sin teclado, mando ni ratón.
 
+Integración de la escena pública: los controles se montan tanto en el patio como
+en `jacobo_risa_street.tscn`, que ahora es la escena inicial. El apuntado de la calle
+usa su suelo inclinado y atraviesa las caras verticales de las paredes que la
+cámara muestra transparentes; conserva alcance, soporte y validación de obstáculos
+desde el jugador. El HUD de teclado de la calle se oculta en modo táctil.
+
 - Joystick izquierdo analógico relativo a la cámara; un dedo mantiene su control
   aunque salga del círculo. Soltar, cancelar, perder foco, cambiar tamaño o
   reaparecer elimina la entrada para evitar movimiento atascado.

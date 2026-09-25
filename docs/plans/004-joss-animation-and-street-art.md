@@ -1,8 +1,15 @@
 # Plan delegable — Animación de Joss y normalización de la calle
 
-Estado: **plan preparado, no ejecutado**. No autoriza por sí mismo implementar
-nuevas funciones. Se ofrece como primer paquete concreto para la próxima oleada
-de agentes económicos. Grok no está conectado en esta sesión.
+Estado: **ejecución parcial autorizada por el desarrollador el 2026-09-25**.
+D01/G01/G02/G04 e I01 completados para animación. G03 (vegetación)
+no se ejecuta en esta petición. R01 sigue pendiente de revisión artística del
+usuario. Ejecución secuencial por el agente disponible; Grok no está conectado.
+Base al activar: `9c0bd9f75259d669a763cddb965e695764219a68`; árbol limpio.
+
+Contrato ejecutado: cuatro frames por dirección a 8 FPS (32 celdas, 4×8),
+conservando tamaño, pivote y escala. Sustituye la propuesta inicial de seis frames
+tras inspeccionar las poses generadas. Los muros usan alfa continua suave:
+el desarrollador rechazó expresamente el tramado de puntos.
 
 ## Objetivo y contexto
 
@@ -69,10 +76,10 @@ integrador modifica archivos compartidos o hace commits durante esa oleada.
    en sprites, cámara, UI y assets ya importados. No bloquear por esto tareas
    que sólo conservan el contrato existente.
 3. Ocho direcciones ya solicitadas por el desarrollador, incluyendo diagonales.
-   Propuesta local para walk: 6 frames por dirección, 8 FPS, loop; spritesheet de
-   6 columnas por 8 filas, cada celda 64x64, orden de filas
+   Contrato local de walk: 4 frames por dirección, 8 FPS, loop; spritesheet de
+   4 columnas por 8 filas, cada celda 64x64, orden de filas
    down/up/left/right/down_left/down_right/up_left/up_right, pivote (32,60),
-   altura máxima 48 px. El número de frames/FPS sigue siendo una propuesta.
+   altura máxima 48 px. Estos valores se limitan a la prueba actual.
 4. Precisar si se aprueba generar esos assets y con qué herramienta disponible.
    No prometer generación visual desde Grok si esa conexión no tiene herramienta.
 5. Mantener `interact` fuera de esta oleada; documentar que el slice completo de
@@ -105,7 +112,7 @@ No editar el idle aprobado para la prueba ni el controlador.
    body_height, producción=draft y rutas de fuente/runtime en JSON.
 6. Entregar hoja, metadata y evidencia. Un preview GIF es útil, no el maestro.
 
-**Aceptación:** 48 frames y orden exacto si D01 mantiene la propuesta; pies en
+**Aceptación:** 32 frames y orden exacto según D01; pies en
 el mismo apoyo; silueta consistente; nearest; fuente reproducible; no runtime
 de vídeo ni atlas de resolución excesiva. No marcar approved sin revisión.
 

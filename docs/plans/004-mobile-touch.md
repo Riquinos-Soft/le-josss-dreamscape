@@ -24,3 +24,14 @@
 - Revisión visual final: aviso vertical legible, etiquetas de giro compatibles
   con la fuente exportada, objeto recogido mediante toque; consola sin errores.
 - Pendiente únicamente: prueba física en Chrome Android y Safari iOS.
+
+## Corrección tras aviso del desarrollador
+
+La URL pública pasó a servir `860487b`, sustituyendo la publicación táctil anterior.
+`origin/main` también cambió la escena inicial a la calle (`252581d`). Se integra
+esa revisión en la rama de controles, conservando animaciones y objetos de la calle.
+El HUD táctil se conecta a ambas escenas. La prueba táctil ejecuta ahora las dos:
+36 comprobaciones correctas, incluyendo apuntado real sobre el suelo de la calle.
+Las paredes transparentes bloqueaban el rayo de apuntado; se saltan sus caras
+verticales sin omitir la validación de alcance y obstáculos desde el jugador.
+Pruebas adicionales: objeto de calle 33 y ciclo de patio 63, sin fallos.

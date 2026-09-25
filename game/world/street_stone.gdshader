@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded, cull_disabled;
+render_mode unshaded, cull_disabled, depth_prepass_alpha;
 
 uniform vec3 route[15];
 uniform vec3 walk_sections[34];
@@ -14,7 +14,7 @@ void vertex() {
 }
 
 void fragment() {
-	if (hides_character(world_position, CAMERA_POSITION_WORLD, FRAGCOORD.xy)) { discard; }
+	ALPHA = wall_opacity(world_position, CAMERA_POSITION_WORLD);
 	for (int i = 0; i < 16; i++) {
 		vec3 left_a = walk_sections[i * 2];
 		vec3 left_b = walk_sections[i * 2 + 2];

@@ -27,8 +27,10 @@ func run() -> void:
 	check(player.is_on_floor(), "player settles on scanned street")
 	check(player.global_position.y > 0.2, "player stays on street surface")
 	await capture("spawn")
-	var sprite := player.get_node("PixelCharacter") as Sprite3D
-	var sheet := sprite.texture.get_image()
+	var sprite := player.get_node("PixelCharacter") as AnimatedSprite3D
+	var sheet := (
+		preload("res://assets/art/characters/char_joss_idle_directions_v02.png").get_image()
+	)
 	for index in 8:
 		var frame_image := sheet.get_region(Rect2i((index % 4) * 64, (index / 4) * 64, 64, 64))
 		var bounds := frame_image.get_used_rect()
@@ -36,25 +38,27 @@ func run() -> void:
 	for action in ["move_right", "move_forward", "move_left", "move_back"]:
 		Input.action_press(action)
 		await frames(8)
-		var expected: int = {"move_right": 3, "move_forward": 1, "move_left": 2, "move_back": 0}[action]
-		check(sprite.frame == expected, "sprite faces " + action)
+		var expected: String = {
+			"move_right": "right", "move_forward": "up", "move_left": "left", "move_back": "down"
+		}[action]
+		check(sprite.animation == "walk_" + expected, "sprite faces " + action)
 		Input.action_release(action)
 	for entry in [
-		["move_left", "move_back", 4],
-		["move_right", "move_back", 5],
-		["move_left", "move_forward", 6],
-		["move_right", "move_forward", 7]
+		["move_left", "move_back", "down_left"],
+		["move_right", "move_back", "down_right"],
+		["move_left", "move_forward", "up_left"],
+		["move_right", "move_forward", "up_right"]
 	]:
 		player.position = player.spawn_transform.origin
 		player.velocity = Vector3.ZERO
 		Input.action_press(entry[0])
 		Input.action_press(entry[1])
 		await frames(8)
-		check(sprite.frame == entry[2], "sprite uses true diagonal " + str(entry[2]))
+		check(sprite.animation == "walk_" + entry[2], "sprite uses true diagonal " + str(entry[2]))
 		Input.action_release(entry[0])
 		Input.action_release(entry[1])
 		await frames(2)
-		check(sprite.frame == entry[2], "idle preserves diagonal orientation")
+		check(sprite.animation == "idle_" + entry[2], "idle preserves diagonal orientation")
 	var orientation := Node3D.new()
 	street.add_child(orientation)
 	player.movement_orientation = orientation
@@ -120,15 +124,25 @@ func run() -> void:
 		await frames(90)
 		steer(Vector3.ZERO)
 		check(player.position.distance_to(street.ROUTE[index]) < 0.6, "end cap contains player")
+	# Capture the respawn signal boundary, before later physics ticks settle onto the slope.
+	var respawns: Array = []
+	player.respawned.connect(
+		func(): respawns.append(
+			[player.global_transform, player.velocity, street.get_node("CameraRig").position]
+		)
+	)
 	for attempt in 2:
 		player.position = Vector3(20, -12, 20)
 		player.velocity = Vector3(5, -40, 8)
-		await frames(1)
-		check(player.global_transform == player.spawn_transform, "fall restores original spawn")
-		check(player.velocity == Vector3.ZERO, "fall clears momentum")
-		var camera := street.get_node("CameraRig") as Node3D
+		await frames(2)
+		check(respawns.size() == attempt + 1, "one recovery per forced fall")
+		if respawns.size() != attempt + 1:
+			continue
+		var snapshot: Array = respawns[-1]
+		check(snapshot[0] == player.spawn_transform, "fall restores original spawn")
+		check(snapshot[1] == Vector3.ZERO, "fall clears momentum")
 		check(
-			camera.position.distance_to(player.position + Vector3.UP * 0.9) < 0.01,
+			snapshot[2].distance_to(player.spawn_transform.origin + Vector3.UP * 0.9) < 0.01,
 			"fall snaps camera to spawn"
 		)
 	await frames(30)

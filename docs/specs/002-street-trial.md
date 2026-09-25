@@ -22,16 +22,19 @@ Add a controller traversal check from the road to the garage door and back.
 Second art correction: reduce the raw 3D reconstruction look with an orthographic
 street camera, a pixel sprite character and flatter color treatment. Keep the
 original materials recognizable. Scanned walls that cover the character must
-become locally transparent using pixel stippling, without changing collision.
+become locally transparent using continuous alpha blending with soft edges, without
+pixel stippling or changes to collision. This supersedes the rejected dotted effect.
 Check both the unobstructed view and a character behind the garage wall natively.
 Joss must display all eight movement directions, including four genuine diagonal
-views, and preserve the last orientation when idle. Walk animation is a separate
-planned task; directional idle art must not be described as an animated walk cycle.
+views, and preserve the last orientation when idle. Each direction now needs an
+actual looping walk animation; static facing sprites are insufficient. Animate
+resolved displacement, stop when blocked, and reset presentation on respawn.
 
 Use the developer's Scaniverse capture as the visual basis of an independent
 street trial. Preserve recognizable contours and decoration while providing a
 continuous, deliberately authored walking surface. Do not make scan holes or
-reconstruction noise into gameplay obstacles. Keep the courtyard as the main scene.
+reconstruction noise into gameplay obstacles. The developer has now authorized
+the street as the public/default main scene; retain the courtyard as a separate scene.
 
 The player must reach the scanned gateway/portal area without jumping. This
 does not introduce portal travel or another world. Normal movement must stay
@@ -67,15 +70,18 @@ records its instance spawn on ready and recovers below world Y=-8 m, resetting
 velocity/interpolation and notifying the camera. Mouse steering uses the player's
 current elevation. Dark asphalt replaces invented cobbles. An orthographic camera,
 flat palette and nearest-sampled world pass (2 px at 720p) accompany Joss's sprites;
-the HUD renders afterward. Occluding scan/garage walls use a local pixel-stipple
-cutaway without changing collision. These assets are not Blender sources.
+the HUD renders afterward. Occluding scan/garage walls use continuous local alpha
+with an opaque depth prepass, without changing collision. These assets are not Blender sources.
 
 Trial-only normalization: Joss has a 48px body in a 64x64 frame, feet pivot (32,60),
 1.8m visual height, 0.0375m per sprite pixel. Original generated source, exact prompt,
 normalization script and JSON metadata are retained. Eight idle directions are
-requested; no animation, global tile standard or approved master palette is implied.
+retained alongside eight walk clips: four frames each, 8 FPS, 32 walk cells.
+The initial six-frame proposal was reduced after inspecting repeated poses.
+Row-wide scaling preserves proportions; actual opaque soles align to y60.
+No global tile standard or approved master palette is implied.
 
-Validation on Windows, Godot 4.7.2 Compatibility: all 302 headless checks pass
+Previous validation on Windows, Godot 4.7.2 Compatibility: all 302 headless checks pass
 (164 street, 138 existing). Street tests cover both ends, variable-width boundaries,
 the garage route and return, repeated falls, eight directional choices and common
 sprite height/feet pivots. Native rendering inspected the garage and the same
@@ -94,3 +100,43 @@ location menus remain a direction to refine, not implemented acceptance here.
 Editable Blender assets, reusable props and authored pixel textures remain the
 production direction under ADR 002. This trial does not require a new asset
 framework, full character, interaction-menu system or a new architectural ADR.
+
+## Walk and smooth occlusion correction — 2026-09-25
+
+`street_character.gd` isolates AnimatedSprite3D presentation from movement.
+Eight idle and eight walk clips use camera-relative resolved velocity. The
+character test covers all directions under two camera headings, sector edges,
+cycle progress, idle preservation, wall blocking and respawn (135 checks).
+Native occlusion capture shows a continuous soft cutaway, with no pixel pattern.
+Final art and manual browser acceptance remain pending.
+
+## Movable trial object
+
+The developer requested one movable object and a push after completion. Reuse
+the existing single-instance block pickup/inventory/placement loop in the street.
+Place it within reach of spawn without blocking the walking route. E picks up,
+P starts placement, mouse aims, Q/E rotates, click confirms and Escape cancels.
+Use the actual authored sloping floor: the complete footprint must be supported,
+within reach, unobstructed and clear of the player. Reject edges and empty space;
+preserve identity across repeated moves and keep cancellation lossless. This is
+repositioning, not rigid-body pushing, and introduces no new inventory system.
+
+Final validation of this correction: 472 checks pass (135 character, 33 street
+item, 166 street traversal, 138 existing). Native captures show the block before
+and after placement, the soft wall cutaway and all four walk frames advancing
+in the actual scene. Both release Web exports succeed; street payload is
+41,568,582 bytes (39.64 MiB). Preview responds HTTP 200 on port 8001. No manual
+Chrome/Safari gameplay acceptance is claimed. Format/lint pass; gdtoolkit still
+emits its pre-existing pkg_resources deprecation warning.
+
+Push integration brought in the remote boot branding and OVH deployment workflow
+without conflicts. After that merge, both exports reached `savepack DONE`; the
+street payload including the new branding is 48,781,491 bytes (46.52 MiB), above
+the earlier 40 MiB prototype target. The Windows import processes stalled during
+shutdown and were terminated after importing. The subsequent exports were slow
+to exit but both eventually returned 0. The merged Linux checks, Web export and
+OVH deployment also passed in [Actions run 36094963803](https://github.com/Riquinos-Soft/le-josss-dreamscape/actions/runs/36094963803).
+That release still opened the courtyard. The subsequent developer request makes
+`world/jacobo_risa_street.tscn` the default scene for native and public Web builds,
+including Joss's eight-direction walking, soft wall occlusion and the movable block.
+Deployment uses the existing tested-main Actions workflow; no hosting changes.

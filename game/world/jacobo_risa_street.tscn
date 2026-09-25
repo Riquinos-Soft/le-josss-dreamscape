@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://world/jacobo_risa_street.gd" id="1_street"]
 [ext_resource type="PackedScene" path="res://assets/streets/jacobo_risa/street.glb" id="2_scan"]
@@ -7,7 +7,10 @@
 [ext_resource type="Shader" path="res://world/street_stone.gdshader" id="5_stone"]
 [ext_resource type="Shader" path="res://world/street_paving.gdshader" id="6_paving"]
 [ext_resource type="Shader" path="res://world/street_pixel.gdshader" id="7_pixel"]
-[ext_resource type="Texture2D" path="res://assets/art/characters/char_joss_idle_directions_v02.png" id="8_character"]
+[ext_resource type="SpriteFrames" path="res://assets/art/characters/char_joss_animations_v01.tres" id="8_character"]
+[ext_resource type="Script" path="res://player/street_character.gd" id="9_animation"]
+[ext_resource type="Script" path="res://items/street_item_loop.gd" id="10_item"]
+[ext_resource type="Script" path="res://player/touch_controls.gd" id="11_touch"]
 
 [sub_resource type="Environment" id="Environment_street"]
 background_mode = 1
@@ -30,6 +33,13 @@ script = ExtResource("1_street")
 study_material = SubResource("Material_study")
 paving_material = SubResource("Material_paving")
 
+[node name="ItemLoop" type="Node" parent="."]
+script = ExtResource("10_item")
+floor_path = NodePath("../StreetCollision")
+initial_item_position = Vector3(3.28, 1.84, 1.2)
+hud_position = Vector2(12, 88)
+control_help = "E: recoger · P: colocar · Ratón: elegir lugar\nQ/E: girar · Clic: confirmar · Esc: cancelar"
+
 [node name="Environment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_street")
 
@@ -50,16 +60,17 @@ collision_layer = 1
 position = Vector3(3, 1.62, 0)
 movement_orientation = NodePath("../CameraRig/Camera")
 
-[node name="PixelCharacter" type="Sprite3D" parent="Player"]
+[node name="PixelCharacter" type="AnimatedSprite3D" parent="Player" node_paths=PackedStringArray("movement_actor", "movement_view")]
 position = Vector3(0, 1.05, 0)
 texture_filter = 0
 pixel_size = 0.0375
 billboard = 1
 alpha_cut = 1
-texture = ExtResource("8_character")
-hframes = 4
-vframes = 2
-frame = 1
+sprite_frames = ExtResource("8_character")
+animation = &"idle_up"
+script = ExtResource("9_animation")
+movement_actor = NodePath("..")
+movement_view = NodePath("../../CameraRig/Camera")
 
 [node name="CameraRig" parent="." node_paths=PackedStringArray("target") instance=ExtResource("4_camera")]
 target = NodePath("../Player")
@@ -87,3 +98,16 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="TouchHUD" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="TouchControls" type="Control" parent="TouchHUD"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("11_touch")
