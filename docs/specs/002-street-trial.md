@@ -151,6 +151,11 @@ Deployment uses the existing tested-main Actions workflow; no hosting changes.
 
 ## Classic scenery iteration
 
+2026-09-26 follow-up: extend visual grassy banks beyond the retaining walls,
+ground tree roots and arrange existing foliage in irregular clusters with visible
+clearings. Keep the garage opening, surveyed collision, camera and pixel scale.
+This is scenery composition under the existing contract, not new walkable space.
+
 Follow-up reference: [developer's street video](https://photos.app.goo.gl/eYYUS9EuS1Gx6CTAA).
 Add varied roadside plants, a tree area and the lateral fence, using this footage
 to check placement. Break up flat asphalt with restrained wear, aggregate and

@@ -13,10 +13,15 @@ var sections: Array[Vector3] = []
 var fade_materials: Array[ShaderMaterial] = []
 var foliage_materials: Array[ShaderMaterial] = []
 var woodland_materials: Array[ShaderMaterial] = []
+var terrain_material: ShaderMaterial
 
 
 func _ready() -> void:
 	var wall_material := make_material(WALL)
+	terrain_material = ShaderMaterial.new()
+	terrain_material.shader = preload("res://world/street_bank_ground.gdshader")
+	var scatter := RandomNumberGenerator.new()
+	scatter.seed = 260926
 	for variant in 4:
 		var material := make_material(FOLIAGE, true)
 		material.set_shader_parameter("atlas_offset", Vector2(variant % 2, variant / 2) * 0.5)
@@ -36,16 +41,24 @@ func _ready() -> void:
 			var start := sections[index * 2 + side]
 			var end := sections[index * 2 + side + 2]
 			var height := HEIGHTS[index] * (1.0 if side == 0 else 0.7)
-			add_bank(start, end, outward, height, wall_material)
-			var count := maxi(1, ceili(start.distance_to(end) / 1.7))
+			var end_height := HEIGHTS[index + 1] * (1.0 if side == 0 else 0.7)
+			add_bank(start, end, outward, Vector2(height, end_height), wall_material)
+			var count := maxi(1, ceili(start.distance_to(end) / 2.1))
 			for plant in count:
-				var along := (plant + 0.5) / count
-				var position := start.lerp(end, along) + outward * (0.5 + 0.2 * (plant % 2))
-				position.y += height - 0.08
+				var along := (plant + scatter.randf_range(0.2, 0.8)) / count
+				var position := start.lerp(end, along) + outward * scatter.randf_range(0.4, 1.0)
+				position.y += lerpf(height, end_height, along)
+				var size := scatter.randf_range(0.034, 0.047)
 				if (index + plant) % 3 != 0:
-					add_woodland(position, 2 if side == 0 else 3, 0.045)
+					add_woodland(position, 2 if side == 0 else 3, size)
 				else:
-					add_foliage(position, 3 if side == 0 else 0, 0.045)
+					add_foliage(position, 3 if side == 0 else 0, size)
+			# Loose outer clusters leave visible grass between the roadside masses.
+			if index % 3 != 1:
+				var cluster := start.lerp(end, 0.55) + outward * 2.1
+				cluster.y += lerpf(height, end_height, 0.55) + 0.1
+				add_woodland(cluster, 3, 0.037)
+				add_woodland(cluster + outward * 0.65 + Vector3(0, 0, 0.6), 2, 0.027)
 	# Footage 55-85s: mesh fence and tree canopy on the garage side of the lane.
 	var fence_material := ShaderMaterial.new()
 	fence_material.shader = preload("res://world/street_fence.gdshader")
@@ -114,27 +127,38 @@ func add_fence(start: Vector3, end: Vector3, material: Material) -> void:
 
 
 func add_bank(
-	start: Vector3, end: Vector3, outward: Vector3, height: float, material: Material
+	start: Vector3, end: Vector3, outward: Vector3, heights: Vector2, material: Material
 ) -> void:
 	var surface := SurfaceTool.new()
 	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var a := start + outward * 0.06
 	var b := end + outward * 0.06
-	var top_a := a + Vector3.UP * height
-	var top_b := b + Vector3.UP * height
+	var top_a := a + Vector3.UP * heights.x
+	var top_b := b + Vector3.UP * heights.y
 	var length := a.distance_to(b)
-	add_quad(surface, [a, top_a, b, top_b], Vector2(length, height) / 1.8)
-	add_quad(
-		surface,
-		[top_a, top_a + outward * 1.3, top_b, top_b + outward * 1.3],
-		Vector2(length, 1.3) / 1.8
-	)
+	add_quad(surface, [a, top_a, b, top_b], Vector2(length, heights.x) / 1.8)
 	surface.generate_normals()
 	var bank := MeshInstance3D.new()
 	bank.name = "RetainingWall"
 	bank.mesh = surface.commit()
 	bank.material_override = material
 	add_child(bank)
+	# Endpoints use the same width function, so adjacent ground panels meet exactly.
+	var outer_a := top_a + outward * bank_width(start.z) + Vector3.UP * 0.18
+	var outer_b := top_b + outward * bank_width(end.z) + Vector3.UP * 0.18
+	var ground_surface := SurfaceTool.new()
+	ground_surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	add_quad(ground_surface, [top_a, outer_a, top_b, outer_b], Vector2.ONE)
+	ground_surface.generate_normals()
+	var ground := MeshInstance3D.new()
+	ground.name = "BankGround"
+	ground.mesh = ground_surface.commit()
+	ground.material_override = terrain_material
+	add_child(ground)
+
+
+func bank_width(z: float) -> float:
+	return 4.2 + sin(z * 0.16) * 0.7
 
 
 func add_quad(surface: SurfaceTool, corners: Array, repeat: Vector2) -> void:
