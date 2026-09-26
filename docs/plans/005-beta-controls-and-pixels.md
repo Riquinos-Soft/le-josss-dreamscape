@@ -1,4 +1,4 @@
-# Plan Beta 01
+# Plan 005 — Touch placement and pixel beta
 
 - Base: `eb46cfd`; árbol limpio. Propietario e integrador: Codex, sin delegación.
 - Spec: `docs/specs/005-beta-controls-and-pixels.md`; petición directa del usuario.

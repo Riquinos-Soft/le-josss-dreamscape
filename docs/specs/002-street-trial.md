@@ -1,9 +1,20 @@
 # Spec 002 — Scanned street and first pixel art pass
 
-Status: traversal and fall recovery implemented and covered by automated physics
+Status: implemented
+Updated: 2026-09-26
+Language: en
+
+Acceptance: traversal and fall recovery implemented and covered by automated physics
 tests. The first pixel treatment is implemented and inspected natively. Browser
 gameplay acceptance and the developer's art review remain pending; this spec is
 not complete. Spec 001 remains the separate courtyard milestone.
+
+Current evidence: the 2026-09-25 video-guided pass was published as `2d77cbd`,
+and public Chrome automation demonstrated scene loading and movement. The
+2026-09-26 grassy-bank pass passed 166 traversal and 33 placement checks, native
+visual inspection and Web export; see [plan 009](../plans/009-street-bank-composition.md).
+Full browser gameplay, physical mobile testing and developer art acceptance
+remain pending. Earlier measurements and art descriptions below are historical.
 
 ## Scope
 

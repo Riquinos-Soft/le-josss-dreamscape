@@ -1,4 +1,4 @@
-# Acciones táctiles disponibles y presentación
+# Plan 006 — Available touch actions and presentation
 
 - Base: `1a82e5f`; árbol limpio. Spec: `005-beta-controls-and-pixels.md`.
 - Propietario/integrador: Codex, sin delegación. Estado: review, listo para publicar.

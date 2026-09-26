@@ -1,92 +1,96 @@
-# Plantilla de plan y paquete delegable
+# Execution plan and delegable task template
 
-Copiar y completar. No entregar campos vacíos como si fueran requisitos resueltos.
-Una tarea pequeña puede ser breve; una tarea compleja necesita todos sus contratos.
+Write in English. Reserve a unique plan ID in the [index](README.md); use
+`# Plan NNN — English title` for the copied document. Complete the fields; empty
+placeholders are not settled requirements. Small tasks may be brief, while complex
+ones need all relevant contracts.
 
-## Cabecera del plan
+## Plan header
 
-- Objetivo observable y spec asociada:
-- Referencias exactas de Game Bible / diseño:
-- Commit base y cambios locales previos:
-- Estado y fecha de última revisión:
-- Decisiones cerradas / pendientes de Astra:
-- Integrador único:
-- Fuera de alcance:
-- Orden de dependencias y oleadas paralelas:
-- Archivos compartidos reservados al integrador:
+- Observable objective and governing spec:
+- Exact Game Bible/design references:
+- Actual base commit and pre-existing local changes:
+- Status and last review date:
+- Settled decisions / unresolved Astra decisions:
+- Single integrator:
+- Non-goals:
+- Dependency order and any authorized parallel waves:
+- Shared files reserved for the integrator:
 
-## Paquete `<ID> — <resultado>`
+## Package `<ID> — <outcome>`
 
-### Asignación
+### Assignment
 
-- Estado: planned / ready / running / review / done / blocked.
-- Ejecutor preferido y capacidad comprobada:
-- Propietario real de la tarea:
-- Dependencias que deben estar entregadas:
-- Tamaño previsto / presupuesto explícito, si existe:
+- Status: planned / ready / running / review / done / blocked.
+- Preferred executor and verified capability:
+- Actual task owner:
+- Dependencies that must be delivered:
+- Expected size / explicit budget, if one exists:
 
-### Contexto mínimo
+### Minimum context
 
-1. Leer `<ruta:sección>` para entender `<contrato>`.
-2. Leer `<ruta>` para reutilizar `<comportamiento existente>`.
-3. No releer todo el repo; si falta una entrada, describir cuál y su impacto.
+1. Read `<path:section>` for `<contract>`.
+2. Read `<path>` to reuse `<existing behavior>`.
+3. Do not reread the whole repository. Identify missing inputs and their impact.
 
-### Límites de edición
+### Edit boundaries
 
-| Archivo permitido | Cambio permitido | Propietario |
+| Allowed file | Allowed change | Owner |
 | --- | --- | --- |
-| `<ruta>` | `<responsabilidad>` | `<ID>` |
+| `<path>` | `<responsibility>` | `<ID>` |
 
-Prohibido tocar: `<archivos / contratos / áreas>`.
-Si se descubre una modificación fuera de la lista, explicar por qué al integrador
-antes de escribirla; no asumir permiso sobre archivos reservados a otro agente.
+Do not touch: `<files / contracts / areas>`.
+If a change outside the list becomes necessary, explain it to the integrator
+before editing. Do not assume ownership of another agent's reserved files.
 
-### Contrato de entrada/salida
+### Input/output contract
 
-- Entradas: formatos, dimensiones, nombres, estado previo, unidades.
-- Salidas: rutas, tipos, campos, señales, APIs o assets exactos.
-- Comportamiento observable: disparador → resultado.
-- Errores/bordes: casos que deben conservar estado o fallar explícitamente.
-- Invariantes que no se pueden cambiar.
+- Inputs: formats, dimensions, names, prior state and units.
+- Outputs: exact paths, types, fields, signals, APIs or assets.
+- Observable behavior: trigger → result.
+- Errors/edge cases: state-preserving behavior or explicit failure.
+- Invariants that must remain unchanged.
 
-### Pasos ejecutables
+### Executable steps
 
-1. Comprobar precondiciones con `<comando/lectura>`.
-2. Implementar `<acción localizada>` reutilizando `<pieza existente>`.
-3. Cubrir `<casos relevantes>` sin añadir tests que sólo repitan la implementación.
-4. Ejecutar `<comandos precisos>` y leer salida, no sólo código de salida.
-5. Inspeccionar `<captura/resultado>` a `<resolución/condiciones>` si es visual.
-6. Entregar el paquete con el formato siguiente; no hacer cambios fuera de alcance.
+1. Check preconditions with `<command/reading>`.
+2. Implement `<localized action>` by reusing `<existing component>`.
+3. Cover `<relevant cases>`; do not write tests that merely mirror implementation.
+4. Run `<exact commands>` and inspect their output, not only exit codes.
+5. Inspect `<capture/result>` at `<resolution/conditions>` for visual work.
+6. Deliver the package below without unrelated edits.
 
-### Criterios de aceptación
+### Acceptance criteria
 
-- [ ] `<criterio verificable con prueba o evidencia concreta>`.
-- [ ] `<regresión que debe permanecer intacta>`.
-- [ ] `<limitación registrada con honestidad>`.
+- [ ] `<verifiable criterion with concrete test/evidence>`.
+- [ ] `<regression behavior to preserve>`.
+- [ ] `<limitation explicitly recorded>`.
 
-### Cuándo detenerse y pedir Astra
+### When to stop and request Astra
 
-`<decisión concreta no resuelta que requiere revisión; no "si hay problemas">`.
-Los fallos de sintaxis/importación o una corrección local siguen siendo del ejecutor.
+`<specific unresolved consequential decision; not merely "if problems arise">`.
+Syntax/import errors and straightforward local corrections remain with the executor.
+Follow [Spec 003](../specs/003-agent-workflow.md), preserving existing authorization.
 
-### Entrega del ejecutor
+### Executor delivery
 
 ```text
-Tarea / versión de paquete / commit base:
-Resultado observable:
-Archivos cambiados:
-Pruebas: comando → resultado → ruta del log:
-Evidencia visual:
-Limitaciones / decisiones pendientes:
-Cambios fuera del paquete: ninguno, o detallar autorización:
-Tiempo / reintentos / coste real disponible:
-Estado propuesto: review, no done sin integración:
+Task / package version / actual base commit:
+Observable outcome:
+Changed files:
+Checks: command → actual result → log path:
+Visual evidence:
+Limitations / open decisions:
+Changes outside package: none, or authorization details:
+Elapsed time / retries / actual available cost:
+Proposed status: review; not done before integration:
 ```
 
-### Revisión del integrador
+### Integrator review
 
-- Revisar diff y confirmar propiedad de archivos.
-- Comprobar todos los criterios con la evidencia entregada.
-- Ejecutar las pruebas de integración afectadas; repetir sólo si hay motivo.
-- Resolver conflictos sin descartar trabajo ajeno.
-- Crear commit atómico y registrar SHA, resultado y siguiente tarea desbloqueada.
+- Inspect the diff and confirm file ownership.
+- Verify every criterion against supplied evidence.
+- Run affected integration checks; repeat only for a concrete reason.
+- Resolve conflicts without discarding others' work.
+- Create an atomic commit and record its SHA, result and next unblocked task.
+- Update the spec/plan indexes and run the documentation check.

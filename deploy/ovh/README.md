@@ -183,7 +183,7 @@ gateway. `systemd-analyze verify` emitted OS-level warnings that `CPUAccounting`
 is ignored in the pre-existing `xfs_scrub_all.service` and `system-xfs_scrub.slice`;
 the new backup units passed and the backup completed.
 
-See Spec 002 for scope. No gameplay code changes are needed for this host.
+See [Spec 007](../../docs/specs/007-vps-hosting.md) for scope. No gameplay code changes are needed for this host.
 Browser gameplay validation of the hosted export remains pending. Accounts, world
 persistence and simultaneous players require a
 separate implementation spec following ADR 004. Restore tests must be expanded

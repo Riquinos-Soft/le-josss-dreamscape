@@ -1,4 +1,12 @@
-# Spec 002: prepare OVH hosting
+# Spec 007 — OVH hosting preparation
+
+Status: implemented
+Updated: 2026-09-26
+Language: en
+
+Acceptance: the static Web deployment path is implemented. Server operation
+details are recorded in [deployment documentation](../../deploy/ovh/README.md).
+This normalization does not re-audit credentials, database recovery or capacity.
 
 Scope authorized by the developer on 2026-09-25: rotate the initial Ubuntu
 password, create the administrator `j0se`, and prepare the VPS to host the game.

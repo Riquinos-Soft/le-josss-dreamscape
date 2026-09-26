@@ -1,4 +1,9 @@
-# Plan delegable — Animación de Joss y normalización de la calle
+# Plan 008 — Joss animation and street art
+
+Historical execution record, retained in its original language. Current street
+scope and the 180-row trial are defined by Spec 002 and Spec 005. Original task
+contracts below describe their execution wave, not instructions to undo later
+accepted changes such as making the street the main scene.
 
 Estado: **ejecución parcial autorizada por el desarrollador el 2026-09-25**.
 D01/G01/G02/G04 e I01 completados para animación. La petición posterior de un

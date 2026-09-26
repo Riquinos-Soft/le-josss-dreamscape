@@ -1,31 +1,56 @@
-# Spec 004 — Navegador móvil en horizontal
+# Spec 004 — Landscape mobile browser controls
 
-La distribución de botones y el apuntado inicial se simplifican en
-[Beta 01](005-beta-controls-and-pixels.md); el resto de garantías se mantiene.
+Status: implemented
+Updated: 2026-09-26
+Language: en
 
-Solicitud: jugar al prototipo publicado sin teclado, mando ni ratón.
+Acceptance: native and browser-emulated checks are recorded in
+[plan 004](../plans/004-mobile-touch.md). Physical Android/iOS testing is pending.
+[Spec 005](005-beta-controls-and-pixels.md) supersedes the initial button layout
+and placement aiming behavior; the remaining guarantees are retained.
 
-Integración de la escena pública: los controles se montan tanto en el patio como
-en `jacobo_risa_street.tscn`, que ahora es la escena inicial. El apuntado de la calle
-usa su suelo inclinado y atraviesa las caras verticales de las paredes que la
-cámara muestra transparentes; conserva alcance, soporte y validación de obstáculos
-desde el jugador. El HUD de teclado de la calle se oculta en modo táctil.
+## Objective
 
-- Joystick izquierdo analógico relativo a la cámara; un dedo mantiene su control
-  aunque salga del círculo. Soltar, cancelar, perder foco, cambiar tamaño o
-  reaparecer elimina la entrada para evitar movimiento atascado.
-- Un segundo dedo puede recoger, iniciar colocación, apuntar tocando el suelo,
-  girar 90 grados, confirmar y cancelar. Los controles no apuntan al mundo ni
-  confirman por la emulación de ratón. Se conserva identidad y validación del objeto.
-- Controles sólo en pantallas táctiles (argumento `--touch` para pruebas locales).
-  Teclado y ratón de escritorio conservan su comportamiento.
-- En móvil vertical se oculta el juego tras un mensaje para girar y se pausa
-  la simulación. Volver a horizontal recupera la partida sin movimiento pendiente.
-  No se depende del bloqueo de orientación del navegador, que puede no estar disponible.
-- UI con márgenes y objetivos grandes, adaptada al viewport expandido existente.
-- Sin cambios de motor, cámara, renderer, persistencia ni servicios.
+Make the published prototype playable without a keyboard, gamepad or mouse.
 
-Aceptación: pruebas de movimiento real, multitáctil, ciclo de objeto, cancelación,
-foco y vertical/horizontal; regresiones existentes; ejecución nativa; export Web.
-Publicar el export probado en el receptor OVH y comprobar `/release.txt` público.
-La emulación de navegador no sustituye la prueba física en Chrome Android/Safari iOS.
+## Scope and requirements
+
+Controls are mounted in both the courtyard and `jacobo_risa_street.tscn`, now the
+initial public scene. Street aiming uses its sloped floor and skips vertical
+faces of walls that the camera makes transparent. Player-to-target reach,
+support and obstruction checks remain mandatory. Hide the street keyboard HUD
+in touch mode.
+
+- A left analog joystick moves relative to the camera. A finger keeps ownership
+  outside its circle. Release, cancellation, focus loss, resize and respawn clear
+  input to prevent stuck movement.
+- A second finger can pick up, begin placement, aim, rotate 90 degrees and
+  confirm. The initial touch-to-aim and cancel controls are superseded by
+  [Spec 005](005-beta-controls-and-pixels.md). Preserve object identity and
+  placement validation. Mouse emulation must not leak UI touches into world
+  aiming or confirmation.
+- Show controls only on touch screens; `--touch` enables local test mode.
+  Desktop keyboard/mouse behavior remains unchanged.
+- In portrait orientation, cover the game with a rotate-device message and
+  pause simulation. Returning to landscape resumes without pending movement.
+  Do not depend on browser orientation lock being available.
+- Use large targets and margins within the existing expanded viewport.
+
+## Non-goals
+
+No engine, camera, renderer, persistence or service changes. Browser emulation
+does not substitute for testing physical Chrome Android and Safari iOS devices.
+
+## Acceptance criteria
+
+- Verify actual movement, multitouch, the item loop, cancellation of input,
+  focus changes and portrait/landscape transitions.
+- Run existing regressions, native rendering and a Web export.
+- Publish the tested export through the OVH receiver when authorized and verify
+  the public `/release.txt`.
+
+## Validation
+
+Implementation and emulated-browser results are recorded in
+[plan 004](../plans/004-mobile-touch.md). Later refinements are covered by
+[Spec 005](005-beta-controls-and-pixels.md). Physical-device acceptance remains open.

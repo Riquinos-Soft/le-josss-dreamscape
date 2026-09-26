@@ -1,4 +1,4 @@
-# Street video decor correction
+# Plan 007 — Street video decor correction
 
 Scope: spec 002; retain existing camera, movement, collision and pixel scale.
 Integrator: current session. No parallel file owners or new architecture.

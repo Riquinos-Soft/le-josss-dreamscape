@@ -1,4 +1,4 @@
-# Plan 004 — Controles táctiles
+# Plan 004 — Mobile touch controls
 
 - Base: `be68bc5d1fbe479848dcd7a0a86fc702ba5f5d6f`; árbol inicialmente limpio.
 - Spec: `docs/specs/004-mobile-touch.md`; petición directa del desarrollador.

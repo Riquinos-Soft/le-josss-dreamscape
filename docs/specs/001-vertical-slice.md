@@ -1,6 +1,16 @@
 # Spec 001 — Vertical slice
 
-Status: Chrome and Safari Web baseline accepted manually by the developer. The approved single-item lifecycle is implemented and passes automated native checks. New browser gameplay acceptance, subjective feel, and remaining art/performance criteria are pending; the full spec is not marked complete.
+Status: implemented
+Updated: 2026-09-26
+Language: en
+
+Acceptance: Chrome and Safari Web baseline accepted manually by the developer. The approved single-item lifecycle is implemented and passes automated native checks. New browser gameplay acceptance, subjective feel, and remaining art/performance criteria are pending; the full spec is not marked complete.
+
+Scope note: this document describes the original courtyard milestone. Later work
+in [Spec 002](002-street-trial.md) made the street the public main scene;
+[Spec 004](004-mobile-touch.md) and [Spec 005](005-beta-controls-and-pixels.md)
+added touch support. Historical verification below does not describe current
+feature availability; later dated records take precedence over earlier entries.
 
 ## Objective
 

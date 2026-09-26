@@ -1,6 +1,10 @@
-# Spec 003: branded boot splash
+# Spec 006 — Branded boot splash
 
-Status: implemented; validation recorded below.
+Status: implemented
+Updated: 2026-09-26
+Language: en
+
+Acceptance: validation recorded below; manual visual acceptance remains separate.
 
 ## Scope
 

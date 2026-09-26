@@ -3,6 +3,9 @@
 ## Working style
 
 - Use lightweight spec-driven development.
+- Follow `docs/specs/README.md` for specification language, IDs, lifecycle and review. Write all specs in English, including titles, acceptance criteria and validation notes; keep exact user-facing Spanish labels only when they are part of a requirement. Use `docs/specs/template.md` for new specs.
+- Reserve the next unused spec ID in the spec index before creating a file. Check the index and current branch; never reuse or renumber an existing ID. Plans have their own independent index in `docs/plans/README.md`. Update links and run `python tools/check_docs.py` after documentation changes.
+- Keep proposed roadmap work in `docs/roadmap.md` separate from authorized implementation. A roadmap entry is not an approved spec or permission to add a system.
 - Before changing code, read only files relevant to the task and applicable specs or ADRs.
 - Do not repeatedly revisit settled architectural decisions.
 - Avoid external research unless it is genuinely necessary.

@@ -1,4 +1,5 @@
 GODOT ?= godot
+PYTHON ?= python3
 
 TESTS := \
 	test_touch_controls.gd \
@@ -13,6 +14,7 @@ TESTS := \
 .PHONY: lint format import test export-web check
 
 lint:
+	$(PYTHON) tools/check_docs.py
 	gdformat --check game
 	gdlint game
 
