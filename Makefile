@@ -6,7 +6,8 @@ TESTS := \
 	test_item_lifecycle.gd \
 	test_courtyard.gd \
 	test_home_exterior.gd \
-	test_scan_movement.gd
+	test_scan_movement.gd \
+	test_connected_stairs.gd
 
 .PHONY: lint format import test export-web check
 

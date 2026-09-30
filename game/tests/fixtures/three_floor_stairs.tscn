@@ -1,0 +1,72 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="PackedScene" path="res://world/modules/stair_flight.tscn" id="Stairs"]
+
+[ext_resource type="PackedScene" path="res://player/player.tscn" id="Player"]
+
+[ext_resource type="PackedScene" path="res://player/camera_rig.tscn" id="Camera"]
+
+[sub_resource type="BoxShape3D" id="LandingShape"]
+size = Vector3(4, 0.2, 2)
+
+[sub_resource type="StandardMaterial3D" id="FloorMaterial"]
+albedo_color = Color(0.33, 0.42, 0.44, 1)
+
+[sub_resource type="BoxMesh" id="LandingMesh"]
+material = SubResource("FloorMaterial")
+size = Vector3(4, 0.2, 2)
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 1
+background_color = Color(0.12, 0.16, 0.19, 1)
+ambient_light_source = 3
+ambient_light_energy = 0.7
+
+[node name="ThreeFloorStairsFixture" type="Node3D"]
+
+[node name="FirstFlight" parent="." instance=ExtResource("Stairs")]
+
+[node name="SecondFlight" parent="." instance=ExtResource("Stairs")]
+position = Vector3(0, 2.8, -7.6)
+
+[node name="GroundLanding" type="StaticBody3D" parent="."]
+position = Vector3(0, -0.1, 1)
+
+[node name="Mesh" type="MeshInstance3D" parent="GroundLanding"]
+mesh = SubResource("LandingMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="GroundLanding"]
+shape = SubResource("LandingShape")
+
+[node name="FirstLanding" type="StaticBody3D" parent="."]
+position = Vector3(0, 2.6999999999999997, -6.6)
+
+[node name="Mesh" type="MeshInstance3D" parent="FirstLanding"]
+mesh = SubResource("LandingMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="FirstLanding"]
+shape = SubResource("LandingShape")
+
+[node name="SecondLanding" type="StaticBody3D" parent="."]
+position = Vector3(0, 5.5, -14.2)
+
+[node name="Mesh" type="MeshInstance3D" parent="SecondLanding"]
+mesh = SubResource("LandingMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="SecondLanding"]
+shape = SubResource("LandingShape")
+
+[node name="Player" parent="." node_paths=PackedStringArray("movement_orientation") instance=ExtResource("Player")]
+position = Vector3(0, 5.65, -14.2)
+movement_orientation = NodePath("../CameraRig/Camera")
+prevent_ledge_fall = true
+step_height = 0.25
+
+[node name="CameraRig" parent="." node_paths=PackedStringArray("target") instance=ExtResource("Camera")]
+target = NodePath("../Player")
+
+[node name="Environment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-55, -30, 0)

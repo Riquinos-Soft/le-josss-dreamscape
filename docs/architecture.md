@@ -1,6 +1,6 @@
 # Repository and vertical-slice architecture
 
-Current priority: a faithful exterior from the developer's actual Scaniverse capture, as clarified on 2026-09-24. Main scene is `world/home_exterior.tscn`; see [Spec 002](specs/002-real-microzone.md). The courtyard item lifecycle and its developer-reported provisional manual acceptance remain the Spec 001 baseline. The original static smoke-test scene is preserved.
+Current priority: extend the approved captured exterior into a connected three-storey house, street, parking and bar, renewed on 2026-09-30. Building placement awaits real layout references. Main scene is `world/home_exterior.tscn`; see [Spec 002](specs/002-real-microzone.md). The courtyard item lifecycle and its developer-reported provisional manual acceptance remain the Spec 001 baseline. The original static smoke-test scene is preserved.
 
 ## Captured exterior
 
@@ -8,7 +8,7 @@ Current priority: a faithful exterior from the developer's actual Scaniverse cap
 
 Player options for 25cm step assistance and support checks at open scan edges are enabled only here. Mouse steering projects onto current player elevation. The camera retains its heading and follows the player; an opt-in ray shortens its offset when captured geometry blocks the view. These options do not change courtyard collision behavior. No unseen interiors or street/bar layout is inferred from this exterior capture.
 
-The earlier invented microzone blockout was archived outside the runtime project after the developer corrected the priority. Its connected-interior ADR is deferred. The sections below describe the retained courtyard architecture and future direction.
+The earlier invented microzone blockout was archived outside the runtime project after the developer corrected the priority. The renewed connected-interior plan uses one physics world (ADR 004). `world/modules/stair_flight.tscn` provides visible steps, an inclined static collider and collidable side rails; `tests/fixtures/three_floor_stairs.tscn` previews two flights with the existing player/camera via F6. Its provisional dimensions are not measurements of the house. The sections below describe the retained courtyard architecture and future direction.
 
 ## World scale
 

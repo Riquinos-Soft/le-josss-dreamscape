@@ -1,6 +1,20 @@
-# Spec 002 — Faithful home exterior first
+# Spec 002 — Connected real microzone
 
-Status: implemented as the current playable scene; developer playtest and capture completion remain pending. The developer corrected the initial home-to-bar blockout on 2026-09-24: first reproduce the actual house exterior from the supplied GLB, as faithfully as practical; expand toward the street/bar with later scans, video or photos. Pixel-art styling and invented room plans are deferred. This supersedes the earlier provisional generic microzone.
+Status: captured exterior implemented and positively received by the developer. On 2026-09-30 the connected three-storey home → street → parking → bar → home route became the immediate priority again. Preserve the approved scan as the real-world anchor; simple modular interiors are authorized, but their locations and layout still require the developer's references. The previous rejected invented map is historical.
+
+## Current increment and acceptance
+
+Implemented one reusable metre-scale stair flight; verified the existing player can descend and ascend two flights through three elevations. Default module dimensions (2.8 m rise, 5.6 m run, 1.4 m clear width) are provisional authoring dimensions, not measurements of the real house. The isolated test fixture is an authoring check, not a second game or the real house.
+
+Next steps: identify the actual entrance and stairwell; align three floors and stairs; open the captured facade; connect street and parking; place the bar and accessible interior; verify the complete round trip and camera cutaways; add reusable props and capture gameplay. Each stage must remain visually inspectable.
+
+The full route is **not complete**. Pending input: house entrance location, approximate floor layouts/stairwell, direction and distance to the bar, street/parking references and one known dimension for scale. Ask for these before placing guessed buildings into the approved map.
+
+Scene composition: retain `home_exterior.tscn` as the playable root; add `buildings/home.tscn`, `buildings/bar.tscn` and street/parking children as their placement becomes grounded in references. Reusable static modules live in `world/modules/`; imported meshes remain in `assets/`. One player and physics world span interiors/exteriors. Local roof/floor cutaways are required for the elevated camera. No scene streaming or runtime reconstruction.
+
+Pipeline: existing GLB → offline Blender cleanup/splitting and simple measured additions → GLB/static modular scenes → Godot collision/doors/cutaways. Photos, video and a rough plan fill unseen spaces. Maps can provide street outlines once a location is supplied, but cannot establish interiors. Further AI reconstruction, splats/NeRF and LingBot evaluation are deferred until new source data exposes a concrete need; none is required to author stairs or rooms.
+
+Runtime constraints found: captured geometry is one mesh, so door openings/cutaways require offline splitting; camera shortening alone is unsuitable beneath ceilings; courtyard item placement is tied to one flat floor. Preserve its identity model and existing tests; adapt surface targeting only when item placement in this microzone is in scope.
 
 ## Immediate deliverable
 
@@ -25,15 +39,10 @@ Actual capture → offline Blender import/texture preparation/collision simplifi
 
 This fidelity prototype explicitly supersedes Spec 001's 50k visual-triangle/40MiB payload targets for this scene. Preserve captured shape at 249,260 visual triangles; use a provisional 64MiB uncompressed Web payload ceiling and record actual size. The earlier 256MiB memory and sustained-FPS goals are not claimed until measured. No generalized optimization or streaming system is introduced.
 
-## Next unresolved work
+## Reference boundary
 
-1. Developer playtest of the captured exterior and confirmation of the house identification/view.
-2. Add missing exterior coverage and a real scale reference supplied by the developer.
-3. Reconstruct/clean only observed surfaces, then extend the real street and bar from new evidence.
-4. Interior floors and connected house-to-bar traversal remain the later product goal; use new plans/photos to make them recognizable before revisiting ADR 004.
-
-The rejected generic blockout is preserved only in ignored local `build/experiments/provisional-microzone/`. It is not part of a clean checkout or a game export. World of Anterra and Ultima Online remain long-term interaction/art references; fidelity to this real location takes priority in the current deliverable.
+The rejected generic blockout is preserved only in ignored local `build/experiments/provisional-microzone/`. It is not part of a clean checkout or game export. World of Anterra and Ultima Online guide legibility and atmosphere; styling follows the connected traversal milestone.
 
 ## Verification
 
-173 automated checks pass, including the unchanged courtyard regressions. The captured path round trip also passes natively with inspected screenshots. Web release exports at 63.24 MiB. See [commands, evidence and limitations](../development.md#captured-exterior-verification--2026-09-24).
+189 automated checks pass, including the unchanged courtyard regressions and 16 new stair checks. Captured-path and two-flight round trips pass natively with inspected screenshots. Web release exports at 63.25 MiB. See [commands, evidence and remaining work](../development.md#connected-microzone-first-stair-module--2026-09-30).

@@ -1,5 +1,15 @@
 # Development setup and verified baseline
 
+## Connected microzone: first stair module — 2026-09-30
+
+Goal: extend the approved captured exterior into the real home/street/bar route. Completed: reusable `game/world/modules/stair_flight.tscn` (visible steps, continuous incline collision, side rails), and an F6-inspectable `game/tests/fixtures/three_floor_stairs.tscn` with two flights/three landings using the existing player/camera. Dimensions are provisional; this fixture is not the house layout. Production scene remains the approved scan.
+
+- `PATH=/private/tmp/dreamscape-clean-lint/bin:$PATH make check GODOT=/Applications/Godot.app/Contents/MacOS/Godot`: passed; **189 checks, zero failures**, lint and release Web export succeeded. New 16 checks cover descent from the upper landing through three heights, ascent back, grounded landings and side-rail collision through normal input. No runtime controller changes.
+- `/Applications/Godot.app/Contents/MacOS/Godot --path game --max-fps 60 --script res://tests/test_connected_stairs.gd -- --capture`: passed. Inspected rendered screenshot `build/verification/home-scan/04-stair-module.png`; steps, landing and character are legible. The native automated route is not browser validation.
+- Logs: `build/verification/home-scan/connected-stairs-check.log` and `connected-stairs-native.log`; both exited 0 without reported warnings/errors. Web payload: 66,323,491 bytes (63.25 MiB), below the provisional 64 MiB ceiling. Test fixtures remain excluded by `tests/*`.
+- Next action: obtain entrance/stairwell identification, rough floor layouts, bar direction/distance and one known scale measurement. Then align building interiors and open the captured facade. The requested complete house-to-bar route remains unimplemented; no guessed extension was inserted into the approved scan.
+
+
 Current state: the main scene is the developer's captured home exterior (`world/home_exterior.tscn`), following the fidelity-first clarification on 2026-09-24. The original courtyard and item loop remain available and pass their regressions. Earlier manual browser acceptance applies to that courtyard, not to the new scan. See [Spec 002](specs/002-real-microzone.md).
 
 ## Captured exterior verification — 2026-09-24

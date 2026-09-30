@@ -1,0 +1,115 @@
+[gd_scene load_steps=7 format=3]
+
+[sub_resource type="StandardMaterial3D" id="Stone"]
+albedo_color = Color(0.66, 0.64, 0.59, 1)
+roughness = 1.0
+
+[sub_resource type="BoxMesh" id="Step"]
+material = SubResource("Stone")
+size = Vector3(1.4, 0.175, 0.35)
+
+[sub_resource type="ConvexPolygonShape3D" id="Ramp"]
+points = PackedVector3Array(-0.7, 0, 0, 0.7, 0, 0, -0.7, 0, -5.6, 0.7, 0, -5.6, -0.7, 2.8, -5.6, 0.7, 2.8, -5.6)
+
+[sub_resource type="StandardMaterial3D" id="RailMaterial"]
+albedo_color = Color(0.24, 0.29, 0.27, 1)
+
+[sub_resource type="BoxMesh" id="RailMesh"]
+material = SubResource("RailMaterial")
+size = Vector3(0.1, 0.9, 6.26)
+
+[sub_resource type="BoxShape3D" id="RailShape"]
+size = Vector3(0.1, 0.9, 6.26)
+
+[node name="StairFlight" type="Node3D"]
+
+[node name="Ramp" type="StaticBody3D" parent="."]
+
+[node name="Collision" type="CollisionShape3D" parent="Ramp"]
+shape = SubResource("Ramp")
+
+[node name="Steps" type="Node3D" parent="."]
+
+[node name="Step01" type="MeshInstance3D" parent="Steps"]
+position = Vector3(0, 0.0875, -0.1750)
+mesh = SubResource("Step")
+
+[node name="Step02" type="MeshInstance3D" parent="Steps"]
+position = Vector3(0, 0.2625, -0.5250)
+mesh = SubResource("Step")
+
+[node name="Step03" type="MeshInstance3D" parent="Steps"]
+position = Vector3(0, 0.4375, -0.8750)
+mesh = SubResource("Step")
+
+[node name="Step04" type="MeshInstance3D" parent="Steps"]
+position = Vector3(0, 0.6125, -1.2250)
+mesh = SubResource("Step")
+
+[node name="Step05" type="MeshInstance3D" parent="Steps"]
+position = Vector3(0, 0.7875, -1.5750)
+mesh = SubResource("Step")
+
+[node name="Step06" type="MeshInstance3D" parent="Steps"]
+position = Vector3(0, 0.9625, -1.9250)
+mesh = SubResource("Step")
+
+[node name="Step07" type="MeshInstance3D" parent="Steps"]
+position = Vector3(0, 1.1375, -2.2750)
+mesh = SubResource("Step")
+
+[node name="Step08" type="MeshInstance3D" parent="Steps"]
+position = Vector3(0, 1.3125, -2.6250)
+mesh = SubResource("Step")
+
+[node name="Step09" type="MeshInstance3D" parent="Steps"]
+position = Vector3(0, 1.4875, -2.9750)
+mesh = SubResource("Step")
+
+[node name="Step10" type="MeshInstance3D" parent="Steps"]
+position = Vector3(0, 1.6625, -3.3250)
+mesh = SubResource("Step")
+
+[node name="Step11" type="MeshInstance3D" parent="Steps"]
+position = Vector3(0, 1.8375, -3.6750)
+mesh = SubResource("Step")
+
+[node name="Step12" type="MeshInstance3D" parent="Steps"]
+position = Vector3(0, 2.0125, -4.0250)
+mesh = SubResource("Step")
+
+[node name="Step13" type="MeshInstance3D" parent="Steps"]
+position = Vector3(0, 2.1875, -4.3750)
+mesh = SubResource("Step")
+
+[node name="Step14" type="MeshInstance3D" parent="Steps"]
+position = Vector3(0, 2.3625, -4.7250)
+mesh = SubResource("Step")
+
+[node name="Step15" type="MeshInstance3D" parent="Steps"]
+position = Vector3(0, 2.5375, -5.0750)
+mesh = SubResource("Step")
+
+[node name="Step16" type="MeshInstance3D" parent="Steps"]
+position = Vector3(0, 2.7125, -5.4250)
+mesh = SubResource("Step")
+
+[node name="LeftRail" type="StaticBody3D" parent="."]
+position = Vector3(-0.75, 1.85, -2.8)
+rotation_degrees = Vector3(26.565, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="LeftRail"]
+mesh = SubResource("RailMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="LeftRail"]
+shape = SubResource("RailShape")
+
+[node name="RightRail" type="StaticBody3D" parent="."]
+position = Vector3(0.75, 1.85, -2.8)
+rotation_degrees = Vector3(26.565, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="RightRail"]
+mesh = SubResource("RailMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="RightRail"]
+shape = SubResource("RailShape")

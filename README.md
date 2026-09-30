@@ -34,7 +34,7 @@ F5 opens the actual captured home exterior, using the developer's Scaniverse geo
 
 ## Documentation
 
-- [Current priority: faithful captured home exterior](docs/specs/002-real-microzone.md)
+- [Current priority: connected real microzone](docs/specs/002-real-microzone.md)
 - [Repository and minimal architecture](docs/architecture.md)
 - [Spec 001: vertical slice](docs/specs/001-vertical-slice.md)
 - [Development environment and Web risks](docs/development.md)
