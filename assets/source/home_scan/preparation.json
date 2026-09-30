@@ -1,0 +1,12 @@
+{
+  "source_file": "Scaniverse 2026-09-09 151237.glb",
+  "source_sha256": "eaaa968f8f22fb965cd10887ea714f3558c01bd9e43cfc2bf9d3743aa04c1afd",
+  "blender": "5.2.1 LTS",
+  "visual_vertices": 196199,
+  "visual_triangles": 249260,
+  "collision_triangles": 49852,
+  "texture_max_dimension": 4096,
+  "jpeg_quality": 90,
+  "output_bytes": 11685040,
+  "geometry_note": "Original visual vertices, faces, UVs, transforms and scale retained; collision only decimated."
+}

@@ -4,7 +4,9 @@ TESTS := \
 	test_movement_direction.gd \
 	test_keyboard_input.gd \
 	test_item_lifecycle.gd \
-	test_courtyard.gd
+	test_courtyard.gd \
+	test_home_exterior.gd \
+	test_scan_movement.gd
 
 .PHONY: lint format import test export-web check
 
@@ -20,7 +22,7 @@ import:
 
 test:
 	@for test in $(TESTS); do \
-		"$(GODOT)" --headless --path game --script "res://tests/$$test" || exit $$?; \
+		"$(GODOT)" --headless --path game --fixed-fps 60 --script "res://tests/$$test" || exit $$?; \
 	done
 
 export-web:

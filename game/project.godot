@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Le Joss's Dreamscape"
-run/main_scene="res://world/courtyard.tscn"
+run/main_scene="res://world/home_exterior.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 

@@ -26,8 +26,15 @@ Real-world reconstruction tools such as LingBot-Map may later supply starting ge
 
 Platform priority: Web, macOS development, Android, iOS, possibly other desktop targets. Longer-term activities include interiors, NPCs, fishing, and crafting. Networking, accounts, servers, databases, cloud infrastructure, and persistent housing technology remain future work.
 
+## Current playable scene
+
+F5 opens the actual captured home exterior, using the developer's Scaniverse geometry and photographic texture. Walk with WASD/arrows or hold the right mouse button. The original courtyard remains available for item interaction tests. Missing parts of the capture await further real references before reconstruction or expansion toward the street/bar.
+
+![Captured exterior running in Godot](docs/images/home-exterior-gameplay.png)
+
 ## Documentation
 
+- [Current priority: faithful captured home exterior](docs/specs/002-real-microzone.md)
 - [Repository and minimal architecture](docs/architecture.md)
 - [Spec 001: vertical slice](docs/specs/001-vertical-slice.md)
 - [Development environment and Web risks](docs/development.md)

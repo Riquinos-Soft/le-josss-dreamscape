@@ -1,6 +1,17 @@
 # Development setup and verified baseline
 
-Current state: the single-item pickup/inventory/placement loop is implemented. The developer reports completing the proposed Chrome/Safari gameplay playtest with everything working in principle (2026-09-24). This provides provisional manual gameplay acceptance and supersedes the browser-pending records below. Art and sustained performance validation remain pending; see the current [spec status](specs/001-vertical-slice.md). Original static scene/export are preserved.
+Current state: the main scene is the developer's captured home exterior (`world/home_exterior.tscn`), following the fidelity-first clarification on 2026-09-24. The original courtyard and item loop remain available and pass their regressions. Earlier manual browser acceptance applies to that courtyard, not to the new scan. See [Spec 002](specs/002-real-microzone.md).
+
+## Captured exterior verification — 2026-09-24
+
+- Prepared the supplied GLB offline in Blender 5.2.1: all 249,260 visible triangles retained; one 4096px photographic JPEG; separate 49,852-triangle static collision. Runtime GLB is 11,685,040 bytes. Source hash/settings are in `assets/source/home_scan/preparation.json`.
+- `make check GODOT=/Applications/Godot.app/Contents/MacOS/Godot` passes with the pinned lint tools on PATH. Headless tests run at fixed 60 simulation FPS: direction 13, keyboard 32, item lifecycle 63, courtyard 30, captured exterior 30, scan movement 5; **173 checks, zero failures**. The new route walks 20 metres along the captured path and back through normal movement inputs. Step fixtures cover a 20cm rise, descent, tall-wall rejection and stopping before unsupported ground.
+- Native Compatibility validation at `--max-fps 60` passes all 30 exterior checks. Representative 1280×720 frames were inspected; the player, actual photographic surroundings and controls are visible. The screenshot in `docs/images/home-exterior-gameplay.png` is a game capture, not concept art.
+- Web release export succeeds with unchanged single-threaded/Compatibility preset. Nine-file payload: **66,316,695 bytes (63.24 MiB)**; PCK **26,467,256 bytes**. This fits Spec 002's provisional 64MiB fidelity-prototype ceiling and exceeds the old 40MiB primitive-courtyard target. No sustained frame-time or browser-memory benchmark is claimed.
+- New scan gameplay has not been manually accepted in Chrome or Safari. Computer-use access was unavailable because permission was not granted; no UI automation or browser pass is claimed. Local HTTP checks and export do not replace that playtest.
+- Evidence: ignored `build/verification/home-scan/check.log`, `route.log`, `movement.log`, `native-final.log`, and numbered PNGs. Native command: `Godot --path game --max-fps 60 --script res://tests/test_home_exterior.gd -- --capture` (use the installed executable path on macOS). Tests do not ship in the Web PCK.
+
+Validation caveats: initial sandboxed Blender/Godot attempts failed on environment access; authorized native runs succeeded. An accelerated native `--fixed-fps` test warned that Jolt's job system exceeded its job capacity. Another capture waited indefinitely for a draw signal from an occluded window. The capture driver now requests a draw directly and native validation runs at normal capped speed; the final native log contains neither warning nor runtime error. The pinned gdtoolkit dependency still emits its existing `pkg_resources` deprecation warning; lint succeeds. Failed test routes and an initial step-edge collision issue were corrected before the recorded passing runs.
 
 ## Manual gameplay report — 2026-09-24
 

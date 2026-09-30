@@ -1,6 +1,14 @@
 # Repository and vertical-slice architecture
 
-Status: the single-item lifecycle is implemented. On 2026-09-24 the developer reported completing the proposed Chrome/Safari gameplay playtest with everything working in principle; this is provisional manual acceptance. Detailed evidence and remaining art/performance criteria are tracked in [Spec 001](specs/001-vertical-slice.md). The original static smoke-test scene is preserved.
+Current priority: a faithful exterior from the developer's actual Scaniverse capture, as clarified on 2026-09-24. Main scene is `world/home_exterior.tscn`; see [Spec 002](specs/002-real-microzone.md). The courtyard item lifecycle and its developer-reported provisional manual acceptance remain the Spec 001 baseline. The original static smoke-test scene is preserved.
+
+## Captured exterior
+
+`HomeExterior` composes the prepared `assets/home_scan/exterior.glb`, the existing Player/CameraRig scenes, simple lighting and a small controls HUD. Visual triangle geometry, UV layout and source scale are retained; a 4096px photographic texture and a separate simplified static collision mesh are prepared offline in Blender. The `-colonly` import suffix creates collision without rendering the duplicate mesh. A scene-local material adjustment keeps the captured lighting visible without relighting the photograph.
+
+Player options for 25cm step assistance and support checks at open scan edges are enabled only here. Mouse steering projects onto current player elevation. The camera retains its heading and follows the player; an opt-in ray shortens its offset when captured geometry blocks the view. These options do not change courtyard collision behavior. No unseen interiors or street/bar layout is inferred from this exterior capture.
+
+The earlier invented microzone blockout was archived outside the runtime project after the developer corrected the priority. Its connected-interior ADR is deferred. The sections below describe the retained courtyard architecture and future direction.
 
 ## World scale
 

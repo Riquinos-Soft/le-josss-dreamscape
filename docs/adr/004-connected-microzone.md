@@ -1,6 +1,6 @@
 # ADR 004 — One physical microzone with building cutaways
 
-Status: accepted for Spec 002 under the developer's explicit request to choose the simplest robust connection of interiors and exterior.
+Status: deferred after the developer's 2026-09-24 clarification: reproduce the real house exterior from the supplied GLB first, then expand with new references. The provisional invented blockout was not accepted and is not shipped. The following is retained as a proposal for later connected interiors, not the current runtime architecture.
 
 ## Decision
 
