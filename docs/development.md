@@ -1,5 +1,9 @@
 # Development setup and verified baseline
 
+## Map touch interaction — 2026-10-05
+
+The integrated travel test now injects screen-touch events at the marked exit and map buttons. The Map action appears only at the exit, opens the modal, allows selection of Casa and confirms the trip; touch movement resumes afterward. This is a headless simulated-touch check, not physical Android/iOS or browser acceptance. `test_location_travel.gd` now passes **99 checks**. `PATH=/private/tmp/lourizan-author313/bin:$PATH make check GODOT=/Applications/Godot.app/Contents/MacOS/Godot` passed: **721 checks, zero failures**, documentation/lint/import and Web release export. Log: `build/verification/lourizan/touch-route-check.log`. GitHub Actions remained queued while its public status reported degraded Actions performance; the live `/release.txt` still returned `5d69bb0` at the time of observation.
+
 ## Integrated physical route — 2026-10-05
 
 The integration test now uses normal player movement for the first street approach to its marked map exit, the captured Pazo paving to its exit, and the captured home path to its exit. Later repeat cycles still position the player at an exit to focus on map state. `PATH=/private/tmp/lourizan-author313/bin:$PATH make check GODOT=/Applications/Godot.app/Contents/MacOS/Godot` passed: **715 checks, zero failures**, docs/lint/import and Web release export. Native Compatibility run passed **93 location-travel checks** with no reported runtime warnings or errors. Logs: ignored `build/verification/lourizan/route-check.log` and `route-native.log`. The public deployment for push `d3c8f18` was still queued in GitHub Actions when this check ran; browser gameplay of the new build remains unverified.

@@ -12,7 +12,7 @@ Use `world/jacobo_risa_street.tscn` as the initial scene inside `world/dreamscap
 
 ## Phase 3 — Route and device acceptance (in progress)
 
-The first street-to-map, captured Pazo paving-to-exit and home-to-exit walks pass under normal player movement in the integrated native test. Verify the exported Web in Chrome/Safari and landscape touch on a physical device when available. Record actual screenshots, performance, UI readability and collision gaps. Do not claim browser/device acceptance from an export alone.
+The first street-to-map, captured Pazo paving-to-exit and home-to-exit walks pass under normal player movement in the integrated native test. Simulated screen touches now open the map, choose Casa and confirm travel in the integrated test. Verify the exported Web in Chrome/Safari and landscape touch on a physical device when available. Record actual screenshots, performance, UI readability and collision gaps. Do not claim browser/device acceptance from an export alone.
 
 ## Phase 4 — Wider Pazo mapping (awaiting references)
 

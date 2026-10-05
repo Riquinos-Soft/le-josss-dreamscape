@@ -118,6 +118,45 @@ func run() -> void:
 	check(await session.travel_to(&"street"), "return from home")
 	await frames(12)
 	check(session.current_id == &"street" and player.is_on_floor(), "street restored after home")
+	await enter_exit(session.get_node("Street/Exit"))
+	var touch_controls: Control = session.get_node("Street/TouchHUD/TouchControls")
+	touch_controls.enable_touch()
+	check(touch_controls.action_rects.has("map"), "touch map action appears at marked edge")
+	var tap := InputEventScreenTouch.new()
+	tap.index = 1
+	tap.position = touch_controls.action_rects["map"].get_center()
+	tap.pressed = true
+	root.push_input(tap, true)
+	Input.flush_buffered_events()
+	await frames(2)
+	check(map_ui.is_open, "touch map action opens the map")
+	check(not touch_controls.input_enabled, "map releases touch input to its buttons")
+	tap.pressed = false
+	root.push_input(tap, true)
+	Input.flush_buffered_events()
+	await frames(1)
+	var destination_touch := InputEventScreenTouch.new()
+	destination_touch.index = 2
+	destination_touch.position = map_ui.home_button.get_global_rect().get_center()
+	destination_touch.pressed = true
+	root.push_input(destination_touch, true)
+	Input.flush_buffered_events()
+	destination_touch.pressed = false
+	root.push_input(destination_touch, true)
+	Input.flush_buffered_events()
+	await frames(2)
+	check(map_ui.selected == &"home", "touch selects destination in map")
+	destination_touch.index = 3
+	destination_touch.position = map_ui.travel_button.get_global_rect().get_center()
+	destination_touch.pressed = true
+	root.push_input(destination_touch, true)
+	Input.flush_buffered_events()
+	destination_touch.pressed = false
+	root.push_input(destination_touch, true)
+	Input.flush_buffered_events()
+	await frames(15)
+	check(session.current_id == &"home", "touch confirms travel to captured home")
+	check(touch_controls.input_enabled, "touch movement returns after travel")
 	print("Location travel: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
 
