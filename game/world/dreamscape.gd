@@ -5,6 +5,16 @@ const LOCATION_PATHS := {
 	&"home": "res://world/locations/home.tscn",
 	&"lourizan": "res://world/locations/lourizan.tscn",
 }
+const MAP_DIRECTIONS := [
+	"derecha",
+	"abajo a la derecha",
+	"abajo",
+	"abajo a la izquierda",
+	"izquierda",
+	"arriba a la izquierda",
+	"arriba",
+	"arriba a la derecha"
+]
 var location_paths := LOCATION_PATHS.duplicate()
 var current_id: StringName = &"street"
 var active_location: Node3D
@@ -30,6 +40,29 @@ func _ready() -> void:
 	map_ui.destination_confirmed.connect(travel_to)
 	touch_controls.map_requested.connect(open_map)
 	watch_exit(street)
+
+
+func _process(_delta: float) -> void:
+	if map_ui.is_open:
+		return
+	var location: Node3D = street if current_id == &"street" else active_location
+	if location == null:
+		return
+	var exit: Area3D = location.get_node("Exit")
+	var camera: Camera3D = camera_rig.get_node("Camera")
+	var screen_direction := (
+		camera.unproject_position(exit.global_position)
+		- camera.unproject_position(player.global_position)
+	)
+	var direction_index := wrapi(roundi(screen_direction.angle() / (PI / 4.0)), 0, 8)
+	var offset := exit.global_position - player.global_position
+	var distance := roundi(Vector2(offset.x, offset.z).length())
+	map_ui.set_guide(
+		(
+			"Salida al mapa · %d m\nSigue %s; pulsa M al llegar."
+			% [distance, MAP_DIRECTIONS[direction_index]]
+		)
+	)
 
 
 func _input(event: InputEvent) -> void:

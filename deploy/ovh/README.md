@@ -70,10 +70,9 @@ for IPv4 and IPv6. Do not open port 8083 publicly.
 
 ## Publish a Web export
 
-The `CI` workflow publishes on pushes to `main` only, after both lint/safety checks
-and the Godot test/export job succeed. Pull requests, other branches and manual CI
-runs do not publish. Deployment downloads the artifact from that same workflow
-run; it does not rebuild the game. Production runs are serialized without
+The `CI` workflow publishes on pushes to `main` or a manual workflow dispatch
+against `main`, after both lint/safety checks and the Godot test/export job succeed.
+Pull requests and other branches do not publish. A manual dispatch is useful when a push run is stranded in the Actions queue; it still runs both gates and deploys only `main`. Deployment downloads the artifact from that same workflow run; it does not rebuild the game. Production runs are serialized without
 cancelling an in-progress deployment.
 
 GitHub environment `production` requires these secrets:

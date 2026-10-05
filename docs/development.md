@@ -1,5 +1,11 @@
 # Development setup and verified baseline
 
+## Deployment queue and map guidance — 2026-10-05
+
+Investigation found two independent causes. GitHub's public status reported a major Actions outage while push run `37370450215` remained queued before its Godot job; the live `/release.txt` stayed at `5d69bb0`. A separate manual `workflow_dispatch` run `37371913850` on the same commit completed lint and Godot/Web export, but its deploy job was skipped by the workflow's `push`-only condition. The workflow now permits a manual dispatch on `main` to deploy the same tested artifact after both gates, while PRs and other branches remain excluded. Verify a fresh dispatch and the live release SHA before calling production updated.
+
+The local UX issue was also real: the street exit sits about 30 m from spawn and the near-exit button overlapped the existing top-left HUD. The map now shows a persistent direction/distance guide in the upper right; near the exit it switches to an unobscured `M · Abrir mapa` button. `test_location_travel.gd` checks the guide, prompt location and travel behavior. Native screenshots `build/verification/lourizan/street-production.png` and `street-map-exit.png` were inspected. The latest local Web export rendered the guide in Chrome. `make check` passed with **725 checks, zero failures**; log: `build/verification/lourizan/map-guide-check.log`. Chrome validation here covers boot and the visible guide, not a manual full route.
+
 ## Local Chrome Web smoke test — 2026-10-05
 
 Opened the latest `build/web` export at `http://127.0.0.1:8000/` in Chrome and inspected the rendered production street: pixel environment, Joss sprite and HUD appeared correctly. The game's console produced no errors; several warnings originated from an installed Chrome extension (`chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn`), not the game. This is a browser boot/visual smoke check, not a complete route playthrough or mobile validation. The local tab was left open for developer review. The public `/release.txt` still returned `5d69bb0` while GitHub Actions was queued during a reported Actions service degradation.

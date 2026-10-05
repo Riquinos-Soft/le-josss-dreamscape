@@ -56,7 +56,7 @@ pick it up, **P** to place, aim with the mouse, **Q/E** to rotate, left-click to
 confirm, and **Esc** to cancel. Placement follows the supported street surface.
 The current scenery pass uses coarse pixel foliage, simple stone banks and a
 reduced palette in place of the visible scan's noisy surfaces, preserving the
-dark asphalt and garage approach. At the southern marked edge, press **M** or the on-screen Map action, select the captured home or Pazo de Lourizán and confirm. Both destinations retain the production character, camera and pixel pass; return through their marked exits. The linked public build changes only after a push and deployment.
+dark asphalt and garage approach. Follow the direction and distance guide in the upper right to the marked street edge (about 30 m from spawn), then press **M** or the on-screen Map action, select the captured home or Pazo de Lourizán and confirm. Both destinations retain the production character, camera and pixel pass; return through their marked exits. The linked public build changes only after a push and deployment.
 
 ## Working method
 

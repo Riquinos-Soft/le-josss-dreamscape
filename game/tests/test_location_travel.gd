@@ -25,6 +25,8 @@ func run() -> void:
 	var original_player := player.get_instance_id()
 	var original_item = session.get_node("Street/ItemLoop").world_item.item
 	check(session.current_id == &"street", "production street opens first")
+	check(map_ui.guide.visible, "map direction is visible from spawn")
+	check(map_ui.guide_label.text.contains("Salida al mapa"), "map direction explains the route")
 	check(player.get_node("PixelCharacter").visible, "pixel sprite retained")
 	check(session.get_node("Street/PixelPass").visible, "world pixel pass retained")
 	check(
@@ -40,6 +42,13 @@ func run() -> void:
 		else:
 			await enter_exit(session.get_node("Street/Exit"))
 		check(session.near_exit != null, "street exit detected")
+		if cycle == 0:
+			check(map_ui.prompt.visible and not map_ui.guide.visible, "exit shows map action")
+			check(
+				map_ui.prompt.get_global_rect().position.x > 500,
+				"map action stays clear of the street HUD"
+			)
+			await capture("street-map-exit")
 		session.open_map()
 		check(map_ui.is_open and player.input_locked, "map freezes movement")
 		if cycle == 0:

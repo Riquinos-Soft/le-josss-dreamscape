@@ -10,6 +10,8 @@ var current: StringName = &"street"
 var selected: StringName = &""
 var is_open := false
 var prompt: PanelContainer
+var guide: PanelContainer
+var guide_label: Label
 var overlay: ColorRect
 var title: Label
 var status: Label
@@ -24,9 +26,25 @@ var lourizan_dot: ColorRect
 
 
 func _ready() -> void:
+	guide = PanelContainer.new()
+	add_child(guide)
+	guide.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	guide.offset_left = -345
+	guide.offset_top = 16
+	guide.offset_right = -16
+	guide.offset_bottom = 76
+	guide_label = Label.new()
+	guide_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	guide.add_child(guide_label)
+	guide_label.text = "Salida al mapa: sigue la indicación"
+
 	prompt = PanelContainer.new()
-	prompt.position = Vector2(16, 16)
 	add_child(prompt)
+	prompt.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	prompt.offset_left = -195
+	prompt.offset_top = 16
+	prompt.offset_right = -16
+	prompt.offset_bottom = 55
 	var open_button := Button.new()
 	open_button.text = "M · Abrir mapa"
 	open_button.focus_mode = Control.FOCUS_NONE
@@ -93,6 +111,11 @@ func _ready() -> void:
 
 func show_prompt(available: bool) -> void:
 	prompt.visible = available and not is_open
+	guide.visible = not available and not is_open
+
+
+func set_guide(message: String) -> void:
+	guide_label.text = message
 
 
 func open_map(location: StringName) -> void:
@@ -101,6 +124,7 @@ func open_map(location: StringName) -> void:
 	is_open = true
 	overlay.show()
 	prompt.hide()
+	guide.hide()
 	status.text = "Estás aquí: %s" % NAMES[current]
 	street_button.disabled = current == &"street"
 	home_button.disabled = current == &"home"
@@ -145,6 +169,7 @@ func close_map() -> void:
 	selected = &""
 	overlay.hide()
 	prompt.hide()
+	guide.show()
 	get_viewport().gui_release_focus()
 
 
