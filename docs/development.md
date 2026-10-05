@@ -1,5 +1,9 @@
 # Development setup and verified baseline
 
+## Integrated physical route — 2026-10-05
+
+The integration test now uses normal player movement for the first street approach to its marked map exit, the captured Pazo paving to its exit, and the captured home path to its exit. Later repeat cycles still position the player at an exit to focus on map state. `PATH=/private/tmp/lourizan-author313/bin:$PATH make check GODOT=/Applications/Godot.app/Contents/MacOS/Godot` passed: **715 checks, zero failures**, docs/lint/import and Web release export. Native Compatibility run passed **93 location-travel checks** with no reported runtime warnings or errors. Logs: ignored `build/verification/lourizan/route-check.log` and `route-native.log`. The public deployment for push `d3c8f18` was still queued in GitHub Actions when this check ran; browser gameplay of the new build remains unverified.
+
 ## Production street and Lourizán integration — 2026-10-05
 
 Fetched `origin/main` at `5d69bb0` and reconciled the local capture/travel work with the actual pixel-art production street. The current local default scene is `world/dreamscape.tscn`, hosting the existing Jacobo Risa scene, Joss sprite, orthographic camera, 180-row world pixel pass, touch HUD and item loop. A marked southern street edge opens a three-destination map; the captured home and Lourizán use the same player and renderer. The physical home-to-bar route remains pending real layout references. Earlier entries below describe historical branch states and are superseded where they identify a different main scene.

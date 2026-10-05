@@ -1,6 +1,8 @@
 extends SceneTree
 ## Production street remains the host for the same player, sprite, camera and pixel pass.
 
+const Direction = preload("res://player/movement_direction.gd")
+
 var checks := 0
 var failures := 0
 var session: Node3D
@@ -32,7 +34,11 @@ func run() -> void:
 	session.open_map()
 	check(not map_ui.is_open, "map requires a marked exit")
 	for cycle in 3:
-		await enter_exit(session.get_node("Street/Exit"))
+		if cycle == 0:
+			for index in range(6, 0, -1):
+				check(await walk_to(session.street.ROUTE[index]), "street route reaches waypoint")
+		else:
+			await enter_exit(session.get_node("Street/Exit"))
 		check(session.near_exit != null, "street exit detected")
 		session.open_map()
 		check(map_ui.is_open and player.input_locked, "map freezes movement")
@@ -72,7 +78,11 @@ func run() -> void:
 			"touch travel mode active"
 		)
 		check(session.near_exit == null, "arrival does not reopen map")
-		await enter_exit(session.active_location.get_node("Exit"))
+		if cycle == 0:
+			for z in [-10, -8, -6, -4]:
+				check(await walk_to(Vector3(6, 0, z)), "Pazo paving reaches waypoint")
+		else:
+			await enter_exit(session.active_location.get_node("Exit"))
 		check(session.near_exit != null, "Lourizán exit detected")
 		session.open_map()
 		map_ui.select(&"street")
@@ -100,7 +110,9 @@ func run() -> void:
 	check(session.current_id == &"home" and player.is_on_floor(), "home arrival grounded")
 	check(player.get_instance_id() == original_player, "home retains production player")
 	check(session.get_node("Street/PixelPass").visible, "home uses world pixel pass")
-	await enter_exit(session.active_location.get_node("Exit"))
+	for z in [10, 8, 6, 4, 2, 0, -2, -4, -6, -8]:
+		check(await walk_to(Vector3(8, 0, z)), "home path reaches waypoint")
+	check(session.near_exit != null, "home path reaches map exit")
 	session.open_map()
 	map_ui.select(&"street")
 	check(await session.travel_to(&"street"), "return from home")
@@ -115,6 +127,34 @@ func enter_exit(exit: Area3D) -> void:
 	player.velocity = Vector3.ZERO
 	player.reset_physics_interpolation()
 	await frames(5)
+
+
+func walk_to(target: Vector3) -> bool:
+	var camera: Camera3D = session.get_node("Street/CameraRig/Camera")
+	for tick in 400:
+		var offset := target - player.global_position
+		offset.y = 0
+		if offset.length() < 0.4:
+			release_movement()
+			await frames(3)
+			return player.is_on_floor()
+		var direction := offset.normalized() * minf(1.0, offset.length() * 4.0)
+		var right := Direction.from_view(Vector2.RIGHT, camera.global_basis)
+		var forward := Direction.from_view(Vector2.UP, camera.global_basis)
+		var x := direction.dot(right)
+		var y := direction.dot(forward)
+		release_movement()
+		Input.action_press("move_right" if x > 0 else "move_left", absf(x))
+		Input.action_press("move_forward" if y > 0 else "move_back", absf(y))
+		await frames(1)
+	release_movement()
+	push_error("Walk blocked at %s toward %s" % [player.global_position, target])
+	return false
+
+
+func release_movement() -> void:
+	for action in ["move_left", "move_right", "move_forward", "move_back"]:
+		Input.action_release(action)
 
 
 func frames(count: int) -> void:
