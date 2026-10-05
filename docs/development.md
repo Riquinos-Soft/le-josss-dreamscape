@@ -1,5 +1,9 @@
 # Development setup and verified baseline
 
+## Local Chrome Web smoke test — 2026-10-05
+
+Opened the latest `build/web` export at `http://127.0.0.1:8000/` in Chrome and inspected the rendered production street: pixel environment, Joss sprite and HUD appeared correctly. The game's console produced no errors; several warnings originated from an installed Chrome extension (`chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn`), not the game. This is a browser boot/visual smoke check, not a complete route playthrough or mobile validation. The local tab was left open for developer review. The public `/release.txt` still returned `5d69bb0` while GitHub Actions was queued during a reported Actions service degradation.
+
 ## Map touch interaction — 2026-10-05
 
 The integrated travel test now injects screen-touch events at the marked exit and map buttons. The Map action appears only at the exit, opens the modal, allows selection of Casa and confirms the trip; touch movement resumes afterward. This is a headless simulated-touch check, not physical Android/iOS or browser acceptance. `test_location_travel.gd` now passes **99 checks**. `PATH=/private/tmp/lourizan-author313/bin:$PATH make check GODOT=/Applications/Godot.app/Contents/MacOS/Godot` passed: **721 checks, zero failures**, documentation/lint/import and Web release export. Log: `build/verification/lourizan/touch-route-check.log`. GitHub Actions remained queued while its public status reported degraded Actions performance; the live `/release.txt` still returned `5d69bb0` at the time of observation.
