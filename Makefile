@@ -7,7 +7,8 @@ TESTS := \
 	test_courtyard.gd \
 	test_home_exterior.gd \
 	test_scan_movement.gd \
-	test_connected_stairs.gd
+	test_connected_stairs.gd \
+	test_lourizan_exterior.gd
 
 .PHONY: lint format import test export-web check
 

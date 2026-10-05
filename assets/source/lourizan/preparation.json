@@ -1,0 +1,23 @@
+{
+  "source_mesh_sha256": "791dc1b6954290d8c456b51202acc78571b7b219fd8bbb879fdfb27e6b781d86",
+  "source_texture_sha256": "74e6ed87ce3fbbd6a097ee083446f3777078d9bd994f9391af27d6ae6fab25ad",
+  "visual_vertices": 206170,
+  "visual_triangles": 264177,
+  "collision_triangles": 55000,
+  "bounds_min": [
+    -10.71882152557373,
+    -0.42716169357299805,
+    -23.876758575439453
+  ],
+  "bounds_max": [
+    12.2651948928833,
+    13.093013763427734,
+    22.433307647705078
+  ],
+  "texture_dimension": [
+    4096,
+    4096
+  ],
+  "output_bytes": 12982644,
+  "note": "Source point positions, faces and UVs retained; only texture and collision simplified."
+}

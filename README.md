@@ -32,6 +32,8 @@ F5 opens the actual captured home exterior, using the developer's Scaniverse geo
 
 ![Captured exterior running in Godot](docs/images/home-exterior-gameplay.png)
 
+![Lourizán capturado en Godot](docs/images/lourizan-gameplay.png)
+
 ## Documentation
 
 - [Current plan: Pazo de Lourizán and map travel](docs/specs/003-lourizan-and-travel.md)

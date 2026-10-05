@@ -1,12 +1,12 @@
 # Spec 003 — Pazo de Lourizán y viaje entre lugares
 
-Estado: plan preparado el 2026-10-05; implementación pendiente. Nueva prioridad del usuario. Se han recibido los enlaces de Scaniverse y Google Photos. Se inspeccionaron los metadatos y previsualización del escaneo, se descargaron su malla Draco y textura, y se inspeccionó la miniatura del vídeo. El vídeo completo no pudo descargarse (HTTP 500); la malla todavía no se ha decodificado. Esta spec permite implementar por fases con Sol u otro modelo de implementación, sin una nueva auditoría completa en cada turno.
+Estado: fases 0–2 implementadas y verificadas el 2026-10-05; fases 3–6 en curso. Nueva prioridad del usuario. Se han recibido los enlaces de Scaniverse y Google Photos. Se inspeccionaron los metadatos y previsualización del escaneo, se descargaron su malla Draco y textura, y se inspeccionó la miniatura del vídeo. El usuario descartó el vídeo. La malla ya se decodificó y convirtió en GLB fotográfico reproducible. Esta spec permite implementar por fases con Sol u otro modelo de implementación, sin una nueva auditoría completa en cada turno.
 
 ## Resultado buscado
 
 Recorrer una primera versión reconocible del Pazo de Lourizán, Pontevedra, basada en el material del usuario. Conectar **Casa ↔ Pazo de Lourizán** mediante una acción explícita en los bordes: acercarse a una salida, abrir mapa, seleccionar destino y aparecer en una entrada segura del destino. Poder regresar por el mismo sistema.
 
-«Primera versión de todo» comprende los dos lugares, sus salidas, el mapa y el viaje de ida/vuelta. El alcance físico de Lourizán será toda la zona útil documentada por la captura y el vídeo, acordada en fase 0. No equivale a afirmar que tenemos cobertura de toda la finca. Los interiores requieren referencias; si no aparecen, la primera entrega cubre exteriores. La ampliación de la casa a tres plantas y al bar permanece en Spec 002, pendiente de sus referencias.
+«Primera versión de todo» comprende los dos lugares, sus salidas, el mapa y el viaje de ida/vuelta. El alcance físico de Lourizán es el pavimento, escalinatas, terraza y fachada incluidos en la captura. No equivale a afirmar que tenemos cobertura de toda la finca. Los interiores requieren referencias; si no aparecen, la primera entrega cubre exteriores. La ampliación de la casa a tres plantas y al bar permanece en Spec 002, pendiente de sus referencias.
 
 ## Base que se reutiliza
 
@@ -56,7 +56,7 @@ Dentro de cada lugar se camina en una escena física continua; el mapa conecta l
 
 ## Referencias y fidelidad de Lourizán
 
-Referencias recibidas: [Scaniverse](https://scaniverse.com/scan/tcmlw54mcgjhp2xd) y [Google Photos](https://photos.app.goo.gl/yXEAJaEVuWxP76n18). Véase [inventario y límites de evidencia](../../assets/source/lourizan/README.md). La previsualización muestra fachada parcial, terrazas, escalinatas y camino/plaza con parterre; la miniatura del vídeo muestra un camino arbolado. No se ha establecido su conexión espacial.
+Referencias recibidas: [Scaniverse](https://scaniverse.com/scan/tcmlw54mcgjhp2xd) (vídeo descartado por el usuario). Véase [inventario y límites de evidencia](../../assets/source/lourizan/README.md). La previsualización muestra fachada parcial, terrazas, escalinatas y camino/plaza con parterre; la miniatura del vídeo muestra un camino arbolado. No se ha establecido su conexión espacial.
 
 Datos iniciales de Scaniverse: malla (no splat), 264.177 triángulos declarados, volumen aproximado 22,98 × 46,31 m horizontal y 13,52 m vertical sin calibración. Material descargado: Draco 0,85 MB y JPEG 8,39 MB; aún no son un asset GLB de ejecución. Preferir exportación GLB si llega del usuario; alternativamente decodificar Draco offline y validar UV/orientación. No aplicar el script de preparación de casa directamente al `.drc`.
 
@@ -64,7 +64,7 @@ Recorrido candidato para la primera versión: camino/plaza pavimentada → escal
 
 Fase 0 debe registrar: archivos y hashes, formato, límites y orientación, textura/triángulos, qué cubre el vídeo, zonas incompletas y una dimensión conocida si está disponible. Seleccionar varios fotogramas representativos con sus tiempos; no generar una reconstrucción a partir de cada fotograma por defecto.
 
-El mapeo fija posiciones y volúmenes observados. El vídeo ayuda a identificar fachada, recorridos, desniveles, accesos y puntos reconocibles. No rellenar espacios desconocidos con arquitectura inventada. Las aproximaciones necesarias para caminar se documentan y mantienen la silueta y distribución observadas. Un borde jugable se coloca sobre terreno estable antes del fin del escaneo.
+El mapeo fija posiciones y volúmenes observados. La captura define fachada, recorridos, desniveles, accesos y puntos reconocibles. No rellenar espacios desconocidos con arquitectura inventada. Las aproximaciones necesarias para caminar se documentan y mantienen la silueta y distribución observadas. Un borde jugable se coloca sobre terreno estable antes del fin del escaneo.
 
 Reutilizar `tools/prepare_home_scan.py` solo tras leerlo y comprobar sus supuestos; parametrizar entradas/salidas si basta. Mantener los originales intactos, preparar copias offline y dejar GLB/texturas reproducibles dentro del repo. No introducir IA/reconstrucción adicional salvo que el material recibido lo haga necesario. El look pixelado se pospone hasta que el lugar y el viaje sean reconocibles y jugables.
 
@@ -119,7 +119,6 @@ No hace falta cambiar de modelo para cada fase ni delegar a otros agentes. Si un
 
 ## Estado para la siguiente sesión
 
-- Fase 0: enlaces, inventario, hashes y previsualizaciones registrados. Pendientes inspección geométrica completa, vídeo reproducible y calibración.
-- Fases 1–6: pendientes; no implementadas ni validadas.
-- Primera acción: importar/decodificar la malla descargada para inspeccionar su cobertura; recibir el vídeo local/descargable para completar el trazado. La fachada y plaza capturadas permiten avanzar a fase 1 sin inventar el resto de la finca.
+- Fases 0–2: captura decodificada y GLB importado. `lourizan_preview.tscn` muestra el pazo con el jugador; ruta pavimentada de 8 m ida y vuelta supera 13 checks. Faltan calibración real y ampliación de la captura.
+- Fases 3–6: pendientes. Siguiente paso: sesión de dos lugares, mapa y viaje de ida/vuelta.
 - Trabajo independiente disponible: fases 3–4 pueden prepararse usando casa y fixtures ligeros de test. No presentar esos fixtures como Lourizán ni habilitar un destino público sin su escena real.

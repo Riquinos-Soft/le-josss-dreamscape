@@ -1,0 +1,69 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/lourizan/exterior.glb" id="1_scan"]
+[ext_resource type="PackedScene" path="res://player/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://player/camera_rig.tscn" id="3_camera"]
+[ext_resource type="Script" path="res://world/home_exterior.gd" id="4_script"]
+
+[sub_resource type="BoxShape3D" id="PavingSupport"]
+size = Vector3(5, 0.2, 16)
+
+[sub_resource type="Environment" id="Environment_scan"]
+background_mode = 1
+background_color = Color(0.12, 0.16, 0.19, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.82, 0.86, 0.92, 1)
+ambient_light_energy = 0.65
+
+[sub_resource type="StyleBoxFlat" id="HUD_background"]
+bg_color = Color(0.05, 0.08, 0.1, 0.85)
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 10.0
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_left = 5
+corner_radius_bottom_right = 5
+
+[node name="LourizanPreview" type="Node3D"]
+script = ExtResource("4_script")
+
+[node name="CapturedExterior" parent="." instance=ExtResource("1_scan")]
+
+[node name="PavingSupport" type="StaticBody3D" parent="."]
+position = Vector3(6.5, 0.03, -8)
+
+[node name="Collision" type="CollisionShape3D" parent="PavingSupport"]
+shape = SubResource("PavingSupport")
+
+[node name="Environment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_scan")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-55, -30, 0)
+shadow_enabled = false
+light_energy = 0.7
+
+[node name="Player" parent="." node_paths=PackedStringArray("movement_orientation") instance=ExtResource("2_player")]
+position = Vector3(6, 1.1, -12)
+movement_orientation = NodePath("../CameraRig/Camera")
+prevent_ledge_fall = true
+step_height = 0.25
+
+[node name="CameraRig" parent="." node_paths=PackedStringArray("target") instance=ExtResource("3_camera")]
+target = NodePath("../Player")
+avoid_world_geometry = false
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Panel" type="PanelContainer" parent="HUD"]
+offset_left = 16.0
+offset_top = 16.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("HUD_background")
+
+[node name="Text" type="Label" parent="HUD/Panel"]
+layout_mode = 2
+mouse_filter = 2
+text = "PAZO DE LOURIZÁN\nWASD / flechas · caminar\nMantener botón derecho · seguir el cursor"
