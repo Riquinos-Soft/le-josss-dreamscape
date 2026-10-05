@@ -1,5 +1,10 @@
 # Development setup and verified baseline
 
+## Lourizán and travel planning — 2026-10-05
+
+Prepared Spec 003 for the supplied brief: real Lourizán location, explicit map opening at exits, destination selection and reversible Casa/Lourizán travel. Seven bounded phases (0–6) include evidence intake, visible location, traversal, session composition, map, travel and Web acceptance, plus a reusable implementation prompt. Received Scaniverse and Google Photos share links. Web reader could not access either; direct public-page downloads succeeded. Inspected scan metadata/preview and video thumbnail; downloaded the advertised Draco mesh (853,382 bytes) and JPEG (8,389,733 bytes), recording hashes in assets/source/lourizan/source-report.json. The advertised MP4 URL returned HTTP 500; full video review and mesh decoding remain pending. No gameplay implementation or new runtime verification is claimed; reviewed Markdown diff and local links only. Next action: decode/import the captured mesh and obtain a playable video to resolve wider path coverage. Existing baseline is commit `2825626` and its recorded 189 checks.
+
+
 ## Connected microzone: first stair module — 2026-09-30
 
 Goal: extend the approved captured exterior into the real home/street/bar route. Completed: reusable `game/world/modules/stair_flight.tscn` (visible steps, continuous incline collision, side rails), and an F6-inspectable `game/tests/fixtures/three_floor_stairs.tscn` with two flights/three landings using the existing player/camera. Dimensions are provisional; this fixture is not the house layout. Production scene remains the approved scan.

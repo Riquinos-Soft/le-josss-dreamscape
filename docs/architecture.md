@@ -2,6 +2,9 @@
 
 Current priority: extend the approved captured exterior into a connected three-storey house, street, parking and bar, renewed on 2026-09-30. Building placement awaits real layout references. Main scene is `world/home_exterior.tscn`; see [Spec 002](specs/002-real-microzone.md). The courtyard item lifecycle and its developer-reported provisional manual acceptance remain the Spec 001 baseline. The original static smoke-test scene is preserved.
 
+
+Planning update (2026-10-05): [Spec 003](specs/003-lourizan-and-travel.md) proposes a session root with one active location and explicit map travel between Casa and Lourizán. This is a plan, not implemented runtime architecture. The current main scene is still the captured house exterior.
+
 ## Captured exterior
 
 `HomeExterior` composes the prepared `assets/home_scan/exterior.glb`, the existing Player/CameraRig scenes, simple lighting and a small controls HUD. Visual triangle geometry, UV layout and source scale are retained; a 4096px photographic texture and a separate simplified static collision mesh are prepared offline in Blender. The `-colonly` import suffix creates collision without rendering the duplicate mesh. A scene-local material adjustment keeps the captured lighting visible without relighting the photograph.

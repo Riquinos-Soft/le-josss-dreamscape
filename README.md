@@ -34,7 +34,8 @@ F5 opens the actual captured home exterior, using the developer's Scaniverse geo
 
 ## Documentation
 
-- [Current priority: connected real microzone](docs/specs/002-real-microzone.md)
+- [Current plan: Pazo de Lourizán and map travel](docs/specs/003-lourizan-and-travel.md)
+- [Home-to-bar microzone](docs/specs/002-real-microzone.md)
 - [Repository and minimal architecture](docs/architecture.md)
 - [Spec 001: vertical slice](docs/specs/001-vertical-slice.md)
 - [Development environment and Web risks](docs/development.md)

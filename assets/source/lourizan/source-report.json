@@ -1,0 +1,31 @@
+{
+  "scan_url": "https://scaniverse.com/scan/tcmlw54mcgjhp2xd",
+  "video_url": "https://photos.app.goo.gl/yXEAJaEVuWxP76n18",
+  "model_type": "mesh",
+  "metadata": {
+    "bound": [
+      -10.718822,
+      -0.4271617,
+      -23.876759,
+      12.265728,
+      13.093237,
+      22.43331
+    ],
+    "points": 205373,
+    "triangles": 264177
+  },
+  "files": [
+    {
+      "name": "mesh.drc",
+      "bytes": 853382,
+      "sha256": "791dc1b6954290d8c456b51202acc78571b7b219fd8bbb879fdfb27e6b781d86",
+      "source": "https://scaniverse.com/api/media/tcmlw54mcgjhp2xd/mesh.drc"
+    },
+    {
+      "name": "tex.jpg",
+      "bytes": 8389733,
+      "sha256": "74e6ed87ce3fbbd6a097ee083446f3777078d9bd994f9391af27d6ae6fab25ad",
+      "source": "https://scaniverse.com/api/media/tcmlw54mcgjhp2xd/tex.jpg"
+    }
+  ]
+}

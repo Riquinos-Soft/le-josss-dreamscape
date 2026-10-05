@@ -2,6 +2,9 @@
 
 Status: captured exterior implemented and positively received by the developer. On 2026-09-30 the connected three-storey home → street → parking → bar → home route became the immediate priority again. Preserve the approved scan as the real-world anchor; simple modular interiors are authorized, but their locations and layout still require the developer's references. The previous rejected invented map is historical.
 
+
+Priority update (2026-10-05): the next planned location and travel milestone is [Spec 003 — Lourizán and map travel](003-lourizan-and-travel.md). This house-to-bar scope remains pending its references; the approved house exterior becomes the first travel destination.
+
 ## Current increment and acceptance
 
 Implemented one reusable metre-scale stair flight; verified the existing player can descend and ascend two flights through three elevations. Default module dimensions (2.8 m rise, 5.6 m run, 1.4 m clear width) are provisional authoring dimensions, not measurements of the real house. The isolated test fixture is an authoring check, not a second game or the real house.
