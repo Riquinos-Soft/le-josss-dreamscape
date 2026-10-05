@@ -1,7 +1,10 @@
 extends Node3D
 ## Travel keeps the production street, player, camera, sprite and pixel pass alive.
 
-const LOCATION_PATHS := {&"lourizan": "res://world/locations/lourizan.tscn"}
+const LOCATION_PATHS := {
+	&"home": "res://world/locations/home.tscn",
+	&"lourizan": "res://world/locations/lourizan.tscn",
+}
 var location_paths := LOCATION_PATHS.duplicate()
 var current_id: StringName = &"street"
 var active_location: Node3D
@@ -159,7 +162,7 @@ func travel_to(destination: StringName) -> bool:
 	player.prevent_ledge_fall = destination != &"street"
 	player.step_height = 0.25 if destination != &"street" else 0.0
 	player.reset_physics_interpolation()
-	camera_rig.avoid_world_geometry = false
+	camera_rig.avoid_world_geometry = destination == &"home"
 	camera_rig.snap_to_target()
 	watch_exit(street if destination == &"street" else incoming)
 	map_ui.close_map()

@@ -8,7 +8,7 @@ Decode the supplied Scaniverse Draco mesh offline, prepare the runtime GLB and r
 
 ## Phase 2 — Production integration (done)
 
-Use `world/jacobo_risa_street.tscn` as the initial scene inside `world/dreamscape.tscn`. Keep its player, sprite, orthographic camera, world pixel pass and touch HUD. The marked street exit, Pazo scene, map selection, cancel/error recovery and return are implemented. `test_location_travel.gd` passes 66 checks; native captures of street, map and Pazo were inspected. The Pazo is screen-pixelated but still shows photographic scan texture; an authored art treatment is a later visual pass.
+Use `world/jacobo_risa_street.tscn` as the initial scene inside `world/dreamscape.tscn`. Keep its player, sprite, orthographic camera, world pixel pass and touch HUD. The marked street exit, captured home and Pazo scenes, map selection, cancel/error recovery and return are implemented. `test_location_travel.gd` passes 72 checks; native captures of street, map and Pazo were inspected. The Pazo is screen-pixelated but still shows photographic scan texture; an authored art treatment is a later visual pass.
 
 ## Phase 3 — Route and device acceptance (in progress)
 

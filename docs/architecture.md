@@ -1,6 +1,6 @@
 # Repository and vertical-slice architecture
 
-Current local entry point is `world/dreamscape.tscn`. It hosts the production pixel-art Jacobo Risa street and keeps its player, sprite, orthographic camera, pixel pass, item loop and touch controls during travel to the captured Pazo exterior. The home exterior and proposed home-to-bar route remain separate pending real layout references. See [Spec 009](specs/009-lourizan-and-map-travel.md) and [Spec 008](specs/008-real-home-microzone.md).
+Current local entry point is `world/dreamscape.tscn`. It hosts the production pixel-art Jacobo Risa street and keeps its player, sprite, orthographic camera, pixel pass, item loop and touch controls during travel to the captured home or Pazo exteriors. The home exterior is a map destination; its physically connected home-to-bar route remains pending real layout references. See [Spec 009](specs/009-lourizan-and-map-travel.md) and [Spec 008](specs/008-real-home-microzone.md).
 
 ## Captured exterior
 
@@ -59,7 +59,7 @@ orthographic camera, eight-direction Joss sprites, clean pixel-art garage faces,
 dark asphalt and local pixel-stipple wall cutaways. A world-only screen pass
 leaves the HUD at full resolution. Generated source art, prompts, normalized
 runtime sheets and metadata are retained. These remain draft visual assets.
-Walk animation and a two-location map are present in the local entry scene. The Pazo uses the production screen pixel pass; its scan still needs an authored art treatment.
+Walk animation and a three-location map are present in the local entry scene. The Pazo uses the production screen pixel pass; its scan still needs an authored art treatment.
 
 ## Single-item implementation
 

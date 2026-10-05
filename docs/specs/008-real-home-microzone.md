@@ -10,9 +10,9 @@ Build a recognizable, walkable connection from the developer's real three-storey
 
 ## Scope and limits
 
-The approved home exterior is playable as `world/home_exterior.tscn` and available as `world/locations/home.tscn`. A reusable stair flight and three-level fixture have been verified. The real entrance, floor layout, bar position and appearance are not established by the capture. Do not present invented geometry as the real location. This route is pending more user references.
+The approved home exterior is playable as `world/home_exterior.tscn` and available as a map destination through `world/locations/home.tscn`. A reusable stair flight and three-level fixture have been verified. The real entrance, floor layout, bar position and appearance are not established by the capture. Do not present invented geometry as the real location. This route is pending more user references.
 
-The current production entry point is the pixel-art Jacobo Risa street, governed by [Spec 002](002-street-trial.md). This captured home exterior remains a separate playable scene until its placement within a connected map is grounded in references. The [Lourizán travel slice](009-lourizan-and-map-travel.md) is a distinct current milestone.
+The current production entry point is the pixel-art Jacobo Risa street, governed by [Spec 002](002-street-trial.md). The captured home exterior is reachable from the map; its physically connected street and bar remain pending real references. The [Lourizán travel slice](009-lourizan-and-map-travel.md) is a distinct current milestone.
 
 ## Acceptance
 
