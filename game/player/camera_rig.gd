@@ -14,6 +14,13 @@ func _ready() -> void:
 	$Camera.look_at(global_position)
 
 
+func snap_to_target() -> void:
+	global_position = target.global_position + Vector3.UP * 0.9
+	clear_fraction = 1.0
+	$Camera.position = camera_offset
+	reset_physics_interpolation()
+
+
 func _process(delta: float) -> void:
 	var target_position := target.get_global_transform_interpolated().origin + Vector3.UP * 0.9
 	global_position = global_position.lerp(target_position, 1.0 - exp(-follow_sharpness * delta))

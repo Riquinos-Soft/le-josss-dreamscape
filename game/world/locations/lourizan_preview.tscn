@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://world/home_exterior.gd" id="4_script"]
 
 [sub_resource type="BoxShape3D" id="PavingSupport"]
-size = Vector3(5, 0.2, 16)
+size = Vector3(5, 0.2, 24)
 
 [sub_resource type="Environment" id="Environment_scan"]
 background_mode = 1
@@ -32,7 +32,7 @@ script = ExtResource("4_script")
 [node name="CapturedExterior" parent="." instance=ExtResource("1_scan")]
 
 [node name="PavingSupport" type="StaticBody3D" parent="."]
-position = Vector3(6.5, 0.03, -8)
+position = Vector3(6.5, 0.03, -4)
 
 [node name="Collision" type="CollisionShape3D" parent="PavingSupport"]
 shape = SubResource("PavingSupport")

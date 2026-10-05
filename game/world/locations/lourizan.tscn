@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/lourizan/exterior.glb" id="1_scan"]
+[ext_resource type="Script" path="res://world/home_exterior.gd" id="4_script"]
+[ext_resource type="PackedScene" path="res://world/travel/exit.tscn" id="5_exit"]
+
+[sub_resource type="BoxShape3D" id="PavingSupport"]
+size = Vector3(5, 0.2, 24)
+
+[sub_resource type="Environment" id="Environment_scan"]
+background_mode = 1
+background_color = Color(0.12, 0.16, 0.19, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.82, 0.86, 0.92, 1)
+ambient_light_energy = 0.65
+
+[node name="LourizanLocation" type="Node3D"]
+script = ExtResource("4_script")
+
+[node name="CapturedExterior" parent="." instance=ExtResource("1_scan")]
+
+[node name="PavingSupport" type="StaticBody3D" parent="."]
+position = Vector3(6.5, 0.03, -4)
+
+[node name="Collision" type="CollisionShape3D" parent="PavingSupport"]
+shape = SubResource("PavingSupport")
+
+[node name="Environment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_scan")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-55, -30, 0)
+shadow_enabled = false
+light_energy = 0.7
+
+
+[node name="Arrival" type="Marker3D" parent="."]
+position = Vector3(6, 1.1, -12)
+
+[node name="Exit" parent="." instance=ExtResource("5_exit")]
+position = Vector3(6, 0.2, -4)

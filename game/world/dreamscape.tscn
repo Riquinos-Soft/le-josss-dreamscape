@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://world/dreamscape.gd" id="1_session"]
+[ext_resource type="PackedScene" path="res://player/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://player/camera_rig.tscn" id="3_camera"]
+[ext_resource type="PackedScene" path="res://world/travel/travel_map.tscn" id="4_map"]
+
+[node name="Dreamscape" type="Node3D"]
+script = ExtResource("1_session")
+
+[node name="LocationSlot" type="Node3D" parent="."]
+
+[node name="Player" parent="." node_paths=PackedStringArray("movement_orientation") instance=ExtResource("2_player")]
+position = Vector3(8, 4.8, 12)
+movement_orientation = NodePath("../CameraRig/Camera")
+prevent_ledge_fall = true
+step_height = 0.25
+
+[node name="CameraRig" parent="." node_paths=PackedStringArray("target") instance=ExtResource("3_camera")]
+target = NodePath("../Player")
+avoid_world_geometry = true
+
+[node name="TravelMap" parent="." instance=ExtResource("4_map")]

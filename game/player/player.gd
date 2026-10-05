@@ -9,6 +9,7 @@ const MovementDirection = preload("res://player/movement_direction.gd")
 @export var prevent_ledge_fall: bool = false
 @export var step_height: float = 0.0
 var mouse_steering_active: bool = false
+var input_locked: bool = false
 
 @onready var visual: Node3D = $Visual
 
@@ -21,15 +22,21 @@ func _notification(what: int) -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if input_locked:
+		return
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
 		mouse_steering_active = event.pressed
 
 
 func _physics_process(delta: float) -> void:
-	var input := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+	var input := (
+		Vector2.ZERO
+		if input_locked
+		else Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+	)
 	var direction := MovementDirection.from_view(input, movement_orientation.global_basis)
 	# Keyboard has deterministic precedence so its existing behavior remains unchanged.
-	if direction.is_zero_approx() and mouse_steering_active:
+	if direction.is_zero_approx() and mouse_steering_active and not input_locked:
 		direction = mouse_movement_direction()
 	if prevent_ledge_fall and is_on_floor() and not has_ground_ahead(direction):
 		direction = Vector3.ZERO
@@ -42,6 +49,16 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	if not direction.is_zero_approx():
 		visual.rotation.y = atan2(-direction.x, -direction.z)
+
+
+func set_input_locked(locked: bool) -> void:
+	input_locked = locked
+	if locked:
+		mouse_steering_active = false
+		velocity.x = 0
+		velocity.z = 0
+		for action in ["move_left", "move_right", "move_forward", "move_back"]:
+			Input.action_release(action)
 
 
 func has_ground_ahead(direction: Vector3) -> bool:
