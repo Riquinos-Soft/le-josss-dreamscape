@@ -3,6 +3,9 @@
 ## Working style
 
 - Use lightweight spec-driven development.
+- Follow `docs/specs/README.md` for specification language, IDs, lifecycle and review. Write all specs in English, including titles, acceptance criteria and validation notes; keep exact user-facing Spanish labels only when they are part of a requirement. Use `docs/specs/template.md` for new specs.
+- Reserve the next unused spec ID in the spec index before creating a file. Check the index and current branch; never reuse or renumber an existing ID. Plans have their own independent index in `docs/plans/README.md`. Update links and run `python tools/check_docs.py` after documentation changes.
+- Keep proposed roadmap work in `docs/roadmap.md` separate from authorized implementation. A roadmap entry is not an approved spec or permission to add a system.
 - Before changing code, read only files relevant to the task and applicable specs or ADRs.
 - Do not repeatedly revisit settled architectural decisions.
 - Avoid external research unless it is genuinely necessary.
@@ -56,6 +59,9 @@ For gameplay or runtime changes:
 - Do not push automatically. Keep commits local until the developer explicitly requests a push.
 
 ## Model and token efficiency
+
+- Follow `docs/specs/003-agent-workflow.md` for escalation, low-cost execution, file ownership, and integration. Prepare delegable plans with `docs/plans/task-template.md` before multi-agent implementation. Prefer Grok for bounded execution when available and authorized; never claim it is connected or selected without checking.
+- Request Astra before implementing unresolved consequential decisions described in that protocol. Continue routine work under already settled contracts without repeated confirmation. During parallel work, only the assigned integrator commits shared-workspace results; this refines the automatic commit rule without authorizing branches, pushes, or unrelated edits.
 
 - Treat expensive, high-reasoning models as an architectural resource, not the default implementation engine.
 - Use the session's normal, efficient implementation model for routine implementation, tests, local refactors, documentation, and straightforward fixes.

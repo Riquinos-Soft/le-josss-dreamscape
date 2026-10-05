@@ -10,8 +10,9 @@ var clear_fraction: float = 1.0
 
 func _ready() -> void:
 	camera_offset = $Camera.position
-	global_position = target.global_position + Vector3.UP * 0.9
+	snap_to_target()
 	$Camera.look_at(global_position)
+	target.respawned.connect(snap_to_target)
 
 
 func snap_to_target() -> void:

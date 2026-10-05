@@ -5,19 +5,19 @@ signal open_requested
 signal cancel_requested
 signal destination_confirmed(destination: StringName)
 
-const NAMES := {&"home": "Casa", &"lourizan": "Pazo de Lourizán"}
-var current: StringName = &"home"
+const NAMES := {&"street": "Calle Jacobo Risa", &"lourizan": "Pazo de Lourizán"}
+var current: StringName = &"street"
 var selected: StringName = &""
 var is_open := false
 var prompt: PanelContainer
 var overlay: ColorRect
 var title: Label
 var status: Label
-var home_button: Button
+var street_button: Button
 var lourizan_button: Button
 var travel_button: Button
 var back_button: Button
-var home_dot: ColorRect
+var street_dot: ColorRect
 var lourizan_dot: ColorRect
 
 
@@ -65,9 +65,9 @@ func _ready() -> void:
 	hint.text = "Elige a dónde viajar desde esta salida"
 	rows.add_child(hint)
 	rows.add_child(make_map_diagram())
-	home_button = Button.new()
-	home_button.pressed.connect(func(): select(&"home"))
-	rows.add_child(home_button)
+	street_button = Button.new()
+	street_button.pressed.connect(func(): select(&"street"))
+	rows.add_child(street_button)
 	lourizan_button = Button.new()
 	lourizan_button.pressed.connect(func(): select(&"lourizan"))
 	rows.add_child(lourizan_button)
@@ -97,12 +97,12 @@ func open_map(location: StringName) -> void:
 	overlay.show()
 	prompt.hide()
 	status.text = "Estás aquí: %s" % NAMES[current]
-	home_button.disabled = current == &"home"
+	street_button.disabled = current == &"street"
 	lourizan_button.disabled = current == &"lourizan"
 	travel_button.disabled = true
 	back_button.disabled = false
 	update_labels()
-	(home_button if current != &"home" else lourizan_button).grab_focus()
+	(street_button if current != &"street" else lourizan_button).grab_focus()
 
 
 func select(destination: StringName) -> void:
@@ -118,7 +118,7 @@ func select(destination: StringName) -> void:
 func set_loading() -> void:
 	status.text = "Cargando destino…"
 	travel_button.disabled = true
-	home_button.disabled = true
+	street_button.disabled = true
 	lourizan_button.disabled = true
 	back_button.disabled = true
 
@@ -126,7 +126,7 @@ func set_loading() -> void:
 func show_error(message: String) -> void:
 	status.text = message
 	back_button.disabled = false
-	home_button.disabled = current == &"home"
+	street_button.disabled = current == &"street"
 	lourizan_button.disabled = current == &"lourizan"
 	travel_button.disabled = selected == &""
 	back_button.grab_focus()
@@ -141,9 +141,9 @@ func close_map() -> void:
 
 
 func update_labels() -> void:
-	home_dot.color = (
+	street_dot.color = (
 		Color(0.22, 0.96, 0.81)
-		if current == &"home" or selected == &"home"
+		if current == &"street" or selected == &"street"
 		else Color(0.52, 0.65, 0.68)
 	)
 	lourizan_dot.color = (
@@ -151,10 +151,10 @@ func update_labels() -> void:
 		if current == &"lourizan" or selected == &"lourizan"
 		else Color(0.52, 0.65, 0.68)
 	)
-	home_button.text = (
-		("✓ " if selected == &"home" else "")
-		+ "Casa"
-		+ (" · Estás aquí" if current == &"home" else "")
+	street_button.text = (
+		("✓ " if selected == &"street" else "")
+		+ "Calle Jacobo Risa"
+		+ (" · Estás aquí" if current == &"street" else "")
 	)
 	lourizan_button.text = (
 		("✓ " if selected == &"lourizan" else "")
@@ -171,18 +171,18 @@ func make_map_diagram() -> Control:
 	line.width = 3.0
 	line.default_color = Color(0.31, 0.64, 0.64, 1)
 	diagram.add_child(line)
-	home_dot = ColorRect.new()
-	home_dot.position = Vector2(62, 23)
-	home_dot.size = Vector2(12, 12)
-	diagram.add_child(home_dot)
+	street_dot = ColorRect.new()
+	street_dot.position = Vector2(62, 23)
+	street_dot.size = Vector2(12, 12)
+	diagram.add_child(street_dot)
 	lourizan_dot = ColorRect.new()
 	lourizan_dot.position = Vector2(316, 23)
 	lourizan_dot.size = Vector2(12, 12)
 	diagram.add_child(lourizan_dot)
-	var home_label := Label.new()
-	home_label.position = Vector2(45, 43)
-	home_label.text = "Casa"
-	diagram.add_child(home_label)
+	var street_label := Label.new()
+	street_label.position = Vector2(45, 43)
+	street_label.text = "Calle Jacobo Risa"
+	diagram.add_child(street_label)
 	var lourizan_label := Label.new()
 	lourizan_label.position = Vector2(258, 43)
 	lourizan_label.text = "Lourizán"

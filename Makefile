@@ -1,6 +1,8 @@
 GODOT ?= godot
+PYTHON ?= python3
 
 TESTS := \
+	test_touch_controls.gd \
 	test_movement_direction.gd \
 	test_keyboard_input.gd \
 	test_item_lifecycle.gd \
@@ -9,11 +11,15 @@ TESTS := \
 	test_scan_movement.gd \
 	test_connected_stairs.gd \
 	test_lourizan_exterior.gd \
-	test_location_travel.gd
+	test_location_travel.gd \
+	test_street_character.gd \
+	test_street_item.gd \
+	test_street_scene.gd
 
 .PHONY: lint format import test export-web check
 
 lint:
+	$(PYTHON) tools/check_docs.py
 	gdformat --check game
 	gdlint game
 

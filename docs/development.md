@@ -1,5 +1,15 @@
 # Development setup and verified baseline
 
+## Production street and Lourizán integration — 2026-10-05
+
+Fetched `origin/main` at `5d69bb0` and reconciled the local capture/travel work with the actual pixel-art production street. The current local default scene is `world/dreamscape.tscn`, hosting the existing Jacobo Risa scene, Joss sprite, orthographic camera, 180-row world pixel pass, touch HUD and item loop. A marked southern street edge opens a two-destination map; Lourizán uses the same player and renderer and a captured paved exterior. The home scan remains a separate playable scene pending home-to-bar references. Earlier entries below describe historical branch states and are superseded where they identify a different main scene.
+
+- `PATH=/private/tmp/lourizan-author313/bin:$PATH make lint`: docs 0 errors, formatter clean, linter clean. The pinned gdtoolkit emits its existing `pkg_resources` deprecation warning.
+- `make test GODOT=/Applications/Godot.app/Contents/MacOS/Godot`: 688 checks, 0 failures, including touch, items, scans, production street and 66 map/travel checks over three round trips. Log: `build/verification/lourizan/production-final-check.log`.
+- Native `Godot --path game --max-fps 60 --script res://tests/test_location_travel.gd -- --capture`: 66 checks, 0 failures. Inspected captures: `build/verification/lourizan/street-production.png`, `travel-map.png`, `lourizan-pixel-pass.png`. Street matches the production pixel treatment; Pazo is recognizably captured and screen-pixelated, but remains visibly photogrammetric rather than authored pixel art. Native log: `production-native.log`.
+- `make export-web GODOT=/Applications/Godot.app/Contents/MacOS/Godot`: passed, HTML/WASM/PCK present. Log: `build/verification/lourizan/production-final-check.log`. Browser gameplay, physical touch and sustained performance are not yet verified. The linked public site is unchanged because no push or deployment was requested.
+- Test harness teleports to each marked exit to isolate map behavior; separate street and Pazo tests exercise walking. A manual end-to-end walk to/from exits is still required for acceptance. The capture only covers Pazo's current paved/facade section; no wider estate or interior is represented.
+
 ## Lourizán capture playable — 2026-10-05
 
 The public Scaniverse Draco/JPEG inputs were decoded offline to `game/assets/lourizan/exterior.glb` with `tools/prepare_lourizan_scan.py` (Python 3.13 and pinned authoring dependencies). 264,177 visible triangles and UV-mapped photographic appearance retained, 55,000-triangle collision, 4096px JPEG. GLB output is 12,982,644 bytes. Initial export had an invalid GLB header and failed Godot import; corrected, reimported and inspected. An initial UV orientation test rendered scrambled texture; V-flip corrected it. An early native walk exposed small captured paving gaps; an invisible support box below the verified 8m paving route resolves them. The limited capture still has gaps elsewhere.
@@ -22,7 +32,7 @@ Goal: extend the approved captured exterior into the real home/street/bar route.
 - Next action: obtain entrance/stairwell identification, rough floor layouts, bar direction/distance and one known scale measurement. Then align building interiors and open the captured facade. The requested complete house-to-bar route remains unimplemented; no guessed extension was inserted into the approved scan.
 
 
-Current state: the main scene is the developer's captured home exterior (`world/home_exterior.tscn`), following the fidelity-first clarification on 2026-09-24. The original courtyard and item loop remain available and pass their regressions. Earlier manual browser acceptance applies to that courtyard, not to the new scan. See [Spec 002](specs/002-real-microzone.md).
+Current state: the main scene is the developer's captured home exterior (`world/home_exterior.tscn`), following the fidelity-first clarification on 2026-09-24. The original courtyard and item loop remain available and pass their regressions. Earlier manual browser acceptance applies to that courtyard, not to the new scan. See [Spec 002](specs/008-real-home-microzone.md).
 
 ## Captured exterior verification — 2026-09-24
 

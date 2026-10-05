@@ -1,4 +1,4 @@
-# ADR 004 — One physical microzone with building cutaways
+# ADR 005 — One physical microzone with building cutaways
 
 Status: accepted for the renewed connected-microzone priority on 2026-09-30. Physical placement of house interiors and the bar awaits real layout references. The earlier invented blockout remains rejected and is not shipped. The first implemented component is a reusable static stair flight, verified separately with the existing player.
 ## Decision

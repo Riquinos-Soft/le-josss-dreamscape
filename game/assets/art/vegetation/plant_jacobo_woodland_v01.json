@@ -1,0 +1,17 @@
+{
+  "asset_id": "plant_jacobo_woodland_v01",
+  "production_status": "draft",
+  "frames": ["broad_tree", "young_tree", "fern", "bramble"],
+  "layout": [2, 2],
+  "frame_width": 64,
+  "frame_height": 64,
+  "pivot": [32, 60],
+  "palette_colors": 17,
+  "filter": "nearest",
+  "mipmaps": false,
+  "collision": "none; surveyed street collision is unchanged",
+  "source": "assets/source/ai/plant_jacobo_woodland_v01.png",
+  "prompt": "assets/source/ai/plant_jacobo_woodland_v01.md",
+  "normalizer": "tools/normalize_woodland.gd",
+  "reference": "https://photos.app.goo.gl/eYYUS9EuS1Gx6CTAA"
+}

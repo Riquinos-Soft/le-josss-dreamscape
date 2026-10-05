@@ -1,8 +1,11 @@
 extends CharacterBody3D
 
+signal respawned
+
 const MovementDirection = preload("res://player/movement_direction.gd")
 
 @export var movement_orientation: Node3D
+@export var fall_height: float = -8.0
 @export var speed: float = 4.0
 @export var mouse_dead_zone: float = 0.35
 @export var mouse_full_speed_distance: float = 2.5
@@ -10,13 +13,29 @@ const MovementDirection = preload("res://player/movement_direction.gd")
 @export var step_height: float = 0.0
 var mouse_steering_active: bool = false
 var input_locked: bool = false
+var touch_direction := Vector2.ZERO
+var spawn_transform: Transform3D
 
 @onready var visual: Node3D = $Visual
+
+
+func _ready() -> void:
+	spawn_transform = global_transform
+
+
+func respawn() -> void:
+	global_transform = spawn_transform
+	velocity = Vector3.ZERO
+	mouse_steering_active = false
+	visual.rotation = Vector3.ZERO
+	reset_physics_interpolation()
+	respawned.emit()
 
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
 		mouse_steering_active = false
+		touch_direction = Vector2.ZERO
 		for action in ["move_left", "move_right", "move_forward", "move_back"]:
 			Input.action_release(action)
 
@@ -29,11 +48,16 @@ func _input(event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if global_position.y < fall_height:
+		respawn()
+		return
 	var input := (
 		Vector2.ZERO
 		if input_locked
 		else Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	)
+	if input.is_zero_approx():
+		input = Vector2.ZERO if input_locked else touch_direction
 	var direction := MovementDirection.from_view(input, movement_orientation.global_basis)
 	# Keyboard has deterministic precedence so its existing behavior remains unchanged.
 	if direction.is_zero_approx() and mouse_steering_active and not input_locked:
@@ -55,6 +79,7 @@ func set_input_locked(locked: bool) -> void:
 	input_locked = locked
 	if locked:
 		mouse_steering_active = false
+		touch_direction = Vector2.ZERO
 		velocity.x = 0
 		velocity.z = 0
 		for action in ["move_left", "move_right", "move_forward", "move_back"]:

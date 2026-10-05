@@ -1,10 +1,19 @@
 extends Node
-## Courtyard-only coordination. Transfers are synchronous; previews own no item.
+## Single-item coordination. Transfers are synchronous; previews own no item.
 const Definition = preload("res://items/item_definition.gd")
 const Item = preload("res://items/item_instance.gd")
 const Inventory = preload("res://inventory/inventory.gd")
 const WorldItem = preload("res://items/world_item.gd")
 const REACH: float = 2.0
+
+@export var floor_path: NodePath = ^"../Geometry/Floor"
+@export var initial_item_position: Vector3 = Vector3(0, 0.25, 1.5)
+@export var hud_position: Vector2 = Vector2(12, 12)
+@export_multiline var control_help: String = (
+	"WASD / arrows or hold right mouse: walk | E: pickup"
+	+ "\nP: place | Mouse: aim | Q/E: rotate 90°"
+	+ "\nLeft click: confirm | Esc: cancel"
+)
 
 var inventory := Inventory.new()
 var world_item: WorldItem
@@ -16,24 +25,29 @@ var target_valid: bool = false
 var commands: Array[StringName] = []
 var status: Label
 var place_button: Button
+var touch_mode: bool = false
+var touch_aim := Vector2.ZERO
+var touch_aim_set: bool = false
+var touch_aim_pending: bool = false
 @onready var player = get_parent().get_node("Player")
 @onready var camera: Camera3D = get_parent().get_node("CameraRig/Camera")
-@onready var floor_body: StaticBody3D = get_parent().get_node("Geometry/Floor")
+@onready var floor_body: StaticBody3D = get_node(floor_path)
 
 
 func _ready() -> void:
 	world_item = WorldItem.new(Item.new(1, Definition.new()))
 	get_parent().add_child.call_deferred(world_item)
-	world_item.position = Vector3(0, 0.25, 1.5)
+	world_item.position = initial_item_position
 	build_hud()
 
 
 func build_hud() -> void:
 	var layer := CanvasLayer.new()
 	layer.name = "HUD"
+	layer.layer = 1
 	add_child(layer)
 	var panel := PanelContainer.new()
-	panel.position = Vector2(12, 12)
+	panel.position = hud_position
 	layer.add_child(panel)
 	var rows := VBoxContainer.new()
 	panel.add_child(rows)
@@ -45,11 +59,7 @@ func build_hud() -> void:
 	place_button.pressed.connect(func(): commands.append(&"begin"))
 	rows.add_child(place_button)
 	var help := Label.new()
-	help.text = (
-		"WASD / arrows or hold right mouse: walk | E: pickup"
-		+ "\nP: place | Mouse: aim | Q/E: rotate 90°"
-		+ "\nLeft click: confirm | Esc: cancel"
-	)
+	help.text = control_help
 	rows.add_child(help)
 	update_hud()
 
@@ -77,11 +87,11 @@ func _notification(what: int) -> void:
 
 func _physics_process(_delta: float) -> void:
 	if placement_active:
-		var mouse := get_viewport().get_mouse_position()
-		var hit = Plane(Vector3.UP, 0).intersects_ray(
-			camera.project_ray_origin(mouse), camera.project_ray_normal(mouse)
-		)
-		target = hit + Vector3.UP * 0.25 if hit != null else Vector3(1000, 0.25, 1000)
+		if not touch_mode or touch_aim_pending:
+			target = placement_target_from_mouse()
+			touch_aim_pending = false
+		elif not touch_aim_set:
+			target = initial_placement_target()
 	for command in commands:
 		match command:
 			&"pickup":
@@ -109,9 +119,17 @@ func _physics_process(_delta: float) -> void:
 
 func clear_path(point: Vector3) -> bool:
 	var from: Vector3 = player.global_position + Vector3.UP * 0.3
-	var to := Vector3(point.x, 0.3, point.z)
+	var to := point + Vector3.UP * 0.05
 	var query := PhysicsRayQueryParameters3D.create(from, to, 1)
 	return player.get_world_3d().direct_space_state.intersect_ray(query).is_empty()
+
+
+func placement_target_from_mouse() -> Vector3:
+	var mouse := touch_aim if touch_mode else get_viewport().get_mouse_position()
+	var hit = Plane(Vector3.UP, 0).intersects_ray(
+		camera.project_ray_origin(mouse), camera.project_ray_normal(mouse)
+	)
+	return hit + Vector3.UP * 0.25 if hit != null else Vector3(1000, 0.25, 1000)
 
 
 func can_pickup() -> bool:
@@ -141,14 +159,21 @@ func begin_placement() -> bool:
 	if placement_active or inventory.item == null:
 		return false
 	placement_active = true
+	touch_aim_set = false
+	touch_aim_pending = false
 	yaw = 0.0
-	target = player.global_position - player.visual.global_basis.z * 1.3
-	target.y = 0.25
+	target = initial_placement_target()
 	preview = WorldItem.make_visual(Color(0.3, 0.9, 0.65))
 	preview.name = "PlacementPreview"
 	get_parent().add_child(preview)
 	preview.position = target
 	return true
+
+
+func initial_placement_target() -> Vector3:
+	var point: Vector3 = player.global_position - player.visual.global_basis.z * 1.3
+	point.y = 0.25
+	return point
 
 
 func rotate_preview(steps: int) -> void:
