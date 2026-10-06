@@ -21,8 +21,9 @@ sustained performance/download measurements remain open.
 ## Current feature sequence
 
 The developer requested both feature specs and sequential execution plans. Lucas
-and the travelling bag are now implemented. The next requested unit is a focused
-Lucas visual upgrade and short garden patrol.
+and the travelling bag are now implemented. The current requested unit is the
+[Lucas visual upgrade and short garden patrol](specs/014-lucas-garden-patrol.md),
+executed through [Plan 013](plans/013-lucas-garden-patrol.md).
 
 1. Implemented: [Lucas Maconheiro and paged dialogue](specs/013-lourizan-guide-dialogue.md),
    [Plan 012](plans/012-lourizan-guide.md): a hippie forest-worker NPC in Lourizán,
