@@ -1,6 +1,6 @@
 # General roadmap proposal
 
-Status: draft for developer discussion. Updated: 2026-09-26.
+Status: draft for developer discussion. Updated: 2026-10-06.
 This is an ordering proposal, not authorization for all listed work, a release
 promise or a new architectural decision. Final priorities will be agreed next.
 
@@ -18,6 +18,24 @@ VPS/database preparation does not mean multiplayer or persistence is implemented
 Developer art acceptance, full gameplay checks on physical mobile/Safari, and
 sustained performance/download measurements remain open.
 
+## Next feature candidates — plans prepared
+
+The developer requested both feature specs and sequential execution plans, with
+Sol 5.6 Medium as the intended executor. This is planning authorization; gameplay
+implementation has not started. Recommended order is Lucas first, then the bag.
+
+1. [Lucas Maconheiro and paged dialogue](specs/013-lourizan-guide-dialogue.md),
+   [Plan 012](plans/012-lourizan-guide.md): a hippie forest-worker NPC in Lourizán,
+   overhead classic RPG speech balloon and four source-backed history paragraphs.
+2. [Eight-slot bag and travelling objects](specs/012-eight-slot-bag.md),
+   [Plan 011](plans/011-eight-slot-bag.md): pickup directly into slots, select to
+   place, a Dreamscape beer and preservation across location travel within a session.
+
+The implementation baseline now also includes Casa/Lourizán map travel,
+authored Pazo architecture, camera corrections and the initial reusable botanical
+kit (Specs 009–011). Visual/browser acceptance is still tracked separately. These
+feature candidates refine the older contextual-interaction proposal below.
+
 ## Proposed sequence and exit criteria
 
 | Stage | Outcome | Exit criteria and dependencies | Authority |
@@ -26,7 +44,7 @@ sustained performance/download measurements remain open.
 | Next: settle the presentation | Consistent character/environment pixel scale and readable occlusion/UI | Review one agreed route; physical mobile/Safari input and visibility checks; measure load/FPS before promising budgets | Continue 002/004/005; request Astra only if changing a cross-project standard |
 | Then: one contextual interaction | Approach a recognizable garage/fence location, see an Observe prompt and read a short response | Correct proximity/input behavior, no clash with pickup/placement, works on desktop and touch | Proposed; agree a bounded spec before implementation |
 | Then: Casa → Bar playable slice | A small purposeful route using the accepted art and interaction vocabulary | Agree locations, boundaries and player objective from the Bible; deliver one complete route before expanding | Proposed; read current Bible and define a new spec/plan |
-| Later: reusable place/prop library | A few reusable plants, fences, surfaces and movable props supporting that slice | Consistent pivots, dimensions, palette, source/provenance and Web import; Blender only where an editable 3D source adds value | Proposed production work, not a generic asset framework |
+| Initial kit implemented; extend when needed | Botanical scenes and ground materials exist; add props supporting the playable slice | Spec 011 kit is implemented, with developer art acceptance pending; preserve pivots, dimensions and provenance | [Spec 011](specs/011-botanical-assets.md); further extensions require scoped work |
 | Later: first impossible event | One readable anomaly connecting the familiar world to Dreamscape | Agree a minimal experience and state boundaries; no generalized multiverse system | Proposed feature and spec |
 | Future: durable/shared world | Accounts, authoritative interaction and persistence, if selected as the next product milestone | Player/load targets, save/reconnect rules, recovery/offsite backups and end-to-end validation agreed first | [ADR 004](adr/004-hosting-and-persistent-server-direction.md) is a proposed runtime boundary; Astra review and implementation spec required |
 

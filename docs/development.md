@@ -1,5 +1,29 @@
 # Development setup and verified baseline
 
+## Bag and Lucas planning handoff — 2026-10-06
+
+Planning-only delivery from clean baseline `2a059ce`: drafted
+[Spec 012](specs/012-eight-slot-bag.md)/[Plan 011](plans/011-eight-slot-bag.md) for
+an eight-slot bag, Dreamscape beer and session-preserved objects across travel;
+[Spec 013](specs/013-lourizan-guide-dialogue.md)/[Plan 012](plans/012-lourizan-guide.md)
+for Lucas Maconheiro, a hippie forest worker with overhead paged historical dialogue.
+The explicit naming/appearance correction is included. NPC history is original
+paraphrase of the linked Turismo de Galicia article, inspected during planning.
+
+Inspected current inventory, item identity/representation, placement validation,
+travel teardown and touch routing. Plans address singular world-item/null access,
+source/destination collision isolation, ownership rollback, modal input and touch
+click-through. Each package names context, allowed paths, contracts, tests and
+handoff. Seven bag packages and six NPC packages are unstarted. Recommended next
+execution: N1 in Plan 012 with Sol 5.6 Medium, selected by the developer. No model
+was spawned/switched and no runtime behavior or art asset changed in this delivery.
+
+Validation: `python3 tools/check_docs.py` and `git diff --check`; documentation
+only, so gameplay tests/export were not repeated. Specs remain draft, preserving
+implementation and developer acceptance as future evidence. Indexes and roadmap
+link the two candidate features. A later launch of a plan authorizes that plan's
+implementation without repeating settled product questions.
+
 ## Reusable botanical kit and ground — 2026-10-06
 
 [Spec 011](specs/011-botanical-assets.md): original generated transparent atlas for

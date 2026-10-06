@@ -20,8 +20,10 @@ None of these documents silently authorizes unrelated work.
 | 009 | [Lourizán and map travel](009-lourizan-and-map-travel.md) | in-progress | Visual/browser acceptance pending |
 | 010 | [Camera clearance, place scale and Lourizán pixel art](010-camera-scale-and-lourizan-art.md) | implemented | Browser and developer art review |
 | 011 | [Reusable botanical assets and garden ground](011-botanical-assets.md) | implemented | Developer visual review |
+| 012 | [Eight-slot bag and travelling objects](012-eight-slot-bag.md) | draft | Implementation deferred; executable plan prepared |
+| 013 | [Lourizán guide and paged dialogue](013-lourizan-guide-dialogue.md) | draft | Implementation deferred; executable plan prepared |
 
-Next available spec ID: **012**. Recompute from this registry before reserving;
+Next available spec ID: **014**. Recompute from this registry before reserving;
 this line is not a standing reservation for an agent or a feature.
 
 ## Language and file naming
