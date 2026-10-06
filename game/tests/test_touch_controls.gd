@@ -27,6 +27,7 @@ func check_scene(scene_path: String) -> void:
 	await frames(10)
 	var player = scene.get_node("Player")
 	var items = scene.get_node("ItemLoop")
+	controls.bag_requested.connect(items.begin_placement.bind(0))
 	var original = items.world_item.item
 	var original_position: Vector3 = items.world_item.position
 	await check_pickup_availability(scene, player, items)
@@ -35,8 +36,8 @@ func check_scene(scene_path: String) -> void:
 	tap_action("pickup")
 	await frames(2)
 	check(items.inventory.get_item(0) == original, "touch pickup preserves identity")
-	check(controls.action_rects.keys() == ["begin"], "held item exposes only placement")
-	tap_action("begin")
+	check(controls.action_rects.keys() == ["bag"], "held item exposes only bag")
+	tap_action("bag")
 	await frames(2)
 	check(items.placement_active, "touch starts placement")
 	check(
@@ -66,7 +67,7 @@ func check_scene(scene_path: String) -> void:
 	)
 	tap_action("pickup")
 	await frames(2)
-	tap_action("begin")
+	tap_action("bag")
 	await frames(2)
 	touch(0, controls.stick_center + Vector2(100, 0), true)
 	var start: Vector3 = player.position
@@ -96,13 +97,15 @@ func check_scene(scene_path: String) -> void:
 	tap_action("right")
 	await frames(1)
 	var aim: Vector2 = scene.get_node("CameraRig/Camera").unproject_position(
-		original_position - Vector3.UP * 0.25
+		original_position - Vector3.UP * (original.definition.size.y * 0.5)
 	)
 	touch(2, aim, true)
 	touch(2, aim, false)
 	await frames(2)
 	check(not items.touch_aim_set, "a floor tap does not move the preview")
-	aim = items.camera.unproject_position(original_position - Vector3.UP * 0.25)
+	aim = items.camera.unproject_position(
+		original_position - Vector3.UP * (original.definition.size.y * 0.5)
+	)
 	var preview_point: Vector2 = items.camera.unproject_position(items.preview.global_position)
 	touch(2, preview_point, true)
 	drag.index = 2
@@ -139,7 +142,12 @@ func check_scene(scene_path: String) -> void:
 		items.placement_active and items.inventory.get_item(0) == original,
 		"invalid confirm retains item"
 	)
-	drag_preview(items, items.camera.unproject_position(original_position - Vector3.UP * 0.25))
+	drag_preview(
+		items,
+		items.camera.unproject_position(
+			original_position - Vector3.UP * (original.definition.size.y * 0.5)
+		)
+	)
 	await frames(2)
 	check(items.target_valid, "invalid placement can be dragged back to valid ground")
 	check(controls.action_rects.has("confirm"), "valid placement restores confirm")
@@ -155,7 +163,7 @@ func check_scene(scene_path: String) -> void:
 	)
 	tap_action("pickup")
 	await frames(2)
-	tap_action("begin")
+	tap_action("bag")
 	await frames(2)
 	check(
 		items.placement_active and items.inventory.get_item(0) == original,

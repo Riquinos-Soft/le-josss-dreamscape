@@ -3,6 +3,7 @@ extends Control
 
 signal map_requested
 signal talk_requested
+signal bag_requested
 
 const RADIUS := 110.0
 var enabled: bool = false
@@ -125,6 +126,8 @@ func handle_touch(event: InputEvent) -> void:
 					map_requested.emit()
 				elif action == "talk":
 					talk_requested.emit()
+				elif action == "bag":
+					bag_requested.emit()
 				else:
 					items.commands.append(StringName(action))
 				feedback_action = action
@@ -169,9 +172,9 @@ func _process(delta: float) -> void:
 	elif items.placement_active:
 		message.text = "Arrastra el objeto para moverlo · Verde: puedes confirmar"
 	elif items.inventory.occupied_count() > 0:
-		message.text = "Objeto recogido · Pulsa Colocar"
+		message.text = "Objeto guardado · Pulsa Bolsa"
 	elif items.can_pickup():
-		message.text = "Bloque al alcance · Pulsa Recoger"
+		message.text = "Birra al alcance · Pulsa Recoger"
 	else:
 		message.text = ""
 	update_actions()
@@ -190,7 +193,7 @@ func update_actions() -> void:
 		if items.target_valid:
 			names.append("confirm")
 	elif items.inventory.occupied_count() > 0:
-		names = ["begin"]
+		names = ["bag"]
 	elif items.can_pickup():
 		names = ["pickup"]
 	if action_rects.keys() == names:
@@ -219,7 +222,8 @@ func _draw() -> void:
 		"right": "Girar",
 		"confirm": "Confirmar",
 		"map": "Mapa",
-		"talk": "Hablar"
+		"talk": "Hablar",
+		"bag": "Bolsa"
 	}
 	var font := ThemeDB.fallback_font
 	for action in action_rects:
@@ -243,6 +247,9 @@ func _draw() -> void:
 
 func draw_action_icon(action: String, center: Vector2, color: Color) -> void:
 	match action:
+		"bag":
+			draw_rect(Rect2(center - Vector2(14, 11), Vector2(28, 25)), color, false, 3.0)
+			draw_arc(center + Vector2(0, -10), 9, PI, TAU, 8, color, 3.0, true)
 		"talk":
 			draw_circle(center, 16, color, false, 3.0, true)
 			draw_polyline(

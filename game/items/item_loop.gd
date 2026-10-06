@@ -1,5 +1,9 @@
 extends Node
 ## Single-item coordination. Transfers are synchronous; previews own no item.
+
+signal bag_requested
+signal feedback_requested(message: String)
+
 const Definition = preload("res://items/item_definition.gd")
 const Item = preload("res://items/item_instance.gd")
 const Inventory = preload("res://inventory/inventory.gd")
@@ -55,9 +59,9 @@ func build_hud() -> void:
 	status = Label.new()
 	rows.add_child(status)
 	place_button = Button.new()
-	place_button.text = "Place (P)"
+	place_button.text = "Bolsa (B/P)"
 	place_button.focus_mode = Control.FOCUS_NONE
-	place_button.pressed.connect(func(): commands.append(&"begin"))
+	place_button.pressed.connect(func(): bag_requested.emit())
 	rows.add_child(place_button)
 	var help := Label.new()
 	help.text = control_help
@@ -73,7 +77,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			KEY_Q:
 				commands.append(&"left")
 			KEY_P:
-				commands.append(&"begin")
+				bag_requested.emit()
 			KEY_ESCAPE:
 				commands.append(&"cancel")
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
@@ -147,6 +151,13 @@ func can_pickup() -> bool:
 
 
 func pickup() -> bool:
+	if (
+		inventory.first_free_slot() == -1
+		and is_instance_valid(world_item)
+		and player.global_position.distance_to(world_item.global_position) <= REACH
+	):
+		feedback_requested.emit("Bolsa llena")
+		return false
 	if not can_pickup() or not inventory.put(world_item.item):
 		return false
 	world_item.item = null
@@ -154,6 +165,7 @@ func pickup() -> bool:
 	world_item.get_parent().remove_child(world_item)
 	world_item.queue_free()
 	world_item = null
+	feedback_requested.emit("Guardado en la bolsa")
 	return true
 
 

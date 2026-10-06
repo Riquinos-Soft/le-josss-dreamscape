@@ -1,0 +1,7 @@
+{
+  "asset_id": "bag_icon_v01",
+  "production_status": "implemented; developer visual review pending",
+  "image_size": [1536, 1536],
+  "source": "OpenAI built-in image generation, 2026-10-06",
+  "prompt": "Create one original transparent pixel-art UI icon for a fantasy RPG inventory button: a compact worn dark brown leather backpack with muted olive fabric flap, cream stitching, small teal crescent clasp, warm highlights, chunky hand-authored 1990s RPG pixels, immediately readable at 48x48 and 64x64, centered with transparent margin, front three-quarter view, no words, no character, no scenery, no border, no drop shadow. Output a single isolated backpack icon."
+}

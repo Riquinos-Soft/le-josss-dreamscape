@@ -6,7 +6,7 @@ const INVALID_TARGET := Vector3(1000, 1000, 1000)
 
 func _ready() -> void:
 	super()
-	place_button.text = "Colocar (P)"
+	place_button.text = "Bolsa (B/P)"
 	# The authored collision is installed by the parent after children's _ready.
 	call_deferred("settle_initial_item")
 

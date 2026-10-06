@@ -34,6 +34,7 @@ var dialogue_controls_owned := false
 @onready var touch_controls: Control = $Street/TouchHUD/TouchControls
 @onready var item_loop: Node = $Street/ItemLoop
 @onready var dialogue: CanvasLayer = $DialogueBubble
+@onready var bag_ui: CanvasLayer = $BagUI
 
 
 func _ready() -> void:
@@ -44,8 +45,16 @@ func _ready() -> void:
 	map_ui.destination_confirmed.connect(travel_to)
 	touch_controls.map_requested.connect(open_map)
 	touch_controls.talk_requested.connect(open_dialogue)
+	touch_controls.bag_requested.connect(open_bag)
+	item_loop.bag_requested.connect(open_bag)
+	item_loop.feedback_requested.connect(bag_ui.show_feedback)
 	dialogue.closed.connect(on_dialogue_closed)
+	bag_ui.open_requested.connect(open_bag)
+	bag_ui.close_requested.connect(close_bag)
+	bag_ui.slot_selected.connect(on_bag_slot_selected)
+	bag_ui.bind_inventory(item_loop.inventory)
 	player.respawned.connect(close_dialogue)
+	player.respawned.connect(close_bag)
 	watch_exit(street)
 
 
@@ -54,6 +63,7 @@ func _process(_delta: float) -> void:
 		is_instance_valid(active_guide)
 		and not dialogue.is_open
 		and not map_ui.is_open
+		and not bag_ui.is_open
 		and not busy
 		and not item_loop.placement_active
 		and active_guide.can_talk(player)
@@ -61,7 +71,7 @@ func _process(_delta: float) -> void:
 	if is_instance_valid(active_guide):
 		active_guide.set_prompt_visible(can_talk)
 	touch_controls.talk_available = can_talk
-	if map_ui.is_open or dialogue.is_open:
+	if map_ui.is_open or dialogue.is_open or bag_ui.is_open:
 		return
 	var location: Node3D = street if current_id == &"street" else active_location
 	if location == null:
@@ -86,6 +96,15 @@ func _process(_delta: float) -> void:
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		if dialogue.is_open:
+			return
+		if bag_ui.is_open:
+			if event.physical_keycode in [KEY_ESCAPE, KEY_B, KEY_P]:
+				close_bag()
+				get_viewport().set_input_as_handled()
+			return
+		if event.physical_keycode in [KEY_B, KEY_P]:
+			open_bag()
+			get_viewport().set_input_as_handled()
 			return
 		if event.physical_keycode == KEY_E and can_open_dialogue():
 			open_dialogue()
@@ -130,11 +149,14 @@ func open_map() -> void:
 	if (
 		busy
 		or dialogue.is_open
+		or bag_ui.is_open
 		or near_exit == null
 		or not is_instance_valid(near_exit)
 		or map_ui.is_open
 	):
 		return
+	if item_loop.placement_active:
+		item_loop.cancel_placement()
 	player.set_input_locked(true)
 	item_loop.process_mode = Node.PROCESS_MODE_DISABLED
 	touch_controls.input_enabled = false
@@ -157,6 +179,7 @@ func can_open_dialogue() -> bool:
 	return (
 		not busy
 		and not map_ui.is_open
+		and not bag_ui.is_open
 		and not dialogue.is_open
 		and not item_loop.placement_active
 		and is_instance_valid(active_guide)
@@ -206,6 +229,40 @@ func bind_active_guide() -> void:
 		active_guide = active_location.get_node_or_null("LucasMaconheiro")
 	touch_controls.talk_available = false
 	touch_controls.update_actions()
+
+
+func open_bag() -> void:
+	if busy or map_ui.is_open or dialogue.is_open or bag_ui.is_open:
+		return
+	if item_loop.placement_active:
+		item_loop.cancel_placement()
+	player.set_input_locked(true)
+	item_loop.process_mode = Node.PROCESS_MODE_DISABLED
+	item_loop.commands.clear()
+	touch_controls.input_enabled = false
+	touch_controls.reset_touch()
+	map_ui.guide.hide()
+	map_ui.prompt.hide()
+	bag_ui.open_bag()
+
+
+func close_bag() -> void:
+	if not bag_ui.is_open:
+		return
+	bag_ui.close_bag()
+	player.set_input_locked(false)
+	if current_id == &"street":
+		item_loop.process_mode = Node.PROCESS_MODE_INHERIT
+	touch_controls.input_enabled = true
+	touch_controls.reset_touch()
+	map_ui.show_prompt(near_exit != null and is_instance_valid(near_exit))
+
+
+func on_bag_slot_selected(index: int) -> void:
+	if not bag_ui.is_open:
+		return
+	close_bag()
+	item_loop.begin_placement(index)
 
 
 func set_street_active(active: bool) -> void:
