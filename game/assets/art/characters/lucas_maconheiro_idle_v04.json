@@ -1,0 +1,17 @@
+{
+  "asset_id": "lucas_maconheiro_idle_v04",
+  "production_status": "implemented; developer visual review pending",
+  "character": "Lucas Maconheiro",
+  "layout": [4, 8],
+  "cell_size": [64, 64],
+  "directions": ["down", "up", "left", "right", "down_left", "down_right", "up_left", "up_right"],
+  "frames_per_direction": 1,
+  "pivot": "feet baseline y=60; body height normalized to 48 pixels",
+  "filter": "linear in runtime, nearest resize from original generated sheet",
+  "mipmaps": false,
+  "source": "OpenAI built-in image generation, 2026-10-07; original 1774x887 transparent 4x2 sheet normalized into 64x64 cells",
+  "prompt": "Original fictional Lucas Maconheiro idle poses: eight distinct facings in 4x2 order (down, up, left, right, down-left, down-right, up-left, up-right); olive field jacket, ochre shirt, brown trousers, boots, tied-back dark hair, beard, canvas satchel; standing upright, legs straight, both feet planted, arms relaxed; transparent background.",
+  "normalizer": "tools/normalize_generated_idle.gd",
+  "walk_reference": "lucas_maconheiro_walk_v02.png",
+  "source_path_note": "Generated source is retained locally under the session generated_images directory and is not a runtime asset."
+}

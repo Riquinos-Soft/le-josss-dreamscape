@@ -39,7 +39,7 @@ func run() -> void:
 	world.add_child(actor)
 	character = AnimatedSprite3D.new()
 	character.set_script(load("res://player/street_character.gd"))
-	character.sprite_frames = load("res://assets/art/characters/char_joss_animations_v01.tres")
+	character.sprite_frames = load("res://assets/art/characters/char_joss_animations_v02.tres")
 	character.movement_actor = actor
 	character.movement_view = camera
 	actor.add_child(character)
@@ -55,9 +55,11 @@ func run() -> void:
 		var first_walk_image := first_walk_texture.atlas.get_image().get_region(
 			Rect2i(first_walk_texture.region)
 		)
+		var idle_bounds := idle_image.get_used_rect()
+		check(idle_bounds.end.y == 60, "standing feet are grounded " + direction)
 		check(
-			idle_image.get_data() == first_walk_image.get_data(),
-			"idle and walk share the same silhouette " + direction
+			idle_image.get_data() != first_walk_image.get_data(),
+			"standing pose is distinct from walking " + direction
 		)
 		var previous: PackedByteArray
 		for index in 4:

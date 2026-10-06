@@ -36,6 +36,30 @@ func run() -> void:
 			and guide_sprite.sprite_frames.has_animation("walk_" + direction)
 		)
 	check(directional_animations, "Lucas has eight-direction idle and walk art")
+	for direction in [
+		"down", "up", "left", "right", "down_left", "down_right", "up_left", "up_right"
+	]:
+		var idle_clip := StringName("idle_" + direction)
+		var walk_clip := StringName("walk_" + direction)
+		var idle_frame := guide_sprite.sprite_frames.get_frame_texture(idle_clip, 0) as AtlasTexture
+		var walk_frame := guide_sprite.sprite_frames.get_frame_texture(walk_clip, 0) as AtlasTexture
+		var idle_image := idle_frame.atlas.get_image().get_region(Rect2i(idle_frame.region))
+		var walk_image := walk_frame.atlas.get_image().get_region(Rect2i(walk_frame.region))
+		check(
+			guide_sprite.sprite_frames.get_frame_count(idle_clip) == 1,
+			"Lucas stands still " + direction
+		)
+		check(
+			guide_sprite.sprite_frames.get_frame_count(walk_clip) == 2,
+			"Lucas has alternating walk poses " + direction
+		)
+		check(
+			idle_image.get_used_rect().end.y == 60, "Lucas standing feet are grounded " + direction
+		)
+		check(
+			idle_image.get_data() != walk_image.get_data(),
+			"Lucas standing pose differs from stride " + direction
+		)
 	var patrol_start := guide.global_position
 	await frames(80)
 	check(

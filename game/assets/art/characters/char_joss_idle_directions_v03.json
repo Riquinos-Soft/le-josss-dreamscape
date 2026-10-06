@@ -1,0 +1,22 @@
+{
+  "character_id": "joss",
+  "state": "idle",
+  "production_status": "implemented; developer visual review pending",
+  "directions": ["down", "up", "left", "right", "down_left", "down_right", "up_left", "up_right"],
+  "frame_width": 64,
+  "frame_height": 64,
+  "frame_count": 8,
+  "frames_per_direction": 1,
+  "source_layout": [4, 2],
+  "layout": [4, 8],
+  "pivot_x": 32,
+  "pivot_y": 60,
+  "body_height_pixels": 48,
+  "pixel_size_meters": 0.0375,
+  "filter": "linear in runtime; nearest resize from original generated sheet",
+  "mipmaps": false,
+  "source": "OpenAI built-in image generation, 2026-10-07; original 1774x887 transparent 4x2 sheet normalized into 64x64 cells",
+  "prompt": "Original Joss standing poses: orange-haired male protagonist in bright blue hoodie, dark blue trousers and brown boots; eight distinct directions; upright relaxed posture, legs extended, both feet planted and arms resting; transparent background.",
+  "normalizer": "tools/normalize_generated_idle.gd",
+  "walk_reference": "char_joss_walk_directions_v01.png"
+}
