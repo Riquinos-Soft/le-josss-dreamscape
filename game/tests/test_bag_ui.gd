@@ -20,6 +20,7 @@ func run() -> void:
 	items = session.get_node("Street/ItemLoop")
 	player = session.get_node("Street/Player")
 	await frames(20)
+	await travel_to_street()
 	check(bag.slot_buttons.size() == 8, "bag exposes eight stable slot controls")
 	check(not bag.is_open and bag.open_button.visible, "closed bag icon is visible")
 	check(bag.occupancy.text == "0/8", "empty occupancy visible")
@@ -92,6 +93,17 @@ func frames(count: int) -> void:
 	for index in count:
 		await physics_frame
 	await process_frame
+
+
+func travel_to_street() -> void:
+	var exit: Area3D = session.active_location.get_node("Exit")
+	player.global_position = exit.global_position + Vector3.UP * 0.25
+	player.velocity = Vector3.ZERO
+	await frames(5)
+	session.open_map()
+	session.map_ui.select(&"street")
+	await session.travel_to(&"street")
+	await frames(8)
 
 
 func capture(label: String) -> void:

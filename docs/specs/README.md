@@ -17,13 +17,13 @@ None of these documents silently authorizes unrelated work.
 | 006 | [Branded boot splash](006-boot-branding.md) | implemented | Manual visual acceptance |
 | 007 | [OVH hosting preparation](007-vps-hosting.md) | implemented | Operational checks tracked separately; no multiplayer runtime |
 | 008 | [Connected real home microzone](008-real-home-microzone.md) | in-progress | Home-to-bar route awaits location references |
-| 009 | [Lourizán and map travel](009-lourizan-and-map-travel.md) | in-progress | Visual/browser acceptance pending |
+| 009 | [Lourizán and map travel](009-lourizan-and-map-travel.md) | in-progress | Developer visual/browser acceptance pending |
 | 010 | [Camera clearance, place scale and Lourizán pixel art](010-camera-scale-and-lourizan-art.md) | implemented | Browser/developer review; authorized facade follow-up in Plan 014 |
 | 011 | [Reusable botanical assets and garden ground](011-botanical-assets.md) | implemented | Developer visual review |
 | 012 | [Eight-slot bag and travelling objects](012-eight-slot-bag.md) | implemented | Developer art review and physical mobile gameplay |
-| 013 | [Lourizán guide and paged dialogue](013-lourizan-guide-dialogue.md) | implemented | Developer visual/copy review and browser/physical-device gameplay |
+| 013 | [Lourizán guide and paged dialogue](013-lourizan-guide-dialogue.md) | implemented | Developer dialogue/art review and browser/physical-device gameplay |
 | 014 | [Lucas garden patrol and character art](014-lucas-garden-patrol.md) | implemented | Developer review; authorized atlas follow-up in Plan 014 |
-| 015 | [Retro character clarity and stable walking](015-retro-character-clarity.md) | implemented | Mobile review; authorized true standing poses in Plan 014 |
+| 015 | [Retro character clarity and stable walking](015-retro-character-clarity.md) | implemented | Developer visual/mobile review of straight-leg idle poses |
 
 Next available spec ID: **016**. Recompute from this registry before reserving;
 this line is not a standing reservation for an agent or a feature.

@@ -1,5 +1,28 @@
 # Development setup and verified baseline
 
+## Pazo start, straight-leg idle poses and Lucas conversations — 2026-10-07
+
+Fresh sessions now load Lourizán and bind Lucas; the street exit and map still
+return to Calle Jacobo Risa, including its saved beer item. Joss and Lucas use
+replaced eight-direction idle atlases with straight, side-by-side legs and planted
+boots. Native captures at 1280×720 show both standing silhouettes clearly; the
+conversation screenshot also confirms Lucas stays idle while speaking. Inspected
+`build/verification/lucas-patrol/lucas-approach.png` and `lucas-dialogue.png`.
+
+Lucas now has ten distinct one-page Spanish conversations. Each talk is randomly
+selected and cannot repeat the previous choice; exactly two variants joke about
+Brazil. Historical facts remain within the four source-backed statements.
+
+`make check GODOT=/Applications/Godot.app/Contents/MacOS/Godot` passed all 989
+automated checks, documentation, GDScript formatting/lint, Godot import and Web
+export. Focused startup/travel, bag/support, dialogue and character tests passed;
+`test_lourizan_dialogue.gd` reports 82 checks, `test_location_travel.gd` 119,
+`test_street_character.gd` 156, and the full export produced HTML/WASM/PCK. The
+local gdtoolkit installation emits its existing `pkg_resources` deprecation
+warning. No browser gameplay or physical-device check was performed; developer
+visual and mobile acceptance remain pending. Production deployment is pending
+the authorized push of this follow-up.
+
 ## Lucas standing poses and Lourizán facade — 2026-10-07
 
 [Plan 014](plans/014-lucas-atlas-and-pazo-refinement.md) is implemented in two

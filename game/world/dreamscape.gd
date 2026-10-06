@@ -17,13 +17,14 @@ const MAP_DIRECTIONS := [
 	"arriba a la derecha"
 ]
 var location_paths := LOCATION_PATHS.duplicate()
-var current_id: StringName = &"street"
+var current_id: StringName = &"lourizan"
 var active_location: Node3D
 var near_exit: Area3D
 var busy := false
 var street_environment: Environment
 var active_guide: Node3D
 var dialogue_controls_owned := false
+var last_dialogue_index := -1
 
 @onready var street: Node3D = $Street
 @onready var player: CharacterBody3D = $Street/Player
@@ -61,6 +62,54 @@ func _ready() -> void:
 func bind_initial_item_context() -> void:
 	await get_tree().physics_frame
 	item_loop.bind_initial_context(&"street", item_world, item_supports(street))
+	await start_at_lourizan()
+
+
+func start_at_lourizan() -> void:
+	busy = true
+	player.set_input_locked(true)
+	var incoming := load_destination(location_paths[&"lourizan"])
+	if incoming == null:
+		push_error("Could not load starting location: Lourizán")
+		current_id = &"street"
+		busy = false
+		player.set_input_locked(false)
+		return
+	slot.add_child(incoming)
+	set_street_active(false)
+	await get_tree().physics_frame
+	var arrival: Marker3D = incoming.get_node("Arrival")
+	var ray := PhysicsRayQueryParameters3D.create(
+		arrival.global_position + Vector3.UP * 2, arrival.global_position - Vector3.UP * 3, 1
+	)
+	var hit: Dictionary = get_world_3d().direct_space_state.intersect_ray(ray)
+	if (
+		hit.is_empty()
+		or hit.normal.y < 0.6
+		or absf(hit.position.y - arrival.global_position.y) > 1.2
+	):
+		incoming.queue_free()
+		set_street_active(true)
+		push_error("Starting Lourizán location has no safe arrival floor")
+		current_id = &"street"
+		busy = false
+		player.set_input_locked(false)
+		return
+	item_loop.commit_location_change(&"lourizan", item_world, item_supports(incoming))
+	active_location = incoming
+	current_id = &"lourizan"
+	bind_active_guide()
+	player.global_position = hit.position + Vector3.UP * 0.05
+	player.spawn_transform = player.global_transform
+	player.velocity = Vector3.ZERO
+	player.prevent_ledge_fall = true
+	player.step_height = 0.25
+	player.reset_physics_interpolation()
+	camera_rig.snap_to_target()
+	watch_exit(incoming)
+	player.set_input_locked(false)
+	touch_controls.input_enabled = true
+	busy = false
 
 
 func item_supports(location: Node3D) -> Array[CollisionObject3D]:
@@ -218,9 +267,11 @@ func open_dialogue() -> void:
 	map_ui.prompt.hide()
 	active_guide.set_prompt_visible(false)
 	active_guide.set_conversation_active(true)
-	dialogue.open(
-		LourizanHistory.SPEAKER, active_guide.get_node("Head"), LourizanHistory.PARAGRAPHS
-	)
+	last_dialogue_index = LourizanHistory.choose_dialogue(last_dialogue_index)
+	var pages: Array[String] = []
+	for paragraph in LourizanHistory.DIALOGUES[last_dialogue_index]:
+		pages.append(paragraph)
+	dialogue.open(LourizanHistory.SPEAKER, active_guide.get_node("Head"), pages)
 
 
 func close_dialogue() -> void:

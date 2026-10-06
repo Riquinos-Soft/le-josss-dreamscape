@@ -19,6 +19,7 @@ func run() -> void:
 	player = session.get_node("Street/Player")
 	items = session.get_node("Street/ItemLoop")
 	await frames(25)
+	await travel_to_street()
 	check(items.pickup(), "beer picked up for support route")
 	check(items.begin_placement(0), "street preview starts")
 	var street_target: Vector3 = items.supported_pose(
@@ -80,6 +81,10 @@ func travel(destination: StringName) -> void:
 	session.map_ui.select(destination)
 	check(await session.travel_to(destination), "travel to %s" % destination)
 	await frames(10)
+
+
+func travel_to_street() -> void:
+	await travel(&"street")
 
 
 func frames(count: int) -> void:

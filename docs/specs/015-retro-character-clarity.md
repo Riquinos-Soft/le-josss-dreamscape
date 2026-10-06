@@ -19,17 +19,19 @@ the new request authorizes proceeding without treating that acceptance as passed
 The developer further required BOTH Joss and Lucas to walk correctly and adopt
 a standing shape with extended legs when stopped. This supersedes R5's
 requirement to reuse the first walk frame: retain proportions and facing, but
-use dedicated standing art for all eight directions, with planted feet and no
-frozen stride. Preserve stable direction transitions and walk-cycle phase.
+use dedicated standing art for all eight directions. The developer clarified
+that both legs must be straight and side by side, with boots aligned at the same
+height; planted feet and no frozen stride. Preserve proportions, facing, stable
+direction transitions and walk-cycle phase.
 
 Follow-up acceptance: inspect eight-direction start/walk/turn/stop sequences
 for both characters at 1280×720 and 844×390; verify wall stops and Lucas
 waypoint/dialogue pauses use standing poses. Replace the old pixel-equality
-regression with applicable state/grounding checks and visual evidence. Run
-focused tests/full gate/Web export. Plan L1 completed in commit `3451cb8`. Joss now uses dedicated v03 standing
-poses; no pixel-equality requirement remains. `make check` passed 985 checks
-and Web export; see [development](../development.md). Developer/mobile acceptance
-remains pending.
+regression with applicable state/grounding checks and visual evidence. Plan L1
+initially used dedicated poses, but developer review clarified that the legs did
+not read as straight and together. The 2026-10-07 follow-up replaces both idle
+atlases with straight-leg standing art and verifies all directions. Results and
+remaining review are recorded in [development](../development.md).
 
 
 ## Objective and scope

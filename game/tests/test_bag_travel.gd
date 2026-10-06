@@ -22,6 +22,7 @@ func run() -> void:
 	player = session.get_node("Street/Player")
 	items = session.get_node("Street/ItemLoop")
 	await frames(25)
+	await travel_to_street()
 	var beer = items.world_item.item
 	check(items.pickup(), "street beer enters bag")
 	check(items.inventory.get_item(0) == beer, "street pickup keeps exact reference")
@@ -111,6 +112,14 @@ func enter_exit(exit: Area3D) -> void:
 	player.velocity = Vector3.ZERO
 	player.reset_physics_interpolation()
 	await frames(5)
+
+
+func travel_to_street() -> void:
+	await enter_exit(session.active_location.get_node("Exit"))
+	session.open_map()
+	session.map_ui.select(&"street")
+	await session.travel_to(&"street")
+	await frames(8)
 
 
 func frames(count: int) -> void:

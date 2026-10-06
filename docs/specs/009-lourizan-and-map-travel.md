@@ -14,7 +14,7 @@ The captured façade and paved approach form the initial Pazo location. The link
 
 ## Requirements
 
-- The production street remains the initial location; the home scan and Lourizán are map destinations. Its existing player, camera, sprite, world pixel pass, item scene and touch controls survive travel.
+- A fresh session starts in Lourizán. The production street and home scan remain available as map destinations. The same player, camera, sprite, world pixel pass, item scene and touch controls survive travel.
 - A marked edge opens the map via M, prompt button or mobile Map action. The map cannot open elsewhere. Selection requires confirmation; Escape/Back cancels in place.
 - Before reaching an exit, an on-screen direction and distance guide identifies it. At the exit, the map action is visible away from the existing street HUD.
 - During the map and loading, movement stops. Travel returns the same player instance to a grounded arrival outside the exit, resets velocity and camera position, and updates fall recovery.
@@ -23,7 +23,7 @@ The captured façade and paved approach form the initial Pazo location. The link
 
 ## Acceptance
 
-- AC1: The production street still opens with its pixel art, sprite, camera and item interaction. Verify native capture and street tests.
+- AC1: A fresh session opens in Lourizán with the guide active; the street remains reachable from its marked exit and retains its authored item. Verify native startup and location/item tests.
 - AC2: Lourizán loads and the paved captured section is walkable with collision. Verify native capture and route test.
 - AC3: Map cancel, three street ↔ Lourizán round trips, one home round trip and missing-target recovery pass. Verify `test_location_travel.gd` plus visual playthrough.
 - AC4: Existing tests, docs checks and Web release export pass from a clean checkout. Browser gameplay remains a separate acceptance step.

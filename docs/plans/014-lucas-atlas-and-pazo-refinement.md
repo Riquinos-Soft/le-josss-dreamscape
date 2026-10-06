@@ -24,10 +24,19 @@
 - Settled contracts: Godot 4.7.2 standard, Compatibility/Web, metre units, existing
   place scales/camera, continuous presentation, shared directional animation,
   local patrol, existing dialogue and item identity.
-- Non-goals: new NPC systems, extra dialogue, interiors, estate expansion,
+- Non-goals: new NPC systems, interiors, estate expansion,
   persistence, global asset pipeline, renderer changes, automatic push/deployment.
 - Shared files reserved for integrator: specs, indexes, roadmap, development log,
   Makefile and this plan. No changes to Makefile are expected.
+
+## Authorized follow-up — 2026-10-07
+
+After production review, the developer clarified the stopped pose: Joss and Lucas
+must stand with straight legs side by side. The developer also requested that a
+fresh session start in Lourizán and that Lucas have ten randomized conversations,
+including exactly two Brazil jokes. These authorized changes extend Specs 009,
+013 and 015. Implementation and focused verification are recorded in
+[development](../development.md); visual and gameplay acceptance remain pending.
 
 ## Starting state and pre-existing files
 

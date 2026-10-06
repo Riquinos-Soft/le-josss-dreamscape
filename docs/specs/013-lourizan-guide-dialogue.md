@@ -12,8 +12,9 @@ The stationary visual and movement scope below was extended by
 
 ## Objective
 
-Meet one stationary garden guide in Lourizán and hear a short history of the pazo
-through a classic pixel RPG speech balloon, advancing one paragraph at a time.
+Meet one garden guide in Lourizán and hear one of ten short conversations through
+a classic pixel RPG speech balloon. Each conversation is chosen at random and
+differs from the immediately preceding conversation.
 
 ## Requirements
 
@@ -40,11 +41,12 @@ through a classic pixel RPG speech balloon, advancing one paragraph at a time.
   speaker. Avoid HUD/touch conflicts. Reflow for 1280×720 and 844×390; do not shrink
   text below readability or crop buttons. If a paragraph needs more space, split
   its display into continuation pages rather than losing text.
-- R5 — Show the full paragraph immediately. Each fresh E/Enter/Space press or
-  `Continuar` click/tap advances one page. Opening input must not skip page one;
-  held keys, key-repeat and emulated touch/mouse pairs must not skip pages. Last
-  button reads `Terminar`; final activation closes the conversation. Escape or
-  visible close control ends early; starting again begins at paragraph one.
+- R5 — Show the full selected conversation immediately. Each fresh E/Enter/Space
+  press or `Continuar` click/tap advances one page. Opening input must not skip
+  page one; held keys, key-repeat and emulated touch/mouse pairs must not skip
+  pages. Last button reads `Terminar`; final activation closes the conversation.
+  Escape or visible close control ends early. A later talk randomly selects a
+  different variant from the previous talk during this session.
   There is no auto-advance, typewriter, branching, choice tree or voice in v1.
 - R6 — During dialogue, lock movement, pickup, bag and travel, reset held steering
   and touch gestures, and consume UI events. Restore controls after closing;
@@ -59,7 +61,7 @@ through a classic pixel RPG speech balloon, advancing one paragraph at a time.
 
 ## Content and historical basis
 
-Initial Spanish copy below is original paraphrase of the tourism authority's
+Four historical variants below are original paraphrase of the tourism authority's
 [Paseo romántico por el Pazo de Lourizán](https://blog.turismo.gal/paseo-romantico-por-el-pazo-de-lourizan/),
 published in December 2018 and inspected on 2026-10-06. Its historical chronology,
 Montero Ríos connection, imperial stairs and garden species support these pages.
@@ -71,10 +73,12 @@ need fresh verification. The speaker is fictional; historical statements are not
 3. `Fíjate en la escalinata imperial y en las estatuas que la acompañan. En el jardín conviven robles y castaños con cedros, magnolios y camelias.`
 4. `En 1943, la finca se destinó a la enseñanza y la investigación forestal. Por eso la historia de Lourizán también está ligada al estudio y al cuidado de los árboles.`
 
-Keep this dialogue as local data with speaker, ordered paragraph array and source
-URL in developer metadata. Do not put implementation notes or source disclaimers
-in the player's speech balloon. Preserve accents. More lore requires an explicit
-content extension, not speculative generated history.
+Keep all ten Spanish dialogue variants as local data. Historical claims must stay
+within the source-backed statements above. The other six variants may use
+non-factual garden observations and light character banter. Exactly two variants
+must be jokes about Brazil. Do not put implementation notes or source disclaimers
+in the player's speech balloon. Preserve accents. New historical claims require
+an explicit content extension.
 
 ## Minimal implementation contract
 
@@ -99,16 +103,18 @@ The guide and bag can be implemented independently and integrated sequentially.
 
 ## Acceptance criteria
 
-- AC1: Approach the guide normally, start talk, advance through all four paragraphs
-  once per action, and resume movement. Opening cannot skip the first paragraph.
+- AC1: Ten distinct variants exist. Repeated talks select a different variant at
+  random each time; exactly two variants are jokes about Brazil. Opening cannot
+  skip the selected conversation.
 - AC2: Out-of-reach/through-wall attempts fail; pickup, bag, map and rotation do not
   trigger during dialogue. Closing/focus loss/respawn/unload clears stale controls.
 - AC3: Bubble remains above/pointing to the NPC, within bounds, with no lost text
   at both target viewport sizes. Inspect native screenshots and simulated touch.
 - AC4: Travel away and back produces one guide and no duplicate signal handlers;
   replay starts at page one. Existing item and travel tests continue to pass.
-- AC5: Copy matches the four approved-for-implementation paragraphs, has no added
-  unsupported history, and original NPC/bubble art reads in the production style.
+- AC5: Historical copy stays within the four source-backed paragraphs above; the
+  remaining banter adds no historical claims. Exactly two conversations joke
+  about Brazil, and original NPC/bubble art reads in the production style.
 - AC6: Tests and Web export pass; browser and physical device evidence is reported
   distinctly. Developer visual/copy acceptance remains pending after implementation.
 

@@ -21,10 +21,16 @@ func run() -> void:
 	player = session.get_node("Street/Player")
 	map_ui = session.get_node("TravelMap")
 	await frames(25)
-	await capture("street-production")
 	var original_player := player.get_instance_id()
-	var original_item = session.get_node("Street/ItemLoop").world_item.item
-	check(session.current_id == &"street", "production street opens first")
+	check(session.current_id == &"lourizan", "fresh session starts at Lourizán")
+	check(session.active_guide != null, "starting Pazo binds Lucas")
+	var original_item = session.get_node("Street/ItemLoop").location_records[&"street"][0].item
+	await enter_exit(session.active_location.get_node("Exit"))
+	session.open_map()
+	map_ui.select(&"street")
+	check(await session.travel_to(&"street"), "street remains reachable from starting Pazo")
+	await frames(12)
+	await capture("street-production")
 	var presentation: ShaderMaterial = session.get_node("Street/PixelPass/Screen").material
 	check(presentation.get_shader_parameter("world_pixel_height") == 0.0, "clear street rendering")
 	check(map_ui.guide.visible, "map direction is visible from spawn")

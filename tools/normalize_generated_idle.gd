@@ -1,5 +1,5 @@
 extends SceneTree
-## Normalize an exact 4x2 generated standing sheet into the shared 4x8 atlas.
+## Normalize generated 4x2 or 4x8 standing art into the shared 4x8 atlas.
 
 const CELL := 64
 const BODY_HEIGHT := 48
@@ -15,16 +15,17 @@ func _initialize() -> void:
 		return
 	var source := Image.load_from_file(args[0])
 	if source == null or source.get_width() < 4 or source.get_height() < 2:
-		push_error("Expected a transparent image with an exact 4x2 grid")
+		push_error("Expected a transparent image with a 4x2 or 4x8 grid")
 		quit(1)
 		return
+	var rows := 8 if source.get_height() >= source.get_width() * 2 else 2
 	var result := Image.create(CELL * 4, CELL * DIRECTIONS, false, Image.FORMAT_RGBA8)
 	for direction in DIRECTIONS:
 		var source_rect := Rect2i(
-			direction % 4 * source.get_width() / 4,
-			direction / 4 * source.get_height() / 2,
+			(0 if rows == 8 else direction % 4 * source.get_width() / 4),
+			(direction if rows == 8 else direction / 4) * source.get_height() / rows,
 			source.get_width() / 4,
-			source.get_height() / 2
+			source.get_height() / rows
 		)
 		var frame := source.get_region(source_rect)
 		var bounds := _alpha_bounds(frame)

@@ -1,6 +1,7 @@
 extends SceneTree
 ## Integrated guide, paged dialogue, input lock and travel lifecycle.
 
+const LourizanHistory = preload("res://dialogue/lourizan_history.gd")
 var checks := 0
 var failures := 0
 var session: Node3D
@@ -19,8 +20,7 @@ func run() -> void:
 	player = session.get_node("Street/Player")
 	dialogue = session.get_node("DialogueBubble")
 	await frames(20)
-	await travel_from_street(&"lourizan")
-	check(session.current_id == &"lourizan", "arrives in Lourizán")
+	check(session.current_id == &"lourizan", "a fresh session starts in Lourizán")
 	check(session.active_location.get_children().filter(is_guide).size() == 1, "one guide exists")
 	var guide: Node3D = session.active_location.get_node("LucasMaconheiro")
 	check(guide.name == "LucasMaconheiro", "guide has stable scene identity")
@@ -127,7 +127,25 @@ func run() -> void:
 		not session.get_node("Street/TouchHUD/TouchControls").input_enabled,
 		"dialogue releases touch to UI"
 	)
-	check(dialogue.body_label.text.begins_with("Bienvenido"), "first sourced paragraph is shown")
+	check(
+		LourizanHistory.DIALOGUES.any(
+			func(pages: Array): return pages.size() == 1 and pages[0] == dialogue.body_label.text
+		),
+		"one complete conversation variant is shown"
+	)
+	check(LourizanHistory.DIALOGUES.size() == 10, "Lucas has ten conversation variants")
+	var brazil_jokes := LourizanHistory.DIALOGUES.filter(
+		func(pages: Array): return pages[0].contains("Brasil")
+	)
+	check(brazil_jokes.size() == 2, "exactly two variants joke about Brazil")
+	var first_choice: int = session.last_dialogue_index
+	var prior_choice: int = first_choice
+	var distinct_choices := true
+	for _attempt in 40:
+		var choice: int = LourizanHistory.choose_dialogue(prior_choice)
+		distinct_choices = distinct_choices and choice != prior_choice
+		prior_choice = choice
+	check(distinct_choices, "random conversation selection changes each time")
 	check(not session.get_node("TravelMap").guide.visible, "map guide hides during conversation")
 	var locked_position := player.global_position
 	Input.action_press("move_forward")
@@ -154,7 +172,13 @@ func run() -> void:
 	check(dialogue.page_index == 0, "held key cannot skip a page")
 	key(KEY_E)
 	await frames(1)
-	check(dialogue.page_index == 1, "fresh action advances once")
+	check(not dialogue.is_open, "one-page conversation closes on fresh action")
+	session.open_dialogue()
+	await frames(1)
+	check(
+		dialogue.is_open and session.last_dialogue_index != first_choice,
+		"next talk selects a new variant"
+	)
 	root.size = Vector2i(844, 390)
 	await frames(2)
 	var rect: Rect2 = dialogue.panel.get_global_rect()
@@ -175,15 +199,6 @@ func run() -> void:
 	await frames(2)
 	await capture("lucas-dialogue")
 	key(KEY_ENTER)
-	await frames(1)
-	check(dialogue.page_index == 2, "enter advances dialogue")
-	key(KEY_SPACE)
-	await frames(1)
-	check(
-		dialogue.page_index == 3 and dialogue.continue_button.text == "Terminar",
-		"last page is explicit"
-	)
-	key(KEY_E)
 	await frames(2)
 	check(not dialogue.is_open and not player.input_locked, "final action restores movement")
 	check(session.get_node("Street/TouchHUD/TouchControls").input_enabled, "touch movement returns")
