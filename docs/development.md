@@ -1,5 +1,26 @@
 # Development setup and verified baseline
 
+## Lucas garden patrol and character art — 2026-10-06
+
+[Spec 014](specs/014-lucas-garden-patrol.md) and
+[Plan 013](plans/013-lucas-garden-patrol.md) replace Lucas's high-detail static
+four-view sprite with original compact pixel art at Joss's apparent scale: eight
+directions and two walking frames each. Lucas now follows a short, bounded loop on
+the open Lourizán garden paving, pauses at each point and remains collidable. The
+dialogue freezes him in place, then resumes the same route after a short pause.
+The bag still rejects placement at his live position.
+
+The focused native dialogue test passes **49 checks** covering several waypoints,
+bounds, walk/idle states, freeze, no jump on close, resume and the existing
+four-page conversation. Placement support (**20**), bag travel (**36**) and
+location travel (**111**) checks pass. Native walking, approach and dialogue
+captures were inspected under `build/verification/lucas-patrol/`. The full
+`make check` passed **917 checks, zero failures** and produced HTML/WASM/PCK for
+Web. Its log and export evidence are in
+`build/verification/lucas-patrol/full-check.log`. The generated sheet's prompt,
+provenance and atlas layout are recorded beside its PNG. Browser conversation,
+physical mobile gameplay and developer visual acceptance remain separate.
+
 ## Eight-slot bag and travelling objects — 2026-10-06
 
 [Spec 012](specs/012-eight-slot-bag.md) and [Plan 011](plans/011-eight-slot-bag.md)
@@ -31,8 +52,8 @@ and physical mobile validation remain separate.
 ## Lucas Maconheiro guide dialogue — 2026-10-06
 
 [Spec 013](specs/013-lourizan-guide-dialogue.md) and
-[Plan 012](plans/012-lourizan-guide.md) are implemented. Lourizán now contains one
-stationary Lucas Maconheiro, an original four-direction pixel character with an
+[Plan 012](plans/012-lourizan-guide.md) are implemented. At that milestone,
+Lourizán contained one stationary Lucas Maconheiro, an original four-direction pixel character with an
 olive field jacket, satchel, tied-back hair and beard. Within 2 m and clear line
 of sight, `E · Hablar` appears; desktop or touch opens a four-page Spanish account
 of the Pazo's history based on the linked Turismo de Galicia source. The balloon

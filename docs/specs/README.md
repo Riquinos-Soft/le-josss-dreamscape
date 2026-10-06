@@ -22,7 +22,7 @@ None of these documents silently authorizes unrelated work.
 | 011 | [Reusable botanical assets and garden ground](011-botanical-assets.md) | implemented | Developer visual review |
 | 012 | [Eight-slot bag and travelling objects](012-eight-slot-bag.md) | implemented | Developer art review and physical mobile gameplay |
 | 013 | [Lourizán guide and paged dialogue](013-lourizan-guide-dialogue.md) | implemented | Developer visual/copy review and browser/physical-device gameplay |
-| 014 | [Lucas garden patrol and character art](014-lucas-garden-patrol.md) | in-progress | Implementation, developer visual review and browser/physical-device gameplay |
+| 014 | [Lucas garden patrol and character art](014-lucas-garden-patrol.md) | implemented | Developer visual review and browser/physical-device gameplay |
 
 Next available spec ID: **015**. Recompute from this registry before reserving;
 this line is not a standing reservation for an agent or a feature.

@@ -7,6 +7,8 @@ Language: en
 Authorization: developer requested the spec and then launched implementation with
 `Adelante con Lucas` on 2026-10-06. The scoped feature is implemented. Developer
 visual/copy acceptance and real browser/physical-device gameplay remain pending.
+The stationary visual and movement scope below was extended by
+[Spec 014](014-lucas-garden-patrol.md); its dialogue contract remains current.
 
 ## Objective
 

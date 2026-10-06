@@ -1,6 +1,6 @@
 # Spec 014 — Lucas garden patrol and character art
 
-Status: in-progress
+Status: implemented
 Updated: 2026-10-06
 Language: en
 
@@ -58,9 +58,17 @@ conversation opens or closes. Reuse Joss's eight-sector naming and a local
 
 ## Validation and open questions
 
-Implementation follows [Plan 013](../plans/013-lucas-garden-patrol.md). Evidence
-will be recorded under ignored `build/verification/lucas-patrol/`. Developer art
-acceptance and physical mobile gameplay remain separate after implementation.
+Implemented through [Plan 013](../plans/013-lucas-garden-patrol.md). The focused
+native test covers eight animation directions, movement to multiple garden
+waypoints, bounds, pauses, conversation freeze/resume, live collision, replay and
+travel. The placement, bag and location-travel tests remain green. Native
+walking, approach and dialogue captures were inspected under ignored
+`build/verification/lucas-patrol/`.
+
+The final `make check` passed 917 checks with zero failures and produced the Web
+release. Its log and export evidence are recorded in
+`build/verification/lucas-patrol/full-check.log`. Developer art acceptance,
+browser conversation gameplay and physical mobile gameplay remain separate.
 There is no blocking product or architecture question.
 
 ## References

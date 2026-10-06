@@ -1,7 +1,7 @@
 # Plan 013 — Lucas garden patrol
 
 Governing spec: [014](../specs/014-lucas-garden-patrol.md).
-Status: active, 2026-10-06. Authorized by the developer.
+Status: done, 2026-10-06. Authorized by the developer.
 Base: `4cf46dd`. Execute sequentially on the current branch.
 
 ## L1 — Match the protagonist's visual language
@@ -29,7 +29,7 @@ Commit one working behavior unit.
 
 ## L3 — Validate and deploy
 
-Status: ready; L2 complete.
+Status: done; L2 complete.
 
 Run focused dialogue, bag placement and travel tests; capture Lucas walking and
 talking natively. Run `make check` with Godot 4.7.2 and inspect warnings, then
@@ -38,11 +38,14 @@ watch CI and verify the public `release.txt` matches the deployed commit.
 
 ## Handoff
 
-L1 result commit: `9dc22e1`. The visual sheet was inspected in a native arrival
-capture. L2 focused checks: 46 Lourizán dialogue checks, 20 placement-support
+L1 result commit: `9dc22e1`; L2 result commit: `9eadbea`. The visual sheet was
+inspected in a native arrival capture. L2 focused checks: 49 Lourizán dialogue
+checks, 20 placement-support
 checks, 36 bag-travel checks and 111 location-travel checks, all with zero
-failures. Native walking, approach and dialogue captures were inspected.
+failures. Native walking, approach and dialogue captures were inspected. Final
+`make check` passed 917 checks with zero failures and produced the Web release.
+Its evidence is in
+`build/verification/lucas-patrol/full-check.log`.
 
-Next action: L3. Expected evidence directory:
-`build/verification/lucas-patrol/`. Remaining manual acceptance after delivery:
+Remaining manual acceptance after delivery:
 developer visual review, full browser conversation and physical mobile gameplay.

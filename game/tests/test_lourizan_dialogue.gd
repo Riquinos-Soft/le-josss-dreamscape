@@ -52,6 +52,14 @@ func run() -> void:
 		patrol_wait_frames += 1
 	check(guide.reached_waypoints > 0, "Lucas reaches an authored garden waypoint")
 	check(guide.pause_remaining > 0.0, "Lucas pauses at a garden waypoint")
+	var second_waypoint_frames := 0
+	var stayed_inside_patrol := true
+	while guide.reached_waypoints < 2 and second_waypoint_frames < 180:
+		await physics_frame
+		second_waypoint_frames += 1
+		stayed_inside_patrol = stayed_inside_patrol and guide.is_inside_patrol_bounds()
+	check(stayed_inside_patrol, "patrol stays inside garden bounds")
+	check(guide.reached_waypoints >= 2, "Lucas walks between several garden points")
 	guide.walk_speed = 0.8
 	check(not session.can_open_dialogue(), "arrival outside range cannot start conversation")
 	player.global_position = guide.global_position + Vector3(1.25, 0.05, 0)
@@ -157,6 +165,10 @@ func run() -> void:
 	check(session.get_node("Street/TouchHUD/TouchControls").input_enabled, "touch movement returns")
 	check(not guide.conversation_active, "closing dialogue releases Lucas patrol")
 	var guide_resume_position := guide.global_position
+	check(
+		guide_resume_position.distance_to(guide_talk_position) < 0.001,
+		"dialogue close does not jump Lucas to another waypoint"
+	)
 	await frames(75)
 	check(
 		guide.global_position.distance_to(guide_resume_position) > 0.2,

@@ -63,14 +63,17 @@ leaves the HUD at full resolution. Generated source art, prompts, normalized
 runtime sheets and metadata are retained. These remain draft visual assets.
 Walk animation and a three-location map are present in the local entry scene. The Pazo uses authored, material-batched architecture, simple collision and the production screen pixel pass with location-specific framing. Its original scan is retained as an offline reference and excluded from Web export. New places follow [the place-authoring workflow](place-authoring.md).
 
-Lourizán composes one stationary guide as part of the location scene. The session
+Lourizán composes one walking guide as part of the location scene. A short authored
+garden loop moves his collidable body and directional pixel sprite; dialogue
+freezes and resumes that local patrol. The session
 root binds that explicit guide after travel and owns the screen-space dialogue
 layer, so unloading a place cannot leave its NPC UI alive. Talk uses a 2 m reach
 and direct line-of-sight check. While dialogue is open, the session directly locks
 player, item, map and touch actions, then restores only the controls it acquired.
 This is a deliberately focused implementation for one guide, with no NPC registry,
 quest system, global event bus or saved conversation state. See
-[Spec 013](specs/013-lourizan-guide-dialogue.md).
+[Spec 013](specs/013-lourizan-guide-dialogue.md) and
+[Spec 014](specs/014-lucas-garden-patrol.md).
 
 ## Eight-slot item implementation
 
