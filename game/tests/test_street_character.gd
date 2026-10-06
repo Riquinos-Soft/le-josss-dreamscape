@@ -46,8 +46,19 @@ func run() -> void:
 	await frames(5)
 	for direction in DIRECTIONS:
 		var clip := StringName("walk_" + direction)
+		var idle_clip := StringName("idle_" + direction)
 		check(character.sprite_frames.get_frame_count(clip) == 4, "four walk poses " + direction)
 		check(character.sprite_frames.get_animation_speed(clip) == 8, "walk cadence " + direction)
+		var idle_texture := character.sprite_frames.get_frame_texture(idle_clip, 0) as AtlasTexture
+		var first_walk_texture := character.sprite_frames.get_frame_texture(clip, 0) as AtlasTexture
+		var idle_image := idle_texture.atlas.get_image().get_region(Rect2i(idle_texture.region))
+		var first_walk_image := first_walk_texture.atlas.get_image().get_region(
+			Rect2i(first_walk_texture.region)
+		)
+		check(
+			idle_image.get_data() == first_walk_image.get_data(),
+			"idle and walk share the same silhouette " + direction
+		)
 		var previous: PackedByteArray
 		for index in 4:
 			var texture := character.sprite_frames.get_frame_texture(clip, index) as AtlasTexture

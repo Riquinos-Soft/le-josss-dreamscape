@@ -31,6 +31,9 @@ changes rendering and animation behavior; facade remodeling follows mobile revie
 - R4 — Record Evermore and real-facade references and a staged art direction:
   readable expressive sprites, restrained earthy colours, coherent shading,
   original textures and geometry. No copied commercial assets.
+- R5 — Stopping after movement must retain Joss's exact directional silhouette.
+  The idle and first walk pose share the same normalized atlas frame, preventing
+  an unrelated head proportion from appearing at rest.
 
 ## Non-goals
 
@@ -62,6 +65,11 @@ The character test also passed 140 checks natively at 60 FPS. Native A/B capture
 at 1280x720 and 844x390 plus walking frames were inspected. Logs and images are in
 `build/verification/restyle/`; commands are in [development](../development.md).
 No full browser gameplay or physical mobile performance pass is claimed.
+
+Follow-up: the idle atlas had a different Joss drawing from the walk atlas, making
+his head change proportion when movement stopped. Idle now uses each direction's
+first walk frame and a focused regression check compares their pixel data. The
+follow-up validation is recorded in [development](../development.md).
 
 ## References and open questions
 

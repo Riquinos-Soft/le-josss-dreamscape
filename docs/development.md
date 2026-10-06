@@ -2,6 +2,15 @@
 
 ## Retro clarity and stable character motion — 2026-10-06
 
+Follow-up: Joss's former idle atlas did not match the walk atlas, so stopping
+could replace his correctly proportioned moving head with a different silhouette.
+Each idle direction now uses its matching first walk frame. The character test
+compares idle and walk pixel data for all eight directions; validation evidence
+is `Godot --headless --path game --max-fps 60 --script
+res://tests/test_street_character.gd`: **148 checks, zero failures**.
+`make check GODOT=/Applications/Godot.app/Contents/MacOS/Godot` then passed
+**936 checks**, formatting, lint, import and the Web HTML/WASM/PCK export.
+
 [Spec 015](specs/015-retro-character-clarity.md) delivers the first restyle step
 before mobile review. Production preserves rendered detail instead of sampling
 the world into 180 rows. Original sprite/material art remains, with linear
