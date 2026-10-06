@@ -224,7 +224,7 @@ system or conflicts with accepted scale contracts. Use local ramps/meshes first.
 
 ## Package V1 — Final acceptance handoff
 
-- Status: review handoff; depends on implementation packages, now complete.
+- Status: implemented and deployed; developer visual and mobile acceptance pending.
 - Owner: integrator. Allowed edits: this plan, governing specs/indexes, roadmap,
   development log. Minimum context: package evidence and final scoped diff.
 - Review final integrated native arrival → Lucas conversation → both stairs →
@@ -233,9 +233,9 @@ system or conflicts with accepted scale contracts. Use local ramps/meshes first.
   implemented only when technical criteria pass; developer visual acceptance,
   physical mobile and actual Chrome/Safari gameplay remain separate.
 - Supply a short mobile checklist: walk/turn/stop, talk/resume, climb/descend each
-  flight, place/pick up, travel back. Do not claim browser validation from export.
-- Keep commits local. Publication requires an applicable explicit push/deploy
-  instruction; this plan does not carry old deployment authorization forward.
+  flight, place/pick up, travel back. Do not claim browser validation from export; browser gameplay remains pending.
+- Keep commits local. The developer explicitly requested push and production deployment after implementation;
+  CI run 37546400548 deployed and verified commit `df1d4e6`.
 - No Astra decision expected; report concrete unmet criteria instead of expanding
   scope. Stop when this bounded delivery is complete.
 

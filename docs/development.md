@@ -35,7 +35,7 @@ documentation, format/lint, import and Web HTML/WASM/PCK export. Full log:
 log. Native walkthrough also passed 41 exterior checks at each of 1280×720 and
 844×390; command: `Godot --path game --max-fps 60 --resolution WIDTHxHEIGHT
 --script res://tests/test_lourizan_exterior.gd -- --capture`. No browser, physical
-phone or deployment check was performed.
+phone check was performed. Production deployment of `df1d4e6da33a208e95660f54078e0fcbeb1f94d5` succeeded through [GitHub Actions run 37546400548](https://github.com/Riquinos-Soft/le-josss-dreamscape/actions/runs/37546400548); its deploy job published the same-run tested export and verified `/release.txt` equals the commit SHA. Direct local DNS lookup for the sslip.io endpoint failed, so endpoint verification is sourced from the passing CI deploy step.
 
 The plan's shared index/spec/development records are updated in a documentation
 commit after the Pazo code commit `a4e2320`. Five Lucas candidate files (three PNGs and two
