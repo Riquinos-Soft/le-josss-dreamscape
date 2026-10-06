@@ -34,7 +34,7 @@ func check_scene(scene_path: String) -> void:
 		original_position = items.supported_pose(scene.to_world(Vector3(3.1, 0, 0.8)), PI / 2)
 	tap_action("pickup")
 	await frames(2)
-	check(items.inventory.item == original, "touch pickup preserves identity")
+	check(items.inventory.get_item(0) == original, "touch pickup preserves identity")
 	check(controls.action_rects.keys() == ["begin"], "held item exposes only placement")
 	tap_action("begin")
 	await frames(2)
@@ -136,7 +136,8 @@ func check_scene(scene_path: String) -> void:
 	touch(1, confirm_point, false)
 	await frames(2)
 	check(
-		items.placement_active and items.inventory.item == original, "invalid confirm retains item"
+		items.placement_active and items.inventory.get_item(0) == original,
+		"invalid confirm retains item"
 	)
 	drag_preview(items, items.camera.unproject_position(original_position - Vector3.UP * 0.25))
 	await frames(2)
@@ -157,7 +158,7 @@ func check_scene(scene_path: String) -> void:
 	tap_action("begin")
 	await frames(2)
 	check(
-		items.placement_active and items.inventory.item == original,
+		items.placement_active and items.inventory.get_item(0) == original,
 		"next placement retains item until confirm"
 	)
 	touch(0, controls.stick_center + Vector2(100, 0), true)
@@ -201,7 +202,7 @@ func check_pickup_availability(scene: Node, player: Node3D, items: Node) -> void
 	touch(1, pickup_point, true)
 	touch(1, pickup_point, false)
 	await frames(2)
-	check(items.inventory.item == null, "hidden pickup area does nothing")
+	check(items.inventory.get_item(0) == null, "hidden pickup area does nothing")
 	player.global_position = start
 	player.velocity = Vector3.ZERO
 	await frames(5)

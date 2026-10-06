@@ -21,29 +21,29 @@ func run() -> void:
 	var original = loop.world_item.item
 	var identity: int = original.session_id
 	var definition = original.definition
-	check(loop.inventory.item == null, "starts empty")
+	check(loop.inventory.occupied_count() == 0, "starts empty")
 	var slot := Inventory.new()
 	check(slot.put(original), "slot accepts instance")
-	check(not slot.put(Item.new(2, definition)), "occupied slot rejects another instance")
+	check(slot.put(Item.new(2, definition)), "second stable slot accepts another instance")
 	check(
-		slot.take(Item.new(3, definition)) == null and slot.item == original,
+		slot.take_at(0, Item.new(3, definition)) == null and slot.get_item(0) == original,
 		"wrong removal leaves slot unchanged"
 	)
 	check(
-		slot.take(original) == original and slot.item == null,
+		slot.take_at(0, original) == original and slot.get_item(0) == null,
 		"expected removal preserves reference"
 	)
 	for cycle in 3:
 		check(loop.pickup(), "pickup succeeds")
 		check(
-			loop.inventory.item == original and loop.world_item == null,
+			loop.inventory.get_item(0) == original and loop.world_item == null,
 			"pickup moves same reference"
 		)
 		check(not loop.pickup(), "repeat pickup rejected")
 		check(loop.begin_placement(), "begin placement")
 		check(not loop.begin_placement(), "repeat begin rejected")
 		check(
-			loop.inventory.item == original and loop.preview is MeshInstance3D,
+			loop.inventory.get_item(0) == original and loop.preview is MeshInstance3D,
 			"preview leaves ownership in inventory"
 		)
 		if cycle == 0:
@@ -56,21 +56,29 @@ func run() -> void:
 				"movement remains active during placement"
 			)
 			check(
-				loop.inventory.item == original and loop.preview is MeshInstance3D,
+				loop.inventory.get_item(0) == original and loop.preview is MeshInstance3D,
 				"movement during placement conserves instance"
 			)
 			player.global_position = position_before_movement
 			player.velocity = Vector3.ZERO
 		loop.cancel_placement()
 		check(
-			loop.inventory.item == original and loop.preview == null and loop.world_item == null,
+			(
+				loop.inventory.get_item(0) == original
+				and loop.preview == null
+				and loop.world_item == null
+			),
 			"cancel conserves instance"
 		)
 		loop.begin_placement()
 		loop.target = Vector3(100, 0.25, 100)
 		check(not loop.confirm_placement(), "out of reach rejected")
 		check(
-			loop.inventory.item == original and loop.world_item == null and loop.placement_active,
+			(
+				loop.inventory.get_item(0) == original
+				and loop.world_item == null
+				and loop.placement_active
+			),
 			"invalid confirm conserves instance"
 		)
 		loop.target = Vector3(player.position.x, 0.25, player.position.z)
@@ -80,7 +88,7 @@ func run() -> void:
 		var expected_yaw: float = loop.yaw
 		check(loop.confirm_placement(), "valid confirm succeeds")
 		check(
-			loop.inventory.item == null and loop.world_item.item == original,
+			loop.inventory.get_item(0) == null and loop.world_item.item == original,
 			"placement transfers same reference"
 		)
 		check(

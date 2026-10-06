@@ -23,7 +23,10 @@ func run() -> void:
 	await capture("street_block_spawn")
 	for cycle in 3:
 		check(loop.pickup(), "pickup from street")
-		check(loop.inventory.item == original and loop.world_item == null, "pickup keeps identity")
+		check(
+			loop.inventory.get_item(0) == original and loop.world_item == null,
+			"pickup keeps identity"
+		)
 		check(loop.begin_placement(), "start street placement")
 		var placement: Vector3 = loop.supported_pose(
 			street.to_world(Vector3(2.25, 0, 1.1)), cycle * PI / 2
@@ -37,7 +40,7 @@ func run() -> void:
 			await capture("street_block_preview")
 		check(loop.confirm_placement(), "confirm supported slope placement")
 		check(
-			loop.world_item.item == original and loop.inventory.item == null,
+			loop.world_item.item == original and loop.inventory.get_item(0) == null,
 			"placement keeps identity"
 		)
 		check(
@@ -57,10 +60,10 @@ func run() -> void:
 	check(not loop.confirm_placement(), "reject overlap with player")
 	var edge: Vector3 = loop.supported_pose(street.to_world(Vector3(4.4, 0, 0)), 0.0)
 	check(edge == loop.INVALID_TARGET, "reject footprint crossing road edge")
-	check(loop.inventory.item == original, "invalid placement cannot lose the item")
+	check(loop.inventory.get_item(0) == original, "invalid placement cannot lose the item")
 	loop.cancel_placement()
 	check(
-		loop.inventory.item == original and loop.preview == null,
+		loop.inventory.get_item(0) == original and loop.preview == null,
 		"cancel keeps item and removes preview"
 	)
 	# Place and retrieve on the garage apron too, at a different world height.
@@ -72,7 +75,7 @@ func run() -> void:
 	check(loop.target != loop.INVALID_TARGET, "garage apron supports footprint")
 	check(loop.confirm_placement(), "place on lower garage apron")
 	await frames(2)
-	check(loop.pickup() and loop.inventory.item == original, "retrieve same item at garage")
+	check(loop.pickup() and loop.inventory.get_item(0) == original, "retrieve same item at garage")
 	print("Street item: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
 

@@ -19,6 +19,7 @@ var inventory := Inventory.new()
 var world_item: WorldItem
 var preview: MeshInstance3D
 var placement_active: bool = false
+var selected_slot: int = -1
 var target := Vector3.ZERO
 var yaw: float = 0.0
 var target_valid: bool = false
@@ -135,7 +136,7 @@ func placement_target_from_mouse() -> Vector3:
 func can_pickup() -> bool:
 	return (
 		not placement_active
-		and inventory.item == null
+		and inventory.first_free_slot() != -1
 		and is_instance_valid(world_item)
 		and world_item.is_inside_tree()
 		and world_item.item != null
@@ -155,9 +156,10 @@ func pickup() -> bool:
 	return true
 
 
-func begin_placement() -> bool:
-	if placement_active or inventory.item == null:
+func begin_placement(slot_index: int = 0) -> bool:
+	if placement_active or inventory.get_item(slot_index) == null:
 		return false
+	selected_slot = slot_index
 	placement_active = true
 	touch_aim_set = false
 	touch_aim_pending = false
@@ -206,12 +208,13 @@ func valid_pose(point: Vector3, angle: float) -> bool:
 
 
 func confirm_placement() -> bool:
-	if not placement_active or inventory.item == null or not valid_pose(target, yaw):
+	var selected_item: Item = inventory.get_item(selected_slot)
+	if not placement_active or selected_item == null or not valid_pose(target, yaw):
 		return false
-	var held := inventory.item
+	var held := selected_item
 	var representation := WorldItem.new(held)
 	# Construct first; only commit once validation and construction have succeeded.
-	if inventory.take(held) != held:
+	if inventory.take_at(selected_slot, held) != held:
 		representation.free()
 		return false
 	world_item = representation
@@ -229,17 +232,19 @@ func cancel_placement() -> void:
 		preview.queue_free()
 	preview = null
 	placement_active = false
+	selected_slot = -1
 
 
 func update_hud() -> void:
-	place_button.disabled = inventory.item == null or placement_active
+	place_button.disabled = inventory.get_item(0) == null or placement_active
 	if placement_active:
+		var selected_item: Item = inventory.get_item(selected_slot)
 		status.text = (
 			"Inventory: Dream block #%d\nPlacement: %s"
-			% [inventory.item.session_id, "valid" if target_valid else "invalid"]
+			% [selected_item.session_id, "valid" if target_valid else "invalid"]
 		)
-	elif inventory.item != null:
-		status.text = "Inventory: Dream block #%d" % inventory.item.session_id
+	elif inventory.occupied_count() > 0:
+		status.text = "Inventory: %d/%d slots" % [inventory.occupied_count(), Inventory.CAPACITY]
 	else:
 		status.text = (
 			"Inventory: empty\n"

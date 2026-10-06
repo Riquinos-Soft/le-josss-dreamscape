@@ -111,12 +111,14 @@ func valid_pose(point: Vector3, angle: float) -> bool:
 
 
 func update_hud() -> void:
-	place_button.disabled = inventory.item == null or placement_active
+	place_button.disabled = inventory.get_item(0) == null or placement_active
 	if placement_active:
 		status.text = (
 			"Bloque · " + ("Puedes colocarlo" if target_valid else "Busca suelo libre cercano")
 		)
-	elif inventory.item != null:
-		status.text = "Llevas el bloque · P para colocarlo"
+	elif inventory.occupied_count() > 0:
+		status.text = (
+			"Bolsa %d/%d · P para colocar" % [inventory.occupied_count(), Inventory.CAPACITY]
+		)
 	else:
 		status.text = "E · Recoger bloque" if can_pickup() else "Acércate al bloque violeta"

@@ -6,6 +6,7 @@ TESTS := \
 	test_movement_direction.gd \
 	test_keyboard_input.gd \
 	test_item_lifecycle.gd \
+	test_bag_inventory.gd \
 	test_courtyard.gd \
 	test_camera_clearance.gd \
 	test_home_exterior.gd \

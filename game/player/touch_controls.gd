@@ -168,7 +168,7 @@ func _process(delta: float) -> void:
 		message.text = "Pazo de Lourizán · explora el lugar"
 	elif items.placement_active:
 		message.text = "Arrastra el objeto para moverlo · Verde: puedes confirmar"
-	elif items.inventory.item != null:
+	elif items.inventory.occupied_count() > 0:
 		message.text = "Objeto recogido · Pulsa Colocar"
 	elif items.can_pickup():
 		message.text = "Bloque al alcance · Pulsa Recoger"
@@ -189,7 +189,7 @@ func update_actions() -> void:
 		names.append("right")
 		if items.target_valid:
 			names.append("confirm")
-	elif items.inventory.item != null:
+	elif items.inventory.occupied_count() > 0:
 		names = ["begin"]
 	elif items.can_pickup():
 		names = ["pickup"]
