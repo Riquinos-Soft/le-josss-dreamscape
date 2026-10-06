@@ -361,7 +361,6 @@ func travel_to(destination: StringName) -> bool:
 	player.reset_physics_interpolation()
 	camera_rig.base_orthographic_size = 13.5
 	camera_rig.focus_height = 0.9
-	street.get_node("PixelPass/Screen").material.set_shader_parameter("world_pixel_height", 180.0)
 	camera_rig.avoid_world_geometry = true
 	camera_rig.snap_to_target()
 	watch_exit(street if destination == &"street" else incoming)

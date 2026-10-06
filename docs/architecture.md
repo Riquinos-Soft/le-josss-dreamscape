@@ -59,7 +59,10 @@ scan is visual decoration; wrapper-owned variable-width cross sections and
 side/end barriers define the route and garage apron. The street uses an
 orthographic camera, eight-direction Joss sprites, clean pixel-art garage faces,
 dark asphalt and local pixel-stipple wall cutaways. A world-only screen pass
-leaves the HUD at full resolution. Generated source art, prompts, normalized
+now preserves continuous sampling in production; the earlier 180-row mosaic is
+retained only for offline comparison. The HUD remains at full resolution.
+Joss and Lucas share directional hysteresis and preserve walking phase on turns
+through `player/directional_animation.gd`. Generated source art, prompts, normalized
 runtime sheets and metadata are retained. These remain draft visual assets.
 Walk animation and a three-location map are present in the local entry scene. The Pazo uses authored, material-batched architecture, simple collision and the production screen pixel pass with location-specific framing. Its original scan is retained as an offline reference and excluded from Web export. New places follow [the place-authoring workflow](place-authoring.md).
 

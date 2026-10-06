@@ -29,3 +29,20 @@ The developer established it on 2026-10-06 after rejecting the filtered Lourizá
 Lourizán example: glazed wings, central clock pavilion, slate mansards, paired
 monumental stairs, raised balustraded terrace and planted forecourt. The scan
 provides spatial evidence; clean authored geometry expresses these landmarks.
+
+## Retro presentation direction — 2026-10-06
+
+The developer selected Secret of Evermore as a visual reference. Aim for readable
+character silhouettes, restrained earthy colours and deliberate light/shadow
+clusters in original art. Preserve small details at the gameplay camera scale;
+do not rely on a coarse full-screen pixel mosaic to create the style. Character
+turns should preserve walking phase and tolerate small analog direction noise.
+Use the shared directional presentation helper for eight-way characters.
+
+[Spec 015](specs/015-retro-character-clarity.md) starts with character clarity
+and motion. After the requested mobile review, refine Lourizán's facade against
+photographs: continuous glazed galleries, their vertical divisions, slate
+mansards, clock pavilion, terrace and the shape of the paired stairs. Establish
+reusable window, cornice, stone and stair modules as those parts are authored.
+Screenshot references inform the visual vocabulary; commercial game sprites or
+textures must not enter runtime assets.

@@ -1,9 +1,7 @@
 extends AnimatedSprite3D
 ## Presentation follows resolved displacement, including sliding, rather than key intent.
 
-const DIRECTIONS: Array[StringName] = [
-	&"right", &"down_right", &"down", &"down_left", &"left", &"up_left", &"up", &"up_right"
-]
+const DirectionalAnimation = preload("res://player/directional_animation.gd")
 
 @export var movement_actor: CharacterBody3D
 @export var movement_view: Camera3D
@@ -24,20 +22,11 @@ func _physics_process(_delta: float) -> void:
 		return
 	var motion := movement_actor.get_real_velocity()
 	motion.y = 0.0
-	var walking := motion.length() > 0.1
+	var was_walking := String(animation).begins_with("walk_")
+	var walking := motion.length() > (0.06 if was_walking else 0.12)
 	if walking:
-		var right := movement_view.global_basis.x
-		right.y = 0.0
-		var forward := -movement_view.global_basis.z
-		forward.y = 0.0
-		var screen_motion := Vector2(
-			motion.dot(right.normalized()), -motion.dot(forward.normalized())
-		)
-		# Nearest 45-degree sector; half-way ties follow roundi (away from zero).
-		facing = DIRECTIONS[posmod(roundi(screen_motion.angle() / (PI / 4.0)), 8)]
-	var next := StringName(("walk_" if walking else "idle_") + String(facing))
-	if animation != next:
-		play(next)
+		facing = DirectionalAnimation.resolve_facing(motion, movement_view, facing, was_walking)
+	DirectionalAnimation.play_direction(self, facing, walking)
 
 
 func _on_respawned() -> void:

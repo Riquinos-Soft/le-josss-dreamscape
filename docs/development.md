@@ -1,5 +1,36 @@
 # Development setup and verified baseline
 
+## Retro clarity and stable character motion — 2026-10-06
+
+[Spec 015](specs/015-retro-character-clarity.md) delivers the first restyle step
+before mobile review. Production preserves rendered detail instead of sampling
+the world into 180 rows. Original sprite/material art remains, with linear
+sampling for both characters. No new textures or heavier render target: the old
+mosaic already ran over the full-resolution render. Travel retains the setting.
+
+Joss and Lucas share `player/directional_animation.gd`: a five-degree angular
+margin prevents direction chatter and turning preserves frame/progress. Joss
+uses separate movement thresholds for starting/stopping animation. Existing
+physics/camera interpolation is retained. The gdtoolkit `pkg_resources`
+deprecation warning remains.
+
+`PATH=/private/tmp/lourizan-author313/bin:$PATH make check GODOT=/Applications/Godot.app/Contents/MacOS/Godot`
+passed **928 checks**, lint/import and Web HTML/WASM/PCK export. Evidence:
+`build/verification/restyle/full-check.log`. Native `--max-fps 60 --script
+res://tests/test_street_character.gd` passed 140 checks (`native-movement.log`).
+`res://tests/capture_character_presentation.gd` produced matching before/after
+720p and 844x390 views and 12 walking frames, inspected for face detail, contours,
+ground contact and UI. Desktop capture is not a physical mobile performance test;
+full browser gameplay remains unverified.
+
+Reviewed Evermore/facade references and eight sampled frames of the developer's
+on-site video. [Timestamped notes](../references/lourizan-video-2026-10-06.md)
+identify the double arch, glazed volumes, stairs and paving for the next pass.
+The one-off AVFoundation extraction emitted SDK warnings for deprecated synchronous
+reading calls; extraction succeeded. No video or external reference image ships
+with the game. Next: deploy, developer tests mobile walking/turning/talk, then
+refine the facade from the new reference.
+
 ## Lucas garden patrol and character art — 2026-10-06
 
 [Spec 014](specs/014-lucas-garden-patrol.md) and

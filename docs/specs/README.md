@@ -23,8 +23,9 @@ None of these documents silently authorizes unrelated work.
 | 012 | [Eight-slot bag and travelling objects](012-eight-slot-bag.md) | implemented | Developer art review and physical mobile gameplay |
 | 013 | [Lourizán guide and paged dialogue](013-lourizan-guide-dialogue.md) | implemented | Developer visual/copy review and browser/physical-device gameplay |
 | 014 | [Lucas garden patrol and character art](014-lucas-garden-patrol.md) | implemented | Developer visual review and browser/physical-device gameplay |
+| 015 | [Retro character clarity and stable walking](015-retro-character-clarity.md) | implemented | First mobile presentation review; later facade pass |
 
-Next available spec ID: **015**. Recompute from this registry before reserving;
+Next available spec ID: **016**. Recompute from this registry before reserving;
 this line is not a standing reservation for an agent or a feature.
 
 ## Language and file naming

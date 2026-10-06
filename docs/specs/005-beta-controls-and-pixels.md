@@ -7,6 +7,8 @@ Language: en
 Acceptance: implementation and emulated-browser checks are complete; physical
 Android/iOS testing and developer art acceptance remain pending.
 Beta 01 is a comparison reference, not the final asset standard.
+The 180-row production filter below is superseded by
+[Spec 015](015-retro-character-clarity.md)'s clarity pass.
 
 ## Objective and scope
 

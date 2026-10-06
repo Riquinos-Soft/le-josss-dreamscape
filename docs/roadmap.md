@@ -20,6 +20,12 @@ sustained performance/download measurements remain open.
 
 ## Current feature sequence
 
+Current visual checkpoint: [Spec 015](specs/015-retro-character-clarity.md) improves
+character clarity and walking stability and is ready for the developer's mobile
+review. Secret of Evermore guides subsequent original art; the developer's
+[on-site video](../references/lourizan-video-2026-10-06.md) guides the next facade
+pass. Proceed in small deployed steps after that review.
+
 The developer requested both feature specs and sequential execution plans. Lucas,
 the travelling bag and the [Lucas visual upgrade and short garden patrol](specs/014-lucas-garden-patrol.md)
 are implemented through [Plan 013](plans/013-lucas-garden-patrol.md).

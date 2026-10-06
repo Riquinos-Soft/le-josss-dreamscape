@@ -25,6 +25,8 @@ func run() -> void:
 	var original_player := player.get_instance_id()
 	var original_item = session.get_node("Street/ItemLoop").world_item.item
 	check(session.current_id == &"street", "production street opens first")
+	var presentation: ShaderMaterial = session.get_node("Street/PixelPass/Screen").material
+	check(presentation.get_shader_parameter("world_pixel_height") == 0.0, "clear street rendering")
 	check(map_ui.guide.visible, "map direction is visible from spawn")
 	check(map_ui.guide_label.text.contains("Salida al mapa"), "map direction explains the route")
 	check(player.get_node("PixelCharacter").visible, "pixel sprite retained")
@@ -91,6 +93,10 @@ func run() -> void:
 			)
 		check(session.current_id == &"lourizan", "Lourizán active")
 		check(
+			presentation.get_shader_parameter("world_pixel_height") == 0.0,
+			"Pazo travel does not restore the coarse mosaic"
+		)
+		check(
 			session.get_node("Street/CameraRig").base_orthographic_size == 13.5,
 			"Pazo uses the same maximum zoom as the street"
 		)
@@ -140,6 +146,9 @@ func run() -> void:
 	await frames(12)
 	await capture("home-pixel-pass")
 	check(session.current_id == &"home" and player.is_on_floor(), "home arrival grounded")
+	check(
+		presentation.get_shader_parameter("world_pixel_height") == 0.0, "home keeps clear rendering"
+	)
 	check(player.get_instance_id() == original_player, "home retains production player")
 	check(session.get_node("Street/PixelPass").visible, "home uses world pixel pass")
 	for z in [10, 8, 6, 4, 2, 0, -2, -4, -6, -8]:
@@ -153,6 +162,10 @@ func run() -> void:
 	check(await session.travel_to(&"street"), "return from home")
 	await frames(12)
 	check(session.current_id == &"street" and player.is_on_floor(), "street restored after home")
+	check(
+		presentation.get_shader_parameter("world_pixel_height") == 0.0,
+		"return keeps clear rendering"
+	)
 	await enter_exit(session.get_node("Street/Exit"))
 	var touch_controls: Control = session.get_node("Street/TouchHUD/TouchControls")
 	touch_controls.enable_touch()

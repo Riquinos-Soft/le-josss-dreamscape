@@ -28,6 +28,7 @@ shader = ExtResource("6_paving")
 
 [sub_resource type="ShaderMaterial" id="Material_pixel"]
 shader = ExtResource("7_pixel")
+shader_parameter/world_pixel_height = 0.0
 
 [node name="JacoboRisaStreet" type="Node3D"]
 script = ExtResource("1_street")
@@ -69,7 +70,7 @@ movement_orientation = NodePath("../CameraRig/Camera")
 
 [node name="PixelCharacter" type="AnimatedSprite3D" parent="Player" node_paths=PackedStringArray("movement_actor", "movement_view")]
 position = Vector3(0, 1.05, 0)
-texture_filter = 0
+texture_filter = 1
 pixel_size = 0.0375
 billboard = 1
 alpha_cut = 1

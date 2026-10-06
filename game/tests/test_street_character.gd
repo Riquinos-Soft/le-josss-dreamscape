@@ -81,12 +81,32 @@ func run() -> void:
 				character.animation == "idle_" + DIRECTIONS[index],
 				"idle keeps facing " + DIRECTIONS[index]
 			)
-	# Check both sides of sector boundaries through analog input and the real controller.
+	# Resting characters immediately face fresh input on either side of a boundary.
 	for entry in [[22.4, "right"], [22.6, "down_right"], [-22.4, "right"], [-22.6, "up_right"]]:
+		steer(Vector2.ZERO)
+		await frames(3)
 		actor.position = Vector3.ZERO
 		steer(Vector2.from_angle(deg_to_rad(entry[0])))
 		await frames(5)
 		check(character.animation == "walk_" + entry[1], "sector boundary " + str(entry[0]))
+	steer(Vector2.RIGHT)
+	await frames(8)
+	var steady_facing := true
+	var continued_cycle: Array[int] = []
+	for tick in 40:
+		steer(Vector2.from_angle(deg_to_rad(22.0 if tick % 2 == 0 else 23.0)))
+		await frames(1)
+		steady_facing = steady_facing and character.animation == &"walk_right"
+		if character.frame not in continued_cycle:
+			continued_cycle.append(character.frame)
+	check(steady_facing, "noisy joystick at sector edge keeps a steady facing")
+	check(continued_cycle.size() == 4, "edge noise does not repeatedly restart the walk cycle")
+	character.set_frame_and_progress(2, 0.4)
+	steer(Vector2.from_angle(deg_to_rad(30.0)))
+	await frames(1)
+	check(character.animation == &"walk_down_right", "deliberate turn exits the angular dead band")
+	check(character.frame == 2, "turn preserves the current footstep instead of restarting")
+	check(character.frame_progress >= 0.4, "turn preserves subframe progress")
 	steer(Vector2.ZERO)
 	camera.rotation = Vector3.ZERO
 	actor.position = Vector3.ZERO
