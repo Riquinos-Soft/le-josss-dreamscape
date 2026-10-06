@@ -38,6 +38,7 @@ Platform priority: Web, macOS development, Android, iOS, possibly other desktop 
 - [Spec 008: connected real home microzone](docs/specs/008-real-home-microzone.md)
 - [Spec 009: Lourizán and map travel](docs/specs/009-lourizan-and-map-travel.md)
 - [Spec 013: Lucas Maconheiro and paged dialogue](docs/specs/013-lourizan-guide-dialogue.md)
+- [Spec 012: eight-slot bag and travelling objects](docs/specs/012-eight-slot-bag.md)
 - [Plan 010: phased Lourizán implementation](docs/plans/010-lourizan-map-travel.md)
 - [Delegable task template](docs/plans/task-template.md)
 - [Plan and execution status: Joss animation and street art](docs/plans/008-joss-animation-and-street-art.md)
@@ -53,8 +54,10 @@ Platform priority: Web, macOS development, Android, iOS, possibly other desktop 
 
 The current local build opens the scanned street with eight-direction walking animation,
 smooth wall transparency, and a movable violet block near spawn. Press **E** to
-pick it up, **P** to place, aim with the mouse, **Q/E** to rotate, left-click to
-confirm, and **Esc** to cancel. Placement follows the supported street surface.
+store it in the bag. Open the eight-slot bag with **B/P** or its right-side icon,
+select the beer, aim with the mouse, use **Q/E** to rotate, left-click to confirm,
+and **Esc** to cancel. Placed objects remain in each visited location for the
+running session.
 The current scenery pass uses coarse pixel foliage, simple stone banks and a
 reduced palette in place of the visible scan's noisy surfaces, preserving the
 dark asphalt and garage approach. Follow the direction and distance guide in the upper right to the marked street edge (about 30 m from spawn), then press **M** or the on-screen Map action, select the captured home or Pazo de Lourizán and confirm. Both destinations retain the production character, camera and pixel pass; return through their marked exits. At Lourizán, approach Lucas Maconheiro and press **E** or the on-screen **Hablar** action to read his four-page account of the Pazo. The linked public build changes only after a push and deployment.

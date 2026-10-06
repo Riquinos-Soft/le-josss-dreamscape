@@ -37,7 +37,7 @@ paving_material = SubResource("Material_paving")
 [node name="ItemLoop" type="Node" parent="."]
 script = ExtResource("10_item")
 floor_path = NodePath("../StreetCollision")
-initial_item_position = Vector3(4.2, 1.84, 0.3)
+initial_item_position = Vector3(5.5, 1.84, 0.8)
 hud_position = Vector2(12, 88)
 control_help = "E: recoger · P: colocar · Ratón: elegir lugar\nQ/E: girar · Clic: confirmar · Esc: cancelar"
 

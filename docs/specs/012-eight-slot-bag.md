@@ -1,13 +1,12 @@
 # Spec 012 — Eight-slot bag and travelling objects
 
-Status: draft
+Status: implemented
 Updated: 2026-10-06
 Language: en
 
-Authorization: developer requested specifications and stepwise plans for both the
-bag and NPC on 2026-10-06. This delivery is planning only; start implementation
-when the developer launches its execution plan. Draft indicates unimplemented
-planning, not missing product requirements. Acceptance: no gameplay changes yet.
+Authorization: developer requested the spec and launched its implementation with
+`Sigue el siguiente spec` on 2026-10-06. The scoped feature is implemented.
+Developer art acceptance and physical mobile gameplay remain pending.
 
 ## Objective
 
@@ -140,10 +139,19 @@ Placed objects survive travel only within the current running session.
 
 ## Validation and open questions
 
-Planning only: run documentation validation now. Runtime validation belongs to
-[Plan 011](../plans/011-eight-slot-bag.md). No blocking product question; physical
-bag skin/beer art remains subject to developer visual review. Any durable save
-or generalized inventory request is a new decision, outside this plan.
+Implemented through [Plan 011](../plans/011-eight-slot-bag.md). Automated coverage
+includes eight stable slots/full rejection, exact-reference selection, modal
+keyboard/mouse/touch input, multiple world representations, failed travel rollback,
+street/Casa/Pazo support validation, NPC/overlap rejection, unload restoration and
+the complete street → Pazo → Casa → Pazo → street round trip. Native screenshots
+under `build/verification/bag/` cover the normal and compact bag plus Pazo placement.
+
+Final `make check` passed 902 checks with zero failures and produced the Web
+release files; evidence is recorded in `build/verification/bag/full-check.log`.
+The generated beer and backpack prompts
+and provenance live beside their runtime PNGs. Browser and physical-device
+acceptance are recorded separately from export. No blocking product question;
+durable save or generalized containers remain outside this spec.
 
 ## References
 

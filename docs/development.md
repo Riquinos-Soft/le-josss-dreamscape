@@ -1,5 +1,33 @@
 # Development setup and verified baseline
 
+## Eight-slot bag and travelling objects — 2026-10-06
+
+[Spec 012](specs/012-eight-slot-bag.md) and [Plan 011](plans/011-eight-slot-bag.md)
+are implemented. Pickup now stores the exact item instance in the first of eight
+stable slots without starting placement. A right-side original pixel backpack,
+plus B/P and touch actions, opens a 4×2 bag. Selecting an occupied slot closes the
+modal and starts the existing rotate/validate/confirm flow; cancellation preserves
+the same instance and slot. The initial street object is now the original amber
+Birra Dreamscape with a teal dream label, matching icon, small physical collider
+and readable pickup halo.
+
+The session controller now manages several world representations and records them
+by location ID as `{item, global transform}` before a successful travel commit.
+Street, Casa and Lourizán bind only their active collision bodies as placement
+supports. Returning restores the same references and poses; an initialized empty
+location stays empty. Failed destination loading does not change source records,
+bag ownership or world nodes. No reload persistence was added.
+
+Native evidence under `build/verification/bag/` includes the normal/compact bag
+and two placed Pazo bottles. Focused checks cover full bag rejection, input modal
+isolation, multi-object overlap, Casa edges, the Pazo terrace, Lucas collision and
+the full round trip. Final `make check` passed **902 checks, zero failures** and
+produced the Web release HTML/WASM/PCK. Final suite and Web export log:
+`build/verification/bag/full-check.log`. Generated prompts/provenance live beside
+`game/assets/art/items/birra_dreamscape_icon_v01.png` and
+`game/assets/art/ui/bag_icon_v01.png`. Developer art review, browser playthrough
+and physical mobile validation remain separate.
+
 ## Lucas Maconheiro guide dialogue — 2026-10-06
 
 [Spec 013](specs/013-lourizan-guide-dialogue.md) and
@@ -42,8 +70,8 @@ At that planning point, the current inventory, item identity/representation, pla
 travel teardown and touch routing. Plans address singular world-item/null access,
 source/destination collision isolation, ownership rollback, modal input and touch
 click-through. Each package names context, allowed paths, contracts, tests and
-handoff. Seven bag packages and six NPC packages were unstarted. The NPC packages
-were subsequently completed as recorded above; the bag plan remains unstarted.
+handoff. Seven bag packages and six NPC packages were unstarted. Both sets were
+subsequently completed as recorded above.
 No model was spawned/switched and no runtime behavior or art asset changed in
 that planning delivery.
 

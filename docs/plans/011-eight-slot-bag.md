@@ -1,8 +1,8 @@
 # Plan 011 — Eight-slot bag
 
 Governing spec: [012](../specs/012-eight-slot-bag.md).
-Status: planned, 2026-10-06. Planning authorized; implementation not started.
-Actual planning base: `2a059ce`; worktree was clean before this documentation.
+Status: done, 2026-10-06. Implementation authorized and completed.
+Actual planning base: `2a059ce`; implementation base: `78e5485`.
 Design references: developer's bag/beer brief; ADR 003 ownership; Spec 009 travel;
 Spec 005 touch/UI. External Notion Bible was not supplied or reinterpreted.
 Observable objective: beer pickup → bag → travel → placement → return and recover.
@@ -67,7 +67,7 @@ alone do not create a new blanket deployment authorization.
 
 ## B1 — Replace one-slot storage with eight stable slots
 
-Status: planned. Owner: the single Sol 5.6 Medium executor/integrator.
+Status: done. Owner: the session executor/integrator.
 Dependencies: developer starts this plan. Size: one focused working commit; no numeric budget assumed.
 
 Minimum context: Spec 012 R1/R5 and ADR 003; inventory.gd, item_instance.gd, item_loop.gd; rg all inventory callers.
@@ -87,7 +87,7 @@ Acceptance: Old loop still runs; eight entries can be stored without aliasing or
 
 ## B2 — Author the beer definition and matching art
 
-Status: planned. Owner: the single Sol 5.6 Medium executor/integrator.
+Status: done. Owner: the session executor/integrator.
 Dependencies: B1. Size: one focused working commit; no numeric budget assumed.
 
 Minimum context: Spec 012 R9; item_definition.gd, world_item.gd; current art metadata convention.
@@ -107,7 +107,7 @@ Acceptance: Recognizable small beer on street, matching icon, preview and collid
 
 ## B3 — Build the visible bag and select-to-place flow
 
-Status: planned. Owner: the single Sol 5.6 Medium executor/integrator.
+Status: done. Owner: the session executor/integrator.
 Dependencies: B1 and B2. Size: one focused working commit; no numeric budget assumed.
 
 Minimum context: Spec 012 R2–R5/shared input; touch_controls.gd input consumption; dreamscape.gd open_map/close_map.
@@ -128,7 +128,7 @@ Acceptance: Pickup stores silently with short feedback; clicking a slot only ope
 
 ## B4 — Support several placed objects in the active zone
 
-Status: planned. Owner: the single Sol 5.6 Medium executor/integrator.
+Status: done. Owner: the session executor/integrator.
 Dependencies: B3. Size: one focused working commit; no numeric budget assumed.
 
 Minimum context: Spec 012 minimal controller contract; current world_item and can_pickup paths; dreamscape.gd set_street_active.
@@ -148,7 +148,7 @@ Acceptance: Eight objects can be manipulated one at a time with no replacement/l
 
 ## B5 — Retain placed objects across scene unloads
 
-Status: planned. Owner: the single Sol 5.6 Medium executor/integrator.
+Status: done. Owner: the session executor/integrator.
 Dependencies: B4. Size: one focused working commit; no numeric budget assumed.
 
 Minimum context: Spec 012 R7–R8; dreamscape.gd travel_to/load_destination and rollback; ADR 003.
@@ -169,7 +169,7 @@ Acceptance: Placed objects survive return trips in memory; no duplicate seed, da
 
 ## B6 — Enable safe placement on each place’s terrain
 
-Status: planned. Owner: the single Sol 5.6 Medium executor/integrator.
+Status: done. Owner: the session executor/integrator.
 Dependencies: B5. Size: one focused working commit; no numeric budget assumed.
 
 Minimum context: Spec 012 R6; street support and overlap queries; home/Pazo geometry and location scaling.
@@ -189,7 +189,7 @@ Acceptance: Beer can be placed on all three current zones and the supported terr
 
 ## B7 — Complete the playable round trip and handoff
 
-Status: planned. Owner: the single Sol 5.6 Medium executor/integrator.
+Status: done. Owner: the session executor/integrator.
 Dependencies: B6. Size: one focused working commit; no numeric budget assumed.
 
 Minimum context: Spec 012 acceptance; package evidence; NPC spec shared controls if installed.
@@ -219,6 +219,11 @@ Acceptance: Each AC has evidence or explicit remaining manual acceptance; next e
 
 ## Handoff
 
-Planning base `2a059ce`; B1–B7 unstarted. First action after launch: inspect current
-inventory call sites and implement B1. Package dependencies are the execution
-order, not permission to run parallel agents.
+Planning base `2a059ce`; implementation base `78e5485`; B1–B7 complete. Commits
+`c371697`, `5497336`, `d1607c0` and `9b75d8a` deliver stable slots, Birra Dreamscape,
+the pixel bag UI and cross-location world records/support validation respectively.
+The full route preserves instance references, IDs and transforms, and an empty
+initialized street does not respawn its seed. Final `make check` passed 902 checks
+with zero failures and produced the Web release; evidence is in
+`build/verification/bag/full-check.log`. Native captures are in the same bag
+evidence directory. Developer art review and physical-device gameplay remain open.

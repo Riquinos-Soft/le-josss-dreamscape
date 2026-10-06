@@ -23,9 +23,9 @@ Blender authoring uses Metric, Unit Scale 1.0, and meter-sized dimensions with t
 - `game/player/`: player scene/controller, pure movement-direction helper, and dedicated camera rig. No interaction probe implemented yet.
 - `game/items/`: constant item definition, runtime instance, procedural world representation, and courtyard-local pickup/placement coordination.
 - `game/inventory/`: a holder of item instances, independent of scene nodes; not a dictionary of type counts as the authoritative state.
-- `game/npcs/`: focused place-owned NPC scenes; currently the stationary Lourizán guide.
+- `game/npcs/`: focused place-owned NPC scenes; currently the Lourizán guide.
 - `game/dialogue/`: local dialogue data and the session-owned paged speech balloon.
-- HUD: a few procedural Control nodes owned by `ItemLoop`; no separate UI directory/framework is needed yet.
+- HUD: focused procedural `Control` nodes owned by the session item loop and dialogue layer; no general UI framework is needed yet.
 - `game/assets/`: approved runtime GLB, textures, materials, and eventual audio.
 - `game/tests/`: direction, keyboard, courtyard, and item lifecycle checks.
 - `docs/`: setup, architecture, specs, and the few ADRs that matter.
@@ -38,7 +38,7 @@ Create gameplay subdirectories when they gain content. Keep scenes and their scr
 
 ## Implemented movement layer
 
-`Courtyard` owns `Geometry` (floor, walls, obstacles), `Player`, `CameraRig`, environment/light, and `ItemLoop`. The latter adds one `WorldItem`, or a mesh-only `PlacementPreview` during placement, and its own CanvasLayer HUD. All geometry is primitive.
+`Courtyard` owns `Geometry` (floor, walls, obstacles), `Player`, `CameraRig`, environment/light, and `ItemLoop`. The item loop can add `WorldItem` representations or a mesh-only `PlacementPreview` during placement and owns its CanvasLayer HUD. All geometry is primitive.
 
 `Player` uses `CharacterBody3D`, a capsule collision shape, and a separate visual root with a capsule mesh/facing marker. Named InputMap actions map physical WASD and arrow keys. Holding the right mouse button projects the cursor onto the courtyard ground plane and feeds the resulting direction into the same movement path, with a 0.35 m dead zone and full speed from 2.5 m. Keyboard input takes precedence when both inputs are active. `Input.get_vector` and the direction helper cap keyboard diagonal magnitude; horizontal velocity is assigned at up to 4 m/s and stops on release. Gravity and a 0.2 m floor snap keep the player grounded. Focus-out clears movement input. Only the visual rotates toward travel; the body/camera basis does not rotate with it.
 
@@ -72,34 +72,34 @@ This is a deliberately focused implementation for one guide, with no NPC registr
 quest system, global event bus or saved conversation state. See
 [Spec 013](specs/013-lourizan-guide-dialogue.md).
 
-## Single-item implementation
+## Eight-slot item implementation
 
-`items/item_loop.gd` coordinates pickup, inventory, floor preview, validity, and the small HUD directly. `inventory/inventory.gd` owns one data reference; its removal method requires the expected instance. `items/item_instance.gd` contains only session ID and definition. `items/item_definition.gd` provides immutable constants for this one prototype (type, display name, dimensions); a Resource asset/catalog would add no value yet. `items/world_item.gd` constructs a static collision box and striped rectangular mesh, retaining the instance reference. A recreated world node receives the original data object.
+`items/item_loop.gd` is session-owned and coordinates pickup, an eight-slot inventory, the bag UI, floor preview and placement validity across loaded locations. `inventory/inventory.gd` owns eight stable references, rejects duplicates and removes only the expected instance. `items/item_instance.gd` contains the stable session ID and definition. `items/item_definition.gd` provides the immutable data needed by the current prototype. `items/world_item.gd` constructs a static collision body and visual while retaining the instance reference. Recreated world nodes receive the original data object rather than a copy.
 
-Pickup is limited to 2 m with a ray against courtyard geometry. Placement targets the mouse ray's intersection with the y=0 plane, within 2 m horizontally. A rotated footprint must remain inside the 20×16 m courtyard; a physics overlap query rejects geometry/player/items while excluding the supporting floor. A player-to-target ray prevents placement through obstacles. Preview is green/red and non-colliding. Q/E rotates yaw by 90°; keyboard and right-mouse movement remain active until confirm/cancel. Layer 1 is courtyard geometry, 2 player, 4 item; the player collides with geometry and the placed item.
+Pickup selects the nearest reachable world item and stores it in the first free slot. Selecting an occupied bag slot enters placement for that exact instance. Placement raycasts against the active location's support geometry; it rejects slopes, unsupported corners, overlap with geometry, players, NPCs and other items. A player-to-target ray prevents placement through obstacles. Preview is green/red and non-colliding. Q/E rotates yaw by 90 degrees and confirm revalidates before the authoritative transfer.
 
-This validity policy assumes this authored flat floor and box-shaped prototype. It is not suitable for holes, uneven floors, shelves, or arbitrary supporting surfaces. The tiny top stripe is visual only. The item remains static after placement. No location metadata, serialization, catalog, or general interaction framework exists.
+World records preserve each instance and its transform per location for the current runtime session. Travel commits only after the destination has loaded and validated, so a failed load leaves source item state intact. Reloading the game still resets everything: there is no save format, catalog service or general interaction framework.
 
 ## Composition direction
 
-One slice root owns the world, player, inventory, and HUD, connects local signals, and coordinates item transfers. No autoload or registry is needed for one scene/session. Reloading/restarting resets state; within a runtime session, placed items stay where confirmed.
+One session root owns the loaded world, player, inventory, item world container and HUD, connects local signals, and coordinates item transfers. No autoload or registry is needed. Reloading/restarting resets state; within a runtime session, carried and placed items retain identity across locations.
 
 - Player: `CharacterBody3D`, a simple collision shape, visible placeholder character, and a small interaction probe. Movement uses named InputMap actions and physics updates, projected onto the ground using the camera's forward/right directions. Rotate the character visual independently of the camera framing.
 - Camera: slightly elevated third-person 3/4 view, with constrained follow behavior and a stable initial heading. Keep the character visible and frame the surrounding architecture. No free orbit, mouse-look, or cursor capture in Spec 001. A small camera rig in the player feature is enough; do not build a camera framework.
 - World: static collision and meshes. Visual meshes do not define gameplay behavior. Use simple hand-authored collision shapes for this slice.
 - World item: mesh and simple collision with a small local interaction script, referencing the actual item instance. Player-to-item reach/obstruction checks prevent collection through walls. Recreated world nodes represent the same instance after placement.
-- Inventory: a small GDScript `RefCounted` holder, limited to one non-stackable item for this demonstration. It holds the item instance, not a scene node or a replacement counter. Capacity/transfer validation can be tested without rendering.
-- Placement: one small script coordinates a non-interactive preview on the courtyard floor, yaw rotation, validity checks, confirm, and cancel. Keep it local to the slice; it is not a general furniture or building system.
-- HUD: `Control` nodes under a `CanvasLayer`, showing the held item's name, Drop/Place action, and placement validity/controls. Emits requests; does not own or clone item state. No inventory grid or recipe menu.
+- Inventory: a small GDScript `RefCounted` holder with eight stable, non-stackable slots. It holds item instances, not scene nodes or replacement counters. Capacity and transfer validation can be tested without rendering.
+- Placement: one focused script coordinates a non-interactive preview on supported surfaces, yaw rotation, validity checks, confirm, and cancel. It is not a general furniture or building system.
+- HUD: `Control` nodes under a `CanvasLayer`, including a right-side bag button and a pixel-styled 4x2 modal slot panel. It emits requests and displays current state; it does not own or clone item identity.
 
 ## Minimal item boundary
 
 The durable rule is in [ADR 003](adr/003-item-identity-and-world-representation.md): definitions describe kinds of objects; instances represent actual objects; world nodes and inventory are contexts for the same instance.
 
 - **ItemDefinition:** shared type ID, display name, and reference to its simple visual. One small definition is enough. A Godot Resource is a reasonable authoring choice; do not build a catalog/database system. Shared definition data must not hold per-object mutable state.
-- **ItemInstance:** plain GDScript `RefCounted` data with an instance ID and definition reference. ID remains stable through this session's transfers and differs from a Godot node's instance ID. A slice-local incrementing ID is sufficient; no global UUID service. Only one non-stackable object, implicitly quantity one. No owner, durability, custom property bag, or history fields yet.
+- **ItemInstance:** plain GDScript `RefCounted` data with an instance ID and definition reference. ID remains stable through this session's transfers and differs from a Godot node's instance ID. A session-local incrementing ID is sufficient; no global UUID service. Items are non-stackable and implicitly quantity one. No owner, durability, custom property bag, or history fields yet.
 - **WorldItem:** the scene representation of an instance, with a world transform and interaction/collision. Visual or preview nodes are not the object identity. Transform belongs to the world representation for now, not to shared item data.
-- **Inventory:** a holder of instances, with one slot for this test. Counts may be derived for display; counts cannot replace identity. Other containers are future holders, not a base-class hierarchy to implement now.
+- **Inventory:** a holder of instances with eight stable slots for this prototype. Counts may be derived for display; counts cannot replace identity. Other containers are future holders, not a base-class hierarchy to implement now.
 
 An item has exactly one committed location: world or inventory. Do not duplicate authoritative location fields across models. Future ownership means who owns an item, not which holder currently contains it; neither player ownership nor cross-world location metadata is required yet.
 
@@ -107,7 +107,7 @@ Pickup validates reach, obstruction, capacity, and an in-progress guard before a
 
 Drop and place are one operation in Spec 001. Entering placement leaves the real instance in inventory and displays a non-colliding, non-pickable preview. Aim at floor within reach, rotate around the vertical axis, and validate the footprint. Confirm revalidates and transfers the instance to a new world representation at the preview pose. Complete synchronously; if creation or validation fails, leave inventory unchanged and remove any partial representation. Cancel removes only the preview. Do not add a second physics-toss path.
 
-Use a clearly asymmetric block as the item so yaw changes are visible. Proposed limits: flat courtyard floor only, free horizontal position within reach, 90-degree yaw increments, no overlap with walls/player, no stacking, surface attachment, snapping grid, gravity simulation, or arbitrary three-axis rotation. These constraints keep the slice small; they do not define the long-term placement rules. Repositioning in the slice is pickup followed by placement.
+The first authored item is a clearly asymmetric Dreamscape beer bottle so yaw changes remain visible. Current limits are free horizontal position within reach on validated support, 90-degree yaw increments, and no overlap with walls, player, NPCs or items. There is no stacking, surface attachment, snapping grid, gravity simulation or arbitrary three-axis rotation. Repositioning remains pickup followed by placement.
 
 Crafting is deferred from Spec 001. When added later, crafted output should be an item instance usable by this same placement path. Ingredient consumption/output creation rules belong to that later spec; no crafting implementation or tests now.
 

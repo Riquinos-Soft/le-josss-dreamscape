@@ -21,13 +21,13 @@ sustained performance/download measurements remain open.
 ## Current feature sequence
 
 The developer requested both feature specs and sequential execution plans. Lucas
-was selected first and is now implemented; the bag remains the next prepared
-feature candidate.
+and the travelling bag are now implemented. The next requested unit is a focused
+Lucas visual upgrade and short garden patrol.
 
 1. Implemented: [Lucas Maconheiro and paged dialogue](specs/013-lourizan-guide-dialogue.md),
    [Plan 012](plans/012-lourizan-guide.md): a hippie forest-worker NPC in Lourizán,
    overhead classic RPG speech balloon and four source-backed history paragraphs.
-2. Next prepared candidate: [Eight-slot bag and travelling objects](specs/012-eight-slot-bag.md),
+2. Implemented: [Eight-slot bag and travelling objects](specs/012-eight-slot-bag.md),
    [Plan 011](plans/011-eight-slot-bag.md): pickup directly into slots, select to
    place, a Dreamscape beer and preservation across location travel within a session.
 
