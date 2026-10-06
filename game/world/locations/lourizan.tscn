@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://world/lourizan_exterior.gd" id="4_script"]
 [ext_resource type="PackedScene" path="res://world/travel/exit.tscn" id="5_exit"]
+[ext_resource type="PackedScene" path="res://npcs/lourizan_guide.tscn" id="6_guide"]
 
 [sub_resource type="Environment" id="Environment_scan"]
 background_mode = 1
@@ -28,3 +29,6 @@ position = Vector3(8, 0.1, 0)
 
 [node name="Exit" parent="." instance=ExtResource("5_exit")]
 position = Vector3(6, 0.2, -4)
+
+[node name="LucasMaconheiro" parent="." instance=ExtResource("6_guide")]
+position = Vector3(5, 0.2, 4.5)

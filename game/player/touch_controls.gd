@@ -2,12 +2,14 @@ extends Control
 ## One finger owns movement; other fingers can aim and use actions independently.
 
 signal map_requested
+signal talk_requested
 
 const RADIUS := 110.0
 var enabled: bool = false
 var input_enabled: bool = true
 var travel_available: bool = false
 var travel_only: bool = false
+var talk_available: bool = false
 var stick_finger: int = -1
 var stick_center := Vector2.ZERO
 var stick_value := Vector2.ZERO
@@ -121,6 +123,8 @@ func handle_touch(event: InputEvent) -> void:
 			if action_rects[action].has_point(event.position):
 				if action == "map":
 					map_requested.emit()
+				elif action == "talk":
+					talk_requested.emit()
 				else:
 					items.commands.append(StringName(action))
 				feedback_action = action
@@ -158,6 +162,8 @@ func _process(delta: float) -> void:
 		queue_redraw()
 	if portrait:
 		message.text = "Gira el móvil\npara jugar en horizontal"
+	elif talk_available:
+		message.text = "Lucas Maconheiro · Pulsa Hablar"
 	elif travel_only:
 		message.text = "Pazo de Lourizán · explora el lugar"
 	elif items.placement_active:
@@ -173,7 +179,9 @@ func _process(delta: float) -> void:
 
 func update_actions() -> void:
 	var names: Array[String] = []
-	if travel_available:
+	if talk_available:
+		names.append("talk")
+	elif travel_available:
 		names.append("map")
 	elif travel_only:
 		pass
@@ -210,7 +218,8 @@ func _draw() -> void:
 		"begin": "Colocar",
 		"right": "Girar",
 		"confirm": "Confirmar",
-		"map": "Mapa"
+		"map": "Mapa",
+		"talk": "Hablar"
 	}
 	var font := ThemeDB.fallback_font
 	for action in action_rects:
@@ -234,6 +243,16 @@ func _draw() -> void:
 
 func draw_action_icon(action: String, center: Vector2, color: Color) -> void:
 	match action:
+		"talk":
+			draw_circle(center, 16, color, false, 3.0, true)
+			draw_polyline(
+				PackedVector2Array(
+					[center + Vector2(-8, 14), center + Vector2(-13, 24), center + Vector2(0, 17)]
+				),
+				color,
+				3.0,
+				true
+			)
 		"map":
 			draw_rect(Rect2(center - Vector2(17, 13), Vector2(34, 26)), color, false, 3.0)
 			draw_line(center + Vector2(-4, -12), center + Vector2(-4, 12), color, 2.0)

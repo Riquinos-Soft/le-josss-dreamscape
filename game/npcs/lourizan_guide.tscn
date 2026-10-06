@@ -1,0 +1,46 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://npcs/lourizan_guide.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/art/characters/lucas_maconheiro_idle_v01.png" id="2_texture"]
+
+[sub_resource type="CapsuleShape3D" id="Capsule_guide"]
+radius = 0.28
+height = 1.7
+
+[sub_resource type="StandardMaterial3D" id="Marker_material"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.95, 0.82, 0.38, 1)
+
+[node name="LucasMaconheiro" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="Sprite" type="Sprite3D" parent="."]
+position = Vector3(0, 0.9, 0)
+texture_filter = 1
+texture = ExtResource("2_texture")
+hframes = 2
+vframes = 2
+pixel_size = 0.0029
+billboard = 1
+
+[node name="Body" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape3D" parent="Body"]
+position = Vector3(0, 0.85, 0)
+shape = SubResource("Capsule_guide")
+
+[node name="Head" type="Marker3D" parent="."]
+position = Vector3(0, 1.78, 0)
+
+[node name="TalkMarker" type="Label3D" parent="."]
+position = Vector3(0, 2.12, 0)
+pixel_size = 0.003
+billboard = 1
+text = "E · Hablar"
+font_size = 32
+outline_size = 8
+modulate = Color(1, 0.89, 0.45, 1)
+no_depth_test = true

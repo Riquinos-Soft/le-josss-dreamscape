@@ -1,8 +1,8 @@
 # Plan 012 — Lourizán guide
 
 Governing spec: [013](../specs/013-lourizan-guide-dialogue.md).
-Status: planned, 2026-10-06. Planning authorized; implementation not started.
-Actual planning base: `2a059ce`; no pre-existing worktree modifications.
+Status: done, 2026-10-06. Implementation authorized and completed.
+Actual planning base: `2a059ce`; implementation base: `426b83c`.
 Design references: developer's NPC/old RPG balloon brief, Spec 009 travel,
 Spec 005 touch and the sourced dialogue in Spec 013. No external Bible page was
 provided. Observable objective: walk up, talk, advance four paragraphs and leave.
@@ -66,7 +66,7 @@ alone do not create a new blanket deployment authorization.
 
 ## N1 — Place a visible stationary guide
 
-Status: planned. Owner: the single Sol 5.6 Medium executor/integrator.
+Status: done. Owner: the session executor/integrator.
 Dependencies: developer starts this plan. Size: one focused working commit; no numeric budget assumed.
 
 Minimum context: Spec 013 R1 and local Pazo composition; current pixel character art conventions.
@@ -86,7 +86,7 @@ Acceptance: A recognizably separate NPC is visible and reachable, with no duplic
 
 ## N2 — Add a proximity talk prompt
 
-Status: planned. Owner: the single Sol 5.6 Medium executor/integrator.
+Status: done. Owner: the session executor/integrator.
 Dependencies: N1. Size: one focused working commit; no numeric budget assumed.
 
 Minimum context: Spec 013 R2/shared input; dreamscape.gd active location and touch_controls.gd action routing.
@@ -106,7 +106,7 @@ Acceptance: Talk is discoverable; its input does not pick up an item simultaneou
 
 ## N3 — Implement the balloon and page state locally
 
-Status: planned. Owner: the single Sol 5.6 Medium executor/integrator.
+Status: done. Owner: the session executor/integrator.
 Dependencies: N1; N2 integrated before production wiring. Size: one focused working commit; no numeric budget assumed.
 
 Minimum context: Spec 013 R3–R5 and exact four paragraphs; travel_map UI patterns for handled input.
@@ -126,7 +126,7 @@ Acceptance: All supplied text is legible and complete, above or pointing to the 
 
 ## N4 — Connect conversation to session controls
 
-Status: planned. Owner: the single Sol 5.6 Medium executor/integrator.
+Status: done. Owner: the session executor/integrator.
 Dependencies: N2 and N3. Size: one focused working commit; no numeric budget assumed.
 
 Minimum context: Spec 013 R6/R7; player.set_input_locked; dreamscape map locks; touch input consumption; installed bag contracts if any.
@@ -147,7 +147,7 @@ Acceptance: Conversation works in the actual game; Joss stays still and no hidde
 
 ## N5 — Verify travel, replay and final art
 
-Status: planned. Owner: the single Sol 5.6 Medium executor/integrator.
+Status: done. Owner: the session executor/integrator.
 Dependencies: N4. Size: one focused working commit; no numeric budget assumed.
 
 Minimum context: Spec 013 acceptance and existing travel tests; guide source notes.
@@ -167,7 +167,7 @@ Acceptance: No stale UI or lock across return trips; copy and art have concrete 
 
 ## N6 — Validate Web and record completion
 
-Status: planned. Owner: the single Sol 5.6 Medium executor/integrator.
+Status: done. Owner: the session executor/integrator.
 Dependencies: N5. Size: one focused working commit; no numeric budget assumed.
 
 Minimum context: All Spec 013 ACs and package evidence.
@@ -198,6 +198,17 @@ Acceptance: Feature can be picked up from a clean checkout and its evidence supp
 
 ## Handoff
 
-Planning base `2a059ce`; N1–N6 unstarted. First action after launch: create the
-visible guide and verify its supported placement for N1. Preferred first feature
-because its scope and rollback are smaller than inventory travel ownership.
+Planning base `2a059ce`; implementation base `426b83c`; N1–N6 complete. Lucas is
+composed only in Lourizán at local `Vector3(5, 0.2, 4.5)`, with original four-way
+sprite art, 2 m range/line-of-sight talk checks, overhead paged dialogue and
+desktop/touch input gating. Dialogue closes safely on focus loss, respawn and
+location changes; returning creates one guide and restarts at page one.
+
+Final evidence: `make check GODOT=/Applications/Godot.app/Contents/MacOS/Godot`
+passed documentation, lint/import, 786 checks and Web export; log
+`build/verification/lucas/full-check.log`. Native captured dialogue passed 34
+checks; log `build/verification/lucas/dialogue-native-final.log` and screenshots
+in the same directory. The pinned gdtoolkit deprecation remains. Browser and
+physical mobile conversation checks, plus developer art/copy acceptance, remain
+open and do not prevent the spec's implemented status. Plan 011 is now the next
+prepared feature candidate.

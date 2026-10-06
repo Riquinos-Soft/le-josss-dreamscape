@@ -1,0 +1,13 @@
+{
+  "asset_id": "lucas_maconheiro_idle_v01",
+  "production_status": "implemented; developer visual review pending",
+  "character": "Lucas Maconheiro",
+  "frames": ["southeast", "southwest", "northwest", "northeast"],
+  "layout": [2, 2],
+  "image_size": [1254, 1254],
+  "pivot": "feet near 88% of each cell; runtime Sprite3D centered at 0.9 m",
+  "filter": "nearest",
+  "mipmaps": false,
+  "source": "OpenAI built-in image generation, 2026-10-06",
+  "prompt": "Original transparent four-direction pixel sprite sheet for Lucas Maconheiro: friendly fictional Galician forest worker with a relaxed hippie appearance, olive field jacket, ochre shirt, brown trousers, worn boots, canvas satchel, tied-back dark hair, beard and woven bracelet; elevated 3/4 RPG view; no text, scenery, tools, weapons or drug imagery."
+}

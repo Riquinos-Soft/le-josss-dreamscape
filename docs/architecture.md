@@ -1,6 +1,6 @@
 # Repository and vertical-slice architecture
 
-Current local entry point is `world/dreamscape.tscn`. It hosts the production pixel-art Jacobo Risa street and keeps its player, sprite, orthographic camera, pixel pass, item loop and touch controls during travel to the captured home or Pazo exteriors. The home exterior is a map destination; its physically connected home-to-bar route remains pending real layout references. See [Spec 009](specs/009-lourizan-and-map-travel.md) and [Spec 008](specs/008-real-home-microzone.md).
+Current local entry point is `world/dreamscape.tscn`. It hosts the production pixel-art Jacobo Risa street and keeps its player, sprite, orthographic camera, pixel pass, item loop, touch controls and dialogue layer during travel to the captured home or Pazo exteriors. The home exterior is a map destination; its physically connected home-to-bar route remains pending real layout references. See [Spec 009](specs/009-lourizan-and-map-travel.md) and [Spec 008](specs/008-real-home-microzone.md).
 
 ## Captured exterior
 
@@ -23,6 +23,8 @@ Blender authoring uses Metric, Unit Scale 1.0, and meter-sized dimensions with t
 - `game/player/`: player scene/controller, pure movement-direction helper, and dedicated camera rig. No interaction probe implemented yet.
 - `game/items/`: constant item definition, runtime instance, procedural world representation, and courtyard-local pickup/placement coordination.
 - `game/inventory/`: a holder of item instances, independent of scene nodes; not a dictionary of type counts as the authoritative state.
+- `game/npcs/`: focused place-owned NPC scenes; currently the stationary Lourizán guide.
+- `game/dialogue/`: local dialogue data and the session-owned paged speech balloon.
 - HUD: a few procedural Control nodes owned by `ItemLoop`; no separate UI directory/framework is needed yet.
 - `game/assets/`: approved runtime GLB, textures, materials, and eventual audio.
 - `game/tests/`: direction, keyboard, courtyard, and item lifecycle checks.
@@ -60,6 +62,15 @@ dark asphalt and local pixel-stipple wall cutaways. A world-only screen pass
 leaves the HUD at full resolution. Generated source art, prompts, normalized
 runtime sheets and metadata are retained. These remain draft visual assets.
 Walk animation and a three-location map are present in the local entry scene. The Pazo uses authored, material-batched architecture, simple collision and the production screen pixel pass with location-specific framing. Its original scan is retained as an offline reference and excluded from Web export. New places follow [the place-authoring workflow](place-authoring.md).
+
+Lourizán composes one stationary guide as part of the location scene. The session
+root binds that explicit guide after travel and owns the screen-space dialogue
+layer, so unloading a place cannot leave its NPC UI alive. Talk uses a 2 m reach
+and direct line-of-sight check. While dialogue is open, the session directly locks
+player, item, map and touch actions, then restores only the controls it acquired.
+This is a deliberately focused implementation for one guide, with no NPC registry,
+quest system, global event bus or saved conversation state. See
+[Spec 013](specs/013-lourizan-guide-dialogue.md).
 
 ## Single-item implementation
 

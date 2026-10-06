@@ -1,6 +1,7 @@
 extends Node3D
 ## Travel keeps the production street, player, camera, sprite and pixel pass alive.
 
+const LourizanHistory = preload("res://dialogue/lourizan_history.gd")
 const LOCATION_PATHS := {
 	&"home": "res://world/locations/home.tscn",
 	&"lourizan": "res://world/locations/lourizan.tscn",
@@ -22,6 +23,8 @@ var near_exit: Area3D
 var busy := false
 var street_environment: Environment
 var item_collision_layer: int
+var active_guide: Node3D
+var dialogue_controls_owned := false
 
 @onready var street: Node3D = $Street
 @onready var player: CharacterBody3D = $Street/Player
@@ -30,6 +33,7 @@ var item_collision_layer: int
 @onready var map_ui: CanvasLayer = $TravelMap
 @onready var touch_controls: Control = $Street/TouchHUD/TouchControls
 @onready var item_loop: Node = $Street/ItemLoop
+@onready var dialogue: CanvasLayer = $DialogueBubble
 
 
 func _ready() -> void:
@@ -39,11 +43,25 @@ func _ready() -> void:
 	map_ui.cancel_requested.connect(close_map)
 	map_ui.destination_confirmed.connect(travel_to)
 	touch_controls.map_requested.connect(open_map)
+	touch_controls.talk_requested.connect(open_dialogue)
+	dialogue.closed.connect(on_dialogue_closed)
+	player.respawned.connect(close_dialogue)
 	watch_exit(street)
 
 
 func _process(_delta: float) -> void:
-	if map_ui.is_open:
+	var can_talk: bool = (
+		is_instance_valid(active_guide)
+		and not dialogue.is_open
+		and not map_ui.is_open
+		and not busy
+		and not item_loop.placement_active
+		and active_guide.can_talk(player)
+	)
+	if is_instance_valid(active_guide):
+		active_guide.set_prompt_visible(can_talk)
+	touch_controls.talk_available = can_talk
+	if map_ui.is_open or dialogue.is_open:
 		return
 	var location: Node3D = street if current_id == &"street" else active_location
 	if location == null:
@@ -67,7 +85,12 @@ func _process(_delta: float) -> void:
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
-		if event.physical_keycode == KEY_ESCAPE and map_ui.is_open and not busy:
+		if dialogue.is_open:
+			return
+		if event.physical_keycode == KEY_E and can_open_dialogue():
+			open_dialogue()
+			get_viewport().set_input_as_handled()
+		elif event.physical_keycode == KEY_ESCAPE and map_ui.is_open and not busy:
 			close_map()
 			get_viewport().set_input_as_handled()
 		elif event.is_action_pressed("open_travel_map"):
@@ -104,7 +127,13 @@ func on_exit_left(body: Node3D) -> void:
 
 
 func open_map() -> void:
-	if busy or near_exit == null or not is_instance_valid(near_exit) or map_ui.is_open:
+	if (
+		busy
+		or dialogue.is_open
+		or near_exit == null
+		or not is_instance_valid(near_exit)
+		or map_ui.is_open
+	):
 		return
 	player.set_input_locked(true)
 	item_loop.process_mode = Node.PROCESS_MODE_DISABLED
@@ -122,6 +151,61 @@ func close_map() -> void:
 		item_loop.process_mode = Node.PROCESS_MODE_INHERIT
 	touch_controls.input_enabled = true
 	map_ui.show_prompt(near_exit != null and is_instance_valid(near_exit))
+
+
+func can_open_dialogue() -> bool:
+	return (
+		not busy
+		and not map_ui.is_open
+		and not dialogue.is_open
+		and not item_loop.placement_active
+		and is_instance_valid(active_guide)
+		and active_guide.can_talk(player)
+	)
+
+
+func open_dialogue() -> void:
+	if not can_open_dialogue():
+		return
+	dialogue_controls_owned = true
+	player.set_input_locked(true)
+	item_loop.process_mode = Node.PROCESS_MODE_DISABLED
+	item_loop.commands.clear()
+	touch_controls.input_enabled = false
+	touch_controls.reset_touch()
+	map_ui.guide.hide()
+	map_ui.prompt.hide()
+	active_guide.set_prompt_visible(false)
+	dialogue.open(
+		LourizanHistory.SPEAKER, active_guide.get_node("Head"), LourizanHistory.PARAGRAPHS
+	)
+
+
+func close_dialogue() -> void:
+	if dialogue.is_open:
+		dialogue.close()
+
+
+func on_dialogue_closed() -> void:
+	if not dialogue_controls_owned:
+		return
+	dialogue_controls_owned = false
+	player.set_input_locked(false)
+	if current_id == &"street":
+		item_loop.process_mode = Node.PROCESS_MODE_INHERIT
+	touch_controls.input_enabled = true
+	touch_controls.reset_touch()
+	map_ui.show_prompt(near_exit != null and is_instance_valid(near_exit))
+
+
+func bind_active_guide() -> void:
+	if is_instance_valid(active_guide):
+		active_guide.set_prompt_visible(false)
+	active_guide = null
+	if current_id == &"lourizan" and is_instance_valid(active_location):
+		active_guide = active_location.get_node_or_null("LucasMaconheiro")
+	touch_controls.talk_available = false
+	touch_controls.update_actions()
 
 
 func set_street_active(active: bool) -> void:
@@ -187,6 +271,7 @@ func travel_to(destination: StringName) -> bool:
 		active_location.queue_free()
 	active_location = incoming
 	current_id = destination
+	bind_active_guide()
 	if destination == &"street":
 		set_street_active(true)
 	player.global_position = hit.position + Vector3.UP * 0.05

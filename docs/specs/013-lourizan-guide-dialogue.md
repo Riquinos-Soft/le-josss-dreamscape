@@ -1,12 +1,12 @@
 # Spec 013 — Lourizán guide and paged dialogue
 
-Status: draft
+Status: implemented
 Updated: 2026-10-06
 Language: en
 
-Authorization: developer requested a spec and stepwise plan on 2026-10-06.
-This delivery is planning only; implementation starts when its plan is launched.
-Acceptance: no NPC/dialogue implementation yet.
+Authorization: developer requested the spec and then launched implementation with
+`Adelante con Lucas` on 2026-10-06. The scoped feature is implemented. Developer
+visual/copy acceptance and real browser/physical-device gameplay remain pending.
 
 ## Objective
 
@@ -23,8 +23,8 @@ through a classic pixel RPG speech balloon, advancing one paragraph at a time.
   guide, not Montero Ríos. Original pixel sprite, standing idle,
   approximately human scale, a simple physical collider and a 2 m interaction
   radius. No autonomous movement. Place on supported forecourt ground near the
-  arrival route, clear of map exit, stairs, beds and path bottlenecks. Candidate
-  coordinate `(10, 0, -3) * place_scale` must be verified visually and physically.
+  arrival route, clear of map exit, stairs, beds and path bottlenecks. The verified
+  production position is local `Vector3(5, 0.2, 4.5)` before location scaling.
 - R2 — In range with clear line of sight, show `E · Hablar` and a small talk marker
   above the guide. E or a touch `Hablar` button begins. Being behind a wall, outside
   reach, busy travelling, in placement mode or in another modal must block talk.
@@ -112,12 +112,25 @@ The guide and bag can be implemented independently and integrated sequentially.
 
 ## Validation and open questions
 
-Documentation-only work now. [Plan 012](../plans/012-lourizan-guide.md) specifies
-implementation packages and commands. No blocking question; exact sprite and
-bubble styling are routine choices within this spec. The settled character
-direction is Lucas Maconheiro, a hippie forest worker;
-minor costume details remain routine art choices. Developer visual review may
-adjust them later.
+Implemented through [Plan 012](../plans/012-lourizan-guide.md). Final automated
+validation on 2026-10-06:
+
+- `make check GODOT=/Applications/Godot.app/Contents/MacOS/Godot`: documentation,
+  formatting/lint, import, **786 checks with zero failures**, and Web release
+  export. Log: `build/verification/lucas/full-check.log`.
+- Native Compatibility dialogue run with `--capture`: **34 checks with zero
+  failures**. Log: `build/verification/lucas/dialogue-native-final.log`; captures:
+  `lucas-approach.png` and `lucas-dialogue.png` in the same evidence directory.
+- Original Lucas sprite metadata and generation prompt live beside
+  `game/assets/art/characters/lucas_maconheiro_idle_v01.png`.
+
+The native captures were inspected for grounding, route clearance, sprite scale,
+speaker pointer and panel bounds. The full suite covers range/line of sight,
+input priority and locking, page progression, focus loss, touch talk, travel away
+and return, and the absence of duplicate guides. The Web artifact exported; no
+manual browser conversation or physical-device run is claimed. The pinned
+gdtoolkit `pkg_resources` deprecation warning remains. Developer visual/copy
+acceptance is still open; there is no blocking implementation question.
 
 ## References
 

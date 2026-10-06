@@ -1,6 +1,34 @@
 # Development setup and verified baseline
 
-## Bag and Lucas planning handoff — 2026-10-06
+## Lucas Maconheiro guide dialogue — 2026-10-06
+
+[Spec 013](specs/013-lourizan-guide-dialogue.md) and
+[Plan 012](plans/012-lourizan-guide.md) are implemented. Lourizán now contains one
+stationary Lucas Maconheiro, an original four-direction pixel character with an
+olive field jacket, satchel, tied-back hair and beard. Within 2 m and clear line
+of sight, `E · Hablar` appears; desktop or touch opens a four-page Spanish account
+of the Pazo's history based on the linked Turismo de Galicia source. The balloon
+tracks Lucas's projected head, remains screen-clamped, and uses explicit
+Continue/Finish controls. Movement, items and travel remain locked until close.
+Focus loss, respawn and travel clean up the modal, and a return to Lourizán
+creates exactly one fresh guide.
+
+Original runtime sprite:
+`game/assets/art/characters/lucas_maconheiro_idle_v01.png`. Its adjacent JSON
+records the built-in image generator, complete prompt and grid layout. Final
+native captures were inspected for grounding, route clearance, scale and dialogue
+bounds in `build/verification/lucas/lucas-approach.png` and
+`lucas-dialogue.png`.
+
+`make check GODOT=/Applications/Godot.app/Contents/MacOS/Godot` passed docs,
+format/lint, import, **786 checks with zero failures**, and Web release export.
+Log: `build/verification/lucas/full-check.log`. Final native Compatibility run
+passed **34 checks with zero failures**; log:
+`build/verification/lucas/dialogue-native-final.log`. The pinned gdtoolkit
+`pkg_resources` warning remains. Manual browser conversation, physical mobile
+gameplay and developer visual/copy acceptance are pending.
+
+## Historical: bag and Lucas planning handoff — 2026-10-06
 
 Planning-only delivery from clean baseline `2a059ce`: drafted
 [Spec 012](specs/012-eight-slot-bag.md)/[Plan 011](plans/011-eight-slot-bag.md) for
@@ -10,13 +38,14 @@ for Lucas Maconheiro, a hippie forest worker with overhead paged historical dial
 The explicit naming/appearance correction is included. NPC history is original
 paraphrase of the linked Turismo de Galicia article, inspected during planning.
 
-Inspected current inventory, item identity/representation, placement validation,
+At that planning point, the current inventory, item identity/representation, placement validation,
 travel teardown and touch routing. Plans address singular world-item/null access,
 source/destination collision isolation, ownership rollback, modal input and touch
 click-through. Each package names context, allowed paths, contracts, tests and
-handoff. Seven bag packages and six NPC packages are unstarted. Recommended next
-execution: N1 in Plan 012 with Sol 5.6 Medium, selected by the developer. No model
-was spawned/switched and no runtime behavior or art asset changed in this delivery.
+handoff. Seven bag packages and six NPC packages were unstarted. The NPC packages
+were subsequently completed as recorded above; the bag plan remains unstarted.
+No model was spawned/switched and no runtime behavior or art asset changed in
+that planning delivery.
 
 Validation: `python3 tools/check_docs.py` and `git diff --check`; documentation
 only, so gameplay tests/export were not repeated. Specs remain draft, preserving
