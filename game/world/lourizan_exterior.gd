@@ -200,22 +200,19 @@ func build_palace() -> void:
 	box(Vector3(-0.75, 1.8, 0), Vector3(4.5, 3.6, 24), shadow, true)
 	box(Vector3(-0.75, 3.62, 0), Vector3(4.8, 0.12, 24.2), trim)
 	balustrade(Vector3(1.6, 3.7, -6), Vector3(1.6, 3.7, 6))
-	box(Vector3(1.52, 0.8, 0), Vector3(0.1, 1.6, 1.85), glass)
-	var arch := CylinderMesh.new()
-	arch.top_radius = 0.94
-	arch.bottom_radius = 0.94
-	arch.height = 0.10
-	arch.radial_segments = 24
-	piece(arch, Vector3(1.54, 1.65, 0), glass, Vector3(0, 0, PI / 2))
-	for index in 13:
-		var angle := float(index) * PI / 12
-		box(
-			Vector3(1.63, 1.65 + sin(angle) * 1.1, cos(angle) * 1.1),
-			Vector3(0.25, 0.28, 0.28),
-			trim
-		)
-	for z in [-1.1, 1.1]:
-		box(Vector3(1.63, 0.8, z), Vector3(0.25, 1.6, 0.24), trim)
+	# Two closed-backed arches with a substantial central pier; no interior access.
+	for center_z in [-0.95, 0.95]:
+		for side in [-1.0, 1.0]:
+			box(Vector3(1.63, 0.82, center_z + side * 0.84), Vector3(0.32, 1.64, 0.28), trim)
+		for index in 13:
+			var angle := float(index) * PI / 12
+			box(
+				Vector3(1.63, 1.58 + sin(angle) * 0.84, center_z + cos(angle) * 0.84),
+				Vector3(0.32, 0.25, 0.26),
+				trim
+			)
+	box(Vector3(1.64, 0.92, 0), Vector3(0.38, 1.84, 0.32), stone)
+	# Rounded landing slabs connect each lower stair run to the forecourt.
 	for z in [-17.0, -14.0, -5.0, 5.0, 14.0, 17.0]:
 		box(Vector3(-2.25, 0.24, z), Vector3(0.9, 0.48, 1.8), shadow)
 		orb(Vector3(-2.25, 0.8, z), 0.62, green)
@@ -227,6 +224,18 @@ func build_palace() -> void:
 
 func build_stairs() -> void:
 	for z in [-9.0, 9.0]:
+		var landing := CylinderMesh.new()
+		landing.top_radius = 2.25
+		landing.bottom_radius = 2.25
+		landing.height = 0.16
+		landing.radial_segments = 32
+		landing.rings = 1
+		piece(landing, Vector3(5.85, 0.08, z), stone)
+		for index in 9:
+			var angle := -PI / 2.0 + float(index) * PI / 8.0
+			var rail_position := Vector3(5.85 + cos(angle) * 2.0, 0.42, z + sin(angle) * 2.0)
+			column(rail_position, 0.09, 0.72, trim)
+			orb(rail_position + Vector3.UP * 0.43, 0.13, trim)
 		for step in 18:
 			var height := (18 - step) * 0.2
 			box(Vector3(1.5 + step * 0.24, height / 2, z), Vector3(0.26, height, 4.2), stone)

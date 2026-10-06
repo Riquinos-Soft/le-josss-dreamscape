@@ -38,7 +38,23 @@ func run() -> void:
 		if not await walk_to(point * scene.place_scale):
 			finish()
 			return
-	check(player.position.y < 0.5, "stairs return to the forecourt")
+	check(player.position.y < 0.5, "first stair returns to the forecourt")
+	for point in [
+		Vector3(7, 0, 9),
+		Vector3(7, 0, -9),
+		Vector3(5.6, 0, -9),
+		Vector3(3.5, 0, -9),
+		Vector3(0.5, 0, -9)
+	]:
+		if not await walk_to(point * scene.place_scale):
+			finish()
+			return
+	check(player.position.y > 3.5 * scene.place_scale, "second stair reaches the raised terrace")
+	for point in [Vector3(3.5, 0, -9), Vector3(6.5, 0, -9)]:
+		if not await walk_to(point * scene.place_scale):
+			finish()
+			return
+	check(player.position.y < 0.5, "second stair returns to the forecourt")
 	finish()
 
 
