@@ -1,0 +1,8 @@
+{
+  "asset_id": "birra_dreamscape_icon_v01",
+  "production_status": "implemented; developer visual review pending",
+  "image_size": [1536, 1536],
+  "source": "OpenAI built-in image generation, 2026-10-06",
+  "prompt": "Create one original pixel-art inventory icon on a transparent background for a fantasy game item called Birra Dreamscape. A small upright amber glass beer bottle, cream label with a simple teal crescent-and-star dream symbol, teal metal cap, warm golden highlights, chunky hand-authored 1990s RPG pixels, readable at 48x48 and 64x64, centered with generous transparent margin, front three-quarter view, no words, no brand logo, no hands, no scenery, no border, no drop shadow. Output a single isolated bottle icon, not a sprite sheet.",
+  "runtime_use": "bag slot icon; world representation is matching authored 3D geometry"
+}

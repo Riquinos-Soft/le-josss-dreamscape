@@ -21,6 +21,7 @@ func run() -> void:
 	var original = loop.world_item.item
 	var identity: int = original.session_id
 	var definition = original.definition
+	var half_height: float = definition.size.y * 0.5
 	check(loop.inventory.occupied_count() == 0, "starts empty")
 	var slot := Inventory.new()
 	check(slot.put(original), "slot accepts instance")
@@ -71,7 +72,7 @@ func run() -> void:
 			"cancel conserves instance"
 		)
 		loop.begin_placement()
-		loop.target = Vector3(100, 0.25, 100)
+		loop.target = Vector3(100, half_height, 100)
 		check(not loop.confirm_placement(), "out of reach rejected")
 		check(
 			(
@@ -81,9 +82,9 @@ func run() -> void:
 			),
 			"invalid confirm conserves instance"
 		)
-		loop.target = Vector3(player.position.x, 0.25, player.position.z)
+		loop.target = Vector3(player.position.x, half_height, player.position.z)
 		check(not loop.confirm_placement(), "player overlap rejected")
-		loop.target = Vector3(0, 0.25, 1.5)
+		loop.target = Vector3(0, half_height, 1.5)
 		loop.rotate_preview(cycle + 1)
 		var expected_yaw: float = loop.yaw
 		check(loop.confirm_placement(), "valid confirm succeeds")
@@ -99,7 +100,7 @@ func run() -> void:
 			"ID and definition survive"
 		)
 		check(
-			loop.world_item.position.is_equal_approx(Vector3(0, 0.25, 1.5)),
+			loop.world_item.position.is_equal_approx(Vector3(0, half_height, 1.5)),
 			"confirmed position matches"
 		)
 		check(
@@ -118,13 +119,13 @@ func run() -> void:
 	await frames(3)
 	check(not loop.pickup() and loop.world_item.item == original, "distant pickup unchanged")
 	player.position = Vector3(-3, 0, -0.6)
-	loop.world_item.position = Vector3(-3, 0.25, -2.2)
+	loop.world_item.position = Vector3(-3, half_height, -2.2)
 	await frames(3)
 	check(not loop.pickup(), "obstacle blocks pickup")
-	check(not loop.valid_pose(Vector3(-3, 0.25, -1.1), 0), "obstacle overlap rejected")
+	check(not loop.valid_pose(Vector3(-3, half_height, -1.29), 0), "obstacle overlap rejected")
 	player.position = Vector3(9, 0, 4)
 	await frames(3)
-	check(not loop.valid_pose(Vector3(9.8, 0.25, 4), 0), "wall/edge overlap rejected")
+	check(not loop.valid_pose(Vector3(9.97, half_height, 4), 0), "wall/edge overlap rejected")
 	check(not loop.valid_pose(Vector3(9, 1.25, 3), 0), "midair rejected")
 	print("Item lifecycle: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)

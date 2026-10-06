@@ -58,7 +58,7 @@ func run() -> void:
 	check(not loop.confirm_placement(), "reject floating placement")
 	loop.target = loop.supported_pose(player.position, 0.0)
 	check(not loop.confirm_placement(), "reject overlap with player")
-	var edge: Vector3 = loop.supported_pose(street.to_world(Vector3(4.4, 0, 0)), 0.0)
+	var edge: Vector3 = loop.supported_pose(street.to_world(Vector3(4.78, 0, 0)), 0.0)
 	check(edge == loop.INVALID_TARGET, "reject footprint crossing road edge")
 	check(loop.inventory.get_item(0) == original, "invalid placement cannot lose the item")
 	loop.cancel_placement()

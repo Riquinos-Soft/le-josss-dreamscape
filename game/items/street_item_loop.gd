@@ -48,7 +48,8 @@ func initial_placement_target() -> Vector3:
 func preview_pose(point: Vector3) -> Vector3:
 	var supported := supported_pose(point, yaw)
 	# An unsupported preview remains visible in red so it can still be dragged.
-	return point + Vector3.UP * 0.25 if supported == INVALID_TARGET else supported
+	var half_height: float = current_definition().size.y * 0.5
+	return point + Vector3.UP * half_height if supported == INVALID_TARGET else supported
 
 
 func rotate_preview(steps: int) -> void:
@@ -63,7 +64,8 @@ func supported_pose(point: Vector3, angle: float) -> Vector3:
 	if not point.is_finite():
 		return INVALID_TARGET
 	var basis := Basis(Vector3.UP, angle)
-	var half := Definition.SIZE * 0.5
+	var definition := current_definition()
+	var half := definition.size * 0.5
 	var highest := -INF
 	var lowest := INF
 	# Include the center and all four corners; never place partly beyond a road edge.
@@ -100,7 +102,7 @@ func valid_pose(point: Vector3, angle: float) -> bool:
 	if supported == INVALID_TARGET or absf(point.y - supported.y) > 0.015:
 		return false
 	var shape := BoxShape3D.new()
-	shape.size = Definition.SIZE
+	shape.size = current_definition().size
 	var query := PhysicsShapeQueryParameters3D.new()
 	query.shape = shape
 	query.transform = Transform3D(Basis(Vector3.UP, angle), point)
@@ -114,11 +116,12 @@ func update_hud() -> void:
 	place_button.disabled = inventory.get_item(0) == null or placement_active
 	if placement_active:
 		status.text = (
-			"Bloque · " + ("Puedes colocarlo" if target_valid else "Busca suelo libre cercano")
+			"Birra Dreamscape · "
+			+ ("Puedes colocarla" if target_valid else "Busca suelo libre cercano")
 		)
 	elif inventory.occupied_count() > 0:
 		status.text = (
 			"Bolsa %d/%d · P para colocar" % [inventory.occupied_count(), Inventory.CAPACITY]
 		)
 	else:
-		status.text = "E · Recoger bloque" if can_pickup() else "Acércate al bloque violeta"
+		status.text = "E · Guardar birra" if can_pickup() else "Acércate a la Birra Dreamscape"

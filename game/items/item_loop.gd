@@ -7,7 +7,7 @@ const WorldItem = preload("res://items/world_item.gd")
 const REACH: float = 2.0
 
 @export var floor_path: NodePath = ^"../Geometry/Floor"
-@export var initial_item_position: Vector3 = Vector3(0, 0.25, 1.5)
+@export var initial_item_position: Vector3 = Vector3(0, 0.15, 1.5)
 @export var hud_position: Vector2 = Vector2(12, 12)
 @export_multiline var control_help: String = (
 	"WASD / arrows or hold right mouse: walk | E: pickup"
@@ -112,8 +112,8 @@ func _physics_process(_delta: float) -> void:
 		preview.position = target
 		preview.rotation.y = yaw
 		target_valid = valid_pose(target, yaw)
-		preview.material_override.albedo_color = (
-			Color(0.3, 0.9, 0.65) if target_valid else Color(1, 0.22, 0.18)
+		WorldItem.tint_visual(
+			preview, Color(0.3, 0.9, 0.65) if target_valid else Color(1, 0.22, 0.18)
 		)
 	update_hud()
 
@@ -130,7 +130,8 @@ func placement_target_from_mouse() -> Vector3:
 	var hit = Plane(Vector3.UP, 0).intersects_ray(
 		camera.project_ray_origin(mouse), camera.project_ray_normal(mouse)
 	)
-	return hit + Vector3.UP * 0.25 if hit != null else Vector3(1000, 0.25, 1000)
+	var half_height: float = current_definition().size.y * 0.5
+	return hit + Vector3.UP * half_height if hit != null else Vector3(1000, half_height, 1000)
 
 
 func can_pickup() -> bool:
@@ -165,7 +166,9 @@ func begin_placement(slot_index: int = 0) -> bool:
 	touch_aim_pending = false
 	yaw = 0.0
 	target = initial_placement_target()
-	preview = WorldItem.make_visual(Color(0.3, 0.9, 0.65))
+	preview = WorldItem.make_visual(
+		inventory.get_item(selected_slot).definition, Color(0.3, 0.9, 0.65)
+	)
 	preview.name = "PlacementPreview"
 	get_parent().add_child(preview)
 	preview.position = target
@@ -174,8 +177,17 @@ func begin_placement(slot_index: int = 0) -> bool:
 
 func initial_placement_target() -> Vector3:
 	var point: Vector3 = player.global_position - player.visual.global_basis.z * 1.3
-	point.y = 0.25
+	point.y = current_definition().size.y * 0.5
 	return point
+
+
+func current_definition() -> Definition:
+	var selected: Item = inventory.get_item(selected_slot)
+	if selected != null:
+		return selected.definition
+	if is_instance_valid(world_item) and world_item.item != null:
+		return world_item.item.definition
+	return Definition.new()
 
 
 func rotate_preview(steps: int) -> void:
@@ -184,20 +196,21 @@ func rotate_preview(steps: int) -> void:
 
 
 func valid_pose(point: Vector3, angle: float) -> bool:
-	if not point.is_finite() or not is_equal_approx(point.y, 0.25):
+	var definition := current_definition()
+	if not point.is_finite() or not is_equal_approx(point.y, definition.size.y * 0.5):
 		return false
 	var ground := Vector3(point.x, player.global_position.y, point.z)
 	if player.global_position.distance_to(ground) > REACH or not clear_path(point):
 		return false
 	var basis := Basis(Vector3.UP, angle)
-	var half := Definition.SIZE * 0.5
+	var half := definition.size * 0.5
 	for x in [-half.x, half.x]:
 		for z in [-half.z, half.z]:
 			var corner := point + basis * Vector3(x, 0, z)
 			if absf(corner.x) > 10.0 or absf(corner.z) > 8.0:
 				return false
 	var shape := BoxShape3D.new()
-	shape.size = Definition.SIZE
+	shape.size = definition.size
 	var query := PhysicsShapeQueryParameters3D.new()
 	query.shape = shape
 	query.transform = Transform3D(basis, point)
