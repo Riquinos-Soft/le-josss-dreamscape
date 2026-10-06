@@ -1,0 +1,16 @@
+---
+description: Build recognizable real places from scans and photos with authored geometry
+alwaysApply: true
+---
+
+# Real places
+
+When creating or improving a real location, follow `docs/place-authoring.md`.
+Scans are primarily offline references for proportions, layout and elevation.
+Identify the architecture and landmarks in photos, then author clean coherent
+geometry, materials, gardens and collision for the game's established pixel style.
+Do not present a raw scan with a pixel filter, posterization or patched floor as
+finished art. Inspect both arrival framing and the player's walking route.
+For example, Lourizán requires its glazed wings, mansard roofs, central clock,
+paired staircases and terrace balustrades to remain recognizable.
+Record source links, estimated dimensions and actual visual/physical validation.

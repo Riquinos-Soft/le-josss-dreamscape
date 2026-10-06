@@ -77,3 +77,13 @@ Respect the existing product vision and accepted ADRs:
 - Prefer richer world interaction over excessive graphical fidelity.
 - Keep item identity independent from its current visual scene representation.
 - Do not let future dreams, alternate realities, housing, or persistence cause premature implementation of those systems.
+
+## Real-place creation
+
+- For every real place, follow [the place-authoring workflow](docs/place-authoring.md).
+- Use scans primarily as offline references for proportions, levels and layout.
+  Build coherent authored architecture, terrain, materials and collision from
+  those measurements and photographic references. A pixel filter over a raw scan
+  is not an acceptable finished location.
+- Identify the place's defining landmarks first, then inspect the actual gameplay
+  camera composition and walkable route before declaring a visual improvement.
