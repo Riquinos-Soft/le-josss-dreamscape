@@ -29,7 +29,7 @@ func run() -> void:
 		)
 		check(loop.begin_placement(), "start street placement")
 		var placement: Vector3 = loop.supported_pose(
-			street.to_world(Vector3(2.25, 0, 1.1)), cycle * PI / 2
+			street.to_world(Vector3(2.35, 0, 1.0)), cycle * PI / 2
 		)
 		check(placement != loop.INVALID_TARGET, "complete footprint supported on slope")
 		loop.yaw = cycle * PI / 2

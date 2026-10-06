@@ -103,8 +103,8 @@ func run() -> void:
 		check(not session.get_node("Street/Walkway").visible, "street world hidden")
 		check(session.get_node("Street/PixelPass").visible, "pixel pass still active")
 		check(
-			session.get_node("Street/TouchHUD/TouchControls").travel_only,
-			"touch travel mode active"
+			not session.get_node("Street/TouchHUD/TouchControls").travel_only,
+			"touch item actions remain active in Lourizán"
 		)
 		check(session.near_exit == null, "arrival does not reopen map")
 		if cycle == 0:

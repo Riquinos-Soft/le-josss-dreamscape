@@ -13,6 +13,8 @@ script = ExtResource("1_session")
 
 [node name="LocationSlot" type="Node3D" parent="."]
 
+[node name="ItemWorld" type="Node3D" parent="."]
+
 [node name="TravelMap" parent="." instance=ExtResource("3_map")]
 
 [node name="DialogueBubble" parent="." instance=ExtResource("4_dialogue")]

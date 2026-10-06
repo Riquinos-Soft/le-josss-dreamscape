@@ -22,7 +22,6 @@ var active_location: Node3D
 var near_exit: Area3D
 var busy := false
 var street_environment: Environment
-var item_collision_layer: int
 var active_guide: Node3D
 var dialogue_controls_owned := false
 
@@ -30,6 +29,7 @@ var dialogue_controls_owned := false
 @onready var player: CharacterBody3D = $Street/Player
 @onready var camera_rig: Node3D = $Street/CameraRig
 @onready var slot: Node3D = $LocationSlot
+@onready var item_world: Node3D = $ItemWorld
 @onready var map_ui: CanvasLayer = $TravelMap
 @onready var touch_controls: Control = $Street/TouchHUD/TouchControls
 @onready var item_loop: Node = $Street/ItemLoop
@@ -39,7 +39,6 @@ var dialogue_controls_owned := false
 
 func _ready() -> void:
 	street_environment = street.get_node("Environment").environment
-	item_collision_layer = item_loop.world_item.collision_layer
 	map_ui.open_requested.connect(open_map)
 	map_ui.cancel_requested.connect(close_map)
 	map_ui.destination_confirmed.connect(travel_to)
@@ -56,6 +55,26 @@ func _ready() -> void:
 	player.respawned.connect(close_dialogue)
 	player.respawned.connect(close_bag)
 	watch_exit(street)
+	call_deferred("bind_initial_item_context")
+
+
+func bind_initial_item_context() -> void:
+	await get_tree().physics_frame
+	item_loop.bind_initial_context(&"street", item_world, item_supports(street))
+
+
+func item_supports(location: Node3D) -> Array[CollisionObject3D]:
+	var supports: Array[CollisionObject3D] = []
+	if location == street:
+		supports.append(street.get_node("StreetCollision"))
+		return supports
+	var guide := location.get_node_or_null("LucasMaconheiro")
+	for node in location.find_children("*", "StaticBody3D", true, false):
+		if is_instance_valid(guide) and guide.is_ancestor_of(node):
+			continue
+		if node.collision_layer & 1:
+			supports.append(node)
+	return supports
 
 
 func _process(_delta: float) -> void:
@@ -169,8 +188,7 @@ func close_map() -> void:
 		return
 	map_ui.close_map()
 	player.set_input_locked(false)
-	if current_id == &"street":
-		item_loop.process_mode = Node.PROCESS_MODE_INHERIT
+	item_loop.process_mode = Node.PROCESS_MODE_INHERIT
 	touch_controls.input_enabled = true
 	map_ui.show_prompt(near_exit != null and is_instance_valid(near_exit))
 
@@ -214,8 +232,7 @@ func on_dialogue_closed() -> void:
 		return
 	dialogue_controls_owned = false
 	player.set_input_locked(false)
-	if current_id == &"street":
-		item_loop.process_mode = Node.PROCESS_MODE_INHERIT
+	item_loop.process_mode = Node.PROCESS_MODE_INHERIT
 	touch_controls.input_enabled = true
 	touch_controls.reset_touch()
 	map_ui.show_prompt(near_exit != null and is_instance_valid(near_exit))
@@ -251,8 +268,7 @@ func close_bag() -> void:
 		return
 	bag_ui.close_bag()
 	player.set_input_locked(false)
-	if current_id == &"street":
-		item_loop.process_mode = Node.PROCESS_MODE_INHERIT
+	item_loop.process_mode = Node.PROCESS_MODE_INHERIT
 	touch_controls.input_enabled = true
 	touch_controls.reset_touch()
 	map_ui.show_prompt(near_exit != null and is_instance_valid(near_exit))
@@ -273,13 +289,11 @@ func set_street_active(active: bool) -> void:
 	street.get_node("Environment").environment = street_environment if active else null
 	street.get_node("Light").visible = active
 	street.get_node("HUD").visible = active and not touch_controls.enabled
-	item_loop.process_mode = Node.PROCESS_MODE_INHERIT if active else Node.PROCESS_MODE_DISABLED
-	item_loop.get_node("HUD").visible = active and not touch_controls.enabled
-	item_loop.world_item.visible = active
-	item_loop.world_item.collision_layer = item_collision_layer if active else 0
+	item_loop.process_mode = Node.PROCESS_MODE_INHERIT
+	item_loop.get_node("HUD").visible = not touch_controls.enabled
 	if item_loop.preview != null:
-		item_loop.preview.visible = active and item_loop.placement_active
-	touch_controls.travel_only = not active
+		item_loop.preview.visible = item_loop.placement_active
+	touch_controls.travel_only = false
 	touch_controls.update_actions()
 
 
@@ -326,6 +340,9 @@ func travel_to(destination: StringName) -> bool:
 		return travel_failed("No hay suelo seguro en la entrada")
 	if active_location != null:
 		active_location.queue_free()
+	item_loop.commit_location_change(
+		destination, item_world, item_supports(street if destination == &"street" else incoming)
+	)
 	active_location = incoming
 	current_id = destination
 	bind_active_guide()
