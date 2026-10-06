@@ -80,6 +80,15 @@ func run() -> void:
 		await frames(12)
 		if cycle == 0:
 			await capture("lourizan-pixel-pass")
+			check(
+				await walk_to(Vector3(16, 0, 0) * session.active_location.place_scale),
+				"botanical garden approach remains walkable"
+			)
+			await capture("lourizan-botanical-garden")
+			check(
+				await walk_to(Vector3(6, 0, 0) * session.active_location.place_scale),
+				"garden returns to the central forecourt"
+			)
 		check(session.current_id == &"lourizan", "Lourizán active")
 		check(
 			session.get_node("Street/CameraRig").base_orthographic_size == 13.5,

@@ -1,5 +1,31 @@
 # Development setup and verified baseline
 
+## Reusable botanical kit and ground — 2026-10-06
+
+[Spec 011](specs/011-botanical-assets.md): original generated transparent atlas for
+cedar, metasequoia, magnolia and camellia, with measured UV regions and trunk
+baselines. Five reusable scenes (including the existing fern artwork), simple
+large-tree trunk collision and metre-sized billboards live in
+`game/world/vegetation/`. Atlas metadata records sources, generation and regions.
+Lourizán uses mixed species around its perimeter, six camellias in the beds and
+24 ferns along the garden edge. The garden is interpreted, not surveyed planting.
+
+Reusable ground materials add fixed gravel aggregate, moss margins, leaf litter
+and grass variation without coplanar overlays or animated noise. Current zoom,
+controller and travel behavior are unchanged. The asset README documents reuse.
+
+`PATH=/private/tmp/lourizan-author313/bin:$PATH make check GODOT=/Applications/Godot.app/Contents/MacOS/Godot`
+passed documentation, format/lint, import, **752 checks**, and Web export.
+Log: `build/verification/botanical/check.log`. Native production route command:
+`Godot --path game --max-fps 60 --script res://tests/test_location_travel.gd -- --capture`;
+logs `build/verification/botanical/native.log` and `native-final.log` (111 checks,
+zero failures in each); captures in
+`build/verification/lourizan/`, including `lourizan-botanical-garden.png`.
+Inspected the final garden view: new silhouettes and ground detail are visible;
+nearby canopies reveal Joss using the existing wall-opacity shader.
+Known tooling warning: pinned gdtoolkit `pkg_resources` deprecation. Browser and
+final developer visual acceptance remain separate from export/native checks.
+
 ## Camera clipping and Lourizán garden correction — 2026-10-06
 
 Supersedes the wide Pazo framing below. All places now share maximum camera size

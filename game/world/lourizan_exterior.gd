@@ -260,8 +260,8 @@ func statue(base: Vector3) -> void:
 
 
 func build_garden() -> void:
-	var grass := paint(Color("3a5036"))
-	var paving := paint(Color("777c75"))
+	var grass: ShaderMaterial = load("res://world/vegetation/grass.tres")
+	var paving: ShaderMaterial = load("res://world/vegetation/gravel.tres")
 	box(Vector3(2, -0.20, 0), Vector3(48, 0.4, 58), grass, true)
 	box(Vector3(8, 0.015, 0), Vector3(15, 0.035, 46), paving)
 	for z in [-12.0, 12.0]:
@@ -270,24 +270,22 @@ func build_garden() -> void:
 		for side in [-1.0, 1.0]:
 			box(Vector3(13 + side * 1.9, 0.75, z), Vector3(0.5, 0.65, 9.7), green)
 		for offset in [-3.5, 0.0, 3.5]:
-			orb(Vector3(13, 1.0, z + offset), 0.75, leaf)
-			for flower in 5:
-				orb(
-					Vector3(
-						13 + sin(flower * 2.2) * 0.5, 1.45, z + offset + cos(flower * 2.2) * 0.5
-					),
-					0.15,
-					bloom
-				)
+			add_plant(Vector3(13, 0.5, z + offset), "camellia", 0.75)
+	for i in 24:
+		add_plant(Vector3(16.5 + sin(i * 2.0), 0, -23.0 + i * 2), "fern", 1.1)
 	# Layer mature woodland around the forecourt, leaving stair and travel routes open.
 	for i in 18:
 		var z := -26.0 + i * 3.0
-		add_tree(Vector3(20.5 + sin(i * 2.3) * 2.2, 0, z), i % 2, 1.0 + (i % 3) * 0.16)
+		add_plant(
+			Vector3(20.5 + sin(i * 2.3) * 2.2, 0, z),
+			["cedar", "metasequoia", "magnolia"][i % 3],
+			0.75 + (i % 3) * 0.12
+		)
 	for i in 10:
-		add_tree(Vector3(-17.5, 0, -25.0 + i * 5.3), i % 2, 1.35)
+		add_plant(Vector3(-17.5, 0, -25.0 + i * 5.3), "metasequoia", 1.0)
 	for z in [-25.0, 25.0]:
 		for x in [-9.0, -2.0, 7.0, 14.0]:
-			add_tree(Vector3(x, 0, z), 1, 1.15)
+			add_plant(Vector3(x, 0, z), "cedar" if x < 0 else "magnolia", 0.9)
 	# Photographed climbing greenery softens the stone beside the central arch.
 	for side in [-1.0, 1.0]:
 		for i in 90:
@@ -305,21 +303,8 @@ func build_garden() -> void:
 		box(Vector3(x, 0.4, 0), Vector3(0.6, 0.8, 58), shadow, true)
 
 
-func add_tree(position: Vector3, variant: int, size_factor := 1.0) -> void:
-	var visual := MeshInstance3D.new()
-	var quad := QuadMesh.new()
-	quad.size = Vector2(8, 8) * size_factor
-	quad.center_offset = Vector3.UP * 3.5 * size_factor
-	visual.mesh = quad
-	visual.position = position
-	var material := ShaderMaterial.new()
-	material.shader = preload("res://world/street_decor.gdshader")
-	material.set_shader_parameter(
-		"art_texture", preload("res://assets/art/vegetation/plant_jacobo_woodland_v01.png")
-	)
-	material.set_shader_parameter("face_camera", true)
-	material.set_shader_parameter("wall_fade", false)
-	material.set_shader_parameter("atlas_scale", Vector2(0.5, 0.5))
-	material.set_shader_parameter("atlas_offset", Vector2(variant * 0.5, 0))
-	visual.material_override = material
-	architecture.add_child(visual)
+func add_plant(at: Vector3, kind: String, size_factor: float) -> void:
+	var plant: Node3D = load("res://world/vegetation/%s.tscn" % kind).instantiate()
+	plant.position = at
+	plant.scale = Vector3.ONE * size_factor
+	architecture.add_child(plant)

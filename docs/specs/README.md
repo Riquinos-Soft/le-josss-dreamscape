@@ -19,8 +19,9 @@ None of these documents silently authorizes unrelated work.
 | 008 | [Connected real home microzone](008-real-home-microzone.md) | in-progress | Home-to-bar route awaits location references |
 | 009 | [Lourizán and map travel](009-lourizan-and-map-travel.md) | in-progress | Visual/browser acceptance pending |
 | 010 | [Camera clearance, place scale and Lourizán pixel art](010-camera-scale-and-lourizan-art.md) | implemented | Browser and developer art review |
+| 011 | [Reusable botanical assets and garden ground](011-botanical-assets.md) | implemented | Developer visual review |
 
-Next available spec ID: **011**. Recompute from this registry before reserving;
+Next available spec ID: **012**. Recompute from this registry before reserving;
 this line is not a standing reservation for an agent or a feature.
 
 ## Language and file naming

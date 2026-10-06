@@ -1,0 +1,53 @@
+{
+  "asset_id": "lourizan_botanical_v01",
+  "status": "original stylized draft; developer review pending",
+  "source": "OpenAI built-in image generation, 2026-10-06; layout-corrected output preserved with alpha",
+  "species": [
+    "Cedrus libani",
+    "Metasequoia glyptostroboides",
+    "Magnolia grandiflora",
+    "Camellia japonica"
+  ],
+  "regions_xywh": [
+    [
+      0,
+      0,
+      690,
+      670
+    ],
+    [
+      700,
+      0,
+      550,
+      670
+    ],
+    [
+      0,
+      675,
+      662,
+      550
+    ],
+    [
+      665,
+      675,
+      585,
+      550
+    ]
+  ],
+  "baseline_y": [
+    643,
+    643,
+    1206,
+    1206
+  ],
+  "references": [
+    "https://blog.turismo.gal/paseo-romantico-por-el-pazo-de-lourizan/",
+    "https://www.turismo.gal/que-facer/ruta-da-camelia/camelias-durmindo-en-pazos?langId=es_ES"
+  ],
+  "filter": "nearest",
+  "prompt": "Original transparent botanical sprite atlas: layered Lebanon cedar, tapered metasequoia, ivory-flowered magnolia and pink/red camellia; detailed pixel RPG palette, elevated view. Second pass corrects separation; explicit runtime UV regions preserve full silhouettes.",
+  "image_size": [
+    1254,
+    1254
+  ]
+}
