@@ -217,6 +217,7 @@ func open_dialogue() -> void:
 	map_ui.guide.hide()
 	map_ui.prompt.hide()
 	active_guide.set_prompt_visible(false)
+	active_guide.set_conversation_active(true)
 	dialogue.open(
 		LourizanHistory.SPEAKER, active_guide.get_node("Head"), LourizanHistory.PARAGRAPHS
 	)
@@ -231,6 +232,8 @@ func on_dialogue_closed() -> void:
 	if not dialogue_controls_owned:
 		return
 	dialogue_controls_owned = false
+	if is_instance_valid(active_guide):
+		active_guide.set_conversation_active(false)
 	player.set_input_locked(false)
 	item_loop.process_mode = Node.PROCESS_MODE_INHERIT
 	touch_controls.input_enabled = true
@@ -244,6 +247,8 @@ func bind_active_guide() -> void:
 	active_guide = null
 	if current_id == &"lourizan" and is_instance_valid(active_location):
 		active_guide = active_location.get_node_or_null("LucasMaconheiro")
+		if is_instance_valid(active_guide):
+			active_guide.set_movement_view(camera_rig.get_node("Camera"))
 	touch_controls.talk_available = false
 	touch_controls.update_actions()
 

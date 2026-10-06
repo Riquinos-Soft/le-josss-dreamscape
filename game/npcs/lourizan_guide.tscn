@@ -12,7 +12,9 @@ transparency = 1
 shading_mode = 0
 albedo_color = Color(0.95, 0.82, 0.38, 1)
 
-[node name="LucasMaconheiro" type="Node3D"]
+[node name="LucasMaconheiro" type="AnimatableBody3D"]
+collision_layer = 1
+collision_mask = 0
 script = ExtResource("1_script")
 
 [node name="Sprite" type="AnimatedSprite3D" parent="."]
@@ -24,11 +26,7 @@ alpha_cut = 1
 sprite_frames = ExtResource("2_frames")
 animation = &"idle_down"
 
-[node name="Body" type="StaticBody3D" parent="."]
-collision_layer = 1
-collision_mask = 0
-
-[node name="Collision" type="CollisionShape3D" parent="Body"]
+[node name="Collision" type="CollisionShape3D" parent="."]
 position = Vector3(0, 0.85, 0)
 shape = SubResource("Capsule_guide")
 

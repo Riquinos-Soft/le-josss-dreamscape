@@ -24,6 +24,35 @@ func run() -> void:
 	check(session.active_location.get_children().filter(is_guide).size() == 1, "one guide exists")
 	var guide: Node3D = session.active_location.get_node("LucasMaconheiro")
 	check(guide.name == "LucasMaconheiro", "guide has stable scene identity")
+	check(guide is AnimatableBody3D, "walking guide uses a movable physics body")
+	var guide_sprite: AnimatedSprite3D = guide.get_node("Sprite")
+	var directional_animations := true
+	for direction in [
+		"down", "up", "left", "right", "down_left", "down_right", "up_left", "up_right"
+	]:
+		directional_animations = (
+			directional_animations
+			and guide_sprite.sprite_frames.has_animation("idle_" + direction)
+			and guide_sprite.sprite_frames.has_animation("walk_" + direction)
+		)
+	check(directional_animations, "Lucas has eight-direction idle and walk art")
+	var patrol_start := guide.global_position
+	await frames(80)
+	check(
+		guide.global_position.distance_to(patrol_start) > 0.4,
+		"Lucas leaves his starting point on foot"
+	)
+	check(guide_sprite.animation.begins_with("walk_"), "patrol plays a walk animation")
+	check(guide.is_inside_patrol_bounds(), "Lucas remains inside the safe garden route")
+	await capture("lucas-walking")
+	guide.walk_speed = 8.0
+	var patrol_wait_frames := 0
+	while guide.reached_waypoints == 0 and patrol_wait_frames < 90:
+		await physics_frame
+		patrol_wait_frames += 1
+	check(guide.reached_waypoints > 0, "Lucas reaches an authored garden waypoint")
+	check(guide.pause_remaining > 0.0, "Lucas pauses at a garden waypoint")
+	guide.walk_speed = 0.8
 	check(not session.can_open_dialogue(), "arrival outside range cannot start conversation")
 	player.global_position = guide.global_position + Vector3(1.25, 0.05, 0)
 	player.velocity = Vector3.ZERO
@@ -54,6 +83,14 @@ func run() -> void:
 	await frames(2)
 	check(dialogue.is_open and dialogue.page_index == 0, "opening input shows page one")
 	check(player.input_locked, "dialogue locks movement")
+	check(guide.conversation_active, "dialogue pauses Lucas patrol")
+	var guide_talk_position := guide.global_position
+	await frames(30)
+	check(
+		guide.global_position.distance_to(guide_talk_position) < 0.001,
+		"Lucas stays still throughout dialogue"
+	)
+	check(guide_sprite.animation.begins_with("idle_"), "talking Lucas uses his idle pose")
 	check(
 		not session.get_node("Street/TouchHUD/TouchControls").input_enabled,
 		"dialogue releases touch to UI"
@@ -118,6 +155,13 @@ func run() -> void:
 	await frames(2)
 	check(not dialogue.is_open and not player.input_locked, "final action restores movement")
 	check(session.get_node("Street/TouchHUD/TouchControls").input_enabled, "touch movement returns")
+	check(not guide.conversation_active, "closing dialogue releases Lucas patrol")
+	var guide_resume_position := guide.global_position
+	await frames(75)
+	check(
+		guide.global_position.distance_to(guide_resume_position) > 0.2,
+		"Lucas resumes from the same patrol after dialogue"
+	)
 
 	session.open_dialogue()
 	await frames(1)
@@ -193,7 +237,7 @@ func capture(label: String) -> void:
 		return
 	await frames(20)
 	RenderingServer.force_draw(false)
-	var folder := ProjectSettings.globalize_path("res://../build/verification/lucas")
+	var folder := ProjectSettings.globalize_path("res://../build/verification/lucas-patrol")
 	DirAccess.make_dir_recursive_absolute(folder)
 	root.get_texture().get_image().save_png(folder.path_join(label + ".png"))
 

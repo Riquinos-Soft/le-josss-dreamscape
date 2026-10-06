@@ -17,7 +17,7 @@ arrival capture. Commit one working visual unit.
 
 ## L2 — Add a safe local patrol
 
-Status: ready; L1 complete.
+Status: done; L1 complete.
 
 Add a deterministic waypoint loop and pauses on the open central paving. Face the
 actual movement direction. Stop on dialogue open, resume after close, and keep
@@ -29,7 +29,7 @@ Commit one working behavior unit.
 
 ## L3 — Validate and deploy
 
-Status: planned; depends on L2.
+Status: ready; L2 complete.
 
 Run focused dialogue, bag placement and travel tests; capture Lucas walking and
 talking natively. Run `make check` with Godot 4.7.2 and inspect warnings, then
@@ -38,6 +38,11 @@ watch CI and verify the public `release.txt` matches the deployed commit.
 
 ## Handoff
 
-Next action: L2. Expected evidence directory:
+L1 result commit: `9dc22e1`. The visual sheet was inspected in a native arrival
+capture. L2 focused checks: 46 Lourizán dialogue checks, 20 placement-support
+checks, 36 bag-travel checks and 111 location-travel checks, all with zero
+failures. Native walking, approach and dialogue captures were inspected.
+
+Next action: L3. Expected evidence directory:
 `build/verification/lucas-patrol/`. Remaining manual acceptance after delivery:
 developer visual review, full browser conversation and physical mobile gameplay.
