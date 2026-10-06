@@ -1,6 +1,8 @@
 shader_type spatial;
 render_mode unshaded, cull_disabled;
 
+uniform float place_scale = 1.0;
+
 varying vec3 world_position;
 
 float grain_hash(vec2 p) {
@@ -39,7 +41,7 @@ void fragment() {
 		asphalt = vec3(0.18, 0.23, 0.19);
 	}
 	// The garage's original pale concrete apron is distinct from the road asphalt.
-	if (world_position.z > 23.4 && world_position.z < 27.4 && world_position.x > -3.2) {
+	if (world_position.z > 23.4 * place_scale && world_position.z < 27.4 * place_scale && world_position.x > -3.2 * place_scale) {
 		asphalt = mix(vec3(0.33, 0.32, 0.37), vec3(0.37, 0.36, 0.40), step(0.78, tone));
 	}
 	ALBEDO = OUTPUT_IS_SRGB ? asphalt : pow(asphalt, vec3(2.2));

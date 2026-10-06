@@ -13,6 +13,7 @@ ambient_light_energy = 0.65
 
 [node name="HomeLocation" type="Node3D"]
 script = ExtResource("4_script")
+place_scale = 1.3
 
 [node name="CapturedExterior" parent="." instance=ExtResource("1_scan")]
 

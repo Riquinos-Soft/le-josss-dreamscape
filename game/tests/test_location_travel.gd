@@ -38,7 +38,10 @@ func run() -> void:
 	for cycle in 3:
 		if cycle == 0:
 			for index in range(6, 0, -1):
-				check(await walk_to(session.street.ROUTE[index]), "street route reaches waypoint")
+				check(
+					await walk_to(session.street.to_world(session.street.ROUTE[index])),
+					"street route reaches waypoint"
+				)
 		else:
 			await enter_exit(session.get_node("Street/Exit"))
 		check(session.near_exit != null, "street exit detected")
@@ -89,7 +92,10 @@ func run() -> void:
 		check(session.near_exit == null, "arrival does not reopen map")
 		if cycle == 0:
 			for z in [-10, -8, -6, -4]:
-				check(await walk_to(Vector3(6, 0, z)), "Pazo paving reaches waypoint")
+				check(
+					await walk_to(Vector3(6, 0, z) * session.active_location.place_scale),
+					"Pazo paving reaches waypoint"
+				)
 		else:
 			await enter_exit(session.active_location.get_node("Exit"))
 		check(session.near_exit != null, "Lourizán exit detected")
@@ -120,7 +126,10 @@ func run() -> void:
 	check(player.get_instance_id() == original_player, "home retains production player")
 	check(session.get_node("Street/PixelPass").visible, "home uses world pixel pass")
 	for z in [10, 8, 6, 4, 2, 0, -2, -4, -6, -8]:
-		check(await walk_to(Vector3(8, 0, z)), "home path reaches waypoint")
+		check(
+			await walk_to(Vector3(8, 0, z) * session.active_location.place_scale),
+			"home path reaches waypoint"
+		)
 	check(session.near_exit != null, "home path reaches map exit")
 	session.open_map()
 	map_ui.select(&"street")

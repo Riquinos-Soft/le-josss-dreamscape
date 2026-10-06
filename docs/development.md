@@ -1,5 +1,25 @@
 # Development setup and verified baseline
 
+## Camera, scale and Lourizán art — 2026-10-06
+
+[Spec 010](specs/010-camera-scale-and-lourizan-art.md) restores physical camera
+clearance in all three locations; orthographic size now responds as the camera
+approaches solid geometry and eases back out. The street, home and Pazo locations
+are provisionally enlarged as complete spaces (1.45, 1.30 and 1.20), leaving the
+shared 1.8 m player unchanged. Lourizán now uses a reduced stone/plant palette,
+authored court paving, reused pixel plants and a noncolliding ground backdrop.
+The source scan still provides its recognizable silhouette. These factors need a
+real measurement before calling them surveyed scale.
+
+`PATH=/private/tmp/lourizan-author313/bin:$PATH make check GODOT=/Applications/Godot.app/Contents/MacOS/Godot` passed: docs, format/lint,
+import, **731 checks with zero failures**, and release Web export. Log:
+`build/verification/lourizan/spec010-check.log`. Native Compatibility captures
+passed 103 travel checks and 23 standalone Pazo checks; inspected the street,
+home and Pazo views in `build/verification/lourizan/` and
+`build/verification/home-scan/lourizan-start.png`. The pinned gdtoolkit still
+reports its `pkg_resources` deprecation warning. Browser gameplay, physical
+mobile controls and the developer's final art approval remain unverified.
+
 ## Deployment queue and map guidance — 2026-10-05
 
 Investigation found two independent causes. GitHub's public status reported a major Actions outage while push run `37370450215` remained queued before its Godot job; the live `/release.txt` stayed at `5d69bb0`. A separate manual `workflow_dispatch` run `37371913850` on the same commit completed lint and Godot/Web export, but its deploy job was skipped by the workflow's `push`-only condition. The workflow now permits a manual dispatch on `main` to deploy the same tested artifact after both gates, while PRs and other branches remain excluded. Verify a fresh dispatch and the live release SHA before calling production updated.

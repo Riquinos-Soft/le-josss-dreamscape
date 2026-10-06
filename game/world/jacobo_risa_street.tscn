@@ -81,6 +81,7 @@ movement_view = NodePath("../../CameraRig/Camera")
 
 [node name="CameraRig" parent="." node_paths=PackedStringArray("target") instance=ExtResource("4_camera")]
 target = NodePath("../Player")
+avoid_world_geometry = true
 
 [node name="HUD" type="CanvasLayer" parent="."]
 layer = 1

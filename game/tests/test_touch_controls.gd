@@ -31,7 +31,7 @@ func check_scene(scene_path: String) -> void:
 	var original_position: Vector3 = items.world_item.position
 	await check_pickup_availability(scene, player, items)
 	if scene_path.ends_with("jacobo_risa_street.tscn"):
-		original_position = items.supported_pose(Vector3(2.25, 0, 1.1), PI / 2)
+		original_position = items.supported_pose(scene.to_world(Vector3(3.1, 0, 0.8)), PI / 2)
 	tap_action("pickup")
 	await frames(2)
 	check(items.inventory.item == original, "touch pickup preserves identity")
@@ -122,6 +122,11 @@ func check_scene(scene_path: String) -> void:
 	touch(0, Vector2.ZERO, false)
 	check(items.target == dragged_target, "released preview stays at its world position")
 	# With no Cancel button, an invalid drag must remain visible and recoverable.
+	if not controls.action_rects.has("confirm"):
+		check(false, "touch confirm missing before invalid drag in %s" % scene_path)
+		scene.queue_free()
+		await process_frame
+		return
 	var confirm_point: Vector2 = controls.action_rects["confirm"].get_center()
 	drag_preview(items, Vector2(440, 100))
 	await frames(2)

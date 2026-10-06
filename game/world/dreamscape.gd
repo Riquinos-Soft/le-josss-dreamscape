@@ -195,7 +195,7 @@ func travel_to(destination: StringName) -> bool:
 	player.prevent_ledge_fall = destination != &"street"
 	player.step_height = 0.25 if destination != &"street" else 0.0
 	player.reset_physics_interpolation()
-	camera_rig.avoid_world_geometry = destination == &"home"
+	camera_rig.avoid_world_geometry = true
 	camera_rig.snap_to_target()
 	watch_exit(street if destination == &"street" else incoming)
 	map_ui.close_map()

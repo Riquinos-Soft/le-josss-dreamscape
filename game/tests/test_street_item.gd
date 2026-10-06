@@ -25,7 +25,9 @@ func run() -> void:
 		check(loop.pickup(), "pickup from street")
 		check(loop.inventory.item == original and loop.world_item == null, "pickup keeps identity")
 		check(loop.begin_placement(), "start street placement")
-		var placement: Vector3 = loop.supported_pose(Vector3(2.25, 0, 1.1), cycle * PI / 2)
+		var placement: Vector3 = loop.supported_pose(
+			street.to_world(Vector3(2.25, 0, 1.1)), cycle * PI / 2
+		)
 		check(placement != loop.INVALID_TARGET, "complete footprint supported on slope")
 		loop.yaw = cycle * PI / 2
 		loop.target = placement
@@ -49,11 +51,11 @@ func run() -> void:
 	loop.begin_placement()
 	loop.target = Vector3(100, 2, 100)
 	check(not loop.confirm_placement(), "reject outside street")
-	loop.target = loop.supported_pose(Vector3(3.3, 0, 1.1), 0.0) + Vector3.UP
+	loop.target = loop.supported_pose(street.to_world(Vector3(3.3, 0, 1.1)), 0.0) + Vector3.UP
 	check(not loop.confirm_placement(), "reject floating placement")
 	loop.target = loop.supported_pose(player.position, 0.0)
 	check(not loop.confirm_placement(), "reject overlap with player")
-	var edge: Vector3 = loop.supported_pose(Vector3(4.4, 0, 0), 0.0)
+	var edge: Vector3 = loop.supported_pose(street.to_world(Vector3(4.4, 0, 0)), 0.0)
 	check(edge == loop.INVALID_TARGET, "reject footprint crossing road edge")
 	check(loop.inventory.item == original, "invalid placement cannot lose the item")
 	loop.cancel_placement()
@@ -62,11 +64,11 @@ func run() -> void:
 		"cancel keeps item and removes preview"
 	)
 	# Place and retrieve on the garage apron too, at a different world height.
-	player.position = Vector3(-2.5, 0.9, 25.5)
+	player.position = street.to_world(Vector3(-2.5, 0.9, 25.5))
 	player.velocity = Vector3.ZERO
 	await frames(10)
 	loop.begin_placement()
-	loop.target = loop.supported_pose(Vector3(-1.2, 0, 25.5), 0.0)
+	loop.target = loop.supported_pose(street.to_world(Vector3(-1.2, 0, 25.5)), 0.0)
 	check(loop.target != loop.INVALID_TARGET, "garage apron supports footprint")
 	check(loop.confirm_placement(), "place on lower garage apron")
 	await frames(2)

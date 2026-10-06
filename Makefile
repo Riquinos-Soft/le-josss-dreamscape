@@ -7,6 +7,7 @@ TESTS := \
 	test_keyboard_input.gd \
 	test_item_lifecycle.gd \
 	test_courtyard.gd \
+	test_camera_clearance.gd \
 	test_home_exterior.gd \
 	test_scan_movement.gd \
 	test_connected_stairs.gd \

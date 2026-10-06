@@ -25,6 +25,7 @@ corner_radius_bottom_right = 5
 
 [node name="HomeExterior" type="Node3D"]
 script = ExtResource("4_script")
+place_scale = 1.3
 
 [node name="CapturedExterior" parent="." instance=ExtResource("1_scan")]
 

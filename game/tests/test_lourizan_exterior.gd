@@ -15,10 +15,13 @@ func run() -> void:
 	check(visuals.size() == 1, "decimated collision mesh is hidden")
 	if visuals.size() == 1:
 		check(visuals[0].mesh.get_faces().size() / 3 == 264177, "source triangles retained")
-		check(visuals[0].get_active_material(0).albedo_texture != null, "photo texture present")
+		check(
+			visuals[0].material_override is ShaderMaterial,
+			"captured texture uses the Pazo pixel palette"
+		)
 	await capture("lourizan-start")
 	for z in [-10, -8, -6, -4, -2, 0, 2, 4, 6, 4, 2, 0, -2, -4, -6, -8, -10, -12]:
-		if not await walk_to(Vector3(6, 0, z)):
+		if not await walk_to(Vector3(6, 0, z) * scene.place_scale):
 			finish()
 			return
 	check(player.is_on_floor(), "captured path round trip stays grounded")

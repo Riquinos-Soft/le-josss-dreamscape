@@ -63,10 +63,10 @@ func run() -> void:
 	street.add_child(orientation)
 	player.movement_orientation = orientation
 	for index in range(7, -1, -1):
-		await walk_to(street.ROUTE[index])
+		await walk_to(street.to_world(street.ROUTE[index]))
 	await capture("south_end")
 	for index in range(1, street.ROUTE.size()):
-		await walk_to(street.ROUTE[index])
+		await walk_to(street.to_world(street.ROUTE[index]))
 		if index == 11 and "--capture" in OS.get_cmdline_user_args():
 			street.study_material.set_shader_parameter("wall_fade", false)
 			for material in street.facade_materials:
@@ -78,26 +78,26 @@ func run() -> void:
 			await capture("wall_transparent")
 		if index == 12:
 			for point in street.GARAGE_APPROACH:
-				await walk_to(point)
+				await walk_to(street.to_world(point))
 			await capture("garage")
 			check(player.is_on_floor(), "garage entrance supports the player")
 			for point in range(street.GARAGE_APPROACH.size() - 2, -1, -1):
-				await walk_to(street.GARAGE_APPROACH[point])
-			await walk_to(street.ROUTE[index])
+				await walk_to(street.to_world(street.GARAGE_APPROACH[point]))
+			await walk_to(street.to_world(street.ROUTE[index]))
 	await capture("north_end")
 	for index in range(street.ROUTE.size() - 2, 6, -1):
-		await walk_to(street.ROUTE[index])
+		await walk_to(street.to_world(street.ROUTE[index]))
 	var boundary := PackedVector2Array()
 	for index in range(0, street.CROSS_SECTIONS.size(), 2):
-		var vertex: Vector3 = street.CROSS_SECTIONS[index]
+		var vertex: Vector3 = street.to_world(street.CROSS_SECTIONS[index])
 		boundary.append(Vector2(vertex.x, vertex.z))
 	for index in range(street.CROSS_SECTIONS.size() - 1, 0, -2):
-		var vertex: Vector3 = street.CROSS_SECTIONS[index]
+		var vertex: Vector3 = street.to_world(street.CROSS_SECTIONS[index])
 		boundary.append(Vector2(vertex.x, vertex.z))
 	# Push against each variable-width cross section, including the open garage apron.
 	for index in range(2, street.CROSS_SECTIONS.size() - 2, 2):
 		for side in [-1.0, 1.0]:
-			var midpoint: Vector3 = (
+			var midpoint: Vector3 = street.to_world(
 				(street.CROSS_SECTIONS[index] + street.CROSS_SECTIONS[index + 1]) * 0.5
 			)
 			player.global_position = midpoint + Vector3.UP * 0.05
@@ -118,12 +118,15 @@ func run() -> void:
 			if index == 0
 			else (street.ROUTE[-2] - street.ROUTE[-1]).normalized()
 		)
-		player.position = street.ROUTE[index] + inward * 0.7 + Vector3.UP * 0.05
+		player.position = street.to_world(street.ROUTE[index]) + inward * 0.7 + Vector3.UP * 0.05
 		player.velocity = Vector3.ZERO
 		steer(Vector3(0, 0, -1 if index == 0 else 1))
 		await frames(90)
 		steer(Vector3.ZERO)
-		check(player.position.distance_to(street.ROUTE[index]) < 0.6, "end cap contains player")
+		check(
+			player.position.distance_to(street.to_world(street.ROUTE[index])) < 0.6,
+			"end cap contains player"
+		)
 	# Capture the respawn signal boundary, before later physics ticks settle onto the slope.
 	var respawns: Array = []
 	player.respawned.connect(

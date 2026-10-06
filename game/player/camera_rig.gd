@@ -6,10 +6,13 @@ extends Node3D
 @export var avoid_world_geometry: bool = false
 var camera_offset := Vector3.ZERO
 var clear_fraction: float = 1.0
+var displayed_fraction: float = 1.0
+var base_orthographic_size: float = 0.0
 
 
 func _ready() -> void:
 	camera_offset = $Camera.position
+	base_orthographic_size = $Camera.size
 	snap_to_target()
 	$Camera.look_at(global_position)
 	target.respawned.connect(snap_to_target)
@@ -18,15 +21,21 @@ func _ready() -> void:
 func snap_to_target() -> void:
 	global_position = target.global_position + Vector3.UP * 0.9
 	clear_fraction = 1.0
+	displayed_fraction = 1.0
 	$Camera.position = camera_offset
+	$Camera.size = base_orthographic_size
 	reset_physics_interpolation()
 
 
 func _process(delta: float) -> void:
 	var target_position := target.get_global_transform_interpolated().origin + Vector3.UP * 0.9
 	global_position = global_position.lerp(target_position, 1.0 - exp(-follow_sharpness * delta))
-	if avoid_world_geometry:
-		$Camera.position = camera_offset * clear_fraction
+	var desired_fraction := clear_fraction if avoid_world_geometry else 1.0
+	var response := 16.0 if desired_fraction < displayed_fraction else 4.0
+	displayed_fraction = lerpf(displayed_fraction, desired_fraction, 1.0 - exp(-response * delta))
+	$Camera.position = camera_offset * displayed_fraction
+	if $Camera.projection == Camera3D.PROJECTION_ORTHOGONAL:
+		$Camera.size = base_orthographic_size * lerpf(0.72, 1.0, displayed_fraction)
 
 
 func _physics_process(_delta: float) -> void:

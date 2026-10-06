@@ -3,10 +3,10 @@
 [ext_resource type="PackedScene" path="res://assets/lourizan/exterior.glb" id="1_scan"]
 [ext_resource type="PackedScene" path="res://player/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://player/camera_rig.tscn" id="3_camera"]
-[ext_resource type="Script" path="res://world/home_exterior.gd" id="4_script"]
+[ext_resource type="Script" path="res://world/lourizan_exterior.gd" id="4_script"]
 
 [sub_resource type="BoxShape3D" id="PavingSupport"]
-size = Vector3(5, 0.2, 24)
+size = Vector3(8, 0.2, 24)
 
 [sub_resource type="Environment" id="Environment_scan"]
 background_mode = 1
@@ -28,11 +28,12 @@ corner_radius_bottom_right = 5
 
 [node name="LourizanPreview" type="Node3D"]
 script = ExtResource("4_script")
+place_scale = 1.2
 
 [node name="CapturedExterior" parent="." instance=ExtResource("1_scan")]
 
 [node name="PavingSupport" type="StaticBody3D" parent="."]
-position = Vector3(6.5, 0.03, -4)
+position = Vector3(8, 0.03, -4)
 
 [node name="Collision" type="CollisionShape3D" parent="PavingSupport"]
 shape = SubResource("PavingSupport")
@@ -53,7 +54,7 @@ step_height = 0.25
 
 [node name="CameraRig" parent="." node_paths=PackedStringArray("target") instance=ExtResource("3_camera")]
 target = NodePath("../Player")
-avoid_world_geometry = false
+avoid_world_geometry = true
 
 [node name="HUD" type="CanvasLayer" parent="."]
 

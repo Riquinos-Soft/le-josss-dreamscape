@@ -1,7 +1,10 @@
 extends Node3D
 ## A standalone scan trial. The imported mesh is visual data; collision belongs to this scene.
 
-# Surveyed against the scan in meters. The noisy reconstruction stays visual only.
+const PLACE_SCALE := 1.45
+
+# Source coordinates follow the capture; PLACE_SCALE is provisional calibration.
+# The noisy reconstruction stays visual only.
 const ROUTE: Array[Vector3] = [
 	Vector3(2.5, 0.48, -33),
 	Vector3(2.5, 0.51, -30),
@@ -76,14 +79,40 @@ func _ready() -> void:
 		push_error("The street scan has no mesh to build collision from.")
 		return
 	visual_mesh.material_override = study_material
-	study_material.set_shader_parameter("route", PackedVector3Array(ROUTE))
-	study_material.set_shader_parameter("walk_sections", PackedVector3Array(CROSS_SECTIONS))
+	study_material.set_shader_parameter("route", scaled_points(ROUTE))
+	study_material.set_shader_parameter("walk_sections", scaled_points(CROSS_SECTIONS))
 	build_walkway()
 	build_garage()
 	build_pixel_decor()
+	rescale_place()
 	$Player/Visual.hide()
 	$CameraRig/Camera.projection = Camera3D.PROJECTION_ORTHOGONAL
 	$CameraRig/Camera.size = 13.5
+	$CameraRig.base_orthographic_size = 13.5
+	$CameraRig.snap_to_target()
+
+
+func to_world(point: Vector3) -> Vector3:
+	return point * PLACE_SCALE
+
+
+func scaled_points(points: Array[Vector3]) -> PackedVector3Array:
+	var scaled := PackedVector3Array()
+	for point in points:
+		scaled.append(to_world(point))
+	return scaled
+
+
+func rescale_place() -> void:
+	for name in ["StreetCollision", "Walkway", "GarageFacade", "GarageDoor", "PixelDecor"]:
+		get_node(name).scale = Vector3.ONE * PLACE_SCALE
+	$Arrival.position = to_world($Arrival.position)
+	$Exit.position = to_world($Exit.position)
+	$Player.position = to_world($Player.position)
+	$Player.spawn_transform = $Player.transform
+	$Player.reset_physics_interpolation()
+	$ItemLoop.initial_item_position = to_world($ItemLoop.initial_item_position)
+	paving_material.set_shader_parameter("place_scale", PLACE_SCALE)
 
 
 func _process(_delta: float) -> void:

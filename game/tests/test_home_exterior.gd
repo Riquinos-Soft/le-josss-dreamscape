@@ -21,7 +21,10 @@ func run() -> void:
 	camera = scene.get_node("CameraRig/Camera")
 	await frames(45)
 	check(player.is_on_floor(), "spawn rests on captured ground")
-	check(player.position.y > 4.3 and player.position.y < 5.0, "original terrain elevation")
+	check(
+		player.position.y > 4.3 * scene.place_scale and player.position.y < 5.0 * scene.place_scale,
+		"scaled terrain elevation"
+	)
 	var scan := scene.get_node("CapturedExterior")
 	var bodies := scan.find_children("*", "StaticBody3D", true, false)
 	check(bodies.size() == 1, "imported static scan collision")
@@ -41,12 +44,12 @@ func run() -> void:
 	print("Spawn: ", player.position, " camera: ", camera.global_position)
 	await capture("01-home-exterior")
 	for z in [10, 8, 6, 4, 2, 0, -2, -4, -6, -8]:
-		if not await walk_to(Vector3(8, 0, z)):
+		if not await walk_to(Vector3(8, 0, z) * scene.place_scale):
 			finish()
 			return
 	await capture("02-garden-path")
 	for z in [-6, -4, -2, 0, 2, 4, 6, 8, 10, 12]:
-		if not await walk_to(Vector3(8, 0, z)):
+		if not await walk_to(Vector3(8, 0, z) * scene.place_scale):
 			finish()
 			return
 	check(player.is_on_floor(), "round trip remains grounded")
