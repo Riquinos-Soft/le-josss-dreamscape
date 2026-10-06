@@ -19,9 +19,11 @@ export. Focused startup/travel, bag/support, dialogue and character tests passed
 `test_lourizan_dialogue.gd` reports 82 checks, `test_location_travel.gd` 119,
 `test_street_character.gd` 156, and the full export produced HTML/WASM/PCK. The
 local gdtoolkit installation emits its existing `pkg_resources` deprecation
-warning. No browser gameplay or physical-device check was performed; developer
-visual and mobile acceptance remain pending. Production deployment is pending
-the authorized push of this follow-up.
+warning. The production release is commit
+`0aaed2ec34aa4364d2d7b302c89f461a6a016e9b`; [CI run 37547803085](https://github.com/Riquinos-Soft/le-josss-dreamscape/actions/runs/37547803085)
+passed tests/export and deployed that exact SHA. Chrome loaded the production
+game at the Pazo spawn; this did not cover a full browser gameplay route. Safari,
+physical-device and developer visual/mobile acceptance remain pending.
 
 ## Lucas standing poses and Lourizán facade — 2026-10-07
 

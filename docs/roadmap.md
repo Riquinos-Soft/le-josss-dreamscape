@@ -26,7 +26,10 @@ for Joss/Lucas, then reference-led facade and stairs. This specific continuation
 is authorized; the broader roadmap remains a proposal. Mobile acceptance of the
 previous release remains open but is no longer a prerequisite to this work.
 The character and facade packages are now implemented in commits `3451cb8` and
-`a4e2320`. Developer visual and physical mobile acceptance remain next.
+`a4e2320`. The developer then specified straight legs side by side in both idle
+poses, Lourizán as the fresh-session spawn, and ten randomized Lucas conversations
+with two Brazil jokes. That follow-up shipped in `0aaed2e`; the CI deploy verified
+production. Developer visual and physical mobile acceptance remain next.
 
 ## Current feature sequence
 
@@ -42,7 +45,8 @@ are implemented through [Plan 013](plans/013-lucas-garden-patrol.md).
 
 1. Implemented: [Lucas Maconheiro and paged dialogue](specs/013-lourizan-guide-dialogue.md),
    [Plan 012](plans/012-lourizan-guide.md): a hippie forest-worker NPC in Lourizán,
-   overhead classic RPG speech balloon and four source-backed history paragraphs.
+   overhead classic RPG speech balloon and ten randomized Spanish conversations,
+   including source-backed historical details and two Brazil jokes.
 2. Implemented: [Eight-slot bag and travelling objects](specs/012-eight-slot-bag.md),
    [Plan 011](plans/011-eight-slot-bag.md): pickup directly into slots, select to
    place, a Dreamscape beer and preservation across location travel within a session.
