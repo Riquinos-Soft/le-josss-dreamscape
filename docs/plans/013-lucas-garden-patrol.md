@@ -6,7 +6,7 @@ Base: `4cf46dd`. Execute sequentially on the current branch.
 
 ## L1 — Match the protagonist's visual language
 
-Status: ready.
+Status: done.
 
 Create an original low-resolution Lucas sheet with eight directions and a compact
 walk cycle. Replace the static `Sprite3D` with `AnimatedSprite3D`, preserving the
@@ -17,7 +17,7 @@ arrival capture. Commit one working visual unit.
 
 ## L2 — Add a safe local patrol
 
-Status: planned; depends on L1.
+Status: ready; L1 complete.
 
 Add a deterministic waypoint loop and pauses on the open central paving. Face the
 actual movement direction. Stop on dialogue open, resume after close, and keep
@@ -38,6 +38,6 @@ watch CI and verify the public `release.txt` matches the deployed commit.
 
 ## Handoff
 
-Next action: L1. Expected evidence directory:
+Next action: L2. Expected evidence directory:
 `build/verification/lucas-patrol/`. Remaining manual acceptance after delivery:
 developer visual review, full browser conversation and physical mobile gameplay.

@@ -1,0 +1,15 @@
+{
+  "asset_id": "lucas_maconheiro_walk_v02",
+  "production_status": "implemented; developer visual review pending",
+  "character": "Lucas Maconheiro",
+  "layout": [4, 4],
+  "cell_size": [313, 313],
+  "directions": ["down", "up", "left", "right", "down_left", "down_right", "up_left", "up_right"],
+  "frames_per_direction": 2,
+  "pivot": "feet aligned near the lower edge of every cell; runtime sprite centered at 0.94 m",
+  "filter": "nearest",
+  "mipmaps": false,
+  "source": "OpenAI built-in image generation, 2026-10-06; center-cropped from 1254 to 1252 pixels so every atlas cell is exact",
+  "references": ["char_joss_idle_directions_v02.png", "char_joss_walk_directions_v01.png", "lucas_maconheiro_idle_v01.png"],
+  "prompt": "Create a production-ready transparent pixel-art sprite sheet for the original fictional character Lucas Maconheiro. Match the first two reference sheets' compact 16-bit RPG language and preserve the third reference's tied-back dark hair, beard, olive field jacket, ochre shirt, brown trousers, boots and canvas satchel. Strict square 4x4 sheet, two alternating walking poses for each of eight ordered directions, one centered full-body character per cell, common feet baseline, transparent background, no dividers, text, props, scenery or external shadows."
+}

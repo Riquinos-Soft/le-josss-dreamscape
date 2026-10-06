@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://npcs/lourizan_guide.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://assets/art/characters/lucas_maconheiro_idle_v01.png" id="2_texture"]
+[ext_resource type="SpriteFrames" path="res://assets/art/characters/lucas_maconheiro_animations_v02.tres" id="2_frames"]
 
 [sub_resource type="CapsuleShape3D" id="Capsule_guide"]
 radius = 0.28
@@ -15,14 +15,14 @@ albedo_color = Color(0.95, 0.82, 0.38, 1)
 [node name="LucasMaconheiro" type="Node3D"]
 script = ExtResource("1_script")
 
-[node name="Sprite" type="Sprite3D" parent="."]
-position = Vector3(0, 0.9, 0)
+[node name="Sprite" type="AnimatedSprite3D" parent="."]
+position = Vector3(0, 0.94, 0)
 texture_filter = 1
-texture = ExtResource("2_texture")
-hframes = 2
-vframes = 2
-pixel_size = 0.0029
+pixel_size = 0.0076
 billboard = 1
+alpha_cut = 1
+sprite_frames = ExtResource("2_frames")
+animation = &"idle_down"
 
 [node name="Body" type="StaticBody3D" parent="."]
 collision_layer = 1
