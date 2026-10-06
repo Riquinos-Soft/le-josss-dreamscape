@@ -26,7 +26,10 @@ Follow-up acceptance: inspect eight-direction start/walk/turn/stop sequences
 for both characters at 1280×720 and 844×390; verify wall stops and Lucas
 waypoint/dialogue pauses use standing poses. Replace the old pixel-equality
 regression with applicable state/grounding checks and visual evidence. Run
-focused tests/full gate/Web export. Next: Plan L1; art acceptance remains pending.
+focused tests/full gate/Web export. Plan L1 completed in commit `3451cb8`. Joss now uses dedicated v03 standing
+poses; no pixel-equality requirement remains. `make check` passed 985 checks
+and Web export; see [development](../development.md). Developer/mobile acceptance
+remains pending.
 
 
 ## Objective and scope

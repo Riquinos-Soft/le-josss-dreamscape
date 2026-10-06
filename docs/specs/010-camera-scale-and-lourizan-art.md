@@ -17,7 +17,10 @@ divisions, mansards/clock, then curved stair outlines and connected landings fro
 the supplied video. Preserve current scale/camera, playable routes and batching.
 Acceptance: Plan P1/P2 reference-matched gameplay captures, both stair traversals,
 placement/travel/camera regressions and Web export. Dimensions remain estimates
-unless measured. Next: P1 after character package L1.
+unless measured. Plan 014 P1/P2 completed in commit `a4e2320`. The closed-backed double
+arch and rounded landings are visually inspected in native captures; both stairs
+pass traversal checks. Full validation and evidence are in [development](../development.md).
+Browser gameplay, mobile acceptance and developer visual review remain pending.
 
 
 ## Objective and correction

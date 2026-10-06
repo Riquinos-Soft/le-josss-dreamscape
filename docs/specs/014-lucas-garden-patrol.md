@@ -13,8 +13,11 @@ travelling bag release.
 
 The developer authorized continuing Lucas and Pazo improvements and requested
 a bounded plan for an economical executor. [Plan 014](../plans/014-lucas-atlas-and-pazo-refinement.md)
-is ready; implementation has not started. Earlier validation applies to the
-previous release only. Mobile and developer visual acceptance remain pending;
+is ready; implementation is complete in commit `3451cb8`. Lucas now uses the v04
+standing sheet with the existing v02 walk; eight idle directions have planted
+feet and are distinct from the walking frames. Focused and full suite results are
+in [development](../development.md). Earlier validation applies to the previous
+release only; developer art review remains pending. Mobile and developer visual acceptance remain pending;
 the new request authorizes proceeding without treating that acceptance as passed.
 
 Current follow-up: inspect/integrate the pending Lucas atlas, with real

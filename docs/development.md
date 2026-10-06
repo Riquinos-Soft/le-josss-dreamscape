@@ -1,6 +1,47 @@
 # Development setup and verified baseline
 
-## Planning handoff — Lucas and Pazo, 2026-10-07
+## Lucas standing poses and Lourizán facade — 2026-10-07
+
+[Plan 014](plans/014-lucas-atlas-and-pazo-refinement.md) is implemented in two
+working units. Commit `3451cb8` adds original eight-direction standing atlases
+for Joss and Lucas. Both use planted feet at cell y=60, a natural straight-legged
+rest pose distinct from the walk frame, with consistent 1.8 m apparent height.
+Joss retains four alternating walk frames at 8 fps. Lucas keeps his existing v02
+eight-direction, two-pose walk at 4 fps; runtime does not use the defective pending
+v03 walk candidate. `game/npcs/lourizan_guide.tscn` uses 64 px cells at 0.0375 m/px
+and puts the foot baseline on the ground. The original generator sheets are local
+inputs under `~/.codex/generated_images/`; adjacent JSON records prompt, source
+resolution and normalizer. Developer art acceptance remains pending.
+
+Pazo geometry replaces its single dark arch with two adjacent arches separated
+by a stone pier, backed by closed wall geometry. Both stair footings gain rounded
+landings and curved outer baluster outlines. Existing ramp collision and routes
+remain. `game/tests/test_lourizan_exterior.gd` now traverses both stair flights.
+Native captures were inspected at 1280×720 and 844×390. See ignored
+`build/verification/lucas-pazo/pazo-start-1280.png`,
+`pazo-terrace-1280.png`, `lucas-walking-1280.png`, and
+`lucas-dialogue-1280.png`; final 844×390 files are `build/verification/home-scan/
+lourizan-start.png` and `lourizan-terrace.png` from the command below.
+
+`/Applications/Godot.app/Contents/MacOS/Godot --headless --path game --fixed-fps
+60 --script res://tests/test_street_character.gd` passed 156 checks; dialogue
+passed 81; exterior traversal passed 41; place support 20, bag travel 36, camera
+clearance 10 and location travel 117 passed. Full command:
+`PATH=/private/tmp/lourizan-author313/bin:$PATH make check
+GODOT=/Applications/Godot.app/Contents/MacOS/Godot` passed **985 checks**,
+documentation, format/lint, import and Web HTML/WASM/PCK export. Full log:
+`build/verification/lucas-pazo/final-check.log`. The existing gdtoolkit
+`pkg_resources` deprecation warning remains; no runtime errors remain in the final
+log. Native walkthrough also passed 41 exterior checks at each of 1280×720 and
+844×390; command: `Godot --path game --max-fps 60 --resolution WIDTHxHEIGHT
+--script res://tests/test_lourizan_exterior.gd -- --capture`. No browser, physical
+phone or deployment check was performed.
+
+The plan's shared index/spec/development records are updated in a documentation
+commit after the Pazo code commit `a4e2320`. Five Lucas candidate files (three PNGs and two
+that were untracked before work began remain untouched and unstaged.
+
+## Historical planning handoff — Lucas and Pazo, 2026-10-07
 
 Goal: execute [Plan 014](plans/014-lucas-atlas-and-pazo-refinement.md) on an
 available economical model. Base before planning: `e6c835b` on `main`. Five
@@ -14,11 +55,11 @@ Completed: bounded sequential packages, edit ownership, validation commands,
 reference/acceptance contracts. Latest user requirement covers BOTH Joss and Lucas:
 clear walking and dedicated standing poses with extended legs. This supersedes
 the previous first-walk-frame idle shortcut and its pixel-equality test.
-Next: execute L1, then P1/P2 facade/stairs, then acceptance handoff. No runtime
-changes, asset generation, gameplay tests, deployment or model switch performed.
-Documentation validation: `python3 tools/check_docs.py` and `git diff --check`;
-both passed (0 documentation errors; no whitespace errors). Historical runtime counts below do not
-validate the planned changes.
+Superseded by the implementation record above. This planning-only checkpoint
+made no runtime changes or deployment.
+Documentation validation: `python3 tools/check_docs.py` and `git diff --check`
+both passed (0 documentation errors; no whitespace errors). Historical runtime
+counts below do not validate the planned changes.
 
 ## Retro clarity and stable character motion — 2026-10-06
 

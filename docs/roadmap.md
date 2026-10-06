@@ -25,15 +25,16 @@ for economical sequential execution: proper walking and straight-legged standing
 for Joss/Lucas, then reference-led facade and stairs. This specific continuation
 is authorized; the broader roadmap remains a proposal. Mobile acceptance of the
 previous release remains open but is no longer a prerequisite to this work.
-The earlier “after review” ordering below is historical for this iteration.
+The character and facade packages are now implemented in commits `3451cb8` and
+`a4e2320`. Developer visual and physical mobile acceptance remain next.
 
 ## Current feature sequence
 
 Current visual checkpoint: [Spec 015](specs/015-retro-character-clarity.md) improves
-character clarity and walking stability and is ready for the developer's mobile
-review. Secret of Evermore guides subsequent original art; the developer's
-[on-site video](../references/lourizan-video-2026-10-06.md) guides the next facade
-pass. Proceed in small deployed steps after that review.
+character clarity and walking stability and is implemented with dedicated standing art and true walking frames; mobile review
+remains pending. The developer's [on-site video](../references/lourizan-video-2026-10-06.md)
+guided the double-arch and paired-stair refinement; developer review and mobile
+playtesting remain pending.
 
 The developer requested both feature specs and sequential execution plans. Lucas,
 the travelling bag and the [Lucas visual upgrade and short garden patrol](specs/014-lucas-garden-patrol.md)

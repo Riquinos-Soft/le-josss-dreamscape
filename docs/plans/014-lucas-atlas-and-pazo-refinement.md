@@ -1,6 +1,6 @@
 # Plan 014 — Lucas atlas and Pazo refinement
 
-- Status: ready for sequential execution; prepared 2026-10-07.
+- Status: implemented; developer visual and physical mobile acceptance pending. Updated 2026-10-07.
 - Objective: integrate coherent Lucas art and proper walking/standing poses for Joss and Lucas and refine the recognizable Pazo facade
   and paired stairs without disturbing the playable route.
 - Governing specs: [014](../specs/014-lucas-garden-patrol.md),
@@ -13,13 +13,14 @@
   [on-site video notes](../../references/lourizan-video-2026-10-06.md), and the
   exact character/landmark requirements in Specs 014/010/015. The Notion Game Bible
   was not retrieved for this planning pass; no new product decisions depend on it.
-- Base: `main`, `e6c835bc52f672d535638f2ff220b05cdb335f7e` before this documentation
-  commit. Recheck HEAD and working state on resumption; do not reset to this SHA.
-- Executor: the developer-selected economical model in the next session. Grok is
-  not exposed among this session's callable models. No model switch, provider
-  installation, external delegation or cost claim has been made.
+- Base: `main`, `bb80e9db45431eb08dc8be2f51367dab5de2a39d`; implementation commits
+  `3451cb8` (L1) and `a4e2320` (P1/P2). The five pre-existing
+  untracked candidates remain outside these commits.
+- Executor: this Codex session completed the authorized work. Actual token/cost
+  breakdown is unavailable; no savings claim is made. The built-in image generator
+  produced two original standing sheets; no provider was installed.
 - Single integrator: that executing session, responsible for review and commits.
-- Order: L1 → P1 → P2 → V1; no parallel agents required or authorized by this plan.
+- Order: L1 → P1 → P2 → V1; completed sequentially with no delegated agents.
 - Settled contracts: Godot 4.7.2 standard, Compatibility/Web, metre units, existing
   place scales/camera, continuous presentation, shared directional animation,
   local patrol, existing dialogue and item identity.
@@ -80,7 +81,7 @@ Update package/spec status and next step. Never stage unrelated pending files.
 
 ## Package L1 — Coherent walking and standing for Joss and Lucas
 
-- Status: ready. Owner: economical executor/integrator. Dependencies: none.
+- Status: done; commit `3451cb8`. Owner: Codex integrator. Dependencies: none.
 - Minimum context: Spec 014 R1–R5; Spec 015 R1–R3; the starting-state files above;
   `game/npcs/lourizan_guide.gd`, its scene, v02 SpriteFrames/JSON;
   `game/player/directional_animation.gd`; `game/tests/test_lourizan_dialogue.gd`;
@@ -149,7 +150,7 @@ cross-project scale/rendering standards. Local resource fixes remain routine.
 
 ## Package P1 — Recognizable facade landmarks
 
-- Status: planned, ready after L1. Owner: same executor/integrator.
+- Status: done with P2, commit `a4e2320`. Owner: Codex integrator.
 - Minimum context: Spec 010; place-authoring workflow; video notes; existing
   `game/world/lourizan_exterior.gd` (build_palace, roof, window, batching helpers);
   `game/world/locations/lourizan.tscn`, `lourizan_preview.tscn`;
@@ -191,7 +192,7 @@ estimate or blocks only the affected detail.
 
 ## Package P2 — Paired stairs and connected landings
 
-- Status: planned, depends on P1. Owner: same executor/integrator.
+- Status: done with P1, commit `a4e2320`. Owner: Codex integrator.
 - Minimum context: P1 evidence; video timestamps 00:26, 00:53, 01:19, 01:32;
   `build_stairs`, `balustrade`, `statue`, `build_garden` in the exterior script;
   exterior test and `game/tests/test_place_support.gd`.
@@ -223,7 +224,7 @@ system or conflicts with accepted scale contracts. Use local ramps/meshes first.
 
 ## Package V1 — Final acceptance handoff
 
-- Status: planned, depends on all implementation packages.
+- Status: review handoff; depends on implementation packages, now complete.
 - Owner: integrator. Allowed edits: this plan, governing specs/indexes, roadmap,
   development log. Minimum context: package evidence and final scoped diff.
 - Review final integrated native arrival → Lucas conversation → both stairs →
@@ -237,3 +238,31 @@ system or conflicts with accepted scale contracts. Use local ramps/meshes first.
   instruction; this plan does not carry old deployment authorization forward.
 - No Astra decision expected; report concrete unmet criteria instead of expanding
   scope. Stop when this bounded delivery is complete.
+
+
+## Execution results — 2026-10-07
+
+L1 is committed as `3451cb8`; Joss uses dedicated eight-direction standing art
+with straight legs and planted feet, and Lucas uses a new eight-direction idle
+atlas alongside the existing two-pose v02 walk. Runtime walk presentation is
+not replaced by the incomplete v03 candidate. Dialogue/street tests assert idle
+and stride differ and the feet baseline is y=60. Original source images remain in
+the local generated-images directory; committed JSON records prompts and layout.
+Developer review is pending.
+
+P1/P2 are committed as `a4e2320`; they replace the single central arch with two closed-backed arches and a pier,
+and add rounded lower stair landings/curved baluster outlines. Collision ramps,
+metre scale, routes and architecture batching stay in place. The exterior test now
+walks up and down both stair flights. Native captures at 1280×720 and 844×390
+were inspected: `build/verification/lucas-pazo/pazo-terrace-1280.png` and `build/verification/lucas-pazo/pazo-terrace-844.png`. Character
+captures: `build/verification/lucas-pazo/lucas-walking-1280.png` and
+`lucas-dialogue-1280.png`. This is native visual inspection, not browser or phone
+acceptance.
+
+Final command: `PATH=/private/tmp/lourizan-author313/bin:$PATH make check
+GODOT=/Applications/Godot.app/Contents/MacOS/Godot`; 985 checks passed, docs,
+format/lint, imports and Web export passed. Log: `build/verification/lucas-pazo/final-check.log`.
+The gdtoolkit `pkg_resources` deprecation warning remains. Native route command:
+`Godot --path game --max-fps 60 --resolution 1280x720 --script
+res://tests/test_lourizan_exterior.gd -- --capture`; same command passed at
+844×390. Both reported 41 checks, zero failures.
