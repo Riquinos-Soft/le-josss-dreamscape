@@ -1,12 +1,33 @@
 # Spec 015 — Retro character clarity and stable walking
 
 Status: implemented
-Updated: 2026-10-06
+Updated: 2026-10-07
 Language: en
 
 Authorization: developer requested Secret of Evermore-inspired restyling,
 starting with a small character/readability and walking-stability release,
 deployment, then their mobile playtest before further art work.
+
+## Authorized follow-up — 2026-10-07
+
+The developer authorized continuing Lucas and Pazo improvements and requested
+a bounded plan for an economical executor. [Plan 014](../plans/014-lucas-atlas-and-pazo-refinement.md)
+is ready; implementation has not started. Earlier validation applies to the
+previous release only. Mobile and developer visual acceptance remain pending;
+the new request authorizes proceeding without treating that acceptance as passed.
+
+The developer further required BOTH Joss and Lucas to walk correctly and adopt
+a standing shape with extended legs when stopped. This supersedes R5's
+requirement to reuse the first walk frame: retain proportions and facing, but
+use dedicated standing art for all eight directions, with planted feet and no
+frozen stride. Preserve stable direction transitions and walk-cycle phase.
+
+Follow-up acceptance: inspect eight-direction start/walk/turn/stop sequences
+for both characters at 1280×720 and 844×390; verify wall stops and Lucas
+waypoint/dialogue pauses use standing poses. Replace the old pixel-equality
+regression with applicable state/grounding checks and visual evidence. Run
+focused tests/full gate/Web export. Next: Plan L1; art acceptance remains pending.
+
 
 ## Objective and scope
 

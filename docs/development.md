@@ -1,5 +1,25 @@
 # Development setup and verified baseline
 
+## Planning handoff — Lucas and Pazo, 2026-10-07
+
+Goal: execute [Plan 014](plans/014-lucas-atlas-and-pazo-refinement.md) on an
+available economical model. Base before planning: `e6c835b` on `main`. Five
+pre-existing untracked Lucas assets/helpers are inventoried in the plan and
+were not modified or committed. Runtime still uses v02; pending v03 images are
+256×512 walk and 256×128 idle (`sips -g pixelWidth -g pixelHeight`). Helper source
+inspection found cardinal duplication in idle and two repeated walk poses.
+Image quality/provenance has not been visually verified in this planning pass.
+
+Completed: bounded sequential packages, edit ownership, validation commands,
+reference/acceptance contracts. Latest user requirement covers BOTH Joss and Lucas:
+clear walking and dedicated standing poses with extended legs. This supersedes
+the previous first-walk-frame idle shortcut and its pixel-equality test.
+Next: execute L1, then P1/P2 facade/stairs, then acceptance handoff. No runtime
+changes, asset generation, gameplay tests, deployment or model switch performed.
+Documentation validation: `python3 tools/check_docs.py` and `git diff --check`;
+both passed (0 documentation errors; no whitespace errors). Historical runtime counts below do not
+validate the planned changes.
+
 ## Retro clarity and stable character motion — 2026-10-06
 
 Follow-up: Joss's former idle atlas did not match the walk atlas, so stopping

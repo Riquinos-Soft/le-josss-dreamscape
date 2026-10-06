@@ -1,8 +1,24 @@
 # Spec 010 — Camera clearance, place scale and Lourizán pixel art
 
 Status: implemented
-Updated: 2026-10-06
+Updated: 2026-10-07
 Language: en
+
+## Authorized follow-up — 2026-10-07
+
+The developer authorized continuing Lucas and Pazo improvements and requested
+a bounded plan for an economical executor. [Plan 014](../plans/014-lucas-atlas-and-pazo-refinement.md)
+is ready; implementation has not started. Earlier validation applies to the
+previous release only. Mobile and developer visual acceptance remain pending;
+the new request authorizes proceeding without treating that acceptance as passed.
+
+Current follow-up: paired central arches, projecting glazed bays and gallery
+divisions, mansards/clock, then curved stair outlines and connected landings from
+the supplied video. Preserve current scale/camera, playable routes and batching.
+Acceptance: Plan P1/P2 reference-matched gameplay captures, both stair traversals,
+placement/travel/camera regressions and Web export. Dimensions remain estimates
+unless measured. Next: P1 after character package L1.
+
 
 ## Objective and correction
 

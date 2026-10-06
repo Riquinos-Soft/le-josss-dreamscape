@@ -17,8 +17,9 @@ the English-only specification rule applies to every document in `docs/specs/`.
 | 011 | [Eight-slot bag](011-eight-slot-bag.md) | [012](../specs/012-eight-slot-bag.md) |
 | 012 | [Lourizán guide](012-lourizan-guide.md) | [013](../specs/013-lourizan-guide-dialogue.md) |
 | 013 | [Lucas garden patrol](013-lucas-garden-patrol.md) | [014](../specs/014-lucas-garden-patrol.md) |
+| 014 | [Lucas atlas and Pazo refinement](014-lucas-atlas-and-pazo-refinement.md) | [014](../specs/014-lucas-garden-patrol.md), [010](../specs/010-camera-scale-and-lourizan-art.md), [015](../specs/015-retro-character-clarity.md) |
 
-Next available plan ID: **014**. IDs 001–003 are not backfilled. Plan IDs are
+Next available plan ID: **015**. IDs 001–003 are not backfilled. Plan IDs are
 independent of specs and ADRs. Reserve a unique next ID here, use
 `NNN-short-english-kebab-case.md` and title `# Plan NNN — English title`, and update
 references in the same change. Existing IDs remain stable. During parallel work

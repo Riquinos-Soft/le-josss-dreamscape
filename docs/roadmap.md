@@ -1,6 +1,6 @@
 # General roadmap proposal
 
-Status: draft for developer discussion. Updated: 2026-10-06.
+Status: draft for developer discussion. Updated: 2026-10-07.
 This is an ordering proposal, not authorization for all listed work, a release
 promise or a new architectural decision. Final priorities will be agreed next.
 
@@ -17,6 +17,15 @@ fall recovery, smooth occlusion, touch controls and static Web deployment.
 VPS/database preparation does not mean multiplayer or persistence is implemented.
 Developer art acceptance, full gameplay checks on physical mobile/Safari, and
 sustained performance/download measurements remain open.
+
+## Authorized next iteration — 2026-10-07
+
+The developer requested [Plan 014](plans/014-lucas-atlas-and-pazo-refinement.md)
+for economical sequential execution: proper walking and straight-legged standing
+for Joss/Lucas, then reference-led facade and stairs. This specific continuation
+is authorized; the broader roadmap remains a proposal. Mobile acceptance of the
+previous release remains open but is no longer a prerequisite to this work.
+The earlier “after review” ordering below is historical for this iteration.
 
 ## Current feature sequence
 
