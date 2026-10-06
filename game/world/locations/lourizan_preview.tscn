@@ -1,12 +1,8 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=6 format=3]
 
-[ext_resource type="PackedScene" path="res://assets/lourizan/exterior.glb" id="1_scan"]
 [ext_resource type="PackedScene" path="res://player/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://player/camera_rig.tscn" id="3_camera"]
 [ext_resource type="Script" path="res://world/lourizan_exterior.gd" id="4_script"]
-
-[sub_resource type="BoxShape3D" id="PavingSupport"]
-size = Vector3(8, 0.2, 24)
 
 [sub_resource type="Environment" id="Environment_scan"]
 background_mode = 1
@@ -30,14 +26,6 @@ corner_radius_bottom_right = 5
 script = ExtResource("4_script")
 place_scale = 1.2
 
-[node name="CapturedExterior" parent="." instance=ExtResource("1_scan")]
-
-[node name="PavingSupport" type="StaticBody3D" parent="."]
-position = Vector3(8, 0.03, -4)
-
-[node name="Collision" type="CollisionShape3D" parent="PavingSupport"]
-shape = SubResource("PavingSupport")
-
 [node name="Environment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_scan")
 
@@ -47,7 +35,7 @@ shadow_enabled = false
 light_energy = 0.7
 
 [node name="Player" parent="." node_paths=PackedStringArray("movement_orientation") instance=ExtResource("2_player")]
-position = Vector3(6, 1.1, -12)
+position = Vector3(8, 0.1, 0)
 movement_orientation = NodePath("../CameraRig/Camera")
 prevent_ledge_fall = true
 step_height = 0.25

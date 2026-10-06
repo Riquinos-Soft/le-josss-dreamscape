@@ -1,6 +1,33 @@
 # Development setup and verified baseline
 
-## Camera, scale and Lourizán art — 2026-10-06
+## Authored Lourizán reconstruction and standing workflow — 2026-10-06
+
+Supersedes the rejected filtered scan in `a252591`. [Spec 010](specs/010-camera-scale-and-lourizan-art.md)
+now uses batched authored palace geometry: glazed wings, slate mansards, central
+clock, balustraded terrace, paired walkable stairs and formal planted forecourt.
+Simple collision replaces captured collision. The source GLB stays in the repo
+as an offline reference, excluded from Web export. Shared player, map and items
+remain; the Pazo has wider elevated framing and a 360-line pixel presentation.
+Street/home scale and presentation are preserved. Estimated dimensions and
+simplified ornament/layout require developer review, not survey claims.
+
+The permanent [place workflow](place-authoring.md), `AGENTS.md` and
+`.cursor/rules/real-place-authoring.mdc` require scans primarily as spatial
+references, photographic landmark study, coherent authored geometry, traversal
+and gameplay-camera visual inspection for all new places.
+
+Verification: `PATH=/private/tmp/lourizan-author313/bin:$PATH make check GODOT=/Applications/Godot.app/Contents/MacOS/Godot`
+passed docs, formatter/linter, import, **740 checks with zero failures** and Web
+release export. Log: `build/verification/lourizan-rebuild/final-check.log`.
+Native commands use the same executable with `--path game --max-fps 60 --script
+res://tests/test_location_travel.gd -- --capture` and
+`res://tests/test_lourizan_exterior.gd -- --capture`. Captures/evidence are under
+`build/verification/lourizan/`, `build/verification/home-scan/` and
+`build/verification/lourizan-rebuild/`. The pinned gdtoolkit `pkg_resources`
+deprecation remains; no Godot runtime error was reported by the full check.
+Browser gameplay and final developer art acceptance are separate pending checks.
+
+## Historical: rejected initial Lourizán art — 2026-10-06
 
 [Spec 010](specs/010-camera-scale-and-lourizan-art.md) restores physical camera
 clearance in all three locations; orthographic size now responds as the camera

@@ -59,7 +59,7 @@ orthographic camera, eight-direction Joss sprites, clean pixel-art garage faces,
 dark asphalt and local pixel-stipple wall cutaways. A world-only screen pass
 leaves the HUD at full resolution. Generated source art, prompts, normalized
 runtime sheets and metadata are retained. These remain draft visual assets.
-Walk animation and a three-location map are present in the local entry scene. The Pazo uses the production screen pixel pass; its scan still needs an authored art treatment.
+Walk animation and a three-location map are present in the local entry scene. The Pazo uses authored, material-batched architecture, simple collision and the production screen pixel pass with location-specific framing. Its original scan is retained as an offline reference and excluded from Web export. New places follow [the place-authoring workflow](place-authoring.md).
 
 ## Single-item implementation
 
