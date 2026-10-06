@@ -1,6 +1,8 @@
 extends Node3D
 ## Fixed heading and elevation; only the follow position changes.
 
+const ORTHOGRAPHIC_EYE_DISTANCE := 60.0
+
 @export var target: Node3D
 @export var focus_height := 0.9
 @export var follow_sharpness: float = 8.0
@@ -9,6 +11,7 @@ var camera_offset := Vector3.ZERO
 var clear_fraction: float = 1.0
 var displayed_fraction: float = 1.0
 var base_orthographic_size: float = 0.0
+var clearance_hold := 0.0
 
 
 func _ready() -> void:
@@ -24,6 +27,11 @@ func snap_to_target() -> void:
 	clear_fraction = 1.0
 	displayed_fraction = 1.0
 	$Camera.position = camera_offset
+	if $Camera.projection == Camera3D.PROJECTION_ORTHOGONAL:
+		$Camera.position = camera_offset.normalized() * ORTHOGRAPHIC_EYE_DISTANCE
+		$Camera.far = 200.0
+	clearance_hold = 0.0
+	$Camera.look_at(global_position)
 	$Camera.size = base_orthographic_size
 	reset_physics_interpolation()
 
@@ -36,24 +44,32 @@ func _process(delta: float) -> void:
 	var desired_fraction := clear_fraction if avoid_world_geometry else 1.0
 	var response := 16.0 if desired_fraction < displayed_fraction else 4.0
 	displayed_fraction = lerpf(displayed_fraction, desired_fraction, 1.0 - exp(-response * delta))
-	var head := target.global_position + Vector3.UP * 0.9
-	$Camera.position = (
-		camera_offset * displayed_fraction + (head - global_position) * (1.0 - displayed_fraction)
-	)
-	$Camera.look_at(global_position.lerp(head, 1.0 - displayed_fraction))
+	# In orthographic projection, dollying changes clipping, not apparent scale.
+	# Keep the eye behind the scene and change only size; retain a fixed heading.
 	if $Camera.projection == Camera3D.PROJECTION_ORTHOGONAL:
+		$Camera.position = camera_offset.normalized() * ORTHOGRAPHIC_EYE_DISTANCE
 		$Camera.size = base_orthographic_size * lerpf(0.72, 1.0, displayed_fraction)
+	else:
+		$Camera.position = camera_offset * displayed_fraction
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if not avoid_world_geometry:
 		return
 	var head := target.global_position + Vector3.UP * 0.9
 	var desired_eye := global_position + camera_offset
 	var query := PhysicsRayQueryParameters3D.create(head, desired_eye, 1)
 	var hit := get_world_3d().direct_space_state.intersect_ray(query)
-	clear_fraction = 1.0
+	var next_fraction := 1.0
 	if not hit.is_empty():
-		clear_fraction = clampf(
+		next_fraction = clampf(
 			(head.distance_to(hit.position) - 0.35) / head.distance_to(desired_eye), 0.08, 1.0
 		)
+
+	if next_fraction <= clear_fraction:
+		clear_fraction = next_fraction
+		clearance_hold = 0.18
+	else:
+		clearance_hold = maxf(0.0, clearance_hold - delta)
+		if clearance_hold == 0.0:
+			clear_fraction = next_fraction

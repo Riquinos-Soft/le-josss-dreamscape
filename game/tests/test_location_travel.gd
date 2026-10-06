@@ -81,6 +81,14 @@ func run() -> void:
 		if cycle == 0:
 			await capture("lourizan-pixel-pass")
 		check(session.current_id == &"lourizan", "Lourizán active")
+		check(
+			session.get_node("Street/CameraRig").base_orthographic_size == 13.5,
+			"Pazo uses the same maximum zoom as the street"
+		)
+		check(
+			session.get_node("Street/CameraRig").focus_height == 0.9,
+			"travel keeps camera focused on the player"
+		)
 		check(player.get_instance_id() == original_player, "player identity retained")
 		check(player.is_on_floor(), "Lourizán arrival grounded")
 		check(not session.get_node("Street/Walkway").visible, "street world hidden")

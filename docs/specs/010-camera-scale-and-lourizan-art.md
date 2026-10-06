@@ -24,9 +24,8 @@ superseded; retain its accepted shared camera and scale work.
   raised balustraded terrace, paired stairs, statues and a planted forecourt.
   Geometry is batched by material. Simple collision follows visible surfaces;
   both staircases have continuous ramp collision beneath visible steps.
-- Keep the shared player, map travel, items and Compatibility renderer. The Pazo
-  uses wider elevated framing and a 360-line pixel pass; other locations keep
-  their established 180-line presentation. No runtime reconstruction or streaming.
+- Keep the shared player, map travel, items and Compatibility renderer. All locations use the same maximum 13.5 orthographic size, head focus and
+  180-line pixel presentation. No runtime reconstruction or streaming.
 - Retain the original GLB as an offline proportion/layout reference, without a
   scene dependency, and exclude it from Web export. No undocumented interiors.
 - Apply [the place-authoring workflow](../place-authoring.md) to future locations.
@@ -52,6 +51,17 @@ recognizable first exterior, not a surveyed full estate or an interior model.
 - AC4: Documentation, format/lint, import, automated tests and Web export pass;
   push the authorized change and verify deployment SHA. Evidence and commands in
   [development](../development.md).
+
+## Follow-up — camera stability and garden, 2026-10-06
+
+Implemented: use the same maximum orthographic size (13.5) and head focus in all
+locations. Orthographic obstruction response changes zoom without pushing the
+near plane into walls; hold clearance briefly at corners to avoid oscillation.
+Test close obstacles, release and framing across travel. Enrich garden woodland
+and climbing vegetation from photographed references, preserving clear paths.
+Reference: https://www.galiciamaxica.eu/galicia/pontevedra/comarca-de-pontevedra/pontevedra-c/pazolourizan/
+Native walkthrough captures, camera regression tests and Web export are recorded
+in development. The woodland is an interpreted perimeter, not a surveyed tree inventory.
 
 ## Current scope and next step
 

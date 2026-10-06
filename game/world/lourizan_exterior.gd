@@ -44,9 +44,9 @@ func _ready() -> void:
 			get_node(marker).position *= place_scale
 	if has_node("Player"):
 		$Player.spawn_transform = $Player.transform
-		$CameraRig.base_orthographic_size = 32.0
+		$CameraRig.base_orthographic_size = 13.5
 		$CameraRig/Camera.projection = Camera3D.PROJECTION_ORTHOGONAL
-		$CameraRig.focus_height = 10.5
+		$CameraRig.focus_height = 0.9
 		$CameraRig.snap_to_target()
 
 
@@ -279,9 +279,25 @@ func build_garden() -> void:
 					0.15,
 					bloom
 				)
-	for z in [-24.0, -17.0, 17.0, 24.0]:
-		for x in [19.0, -15.5]:
-			add_tree(Vector3(x, 0, z), 0 if z < 0 else 1)
+	# Layer mature woodland around the forecourt, leaving stair and travel routes open.
+	for i in 18:
+		var z := -26.0 + i * 3.0
+		add_tree(Vector3(20.5 + sin(i * 2.3) * 2.2, 0, z), i % 2, 1.0 + (i % 3) * 0.16)
+	for i in 10:
+		add_tree(Vector3(-17.5, 0, -25.0 + i * 5.3), i % 2, 1.35)
+	for z in [-25.0, 25.0]:
+		for x in [-9.0, -2.0, 7.0, 14.0]:
+			add_tree(Vector3(x, 0, z), 1, 1.15)
+	# Photographed climbing greenery softens the stone beside the central arch.
+	for side in [-1.0, 1.0]:
+		for i in 90:
+			var z: float = side * (1.6 + fmod(i * 0.618, 1.0) * 2.9)
+			var y := 0.25 + fmod(i * 0.379, 1.0) * 3.1
+			orb(
+				Vector3(1.54 + sin(i * 1.7) * 0.09, y, z),
+				0.16 + (i % 4) * 0.035,
+				leaf if i % 3 == 0 else green
+			)
 	# Low physical perimeter makes the modeled boundary unambiguous.
 	for z in [-28.5, 28.5]:
 		box(Vector3(2, 0.4, z), Vector3(48, 0.8, 0.6), shadow, true)
@@ -289,11 +305,11 @@ func build_garden() -> void:
 		box(Vector3(x, 0.4, 0), Vector3(0.6, 0.8, 58), shadow, true)
 
 
-func add_tree(position: Vector3, variant: int) -> void:
+func add_tree(position: Vector3, variant: int, size_factor := 1.0) -> void:
 	var visual := MeshInstance3D.new()
 	var quad := QuadMesh.new()
-	quad.size = Vector2(8, 8)
-	quad.center_offset = Vector3.UP * 3.5
+	quad.size = Vector2(8, 8) * size_factor
+	quad.center_offset = Vector3.UP * 3.5 * size_factor
 	visual.mesh = quad
 	visual.position = position
 	var material := ShaderMaterial.new()
@@ -302,6 +318,7 @@ func add_tree(position: Vector3, variant: int) -> void:
 		"art_texture", preload("res://assets/art/vegetation/plant_jacobo_woodland_v01.png")
 	)
 	material.set_shader_parameter("face_camera", true)
+	material.set_shader_parameter("wall_fade", false)
 	material.set_shader_parameter("atlas_scale", Vector2(0.5, 0.5))
 	material.set_shader_parameter("atlas_offset", Vector2(variant * 0.5, 0))
 	visual.material_override = material

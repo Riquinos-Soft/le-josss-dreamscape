@@ -1,6 +1,32 @@
 # Development setup and verified baseline
 
-## Authored Lourizán reconstruction and standing workflow — 2026-10-06
+## Camera clipping and Lourizán garden correction — 2026-10-06
+
+Supersedes the wide Pazo framing below. All places now share maximum camera size
+13.5, head focus 0.9 and pixel height 180. Orthographic obstruction changes zoom
+without moving the eye into walls; fixed heading, 60 m eye offset and 200 m far
+plane keep the clipping volume behind the scene. Clearance holds for 0.18 seconds
+through brief corner gaps. Perspective behavior retains its original approach.
+Wall reveal starts at a physical distance rather than a fraction of camera distance.
+
+Photo reference: https://www.galiciamaxica.eu/galicia/pontevedra/comarca-de-pontevedra/pontevedra-c/pazolourizan/.
+Inspected the facade/foliage photo. Pazo woodland increases from 8 to 36 trees,
+with varied sizes and layered perimeter planting; small climbing leaf clusters
+soften the central terrace. Placement is an interpretation, not a botanical survey.
+Routes remain clear. No downloaded photo ships as game art.
+
+Verification commands: `PATH=/private/tmp/lourizan-author313/bin:$PATH make check GODOT=/Applications/Godot.app/Contents/MacOS/Godot`
+and native `Godot --path game --max-fps 60 --script res://tests/test_location_travel.gd -- --capture`.
+Evidence: `build/verification/camera-garden/`; screenshots in
+`build/verification/lourizan/`. Tests cover close-wall clipping stability, fixed
+heading, bounded zoom, corner gaps and consistent Pazo framing after travel.
+Full suite: 750 checks, zero failures; Web export passes. Native travel passed
+109 checks and native camera clearance passed 10; inspected the arrival screenshot.
+Browser gameplay is not manually verified; this is not a claim of exhaustive
+flicker elimination.
+The existing gdtoolkit `pkg_resources` deprecation remains.
+
+## Historical: authored Lourizán reconstruction and standing workflow — 2026-10-06
 
 Supersedes the rejected filtered scan in `a252591`. [Spec 010](specs/010-camera-scale-and-lourizan-art.md)
 now uses batched authored palace geometry: glazed wings, slate mansards, central

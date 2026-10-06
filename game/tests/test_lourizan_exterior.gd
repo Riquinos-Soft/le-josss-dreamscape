@@ -13,7 +13,7 @@ func run() -> void:
 	check(scene.has_node("Architecture"), "authored palace replaces the scan")
 	check(not scene.has_node("CapturedExterior"), "raw scan is not rendered or collided")
 	check(
-		scene.get_node("Architecture").get_child_count() < 45,
+		scene.get_node("Architecture").get_child_count() < 80,
 		"architecture batches keep node count bounded"
 	)
 	await capture("lourizan-start")

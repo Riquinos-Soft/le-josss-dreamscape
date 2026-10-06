@@ -195,11 +195,9 @@ func travel_to(destination: StringName) -> bool:
 	player.prevent_ledge_fall = destination != &"street"
 	player.step_height = 0.25 if destination != &"street" else 0.0
 	player.reset_physics_interpolation()
-	camera_rig.base_orthographic_size = 32.0 if destination == &"lourizan" else 13.5
-	camera_rig.focus_height = 10.5 if destination == &"lourizan" else 0.9
-	street.get_node("PixelPass/Screen").material.set_shader_parameter(
-		"world_pixel_height", 360.0 if destination == &"lourizan" else 180.0
-	)
+	camera_rig.base_orthographic_size = 13.5
+	camera_rig.focus_height = 0.9
+	street.get_node("PixelPass/Screen").material.set_shader_parameter("world_pixel_height", 180.0)
 	camera_rig.avoid_world_geometry = true
 	camera_rig.snap_to_target()
 	watch_exit(street if destination == &"street" else incoming)
