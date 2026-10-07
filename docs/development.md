@@ -1,5 +1,22 @@
 # Development setup and verified baseline
 
+## Lucas walk atlas correction — 2026-10-07
+
+Production review found Lucas's animation reading 64px atlas regions from a
+313px-cell walk sheet, which showed a large clipped fragment while moving. The
+runtime now uses the existing olive Lucas candidate normalized into a 4x8 sheet:
+two distinct poses per direction, 48px body height and feet baseline y=60. The
+idle sheet now also uses the matching olive field-worker art instead of the
+incorrect blue sheet. The source prompt for the walk candidate is unavailable;
+the metadata records that limitation.
+
+The focused route/dialogue test passed 130 checks with zero failures. A native
+1280x720 walking capture was inspected at
+`build/verification/lucas-patrol/lucas-walking.png`; the Pazo arches, stair route
+and central paving remain readable around the corrected sprite. Full suite and
+Web export are pending. This native capture is not browser or mobile gameplay
+acceptance.
+
 ## Pazo start, straight-leg idle poses and Lucas conversations — 2026-10-07
 
 Fresh sessions now load Lourizán and bind Lucas; the street exit and map still

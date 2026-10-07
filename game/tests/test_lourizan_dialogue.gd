@@ -43,8 +43,24 @@ func run() -> void:
 		var walk_clip := StringName("walk_" + direction)
 		var idle_frame := guide_sprite.sprite_frames.get_frame_texture(idle_clip, 0) as AtlasTexture
 		var walk_frame := guide_sprite.sprite_frames.get_frame_texture(walk_clip, 0) as AtlasTexture
+		var walk_frame_1 := (
+			guide_sprite.sprite_frames.get_frame_texture(walk_clip, 1) as AtlasTexture
+		)
 		var idle_image := idle_frame.atlas.get_image().get_region(Rect2i(idle_frame.region))
 		var walk_image := walk_frame.atlas.get_image().get_region(Rect2i(walk_frame.region))
+		var walk_image_1 := walk_frame_1.atlas.get_image().get_region(Rect2i(walk_frame_1.region))
+		check(
+			idle_frame.atlas.get_size() == Vector2(256, 512),
+			"Lucas idle uses normalized 64 px cells " + direction
+		)
+		check(
+			walk_frame.atlas.get_size() == Vector2(256, 512),
+			"Lucas walk uses normalized 64 px cells " + direction
+		)
+		check(
+			idle_frame.atlas.resource_path.ends_with("lucas_maconheiro_idle_directions_v03.png"),
+			"Lucas idle uses the authored olive guide sheet " + direction
+		)
 		check(
 			guide_sprite.sprite_frames.get_frame_count(idle_clip) == 1,
 			"Lucas stands still " + direction
@@ -57,8 +73,20 @@ func run() -> void:
 			idle_image.get_used_rect().end.y == 60, "Lucas standing feet are grounded " + direction
 		)
 		check(
+			walk_image.get_used_rect().size.y == 48 and walk_image.get_used_rect().end.y == 60,
+			"Lucas walk silhouette matches standing scale and foot pivot " + direction
+		)
+		check(
+			walk_image_1.get_used_rect().size.y == 48 and walk_image_1.get_used_rect().end.y == 60,
+			"Lucas second walk pose matches standing scale and foot pivot " + direction
+		)
+		check(
 			idle_image.get_data() != walk_image.get_data(),
 			"Lucas standing pose differs from stride " + direction
+		)
+		check(
+			walk_image.get_data() != walk_image_1.get_data(),
+			"Lucas walk alternates between distinct poses " + direction
 		)
 	var patrol_start := guide.global_position
 	await frames(80)

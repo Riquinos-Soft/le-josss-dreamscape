@@ -1,0 +1,16 @@
+{
+  "asset_id": "lucas_maconheiro_walk_v03",
+  "production_status": "integrated; developer visual review pending",
+  "character": "Lucas Maconheiro",
+  "layout": [4, 8],
+  "cell_size": [64, 64],
+  "directions": ["down", "up", "left", "right", "down_left", "down_right", "up_left", "up_right"],
+  "frames_per_direction": 2,
+  "pivot": "feet baseline y=60; body height normalized to 48 pixels",
+  "filter": "linear in runtime",
+  "mipmaps": false,
+  "source": "Existing local transparent candidate found in the workspace on 2026-10-07; original generation prompt and source sheet were not retained",
+  "processing_history": "The atlas matches the output contract of tools/normalize_two_frame_walk.gd; the original processing history is unavailable",
+  "visual_reference": "lucas_maconheiro_idle_v04.png",
+  "notes": "The four cells in each row alternate two walking poses. Source provenance remains incomplete."
+}

@@ -1,6 +1,6 @@
 [gd_resource type="SpriteFrames" load_steps=27 format=3]
 
-[ext_resource type="Texture2D" path="res://assets/art/characters/lucas_maconheiro_walk_v02.png" id="walk"]
+[ext_resource type="Texture2D" path="res://assets/art/characters/lucas_maconheiro_walk_v03.png" id="walk"]
 [ext_resource type="Texture2D" path="res://assets/art/characters/lucas_maconheiro_idle_directions_v03.png" id="idle"]
 
 [sub_resource type="AtlasTexture" id="idle_down"]

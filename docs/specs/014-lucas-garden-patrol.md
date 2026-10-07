@@ -26,6 +26,17 @@ alternating walking steps. Preserve patrol, dialogue freeze/resume and collision
 Acceptance: Plan L1 native eight-direction start/walk/turn/stop captures, dialogue
 and placement regressions, full gate and Web export. Next: execute L1.
 
+## Asset scale correction — 2026-10-07
+
+The production review found the previous walk resource using 64px regions from a
+313px-cell sheet, which rendered clipped artwork. Runtime now pairs the olive
+Lucas idle atlas with a normalized 4x8 walk atlas: 64px cells, two poses per
+direction, 48px character height and feet baseline y=60. Automated checks cover
+all directions, source identity, pose distinction, silhouette height and pivot.
+Native walk and dialogue captures, the full test gate and Web export are recorded
+in [development](../development.md). This verifies the native view; production
+browser and physical-device acceptance remain unclaimed.
+
 Spec 015 governs current filtering and continuous presentation, superseding the
 historical nearest-filter/world-pixel-pass sentence in R2.
 

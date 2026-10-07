@@ -251,6 +251,21 @@ system or conflicts with accepted scale contracts. Use local ramps/meshes first.
 
 ## Execution results — 2026-10-07
 
+### Lucas walk asset follow-up
+
+Production review exposed a mismatched v02 walk sheet: runtime sliced 64px
+regions from a 313px-cell atlas, causing the oversized clipped sprite. Integrated
+the existing olive Lucas walk candidate as a 4x8 atlas and normalized each
+direction's two poses to 48px body height and feet baseline y=60. Replaced the
+incorrect blue idle runtime sheet with the olive field-worker atlas matching
+Lucas's outfit. The original walk prompt/source is unavailable and is explicitly
+recorded as such; no generated provenance is inferred. Automated coverage now
+checks all eight directions, atlas geometry, correct idle art, pose distinction,
+body height and planted pivot. Focused route/dialogue test: 130 checks, zero
+failures. Native 1280x720 walking capture inspected at
+`build/verification/lucas-patrol/lucas-walking.png`; Lucas is legible at Joss's
+scale with no clipped atlas region. Full gate and Web export results are pending.
+
 L1 is committed as `3451cb8`; Joss uses dedicated eight-direction standing art
 with straight legs and planted feet, and Lucas uses a new eight-direction idle
 atlas alongside the existing two-pose v02 walk. Runtime walk presentation is

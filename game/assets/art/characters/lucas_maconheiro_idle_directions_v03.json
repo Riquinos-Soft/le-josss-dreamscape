@@ -2,35 +2,16 @@
   "asset_id": "lucas_maconheiro_idle_directions_v03",
   "production_status": "implemented; developer visual review pending",
   "character": "Lucas Maconheiro",
-  "layout": [
-    4,
-    8
-  ],
-  "cell_size": [
-    64,
-    64
-  ],
-  "directions": [
-    "down",
-    "up",
-    "left",
-    "right",
-    "down_left",
-    "down_right",
-    "up_left",
-    "up_right"
-  ],
+  "layout": [4, 8],
+  "cell_size": [64, 64],
+  "directions": ["down", "up", "left", "right", "down_left", "down_right", "up_left", "up_right"],
   "frames_per_direction": 1,
   "pivot": "feet baseline y=60; body height normalized to 48 pixels",
-  "filter": "linear in runtime, nearest resize from original generated sheet",
+  "filter": "linear in runtime, nearest resize from the original generated sheet",
   "mipmaps": false,
-  "source": "OpenAI built-in image generation, 2026-10-07; 887x1774 transparent 4x8 sheet normalized into 64x64 cells",
-  "prompt": "Lucas Maconheiro in eight compass facings: auburn hair, blue jacket, dark trousers, brown boots and backpack. Upright standing idle pose with both legs straight, parallel and side by side; boots aligned on the same baseline, no stride; relaxed arms. Transparent background.",
+  "source": "Normalized from lucas_maconheiro_idle_v04.png, an original eight-direction olive-field-worker sheet generated 2026-10-07",
+  "prompt": "Lucas Maconheiro: tied-back dark hair, beard, olive field jacket, ochre shirt, brown trousers and canvas satchel. Eight distinct facings; upright standing pose with straight legs together, planted boots and relaxed arms; transparent background.",
   "normalizer": "tools/normalize_generated_idle.gd",
-  "walk_reference": "lucas_maconheiro_walk_v02.png",
-  "source_path_note": "Generated transparent source is retained at assets/source/ai/lucas_idle_straight_legs_v01.png",
-  "source_layout": [
-    4,
-    8
-  ]
+  "source_image": "lucas_maconheiro_idle_v04.png",
+  "walk_reference": "lucas_maconheiro_walk_v03.png"
 }
