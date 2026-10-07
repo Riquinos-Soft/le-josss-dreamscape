@@ -11,6 +11,7 @@ var input_enabled: bool = true
 var travel_available: bool = false
 var travel_only: bool = false
 var talk_available: bool = false
+var bag_button: BaseButton
 var stick_finger: int = -1
 var stick_center := Vector2.ZERO
 var stick_value := Vector2.ZERO
@@ -114,6 +115,14 @@ func handle_touch(event: InputEvent) -> void:
 			if event.index == stick_finger:
 				stick_finger = -1
 				set_stick(stick_center)
+			return
+		if (
+			is_instance_valid(bag_button)
+			and bag_button.is_visible_in_tree()
+			and not bag_button.disabled
+			and bag_button.get_global_rect().has_point(event.position)
+		):
+			bag_requested.emit()
 			return
 		if event.position.distance_to(stick_center) <= RADIUS and stick_finger == -1:
 			stick_finger = event.index

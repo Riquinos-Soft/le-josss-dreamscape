@@ -46,6 +46,7 @@ func _ready() -> void:
 	touch_controls.map_requested.connect(open_map)
 	touch_controls.talk_requested.connect(open_dialogue)
 	touch_controls.bag_requested.connect(open_bag)
+	touch_controls.bag_button = bag_ui.open_button
 	item_loop.bag_requested.connect(open_bag)
 	item_loop.feedback_requested.connect(bag_ui.show_feedback)
 	dialogue.closed.connect(on_dialogue_closed)

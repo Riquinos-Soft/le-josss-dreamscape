@@ -1,5 +1,22 @@
 # Development setup and verified baseline
 
+## Mobile backpack icon input — 2026-10-07
+
+The touch controller consumed screen and emulated mouse events before the bag
+Control could receive them. The session now binds the actual bag button to the
+touch controller, which routes a press within its visible, enabled rectangle
+through the existing bag signal. Empty and occupied bags open from the icon;
+opening clears held joystick movement and retains the existing modal gates.
+
+Validation: `test_bag_ui.gd` passed 33 checks headlessly and natively at 844x390.
+Regression inputs include touch press/release and emulated mouse pairs, initial
+empty Pazo inventory, compact occupied inventory, held steering and no placement
+click-through. Inspected `build/verification/bag/bag-compact.png`. Full
+`PATH=/private/tmp/lourizan-author313/bin:$PATH make check
+GODOT=/Applications/Godot.app/Contents/MacOS/Godot` passed, including Web export;
+log: `build/verification/bag/mobile-icon-check.log`. The existing gdtoolkit
+`pkg_resources` deprecation warning remains. Physical mobile gameplay is pending.
+
 ## Lucas walk atlas correction — 2026-10-07
 
 Production review found Lucas's animation reading 64px atlas regions from a

@@ -20,6 +20,13 @@ func run() -> void:
 	items = session.get_node("Street/ItemLoop")
 	player = session.get_node("Street/Player")
 	await frames(20)
+	var touch: Control = session.get_node("Street/TouchHUD/TouchControls")
+	touch.enable_touch()
+	tap_icon()
+	await frames(2)
+	check(bag.is_open and bag.occupancy.text == "0/8", "touch icon opens empty bag at Pazo arrival")
+	check(player.input_locked and not touch.input_enabled, "icon acquires modal input lock")
+	session.close_bag()
 	await travel_to_street()
 	check(bag.slot_buttons.size() == 8, "bag exposes eight stable slot controls")
 	check(not bag.is_open and bag.open_button.visible, "closed bag icon is visible")
@@ -73,8 +80,18 @@ func run() -> void:
 	)
 	await capture("bag-compact")
 	session.close_bag()
-	var touch: Control = session.get_node("Street/TouchHUD/TouchControls")
-	touch.enable_touch()
+	var stick := InputEventScreenTouch.new()
+	stick.index = 0
+	stick.position = touch.stick_center + Vector2(45, 0)
+	stick.pressed = true
+	root.push_input(stick, true)
+	check(player.touch_direction != Vector2.ZERO, "joystick held before icon tap")
+	tap_icon()
+	await frames(2)
+	check(bag.is_open, "compact icon opens occupied bag with emulated mouse pair")
+	check(player.touch_direction == Vector2.ZERO, "icon tap clears held joystick")
+	check(not items.placement_active and items.commands.is_empty(), "icon tap cannot place an item")
+	session.close_bag()
 	touch.update_actions()
 	check(touch.action_rects.has("bag"), "touch bag action appears when occupied")
 	var tap := InputEventScreenTouch.new()
@@ -87,6 +104,23 @@ func run() -> void:
 	check(bag.is_open and not touch.input_enabled, "touch opens modal bag")
 	print("Bag UI: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
+
+
+func tap_icon() -> void:
+	var point: Vector2 = bag.open_button.get_global_rect().get_center()
+	for pressed in [true, false]:
+		var tap := InputEventScreenTouch.new()
+		tap.index = 3
+		tap.position = point
+		tap.pressed = pressed
+		root.push_input(tap, true)
+		var mouse := InputEventMouseButton.new()
+		mouse.device = InputEvent.DEVICE_ID_EMULATION
+		mouse.position = point
+		mouse.button_index = MOUSE_BUTTON_LEFT
+		mouse.pressed = pressed
+		root.push_input(mouse, true)
+	Input.flush_buffered_events()
 
 
 func frames(count: int) -> void:

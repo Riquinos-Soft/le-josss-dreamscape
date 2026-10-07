@@ -1,12 +1,23 @@
 # Spec 012 — Eight-slot bag and travelling objects
 
 Status: implemented
-Updated: 2026-10-06
+Updated: 2026-10-07
 Language: en
 
 Authorization: developer requested the spec and launched its implementation with
 `Sigue el siguiente spec` on 2026-10-06. The scoped feature is implemented.
 Developer art acceptance and physical mobile gameplay remain pending.
+
+## Authorized mobile icon fix — 2026-10-07
+
+The developer reported that tapping the persistent backpack icon cannot open the
+bag on mobile. Route this visible icon through the existing touch input owner,
+using its live UI rectangle. It must open with an empty or occupied inventory,
+including on initial arrival at Lourizán, reset held steering and preserve modal
+exclusion. Verify press/release plus emulated mouse events and compact layout.
+Implemented: 33 bag UI checks passed in headless and native runs; the full gate
+and Web export passed. Evidence is recorded in [development](../development.md).
+Physical Android/iOS acceptance remains pending.
 
 ## Objective
 
