@@ -157,15 +157,42 @@ func run() -> void:
 	)
 	check(
 		LourizanHistory.DIALOGUES.any(
-			func(pages: Array): return pages.size() == 1 and pages[0] == dialogue.body_label.text
+			func(pages: Array): return pages[0] == dialogue.body_label.text
 		),
-		"one complete conversation variant is shown"
+		"selected conversation opens at its first page"
 	)
 	check(LourizanHistory.DIALOGUES.size() == 10, "Lucas has ten conversation variants")
 	var brazil_jokes := LourizanHistory.DIALOGUES.filter(
 		func(pages: Array): return pages[0].contains("Brasil")
 	)
 	check(brazil_jokes.size() == 2, "exactly two variants joke about Brazil")
+	var selected_pages: Array[String] = dialogue.pages.duplicate()
+	var speaker_anchor: Node3D = dialogue.anchor
+	for variant in LourizanHistory.DIALOGUES:
+		var pages: Array[String] = []
+		pages.assign(variant)
+		var is_joke: bool = pages[0].contains("Brasil")
+		check(pages.size() == (1 if is_joke else 2), "only jokes stay on one page")
+		dialogue.open(LourizanHistory.SPEAKER, speaker_anchor, pages)
+		check(
+			dialogue.continue_button.text == ("Terminar" if is_joke else "Continuar"),
+			"conversation exposes the correct first action"
+		)
+		if not is_joke:
+			await frames(2)
+			click_continue()
+			await frames(1)
+			check(
+				(
+					dialogue.is_open
+					and dialogue.page_index == 1
+					and dialogue.body_label.text == pages[1]
+					and dialogue.continue_button.text == "Terminar"
+				),
+				"continue button shows the final page without closing"
+			)
+			check(player.input_locked and guide.conversation_active, "continuation retains locks")
+	dialogue.open(LourizanHistory.SPEAKER, speaker_anchor, selected_pages)
 	var first_choice: int = session.last_dialogue_index
 	var prior_choice: int = first_choice
 	var distinct_choices := true
@@ -198,9 +225,11 @@ func run() -> void:
 	Input.flush_buffered_events()
 	await frames(1)
 	check(dialogue.page_index == 0, "held key cannot skip a page")
-	key(KEY_E)
-	await frames(1)
-	check(not dialogue.is_open, "one-page conversation closes on fresh action")
+	for page in dialogue.pages.size():
+		check(dialogue.page_index == page, "fresh key advances exactly one page")
+		key(KEY_E)
+		await frames(1)
+	check(not dialogue.is_open, "final fresh action closes the conversation")
 	session.open_dialogue()
 	await frames(1)
 	check(
@@ -226,8 +255,9 @@ func run() -> void:
 	root.size = Vector2i(1280, 720)
 	await frames(2)
 	await capture("lucas-dialogue")
-	key(KEY_ENTER)
-	await frames(2)
+	for _page in dialogue.pages.size():
+		key(KEY_ENTER)
+		await frames(1)
 	check(not dialogue.is_open and not player.input_locked, "final action restores movement")
 	check(session.get_node("Street/TouchHUD/TouchControls").input_enabled, "touch movement returns")
 	check(not guide.conversation_active, "closing dialogue releases Lucas patrol")
@@ -298,6 +328,17 @@ func key(code: Key) -> void:
 	event.physical_keycode = code
 	event.pressed = true
 	root.push_input(event, true)
+	Input.flush_buffered_events()
+
+
+func click_continue() -> void:
+	for pressed in [true, false]:
+		var event := InputEventMouseButton.new()
+		event.device = InputEvent.DEVICE_ID_EMULATION
+		event.position = dialogue.continue_button.get_global_rect().get_center()
+		event.button_index = MOUSE_BUTTON_LEFT
+		event.pressed = pressed
+		root.push_input(event, true)
 	Input.flush_buffered_events()
 
 

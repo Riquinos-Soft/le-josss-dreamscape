@@ -1,5 +1,21 @@
 # Development setup and verified baseline
 
+## Lucas continuation pages — 2026-10-07
+
+All eight ordinary conversation variants now split into two readable pages using
+the existing `Continuar` → `Terminar` controls. Both Brazil jokes remain complete
+on a single page with `Terminar`. Historical claims and random selection without
+immediate repeats are preserved. This supersedes the single-page content record
+below.
+
+The dialogue test checks all ten variants, actual emulated-mouse button presses,
+one-page advancement per fresh key, held-key rejection and locks through the
+continuation. Native Compatibility run passed 168 checks; full headless gate
+passed 167 (the random opening selects a one- or two-page variant). The same
+`make check` and successful Web export log as the bag fix is recorded at
+`build/verification/bag/mobile-icon-check.log`. No physical mobile gameplay is
+claimed.
+
 ## Mobile backpack icon input — 2026-10-07
 
 The touch controller consumed screen and emulated mouse events before the bag

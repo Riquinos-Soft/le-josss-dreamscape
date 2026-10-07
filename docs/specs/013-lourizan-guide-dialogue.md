@@ -1,7 +1,7 @@
 # Spec 013 — Lourizán guide and paged dialogue
 
 Status: implemented
-Updated: 2026-10-06
+Updated: 2026-10-07
 Language: en
 
 Authorization: developer requested the spec and then launched implementation with
@@ -9,6 +9,18 @@ Authorization: developer requested the spec and then launched implementation wit
 visual/copy acceptance and real browser/physical-device gameplay remain pending.
 The stationary visual and movement scope below was extended by
 [Spec 014](014-lucas-garden-patrol.md); its dialogue contract remains current.
+
+## Authorized continuation follow-up — 2026-10-07
+
+The developer requested continuation pages for normal conversations, while keeping
+jokes complete on one page. All eight non-joke variants must have two pages:
+`Continuar` advances exactly once and the final page uses `Terminar`. Both Brazil
+jokes remain single-page conversations with `Terminar`. Preserve random selection,
+no immediate repeats, modal locks and the existing historical content boundary.
+Implemented: content and actual emulated-mouse button checks cover all ten
+variants; native and headless dialogue runs and the full Web export gate passed.
+Evidence is recorded in [development](../development.md). Physical-device
+acceptance remains pending.
 
 ## Objective
 
@@ -41,7 +53,7 @@ differs from the immediately preceding conversation.
   speaker. Avoid HUD/touch conflicts. Reflow for 1280×720 and 844×390; do not shrink
   text below readability or crop buttons. If a paragraph needs more space, split
   its display into continuation pages rather than losing text.
-- R5 — Show the full selected conversation immediately. Each fresh E/Enter/Space
+- R5 — Show the current page immediately. Each fresh E/Enter/Space
   press or `Continuar` click/tap advances one page. Opening input must not skip
   page one; held keys, key-repeat and emulated touch/mouse pairs must not skip
   pages. Last button reads `Terminar`; final activation closes the conversation.
