@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://npcs/lourizan_guide.tscn" id="1"]
+[ext_resource type="SpriteFrames" path="res://assets/art/characters/ines_idle_v01.tres" id="2"]
+
+[node name="InesBotanica" instance=ExtResource("1")]
+speaker_name = "Inés · Botánica"
+dialogue_pages = PackedStringArray("Estoy anotando los colores del jardín. Cada paseo me deja una página distinta.", "Si subes a la terraza, encontrarás la puerta del Salón de los sueños.")
+patrol_enabled = false
+
+[node name="Sprite" parent="." index="0"]
+sprite_frames = ExtResource("2")

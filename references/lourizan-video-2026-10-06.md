@@ -29,3 +29,11 @@ Next facade pass after mobile review: double arch and projecting volumes first;
 gallery modules, stair/landing outlines and large stone slab patterns next.
 Calibrate dimensions before claiming metre measurements. Follow
 [the place workflow](../docs/place-authoring.md).
+
+## Authored expansion — 2026-10-07
+
+Spec 016 uses 00:13 for continuous glazed bays and pale frames, 00:26/00:53 for
+statue pedestals, and 01:19 for restrained stone tones and large paving slabs.
+The walkable salon is a fictional dream interpretation authorized separately;
+the video supplies no interior evidence. Floating castles reference the original
+game cover, not the real estate. No additional measured dimensions are claimed.

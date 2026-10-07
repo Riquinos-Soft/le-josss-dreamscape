@@ -14,6 +14,8 @@ var reflection: ShaderMaterial
 var green: ShaderMaterial
 var leaf: ShaderMaterial
 var bloom: ShaderMaterial
+var plaster: ShaderMaterial
+var gold: ShaderMaterial
 
 
 func _ready() -> void:
@@ -21,8 +23,10 @@ func _ready() -> void:
 	architecture.name = "Architecture"
 	architecture.scale = Vector3.ONE * place_scale
 	add_child(architecture)
-	stone = paint(Color("a9a18a"), 1)
-	trim = paint(Color("d5cbb0"))
+	stone = paint(Color("b7ad98"), 1)
+	trim = paint(Color("ded3b9"))
+	plaster = paint(Color("c4a89b"))
+	gold = paint(Color("ac9257"))
 	shadow = paint(Color("68685f"), 1)
 	slate = paint(Color("354555"), 2)
 	glass = paint(Color("263f46"))
@@ -32,8 +36,10 @@ func _ready() -> void:
 	leaf = paint(Color("526c42"))
 	bloom = paint(Color("bb7181"))
 	build_palace()
+	build_gallery_details()
 	build_stairs()
 	build_garden()
+	build_garden_furniture()
 	for material in batches:
 		var visual := MeshInstance3D.new()
 		visual.mesh = batches[material].commit()
@@ -132,7 +138,15 @@ func window(at: Vector3, width := 1.25, height := 2.6) -> void:
 		box(at + Vector3(0.10, y, 0), Vector3(0.14, 0.08, width), frame)
 	box(at + Vector3(0.13, -height / 2 - 0.16, 0), Vector3(0.4, 0.19, width + 0.32), trim)
 	box(at + Vector3(0.13, height / 2 + 0.16, 0), Vector3(0.4, 0.20, width + 0.32), trim)
-	box(at + Vector3(0.09, 0.65, -width * 0.23), Vector3(0.10, 1.1, 0.15), reflection)
+	for z in [-0.28, 0.28]:
+		box(
+			at + Vector3(0.08, 0.18, z * width),
+			Vector3(0.06, height * 0.7, width * 0.23),
+			reflection
+		)
+	for y in [-height * 0.20, height * 0.28]:
+		box(at + Vector3(0.15, y, 0), Vector3(0.08, 0.055, width), frame)
+	box(at + Vector3(0.17, height * 0.36, 0), Vector3(0.06, 0.035, width), trim)
 
 
 func balustrade(start: Vector3, end: Vector3) -> void:
@@ -262,15 +276,81 @@ func build_stairs() -> void:
 
 
 func statue(base: Vector3) -> void:
-	box(base + Vector3.UP * 0.4, Vector3(0.65, 0.8, 0.65), shadow)
-	column(base + Vector3.UP * 1.28, 0.2, 1.05, trim)
-	orb(base + Vector3.UP * 1.97, 0.19, trim)
-	box(base + Vector3(0, 1.65, 0), Vector3(0.35, 0.18, 0.65), trim)
+	# A broad pedestal, draped figure and bent arms, as seen beside the stair flights.
+	for height in [0.10, 0.83, 0.96]:
+		box(base + Vector3.UP * height, Vector3(0.85, 0.13, 0.85), trim)
+	box(base + Vector3.UP * 0.48, Vector3(0.66, 0.65, 0.66), stone)
+	column(base + Vector3.UP * 1.45, 0.26, 0.9, trim)
+	for z in [-0.13, 0.0, 0.13]:
+		column(base + Vector3(0.18, 1.38, z), 0.035, 0.7, stone)
+	orb(base + Vector3.UP * 2.08, 0.19, trim)
+	column(base + Vector3.UP * 1.87, 0.09, 0.18, trim)
+	orb(base + Vector3(0, 1.74, -0.27), 0.14, trim)
+	orb(base + Vector3(0, 1.74, 0.27), 0.14, trim)
+	column(base + Vector3(0.04, 1.57, -0.3), 0.07, 0.32, trim)
+	column(base + Vector3(0.12, 1.63, 0.26), 0.07, 0.3, trim)
+
+
+func build_gallery_details() -> void:
+	# Pale pink wall panels and continuous frames from video 00:13 and 01:19.
+	for z in range(-18, 19, 2):
+		if abs(z) < 3:
+			continue
+		box(Vector3(-2.96, 6.35, z + 0.85), Vector3(0.10, 3.8, 0.48), plaster)
+		for y in [4.35, 8.35]:
+			box(Vector3(-2.60, y, z), Vector3(0.25, 0.12, 1.48), trim)
+	for z in [-10.0, 10.0]:
+		# Projecting glazed galleries have visible end returns, pilasters and cornices.
+		for side in [-1.0, 1.0]:
+			box(Vector3(-2.42, 6.7, z + side * 3.2), Vector3(0.55, 4.85, 0.35), trim)
+			box(Vector3(-2.52, 10.4, z + side * 3.2), Vector3(0.42, 3.25, 0.32), trim)
+		for y in [4.15, 8.7, 9.05, 11.92]:
+			box(Vector3(-2.25, y, z), Vector3(0.8, 0.18, 7.15), trim)
+		for offset in [-2.1, 0.0, 2.1]:
+			window(Vector3(-2.35, 6.45, z + offset), 1.85, 3.8)
+		for end_z in [z - 3.28, z + 3.28]:
+			for x in [-4.0, -5.8, -7.6]:
+				box(Vector3(x, 10.35, end_z), Vector3(1.5, 2.65, 0.08), glass)
+				for dx in [-0.75, 0.0, 0.75]:
+					box(Vector3(x + dx, 10.35, end_z), Vector3(0.07, 2.85, 0.15), frame)
+				for y in [9.0, 10.5, 11.7]:
+					box(Vector3(x, y, end_z), Vector3(1.6, 0.08, 0.15), frame)
+		balustrade(Vector3(-2.05, 8.95, z - 3.3), Vector3(-2.05, 8.95, z + 3.3))
+	for z in [-17.0, -15.0, -5.0, 5.0, 15.0, 17.0]:
+		# Roofline balustrades between the raised pavilions.
+		balustrade(Vector3(-2.7, 9.25, z - 0.9), Vector3(-2.7, 9.25, z + 0.9))
+	for z in [-1.75, 1.75]:
+		for y in [4.55, 8.75]:
+			box(Vector3(-1.85, y, z), Vector3(0.58, 0.23, 0.58), trim)
+	# Brass double doors clearly mark the authorized dream-salon entrance on the terrace.
+	box(Vector3(-2.82, 4.95, 3.8), Vector3(0.18, 2.55, 1.7), glass)
+	for z in [3.0, 3.8, 4.6]:
+		box(Vector3(-2.69, 4.95, z), Vector3(0.12, 2.65, 0.07), gold)
+	box(Vector3(-2.67, 6.30, 3.8), Vector3(0.28, 0.16, 1.95), trim)
+	for z in [3.63, 3.97]:
+		column(Vector3(-2.58, 4.95, z), 0.035, 0.3, gold)
+
+
+func build_garden_furniture() -> void:
+	var timber := paint(Color("624b36"))
+	var iron := paint(Color("263e3b"))
+	for z in [-19.0, 19.0]:
+		for x in [6.0, 10.0]:
+			box(Vector3(x, 0.52, z), Vector3(2.5, 0.16, 0.72), timber, true)
+			for slat in 3:
+				box(Vector3(x, 0.92 + slat * 0.14, z - 0.35), Vector3(2.5, 0.10, 0.09), timber)
+			for side in [-1.0, 1.0]:
+				box(Vector3(x + side, 0.27, z), Vector3(0.09, 0.5, 0.62), iron)
+				box(Vector3(x + side, 0.7, z - 0.35), Vector3(0.07, 1.0, 0.09), iron)
+		for x in [3.0, 14.0]:
+			column(Vector3(x, 1.6, z), 0.065, 3.2, iron)
+			box(Vector3(x, 3.25, z), Vector3(0.38, 0.45, 0.38), gold)
+			box(Vector3(x, 3.55, z), Vector3(0.5, 0.12, 0.5), iron)
 
 
 func build_garden() -> void:
 	var grass: ShaderMaterial = load("res://world/vegetation/grass.tres")
-	var paving: ShaderMaterial = load("res://world/vegetation/gravel.tres")
+	var paving := paint(Color("a7a58f"), 3)
 	box(Vector3(2, -0.20, 0), Vector3(48, 0.4, 58), grass, true)
 	box(Vector3(8, 0.015, 0), Vector3(15, 0.035, 46), paving)
 	for z in [-12.0, 12.0]:

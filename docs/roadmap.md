@@ -31,6 +31,11 @@ poses, Lourizán as the fresh-session spawn, and ten randomized Lucas conversati
 with two Brazil jokes. That follow-up shipped in `0aaed2e`; the CI deploy verified
 production. Developer visual and physical mobile acceptance remain next.
 
+The developer subsequently authorized [Spec 016](specs/016-lourizan-galleries-and-salon.md):
+video-led gallery/paving details, three fictional residents, a luxurious dream
+salon and floating castle scenery beyond the playable boundary. This bounded
+expansion is implemented; visual/physical-device acceptance remains open.
+
 ## Current feature sequence
 
 Current visual checkpoint: [Spec 015](specs/015-retro-character-clarity.md) improves

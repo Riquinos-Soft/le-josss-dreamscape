@@ -23,6 +23,8 @@ var near_exit: Area3D
 var busy := false
 var street_environment: Environment
 var active_guide: Node3D
+var speakers: Array[Node3D] = []
+var inside_salon := false
 var dialogue_controls_owned := false
 var last_dialogue_index := -1
 
@@ -39,6 +41,10 @@ var last_dialogue_index := -1
 
 
 func _ready() -> void:
+	var backdrop := Node3D.new()
+	backdrop.name = "DreamCastles"
+	backdrop.set_script(preload("res://world/dream_castles.gd"))
+	add_child(backdrop)
 	street_environment = street.get_node("Environment").environment
 	map_ui.open_requested.connect(open_map)
 	map_ui.cancel_requested.connect(close_map)
@@ -122,12 +128,14 @@ func item_supports(location: Node3D) -> Array[CollisionObject3D]:
 	for node in location.find_children("*", "StaticBody3D", true, false):
 		if is_instance_valid(guide) and guide.is_ancestor_of(node):
 			continue
-		if node.collision_layer & 1:
+		if node.collision_layer & 1 and not node.is_in_group("placement_obstacle"):
 			supports.append(node)
 	return supports
 
 
 func _process(_delta: float) -> void:
+	if not dialogue.is_open:
+		_select_nearby_speaker()
 	var can_talk: bool = (
 		is_instance_valid(active_guide)
 		and not dialogue.is_open
@@ -140,12 +148,14 @@ func _process(_delta: float) -> void:
 	if is_instance_valid(active_guide):
 		active_guide.set_prompt_visible(can_talk)
 	touch_controls.talk_available = can_talk
+	if is_instance_valid(active_guide):
+		touch_controls.talk_name = active_guide.speaker_name
 	if map_ui.is_open or dialogue.is_open or bag_ui.is_open:
 		return
 	var location: Node3D = street if current_id == &"street" else active_location
 	if location == null:
 		return
-	var exit: Area3D = location.get_node("Exit")
+	var exit: Area3D = location.get_node("Salon/Exit" if inside_salon else "Exit")
 	var camera: Camera3D = camera_rig.get_node("Camera")
 	var screen_direction := (
 		camera.unproject_position(exit.global_position)
@@ -156,7 +166,11 @@ func _process(_delta: float) -> void:
 	var distance := roundi(Vector2(offset.x, offset.z).length())
 	map_ui.set_guide(
 		(
-			"Salida al mapa · %d m\nSigue %s; pulsa M al llegar."
+			(
+				"Jardín · %d m\nSigue %s hasta el umbral dorado."
+				if inside_salon
+				else "Salida al mapa · %d m\nSigue %s; pulsa M al llegar."
+			)
 			% [distance, MAP_DIRECTIONS[direction_index]]
 		)
 	)
@@ -268,11 +282,13 @@ func open_dialogue() -> void:
 	map_ui.prompt.hide()
 	active_guide.set_prompt_visible(false)
 	active_guide.set_conversation_active(true)
-	last_dialogue_index = LourizanHistory.choose_dialogue(last_dialogue_index)
 	var pages: Array[String] = []
-	for paragraph in LourizanHistory.DIALOGUES[last_dialogue_index]:
-		pages.append(paragraph)
-	dialogue.open(LourizanHistory.SPEAKER, active_guide.get_node("Head"), pages)
+	if active_guide.dialogue_pages.is_empty():
+		last_dialogue_index = LourizanHistory.choose_dialogue(last_dialogue_index)
+		pages.assign(LourizanHistory.DIALOGUES[last_dialogue_index])
+	else:
+		pages.assign(active_guide.dialogue_pages)
+	dialogue.open(active_guide.speaker_name, active_guide.get_node("Head"), pages)
 
 
 func close_dialogue() -> void:
@@ -297,12 +313,58 @@ func bind_active_guide() -> void:
 	if is_instance_valid(active_guide):
 		active_guide.set_prompt_visible(false)
 	active_guide = null
+	speakers.clear()
+	inside_salon = false
 	if current_id == &"lourizan" and is_instance_valid(active_location):
 		active_guide = active_location.get_node_or_null("LucasMaconheiro")
-		if is_instance_valid(active_guide):
-			active_guide.set_movement_view(camera_rig.get_node("Camera"))
+		for node in active_location.find_children("*", "AnimatableBody3D", true, false):
+			if node.is_in_group("lourizan_speaker"):
+				speakers.append(node)
+				node.set_movement_view(camera_rig.get_node("Camera"))
+		for path in ["TerraceEntrance", "Salon/Exit"]:
+			var passage := active_location.get_node_or_null(path)
+			if passage != null and not passage.passage_requested.is_connected(_use_passage):
+				passage.passage_requested.connect(_use_passage)
 	touch_controls.talk_available = false
 	touch_controls.update_actions()
+
+
+func _select_nearby_speaker() -> void:
+	var nearest: Node3D
+	var distance := INF
+	for speaker in speakers:
+		if not is_instance_valid(speaker):
+			continue
+		speaker.set_prompt_visible(false)
+		var candidate_distance := player.global_position.distance_squared_to(
+			speaker.global_position
+		)
+		if candidate_distance < distance and speaker.can_talk(player):
+			nearest = speaker
+			distance = candidate_distance
+	if nearest != null:
+		active_guide = nearest
+
+
+func _use_passage(passage: Area3D) -> void:
+	if busy or map_ui.is_open or dialogue.is_open or bag_ui.is_open:
+		return
+	var target := passage.get_node_or_null(passage.destination) as Marker3D
+	if target == null:
+		return
+	item_loop.cancel_placement()
+	item_loop.commands.clear()
+	player.set_input_locked(true)
+	touch_controls.reset_touch()
+	player.global_transform = target.global_transform
+	player.spawn_transform = player.global_transform
+	player.velocity = Vector3.ZERO
+	player.reset_physics_interpolation()
+	inside_salon = passage.indoors
+	near_exit = null
+	map_ui.show_prompt(false)
+	camera_rig.snap_to_target()
+	player.set_input_locked(false)
 
 
 func open_bag() -> void:

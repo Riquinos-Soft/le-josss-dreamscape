@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://npcs/lourizan_guide.tscn" id="1"]
+[ext_resource type="SpriteFrames" path="res://assets/art/characters/brais_idle_v01.tres" id="2"]
+
+[node name="BraisAnfitrion" instance=ExtResource("1")]
+speaker_name = "Brais · Anfitrión"
+dialogue_pages = PackedStringArray("Bienvenido al Salón de los sueños. Aquí el mármol, el terciopelo y las lámparas invitan a quedarse.", "Este salón pertenece a nuestro sueño del Pazo. Para volver al jardín, cruza el umbral dorado de la entrada.")
+patrol_enabled = false
+
+[node name="Sprite" parent="." index="0"]
+sprite_frames = ExtResource("2")

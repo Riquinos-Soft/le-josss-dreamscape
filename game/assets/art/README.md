@@ -19,3 +19,8 @@ door, window groupings and green banks. Reinterpreted: flatter facade geometry,
 violet/amber palette, stylized plants, sprite character and orthographic camera.
 Remaining terrain/vegetation still contains scan facets and requires a later art
 pass. Local trial sizes must not be presented as finalized Bible standards.
+
+The stationary Inés/Brais/Alba atlas is `characters/lourizan_residents_v01.png`.
+Its generated source and exact built-in image_gen prompt are retained at
+[resident provenance](../../../assets/source/ai/lourizan_residents_source_v01.md).
+The 3x1 runtime strip uses 64px cells, 48px silhouettes and feet baseline y=60.

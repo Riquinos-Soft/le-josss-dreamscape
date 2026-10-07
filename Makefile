@@ -16,6 +16,7 @@ TESTS := \
 	test_scan_movement.gd \
 	test_connected_stairs.gd \
 	test_lourizan_exterior.gd \
+	test_lourizan_salon.gd \
 	test_lourizan_dialogue.gd \
 	test_location_travel.gd \
 	test_street_character.gd \

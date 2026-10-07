@@ -17,12 +17,22 @@ void fragment() {
  color *= 0.99 + 0.02 * step(0.75, grain);
  if (pattern == 1) {
   float joint = fract(point.y * 2.5);
-  color *= mix(0.86, 1.0, step(0.04, joint));
+  float row = floor(point.y * 2.5);
+  float vertical = fract((point.x + point.z) * 0.9 + mod(row, 2.0) * 0.5);
+  color *= mix(0.86, 1.0, step(0.035, joint) * step(0.012, vertical));
  }
  if (pattern == 2) {
   float row = floor(point.y * 5.0);
   float slate = fract((point.z + point.x) * 3.0 + mod(row, 2.0) * 0.5);
   color *= 0.85 + 0.15 * step(0.06, slate);
+ }
+ if (pattern == 3) {
+  vec2 slab = vec2(point.x * 0.75, point.z * 0.9);
+  slab.y += mod(floor(slab.x), 2.0) * 0.5;
+  vec2 edge = fract(slab);
+  float join = step(0.018, edge.x) * step(0.018, edge.y);
+  float tone = fract(sin(dot(floor(slab), vec2(12.9898, 78.233))) * 43758.5453);
+  color *= mix(0.74, 0.92 + tone * 0.14, join);
  }
  ALBEDO = color;
  ROUGHNESS = 1.0;

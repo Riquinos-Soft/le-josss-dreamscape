@@ -24,8 +24,9 @@ None of these documents silently authorizes unrelated work.
 | 013 | [Lourizán guide and paged dialogue](013-lourizan-guide-dialogue.md) | implemented | Developer dialogue/art review and browser/physical-device gameplay |
 | 014 | [Lucas garden patrol and character art](014-lucas-garden-patrol.md) | implemented | Developer review; authorized atlas follow-up in Plan 014 |
 | 015 | [Retro character clarity and stable walking](015-retro-character-clarity.md) | implemented | Developer visual/mobile review of straight-leg idle poses |
+| 016 | [Lourizán galleries, residents and dream salon](016-lourizan-galleries-and-salon.md) | implemented | Developer art and physical-device acceptance |
 
-Next available spec ID: **016**. Recompute from this registry before reserving;
+Next available spec ID: **017**. Recompute from this registry before reserving;
 this line is not a standing reservation for an agent or a feature.
 
 ## Language and file naming

@@ -3,6 +3,9 @@ extends AnimatableBody3D
 
 const TALK_RANGE := 2.0
 const DirectionalAnimation = preload("res://player/directional_animation.gd")
+@export var speaker_name := "Lucas Maconheiro"
+@export var dialogue_pages: PackedStringArray = []
+@export var patrol_enabled := true
 @export var walk_speed := 0.8
 @export var waypoint_pause := 1.25
 var patrol_offsets := PackedVector3Array(
@@ -27,14 +30,15 @@ var facing: StringName = &"down"
 
 
 func _ready() -> void:
-	add_to_group("lourizan_guide")
+	add_to_group("lourizan_guide" if patrol_enabled else "lourizan_resident")
+	add_to_group("lourizan_speaker")
 	talk_marker.hide()
 	patrol_origin = position
 	_play_animation(false)
 
 
 func _physics_process(delta: float) -> void:
-	if conversation_active:
+	if conversation_active or not patrol_enabled:
 		_play_animation(false)
 		return
 	if pause_remaining > 0.0:

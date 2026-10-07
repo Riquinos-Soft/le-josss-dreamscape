@@ -11,6 +11,7 @@ var input_enabled: bool = true
 var travel_available: bool = false
 var travel_only: bool = false
 var talk_available: bool = false
+var talk_name := "Lucas Maconheiro"
 var bag_button: BaseButton
 var stick_finger: int = -1
 var stick_center := Vector2.ZERO
@@ -175,7 +176,7 @@ func _process(delta: float) -> void:
 	if portrait:
 		message.text = "Gira el móvil\npara jugar en horizontal"
 	elif talk_available:
-		message.text = "Lucas Maconheiro · Pulsa Hablar"
+		message.text = talk_name + " · Pulsa Hablar"
 	elif travel_only:
 		message.text = "Pazo de Lourizán · explora el lugar"
 	elif items.placement_active:

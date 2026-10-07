@@ -1,5 +1,33 @@
 # Development setup and verified baseline
 
+## Lourizán galleries, residents and dream salon — 2026-10-07
+
+[Spec 016](specs/016-lourizan-galleries-and-salon.md) adds detailed gallery glazing,
+pale stone/cornice work, large slab paving, stair statues, benches and lanterns
+from the local video. Three original stationary residents (Inés, Alba and Brais)
+use the existing collision/dialogue contract and nearest reachable speaker
+selection. Their generated source, prompt and deterministic 64px normalization
+are retained under `assets/source/ai/`. Lucas keeps his existing patrol/content.
+
+A pair of walking doorways connects the terrace to a finite fictional salon with
+marble, carpet, gilded paneling, curtains, chandelier, seating and fireplace.
+Furniture collision is excluded from eligible item support; the floor remains
+valid. Doorways reset input/camera, retain location inventory and block under
+modals. The starry purple void and eight decorative floating castles take their
+palette from the game cover and have no physics bodies.
+
+Validation: native `Godot --path game --max-fps 60 --resolution 1280x720 --script
+res://tests/test_lourizan_salon.gd -- --capture` and the 844x390 run each passed
+25 checks. Logs: `build/verification/pazo-salon-native.log` and
+`build/verification/pazo-salon-compact.log`. Inspected arrival, terrace, salon and
+castle-edge captures under `build/verification/home-scan/pazo-*.png`.
+`PATH=/private/tmp/lourizan-author313/bin:$PATH make check
+GODOT=/Applications/Godot.app/Contents/MacOS/Godot` passed the full suite and Web
+export; log: `build/verification/pazo-expansion-check.log`. The existing
+gdtoolkit deprecation warning remains. The salon is an imagined dream interior,
+not a measured reconstruction. Browser/physical-device and developer art
+acceptance remain pending.
+
 ## Lucas continuation pages — 2026-10-07
 
 All eight ordinary conversation variants now split into two readable pages using
