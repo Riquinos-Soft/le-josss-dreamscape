@@ -23,7 +23,7 @@ None of these documents silently authorizes unrelated work.
 | 012 | [Eight-slot bag and travelling objects](012-eight-slot-bag.md) | implemented | Developer art review and physical mobile gameplay |
 | 013 | [Lourizán guide and paged dialogue](013-lourizan-guide-dialogue.md) | implemented | Developer dialogue/art review and browser/physical-device gameplay |
 | 014 | [Lucas garden patrol and character art](014-lucas-garden-patrol.md) | implemented | Developer review; authorized atlas follow-up in Plan 014 |
-| 015 | [Retro character clarity and stable walking](015-retro-character-clarity.md) | implemented | Developer visual/mobile review of straight-leg idle poses |
+| 015 | [Retro character clarity and stable walking](015-retro-character-clarity.md) | implemented | Canonical character refactor; developer visual/mobile review pending |
 | 016 | [Lourizán galleries, residents and dream salon](016-lourizan-galleries-and-salon.md) | implemented | Developer art and physical-device acceptance |
 
 Next available spec ID: **017**. Recompute from this registry before reserving;

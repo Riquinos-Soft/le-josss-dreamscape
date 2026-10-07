@@ -39,7 +39,7 @@ func run() -> void:
 	world.add_child(actor)
 	character = AnimatedSprite3D.new()
 	character.set_script(load("res://player/street_character.gd"))
-	character.sprite_frames = load("res://assets/art/characters/char_joss_animations_v02.tres")
+	character.sprite_frames = load("res://assets/art/characters/joss.tres")
 	character.movement_actor = actor
 	character.movement_view = camera
 	actor.add_child(character)
@@ -54,6 +54,14 @@ func run() -> void:
 		var idle_image := idle_texture.atlas.get_image().get_region(Rect2i(idle_texture.region))
 		var first_walk_image := first_walk_texture.atlas.get_image().get_region(
 			Rect2i(first_walk_texture.region)
+		)
+		check(
+			idle_texture.region == Rect2(0, DIRECTIONS.find(direction) * 64, 64, 64),
+			"standing art addresses its own directional row " + direction
+		)
+		check(
+			same_identity(idle_image, first_walk_image),
+			"stopping preserves exact walking head and torso " + direction
 		)
 		var idle_bounds := idle_image.get_used_rect()
 		check(idle_bounds.end.y == 60, "standing feet are grounded " + direction)
@@ -174,3 +182,13 @@ func check(condition: bool, label: String) -> void:
 	if not condition:
 		failures += 1
 		push_error(label)
+
+
+func same_identity(idle: Image, walk: Image) -> bool:
+	for y in 43:
+		for x in 64:
+			var a := idle.get_pixel(x, y)
+			var b := walk.get_pixel(x, y)
+			if a.a != b.a or (a.a > 0.0 and a != b):
+				return false
+	return true

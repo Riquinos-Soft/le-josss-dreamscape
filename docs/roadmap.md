@@ -61,6 +61,14 @@ authored Pazo architecture, camera corrections and the initial reusable botanica
 kit (Specs 009–011). Visual/browser acceptance is still tracked separately. These
 feature candidates refine the older contextual-interaction proposal below.
 
+## Next character appearance spec requested
+
+The developer intends a separate spec for configurable face, hair, clothes and
+body style with dynamically composed character/NPC visuals. The current character
+cleanup supplies canonical style references and separates presentation resources
+from identity. Decide layers/generation strategy and authoring contracts in that
+spec; this note does not authorize a runtime generator or customization UI.
+
 ## Proposed sequence and exit criteria
 
 | Stage | Outcome | Exit criteria and dependencies | Authority |

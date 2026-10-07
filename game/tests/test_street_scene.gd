@@ -28,13 +28,18 @@ func run() -> void:
 	check(player.global_position.y > 0.2, "player stays on street surface")
 	await capture("spawn")
 	var sprite := player.get_node("PixelCharacter") as AnimatedSprite3D
-	var sheet := (
-		preload("res://assets/art/characters/char_joss_idle_directions_v02.png").get_image()
-	)
-	for index in 8:
-		var frame_image := sheet.get_region(Rect2i((index % 4) * 64, (index / 4) * 64, 64, 64))
-		var bounds := frame_image.get_used_rect()
-		check(bounds.size.y == 48 and bounds.end.y == 60, "sprite height and feet pivot consistent")
+	var directions := [
+		"down", "up", "left", "right", "down_left", "down_right", "up_left", "up_right"
+	]
+	for direction in directions:
+		var idle := sprite.sprite_frames.get_frame_texture("idle_" + direction, 0) as AtlasTexture
+		var walk := sprite.sprite_frames.get_frame_texture("walk_" + direction, 0) as AtlasTexture
+		var idle_bounds := idle.atlas.get_image().get_region(Rect2i(idle.region)).get_used_rect()
+		var walk_bounds := walk.atlas.get_image().get_region(Rect2i(walk.region)).get_used_rect()
+		check(
+			idle_bounds.size.y == walk_bounds.size.y and idle_bounds.end.y == 60,
+			"standing silhouette keeps its walking height and feet pivot " + direction
+		)
 	for action in ["move_right", "move_forward", "move_left", "move_back"]:
 		Input.action_press(action)
 		await frames(8)

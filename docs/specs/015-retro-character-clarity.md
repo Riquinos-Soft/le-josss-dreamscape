@@ -8,38 +8,43 @@ Authorization: developer requested Secret of Evermore-inspired restyling,
 starting with a small character/readability and walking-stability release,
 deployment, then their mobile playtest before further art work.
 
-## Authorized follow-up — 2026-10-07
+## Current refactor — 2026-10-07
 
-The developer authorized continuing Lucas and Pazo improvements and requested
-a bounded plan for an economical executor. [Plan 014](../plans/014-lucas-atlas-and-pazo-refinement.md)
-is ready; implementation has not started. Earlier validation applies to the
-previous release only. Mobile and developer visual acceptance remain pending;
-the new request authorizes proceeding without treating that acceptance as passed.
+Authorized by the developer: remove obsolete character asset versions, use stable
+unversioned names, and harmonize idle/walk silhouettes with Joss's existing walk
+art. The runtime Joss idle resource incorrectly slices a 4x8 sheet as 4x2; fix
+its actual eight-facing mapping. Retain directional state, frame cadence and
+planted straight-leg standing poses. The current walking head and torso are the
+canonical identity reference; idle must preserve their pixels and proportions.
+Static residents must use the same compact, large-head style.
 
-The developer further required BOTH Joss and Lucas to walk correctly and adopt
-a standing shape with extended legs when stopped. This supersedes R5's
-requirement to reuse the first walk frame: retain proportions and facing, but
-use dedicated standing art for all eight directions. The developer clarified
-that both legs must be straight and side by side, with boots aligned at the same
-height; planted feet and no frozen stride. Preserve proportions, facing, stable
-direction transitions and walk-cycle phase.
+Keep only the active runtime atlases, animation resources and reproducible source
+masters. Git retains historical assets; the working tree must not accumulate
+obsolete variants. Verify exact idle row mapping, distinct direction imagery,
+matching head/torso at rest, movement transitions and NPC conversations. Next:
+developer visual review of the normalized comparison and canonical assets.
 
-Follow-up acceptance: inspect eight-direction start/walk/turn/stop sequences
-for both characters at 1280×720 and 844×390; verify wall stops and Lucas
-waypoint/dialogue pauses use standing poses. Replace the old pixel-equality
-regression with applicable state/grounding checks and visual evidence. Plan L1
-initially used dedicated poses, but developer review clarified that the legs did
-not read as straight and together. The 2026-10-07 follow-up replaces both idle
-atlases with straight-leg standing art and verifies all directions. Results and
-remaining review are recorded in [development](../development.md).
+Future direction supplied by the developer: a separate spec will define character
+style configurations (face, hair, clothing, proportions) and dynamic appearance
+composition. Current SpriteFrames remain replaceable presentation resources,
+independent of NPC identity/dialogue. Do not add unused customization fields or
+claim that baked sprites already implement configurable appearance. The current
+atlases are transitional art references for that next spec.
 
+## Historical iterations
+
+Earlier releases alternated between first-walk-frame idle and independently
+generated standing art. They passed movement-state checks but failed developer
+visual review: head/body proportions changed and directional atlas addressing
+was wrong. The current refactor supersedes those visual acceptance claims;
+older evidence in development notes applies only to those earlier commits.
 
 ## Objective and scope
 
 Recover the detail already authored in Joss and Lucas and reduce shimmering and
 direction flicker while walking. Establish the presentation direction for later
 original character art and a more faithful Lourizán facade. This first release
-changes rendering and animation behavior; facade remodeling follows mobile review.
+now confines changes to character assets, addressing and visual consistency.
 
 ## Requirements
 
@@ -58,44 +63,47 @@ changes rendering and animation behavior; facade remodeling follows mobile revie
   readable expressive sprites, restrained earthy colours, coherent shading,
   original textures and geometry. No copied commercial assets.
 - R5 — Stopping after movement must retain Joss's exact directional silhouette.
-  The idle and first walk pose share the same normalized atlas frame, preventing
-  an unrelated head proportion from appearing at rest.
+  Idle preserves the first walk frame's visible head and torso pixels above y=43,
+  with separately prepared straight-leg standing art below. Every directional
+  animation must address its own actual atlas row.
 
 ## Non-goals
 
-No full character redraw, facade reconstruction, new renderer, postprocessing
-stack, gameplay feature or physical-device acceptance inferred from desktop tests.
+No facade reconstruction, new renderer, gameplay feature or runtime appearance
+generator. Face/hair/clothing configuration is reserved for the requested next
+spec. Physical-device and developer visual acceptance remain separate.
 
 ## Acceptance criteria
 
-- AC1 — Compare the same native scene at 1280x720 and 844x390 with old and new
-  presentation; inspect faces, outlines and details while retaining readable UI.
+- AC1 — Inspect all eight walk/idle direction pairs and the resident lineup,
+  plus the native gameplay composition. Idle retains walking head/torso identity
+  and uses straight standing legs. Developer visual acceptance remains pending.
 - AC2 — Automated movement covers eight directions, noisy analog sector edges,
   deliberate turns, uninterrupted phase, wall stop and respawn. Lucas dialogue
   and patrol regressions pass.
-- AC3 — Existing tests and Web export pass; deploy and verify the public release.
-  Developer plays on a physical mobile before the next visual pass.
+- AC3 — Existing tests and Web export pass. The current refactor is committed
+  locally for review; prior deployment evidence applies to earlier releases.
+- AC4 — Keep only active character atlases/resources with stable unversioned
+  names and retained source provenance. Record configurable appearance as the
+  next spec without implementing a generator in this cleanup.
 
-## Steps and next action
+## Validation and next action
 
-1. Capture the old and new presentation, implement continuous sampling and stable
-   directional animation, then inspect a short native walk.
-2. Run focused checks and full gate, document, commit and deploy.
-3. Await mobile feedback. Next art milestone: facade proportions, glazed bays,
-   mansard profiles, central clock and paired curved stairs from photographs.
+Godot 4.7.2 Compatibility: the full `make check` passed 1138 checks with zero
+failures and produced the Web export. The character test has 172 checks covering
+real movement, all eight facings, correct idle row addressing and exact visible
+head/torso retention; Lucas has corresponding checks in the 184-check dialogue
+suite. The scene test now checks the real runtime resources rather than an unused
+legacy sheet. It compares each idle silhouette height to its corresponding walk
+frame; the canonical walk has a per-frame maximum of 48px, not 48px for every pose.
 
-## Validation
-
-Godot 4.7.2 Compatibility: `make check` passed 928 checks and Web release export.
-The character test also passed 140 checks natively at 60 FPS. Native A/B captures
-at 1280x720 and 844x390 plus walking frames were inspected. Logs and images are in
-`build/verification/restyle/`; commands are in [development](../development.md).
-No full browser gameplay or physical mobile performance pass is claimed.
-
-Follow-up: the idle atlas had a different Joss drawing from the walk atlas, making
-his head change proportion when movement stopped. Idle now uses each direction's
-first walk frame and a focused regression check compares their pixel data. The
-follow-up validation is recorded in [development](../development.md).
+Native 1280x720 dialogue run passed 184 checks and its capture was inspected.
+The eight-direction walk/idle comparison and resident lineup were also inspected;
+paths and commands are recorded in [development](../development.md). An inventory
+audit found five used runtime PNGs and five used SpriteFrames resources, no
+version suffixes or unreferenced character variants. Old assets remain in Git.
+The existing gdtoolkit deprecation warning remains. Next: developer visual review
+and the separate configurable appearance specification.
 
 ## References and open questions
 

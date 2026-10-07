@@ -32,7 +32,7 @@ Leer antes de planificar ejecución:
   [assets](https://app.notion.com/p/3e678dc87e92816687f4e0a522ed4f56) y
   [personajes](https://app.notion.com/p/3e678dc87e928129b15bc2c833de2e09).
 - `game/assets/art/characters/char_joss_idle_directions_v02.json` y su PNG (8 direcciones).
-- `references/joss-character-v2-reference.png`, ficha maestra actual aportada por el desarrollador.
+- `references/joss-character-reference.png`, ficha maestra actual aportada por el desarrollador.
 - `game/world/jacobo_risa_street.gd/.tscn`, sólo las partes indicadas por tarea.
 
 Base: el integrador debe registrar `git rev-parse HEAD` al activar el plan. No

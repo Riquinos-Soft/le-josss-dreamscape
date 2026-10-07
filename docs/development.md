@@ -1,5 +1,39 @@
 # Development setup and verified baseline
 
+## Canonical character assets and matching idle identity — 2026-10-07
+
+The developer requested a bounded character cleanup before further world work.
+Runtime now contains five used PNG atlases and five SpriteFrames resources with
+stable names and no version suffixes. Superseded runtime atlases, source drafts,
+old character references and unused cardinal normalization helpers were removed;
+Git retains their history. Current masters/prompts live in
+[character sources](../assets/source/characters/README.md); the active layout
+contract is in [runtime art](../game/assets/art/characters/README.md).
+
+Fixed Joss idle addressing from an incorrect 4x2 layout to the actual 4x8 rows.
+Lucas also mixed an obsolete two-directions-per-row walk layout and incorrect
+idle diagonals; all clips now address the intended row. Generated standing legs
+are composed with the exact canonical walk head/torso above y=43 so identity and
+scale remain stable. Inés/Brais/Alba were restyled to compact large-head proportions.
+No character generation/customization system is claimed: the requested next spec
+will define face/hair/clothing configurations independently of these transitional
+presentation resources.
+
+Validation: `PATH=/private/tmp/lourizan-author313/bin:$PATH make check
+GODOT=/Applications/Godot.app/Contents/MacOS/Godot` passed 1138 checks with zero
+failures, docs/format/lint/import and Web export. Log:
+`build/verification/characters/full-check.log`. The native 1280x720 dialogue run
+passed 184 checks (`build/verification/characters/native-dialogue.log`); inspected
+`build/verification/lucas-patrol/lucas-dialogue.png` and the eight-facing comparison
+`build/verification/characters/comparison.png` (columns: Joss walk/idle, Lucas
+walk/idle; residents below). Tests ignore RGB padding beneath zero alpha when
+comparing visible identity pixels. The street scene test now reads actual runtime
+clips instead of the unused old sheet and checks their paired silhouette heights.
+The canonical walk uses a maximum of 48px, with small per-pose differences.
+Earlier asset-validation records below are historical and superseded by this
+refactor. The gdtoolkit deprecation warning remains; physical-device and developer
+art acceptance remain pending.
+
 ## Lourizán galleries, residents and dream salon — 2026-10-07
 
 [Spec 016](specs/016-lourizan-galleries-and-salon.md) adds detailed gallery glazing,

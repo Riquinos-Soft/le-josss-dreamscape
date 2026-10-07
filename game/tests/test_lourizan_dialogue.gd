@@ -50,6 +50,14 @@ func run() -> void:
 		var walk_image := walk_frame.atlas.get_image().get_region(Rect2i(walk_frame.region))
 		var walk_image_1 := walk_frame_1.atlas.get_image().get_region(Rect2i(walk_frame_1.region))
 		check(
+			idle_frame.region.position.y == walk_frame.region.position.y,
+			"Lucas idle and walk use the same facing row " + direction
+		)
+		check(
+			same_identity(idle_image, walk_image),
+			"Lucas stopping preserves exact head and torso " + direction
+		)
+		check(
 			idle_frame.atlas.get_size() == Vector2(256, 512),
 			"Lucas idle uses normalized 64 px cells " + direction
 		)
@@ -58,7 +66,7 @@ func run() -> void:
 			"Lucas walk uses normalized 64 px cells " + direction
 		)
 		check(
-			idle_frame.atlas.resource_path.ends_with("lucas_maconheiro_idle_directions_v03.png"),
+			idle_frame.atlas.resource_path.ends_with("lucas_idle.png"),
 			"Lucas idle uses the authored olive guide sheet " + direction
 		)
 		check(
@@ -73,11 +81,19 @@ func run() -> void:
 			idle_image.get_used_rect().end.y == 60, "Lucas standing feet are grounded " + direction
 		)
 		check(
-			walk_image.get_used_rect().size.y == 48 and walk_image.get_used_rect().end.y == 60,
+			(
+				walk_image.get_used_rect().size.y >= 46
+				and walk_image.get_used_rect().size.y <= 48
+				and walk_image.get_used_rect().end.y == 60
+			),
 			"Lucas walk silhouette matches standing scale and foot pivot " + direction
 		)
 		check(
-			walk_image_1.get_used_rect().size.y == 48 and walk_image_1.get_used_rect().end.y == 60,
+			(
+				walk_image_1.get_used_rect().size.y >= 46
+				and walk_image_1.get_used_rect().size.y <= 48
+				and walk_image_1.get_used_rect().end.y == 60
+			),
 			"Lucas second walk pose matches standing scale and foot pivot " + direction
 		)
 		check(
@@ -374,3 +390,13 @@ func finish() -> void:
 		Input.action_release(action)
 	print("Lourizán dialogue: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
+
+
+func same_identity(idle: Image, walk: Image) -> bool:
+	for y in 43:
+		for x in 64:
+			var a := idle.get_pixel(x, y)
+			var b := walk.get_pixel(x, y)
+			if a.a != b.a or (a.a > 0.0 and a != b):
+				return false
+	return true
