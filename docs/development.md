@@ -1,5 +1,23 @@
 # Development setup and verified baseline
 
+## Palace pixel architectural follow-up — 2026-10-13
+
+Spec 019's first material pass did not satisfy the developer's architectural
+request. Replaced decorative primitive geometry with seven original integer-grid
+SVG ornaments, using the recent supplied video at 00:13/00:26/00:40/00:53.
+Arches have recessed shading and concentric mouldings; galleries have drawn panes;
+balusters/statues/clock/dormers/ivy use discrete silhouettes. Added continuous
+stair rails, removed random stone grain, reduced harsh face shading. Retained
+structural masses, stair ramps and all collision. Fixed camera-facing relief and
+facade planes share batched alpha-scissor materials.
+
+Evidence: `build/verification/palace-pixel/`. Godot import/native day-night captures,
+`make export-web`, `gdformat --check game`, `gdlint game`, docs and whitespace
+checks. Existing gdtoolkit deprecation warning remains. No full automated gameplay
+tests or physical device/browser review run. Visual acceptance remains pending;
+local commits only. The mobile hint fix is separate commit `c186472`.
+
+
 ## Mobile map hint removal — 2026-10-13
 
 Developer requested removal of the map-exit/M instruction on mobile. TravelMap

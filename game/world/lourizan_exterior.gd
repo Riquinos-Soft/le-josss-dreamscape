@@ -4,6 +4,7 @@ extends Node3D
 @export var place_scale := 1.2
 var architecture: Node3D
 var batches: Dictionary = {}
+var ornament_materials: Dictionary = {}
 var stone: ShaderMaterial
 var trim: ShaderMaterial
 var shadow: ShaderMaterial
@@ -100,15 +101,6 @@ func column(position: Vector3, radius: float, height: float, material: Material)
 	piece(mesh, position, material)
 
 
-func orb(position: Vector3, radius: float, material: Material) -> void:
-	var mesh := SphereMesh.new()
-	mesh.radius = radius
-	mesh.height = radius * 2.0
-	mesh.radial_segments = 8
-	mesh.rings = 4
-	piece(mesh, position, material)
-
-
 func roof(center: Vector3, width: float, depth: float) -> void:
 	var surface := SurfaceTool.new()
 	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
@@ -130,23 +122,29 @@ func roof(center: Vector3, width: float, depth: float) -> void:
 	box(center, Vector3(depth + 0.25, 0.22, width + 0.25), trim)
 
 
+func ornament(at: Vector3, size: Vector2, asset: String, turn := 0.0) -> void:
+	if not ornament_materials.has(asset):
+		var material := StandardMaterial3D.new()
+		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR
+		material.alpha_scissor_threshold = 0.5
+		material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+		material.cull_mode = BaseMaterial3D.CULL_DISABLED
+		material.albedo_texture = load("res://assets/art/architecture/lourizan-" + asset + ".svg")
+		ornament_materials[asset] = material
+	var mesh := QuadMesh.new()
+	mesh.size = size
+	piece(mesh, at, ornament_materials[asset], Vector3(0, PI / 2 + turn, 0))
+
+
+func carved_post(at: Vector3, height := 0.86) -> void:
+	# Drawn relief faces the fixed isometric camera without intersecting cutout planes.
+	ornament(at + Vector3.UP * height / 2, Vector2(0.35, height), "baluster", -PI / 4)
+
+
 func window(at: Vector3, width := 1.25, height := 2.6) -> void:
-	box(at, Vector3(0.13, height, width), glass)
-	for z in [-width / 2, 0.0, width / 2]:
-		box(at + Vector3(0.10, 0, z), Vector3(0.13, height + 0.18, 0.08), frame)
-	for y in [-height / 2, height / 2, 0.25]:
-		box(at + Vector3(0.10, y, 0), Vector3(0.14, 0.08, width), frame)
-	box(at + Vector3(0.13, -height / 2 - 0.16, 0), Vector3(0.4, 0.19, width + 0.32), trim)
-	box(at + Vector3(0.13, height / 2 + 0.16, 0), Vector3(0.4, 0.20, width + 0.32), trim)
-	for z in [-0.28, 0.28]:
-		box(
-			at + Vector3(0.08, 0.18, z * width),
-			Vector3(0.06, height * 0.7, width * 0.23),
-			reflection
-		)
-	for y in [-height * 0.20, height * 0.28]:
-		box(at + Vector3(0.15, y, 0), Vector3(0.08, 0.055, width), frame)
-	box(at + Vector3(0.17, height * 0.36, 0), Vector3(0.06, 0.035, width), trim)
+	ornament(at + Vector3(0.21, 0, 0), Vector2(width + 0.28, height + 0.32), "window")
+	box(at + Vector3(0.10, -height / 2 - 0.16, 0), Vector3(0.28, 0.13, width + 0.32), trim)
 
 
 func balustrade(start: Vector3, end: Vector3) -> void:
@@ -157,8 +155,7 @@ func balustrade(start: Vector3, end: Vector3) -> void:
 	box((start + end) / 2, size, shadow)
 	for index in range(ceili(length / 0.45) + 1):
 		var base := start.lerp(end, float(index) / ceili(length / 0.45))
-		column(base + Vector3.UP * 0.45, 0.085, 0.78, trim)
-		orb(base + Vector3.UP * 0.36, 0.13, trim)
+		carved_post(base)
 
 
 func build_palace() -> void:
@@ -175,28 +172,12 @@ func build_palace() -> void:
 			window(Vector3(-2.55, 10.35, z + offset), 1.65, 2.7)
 		roof(Vector3(-6.25, 12.15, z), 6.9, 7.7)
 		column(Vector3(-6.25, 15.1, z), 0.09, 1.1, trim)
-		var dormer := CylinderMesh.new()
-		dormer.top_radius = 0.68
-		dormer.bottom_radius = 0.68
-		dormer.height = 0.24
-		dormer.radial_segments = 16
-		piece(dormer, Vector3(-2.05, 13.0, z), trim, Vector3(0, 0, PI / 2))
-		dormer = dormer.duplicate()
-		dormer.top_radius = 0.47
-		dormer.bottom_radius = 0.47
-		piece(dormer, Vector3(-1.91, 13.0, z), glass, Vector3(0, 0, PI / 2))
+		ornament(Vector3(-1.84, 13.0, z), Vector2(1.55, 1.55), "dormer")
 	# Central clock pavilion, pilasters, upper balcony and entry.
 	box(Vector3(-5.6, 9.8, 0), Vector3(6.8, 2.5, 6.2), stone)
 	roof(Vector3(-5.6, 11.2, 0), 6.6, 7.2)
 	box(Vector3(-2.0, 12.0, 0), Vector3(0.65, 2.6, 2.35), trim)
-	var face := CylinderMesh.new()
-	face.top_radius = 0.76
-	face.bottom_radius = 0.76
-	face.height = 0.10
-	face.radial_segments = 32
-	piece(face, Vector3(-1.60, 12.10, 0), frame, Vector3(0, 0, PI / 2))
-	box(Vector3(-1.52, 12.36, 0), Vector3(0.08, 0.56, 0.07), slate)
-	box(Vector3(-1.51, 12.10, 0.22), Vector3(0.08, 0.07, 0.5), slate)
+	ornament(Vector3(-1.60, 12.20, 0), Vector2(2.45, 2.45), "clock")
 	window(Vector3(-2.05, 6.4, 0), 2.3, 3.55)
 	for z in [-1.75, 1.75]:
 		column(Vector3(-1.9, 6.6, z), 0.22, 4.55, trim)
@@ -214,26 +195,15 @@ func build_palace() -> void:
 	box(Vector3(-0.75, 1.8, 0), Vector3(4.5, 3.6, 24), shadow, true)
 	box(Vector3(-0.75, 3.62, 0), Vector3(4.8, 0.12, 24.2), trim)
 	balustrade(Vector3(1.6, 3.7, -6), Vector3(1.6, 3.7, 6))
-	# Two closed-backed arches with a substantial central pier; no interior access.
-	for center_z in [-0.95, 0.95]:
-		for side in [-1.0, 1.0]:
-			box(Vector3(1.63, 0.82, center_z + side * 0.84), Vector3(0.32, 1.64, 0.28), trim)
-		for index in 13:
-			var angle := float(index) * PI / 12
-			box(
-				Vector3(1.63, 1.58 + sin(angle) * 0.84, center_z + cos(angle) * 0.84),
-				Vector3(0.32, 0.25, 0.26),
-				trim
-			)
-	box(Vector3(1.64, 0.92, 0), Vector3(0.38, 1.84, 0.32), stone)
+	# Reference video 00:40: paired recessed vaults, concentric mouldings and broad pier.
+	ornament(Vector3(1.535, 1.63, 0), Vector2(4.15, 3.26), "arches")
 	# Rounded landing slabs connect each lower stair run to the forecourt.
 	for z in [-17.0, -14.0, -5.0, 5.0, 14.0, 17.0]:
 		box(Vector3(-2.25, 0.24, z), Vector3(0.9, 0.48, 1.8), shadow)
-		orb(Vector3(-2.25, 0.8, z), 0.62, green)
-		orb(Vector3(-2.05, 1.0, z - 0.25), 0.38, leaf)
+		box(Vector3(-2.25, 0.56, z), Vector3(0.65, 0.2, 1.5), green)
 	for z in [-17.5, -13.7, -6, 6, 13.7, 17.5]:
 		column(Vector3(-2.35, 9.7, z), 0.2, 0.85, trim)
-		orb(Vector3(-2.35, 10.2, z), 0.35, green)
+		ornament(Vector3(-2.35, 10.2, z), Vector2(0.65, 0.70), "ivy", -PI / 4)
 
 
 func build_stairs() -> void:
@@ -248,8 +218,7 @@ func build_stairs() -> void:
 		for index in 9:
 			var angle := -PI / 2.0 + float(index) * PI / 8.0
 			var rail_position := Vector3(5.85 + cos(angle) * 2.0, 0.42, z + sin(angle) * 2.0)
-			column(rail_position, 0.09, 0.72, trim)
-			orb(rail_position + Vector3.UP * 0.43, 0.13, trim)
+			carved_post(rail_position - Vector3.UP * 0.34, 0.90)
 		for step in 18:
 			var height := (18 - step) * 0.2
 			box(Vector3(1.5 + step * 0.24, height / 2, z), Vector3(0.26, height, 4.2), stone)
@@ -270,8 +239,11 @@ func build_stairs() -> void:
 			for index in 13:
 				var x := 1.4 + index * 0.35
 				var y := 3.6 * (1.0 - float(index) / 12)
-				column(Vector3(x, y + 0.48, z + side * 2.15), 0.10, 0.85, trim)
-				orb(Vector3(x, y + 0.95, z + side * 2.15), 0.14, trim)
+				carved_post(Vector3(x, y + 0.08, z + side * 2.15), 0.88)
+			# Continuous sloped handrail, following the real stair flights.
+			var rail := BoxMesh.new()
+			rail.size = Vector3(5.58, 0.16, 0.30)
+			piece(rail, Vector3(3.5, 2.82, z + side * 2.15), trim, Vector3(0, 0, -atan2(3.6, 4.2)))
 			statue(Vector3(5.9, 0, z + side * 2.25))
 
 
@@ -280,15 +252,7 @@ func statue(base: Vector3) -> void:
 	for height in [0.10, 0.83, 0.96]:
 		box(base + Vector3.UP * height, Vector3(0.85, 0.13, 0.85), trim)
 	box(base + Vector3.UP * 0.48, Vector3(0.66, 0.65, 0.66), stone)
-	column(base + Vector3.UP * 1.45, 0.26, 0.9, trim)
-	for z in [-0.13, 0.0, 0.13]:
-		column(base + Vector3(0.18, 1.38, z), 0.035, 0.7, stone)
-	orb(base + Vector3.UP * 2.08, 0.19, trim)
-	column(base + Vector3.UP * 1.87, 0.09, 0.18, trim)
-	orb(base + Vector3(0, 1.74, -0.27), 0.14, trim)
-	orb(base + Vector3(0, 1.74, 0.27), 0.14, trim)
-	column(base + Vector3(0.04, 1.57, -0.3), 0.07, 0.32, trim)
-	column(base + Vector3(0.12, 1.63, 0.26), 0.07, 0.3, trim)
+	ornament(base + Vector3(0.05, 1.72, 0), Vector2(0.90, 1.55), "statue", -PI / 4)
 
 
 func build_gallery_details() -> void:
@@ -310,11 +274,7 @@ func build_gallery_details() -> void:
 			window(Vector3(-2.35, 6.45, z + offset), 1.85, 3.8)
 		for end_z in [z - 3.28, z + 3.28]:
 			for x in [-4.0, -5.8, -7.6]:
-				box(Vector3(x, 10.35, end_z), Vector3(1.5, 2.65, 0.08), glass)
-				for dx in [-0.75, 0.0, 0.75]:
-					box(Vector3(x + dx, 10.35, end_z), Vector3(0.07, 2.85, 0.15), frame)
-				for y in [9.0, 10.5, 11.7]:
-					box(Vector3(x, y, end_z), Vector3(1.6, 0.08, 0.15), frame)
+				ornament(Vector3(x, 10.35, end_z), Vector2(1.6, 2.85), "window", PI / 2)
 		balustrade(Vector3(-2.05, 8.95, z - 3.3), Vector3(-2.05, 8.95, z + 3.3))
 	for z in [-17.0, -15.0, -5.0, 5.0, 15.0, 17.0]:
 		# Roofline balustrades between the raised pavilions.
@@ -375,15 +335,13 @@ func build_garden() -> void:
 	for z in [-25.0, 25.0]:
 		for x in [-9.0, -2.0, 7.0, 14.0]:
 			add_plant(Vector3(x, 0, z), "cedar" if x < 0 else "magnolia", 0.9)
-	# Photographed climbing greenery softens the stone beside the central arch.
+	# Pixel leaf clusters follow the hanging ivy in video 00:40, not spherical blobs.
 	for side in [-1.0, 1.0]:
-		for i in 90:
-			var z: float = side * (1.6 + fmod(i * 0.618, 1.0) * 2.9)
-			var y := 0.25 + fmod(i * 0.379, 1.0) * 3.1
-			orb(
-				Vector3(1.54 + sin(i * 1.7) * 0.09, y, z),
-				0.16 + (i % 4) * 0.035,
-				leaf if i % 3 == 0 else green
+		for i in 4:
+			ornament(
+				Vector3(1.56 + i * 0.003, 1.7 - i * 0.22, side * (2.45 + i * 0.45)),
+				Vector2(0.95, 2.8 - i * 0.22),
+				"ivy"
 			)
 	# Low physical perimeter makes the modeled boundary unambiguous.
 	for z in [-28.5, 28.5]:

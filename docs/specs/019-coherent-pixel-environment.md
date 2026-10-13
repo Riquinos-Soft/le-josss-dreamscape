@@ -26,6 +26,14 @@ architecture, paving and garden ground. Record the new-art convention.
 No location expansion, changed collision/routes, new rendering backend, character
 redesign, blurred UI or full-screen pixel filter over every object.
 
+## Architectural follow-up — 2026-10-13
+
+Developer rejected the initial primitive-looking arches and architectural details.
+Re-author these as explicit low-resolution drawn ornaments, using the supplied
+2026-10-06 palace video (00:40 vaults, 00:53 stairs) as the primary reference.
+Preserve structural geometry, routes and collision. This follow-up is implemented; developer visual acceptance is still pending.
+Initial material-only work is historical, not visual acceptance.
+
 ## Requirements
 
 - R1 — Jacobo Risa's restrained earth palette, visible color clusters and crisp
@@ -60,8 +68,7 @@ device time, with 13:00 and 01:00 overrides used only in the offline capture scr
 UI remains ungraded. Import, lint/format, docs/whitespace checks and Web export
 passed. The existing gdtoolkit deprecation warning remains. No full gameplay test
 suite or physical mobile/browser review is claimed. Evidence lives under
-`build/verification/pixel-environment/`. Next: developer visual review; no further
-art expansion is authorized by this spec.
+`build/verification/pixel-environment/`. Next: developer visual review of the architectural follow-up below.
 
 ## Open questions
 
@@ -74,3 +81,19 @@ None blocking. Developer must review the visual result before marking accepted.
 - [Pazo](010-camera-scale-and-lourizan-art.md)
 - [Botanical kit](011-botanical-assets.md)
 - [Dream scenery](016-lourizan-galleries-and-salon.md)
+
+## Architectural follow-up validation
+
+Original integer-grid SVG ornaments replace primitive archivolts, window bars,
+round balusters, mannequin statues, clock/dormer circles and spherical ivy.
+Continuous stair handrails were added. Seven shared ornament materials batch the
+repeated geometry; alpha scissor preserves depth without alpha sorting. Stone
+noise was removed and directional contrast reduced. Structural collision/routes
+remain unchanged. Sources and reference timestamps are documented alongside the
+canonical artwork in `game/assets/art/architecture/README.md`.
+
+Godot native arrival/terrace/boundary captures at 13:00 and 01:00 were inspected.
+Import, Web export, formatting, lint and documentation checks are recorded in
+`build/verification/palace-pixel/`. No full gameplay suite or browser/device review
+is claimed. Next step: developer visual acceptance, especially the stair rail and
+vault composition. This is a stylized reconstruction, not a measured replica.

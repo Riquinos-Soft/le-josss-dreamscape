@@ -12,11 +12,8 @@ void fragment() {
  vec3 n = normalize(normal_world);
  vec3 pixel_point = floor(point * 12.0) / 12.0;
  float diffuse = max(dot(n, normalize(vec3(0.7, 1.0, 0.5))), 0.0);
- float light = 0.64 + 0.36 * floor(diffuse * 4.0) / 4.0;
+ float light = 0.80 + 0.20 * floor(diffuse * 4.0) / 4.0;
  vec3 color = paint.rgb * light;
- vec3 p = floor(point * 12.0);
- float grain = fract(sin(dot(p, vec3(12.9898, 78.233, 37.719))) * 43758.5453);
- color *= 0.94 + 0.06 * step(0.4, grain) + 0.04 * step(0.88, grain);
  if (pattern == 1) {
   float joint = fract(pixel_point.y * 2.5);
   float row = floor(pixel_point.y * 2.5);
