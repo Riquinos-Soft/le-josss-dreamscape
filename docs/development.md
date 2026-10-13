@@ -1,5 +1,15 @@
 # Development setup and verified baseline
 
+## Inactive exit and portrait HUD — 2026-10-13
+
+The floating turquoise marker was the street Exit still visible during Pazo visits.
+`set_street_active` now changes exit visibility together with monitoring. Active
+place exits remain available. Portrait touch overlay moves to layer 100 (normal
+landscape layer 10), covering BagUI layer 15 and other modals without losing state.
+Evidence: `build/verification/night-lights/portrait.png` and native/export logs.
+Native portrait rendering and Web export inspected; no physical Safari claim.
+
+
 ## Night sky and lanterns — 2026-10-13
 
 Spec 019 follow-up separates bright daytime sky from night sky and pixel stars.

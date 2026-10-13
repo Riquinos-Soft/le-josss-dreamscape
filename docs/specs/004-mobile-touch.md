@@ -54,3 +54,9 @@ does not substitute for testing physical Chrome Android and Safari iOS devices.
 Implementation and emulated-browser results are recorded in
 [plan 004](../plans/004-mobile-touch.md). Later refinements are covered by
 [Spec 005](005-beta-controls-and-pixels.md). Physical-device acceptance remains open.
+
+## Portrait overlay follow-up — 2026-10-13
+
+The rotation blocker must cover all game HUD/modal layers, including the bag icon.
+Promote the touch CanvasLayer only while portrait; restore the normal landscape
+layer on rotation back, preserving modal state and existing pause behavior.

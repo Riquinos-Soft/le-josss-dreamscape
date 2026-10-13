@@ -446,6 +446,7 @@ func set_street_active(active: bool) -> void:
 		street.get_node(name).visible = active and name != "StreetVisual"
 	street.get_node("StreetCollision").collision_layer = 1 if active else 0
 	street.get_node("Exit").monitoring = active
+	street.get_node("Exit").visible = active
 	street.get_node("Environment").environment = street_environment if active else null
 	street.get_node("Light").visible = active
 	street.get_node("HUD").visible = active and not touch_controls.enabled

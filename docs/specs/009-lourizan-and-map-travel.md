@@ -47,3 +47,10 @@ The executable sequence, file boundaries, checks and next visual milestones are 
 ## References and open questions
 
 [Scaniverse source and preparation](../../assets/source/lourizan/README.md); [production street spec](002-street-trial.md); [development evidence](../development.md). Open: a measured dimension for scan calibration, more captures of the wider estate, and developer visual acceptance of the Pazo's pixel treatment. None block the current captured-paving traversal.
+
+## Inactive exit marker correction — 2026-10-13
+
+The street exit marker and label must be hidden when another location is active.
+Retain the accessible exit marker at the active place; disable monitoring and
+visuals together. The ghost marker over the Pazo backdrop was the inactive street
+exit, not an additional destination.

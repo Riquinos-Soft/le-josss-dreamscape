@@ -60,6 +60,8 @@ func update_layout() -> void:
 	reset_touch()
 	var viewport_size := get_viewport_rect().size
 	portrait = viewport_size.y > viewport_size.x
+	# The orientation blocker must cover inventory and modal CanvasLayers too.
+	get_parent().layer = 100 if portrait else 10
 	get_tree().paused = portrait
 	stick_center = Vector2(170, viewport_size.y - 165)
 	action_rects.clear()
