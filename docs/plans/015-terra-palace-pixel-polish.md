@@ -9,14 +9,15 @@
 - Design authority: [place-authoring](../place-authoring.md), especially Current
   pixel environment contract; Jacobo Risa and Joss at the actual gameplay camera.
   No new Game Bible decisions or external Bible review are claimed.
-- Base: `7fff4ce`, main, clean working tree before this documentation change.
-- Status: planned, 2026-10-13. User authorized a plan, not execution or deployment.
+- Base: `759833c`, main, clean working tree before execution.
+- Status: implemented, 2026-10-13. The developer authorized uninterrupted execution
+  and production push. Developer visual acceptance remains pending.
 - Scope assumption: “house” means the Pazo building discussed in this thread.
   If the developer means the separate Casa location, replace this plan's reference
   and file contracts before starting; do not silently modify Spec 008.
-- Executor: Terra, as requested. Terra is not exposed in this session's callable
-  agent model list; no selection, launch, connection or token savings are claimed.
-  This is a handoff for a Terra session selected by the developer.
+- Executor: the current implementation session. Terra was requested but is not
+  exposed in this session's callable model list, so no Terra selection or cost claim
+  is made. The package boundaries and validation cadence were retained.
 - Integrator: the single executing session. Work serially on the current branch;
   no subagents, parallel waves or simultaneous writers.
 - Settled: existing renderer/camera/scale, nearest sampling, authored pixel clusters,
@@ -53,8 +54,9 @@ inventing details. Read `game/assets/art/architecture/README.md` for current art
    Record evidence, actual result and next package. Do not call art accepted merely
    because import/export passes. Do not push without an explicit user instruction.
 7. Present the phase result briefly. Technical passes may proceed sequentially
-   after execution is authorized; P1's style sample needs developer visual acceptance
-   before mass repetition. Do not repeatedly ask approval for already accepted art.
+  after execution is authorized. The developer explicitly authorized completing the
+  phases without pausing; P1 was reviewed by the executor before repetition. Do not
+  claim that as developer art acceptance.
 
 Evidence: `build/verification/terra-palace/P0/` through `P6/`, ignored logs/captures.
 Keep source art in canonical unversioned files. Git stores history; no v02/v03 copies.
@@ -77,7 +79,7 @@ needed. Do not use generated perspective sheets as uninspected runtime atlases.
 
 ## Package P0 — Baseline and reference mapping
 
-- Status: planned. Owner: Terra session, not assigned. Dependency: execution request.
+- Status: done. Owner: current implementation session. Dependency: none.
 - Allowed: ignored capture scripts/evidence; this plan's reference notes via integrator.
 - Read: reference video notes, exterior script and current facade assets.
 - Output: fixed arrival, double-arch, stair, gallery and roof overview capture setups;
@@ -89,7 +91,7 @@ needed. Do not use generated perspective sheets as uninspected runtime atlases.
 
 ## Package P1 — One convincing gallery bay
 
-- Status: planned. Owner: Terra session. Dependency: P0.
+- Status: done. Owner: current implementation session. Dependency: P0.
 - Allowed: `game/assets/art/architecture/lourizan-window.svg`, and only `window()`
   in `game/world/lourizan_exterior.gd` if placement adjustments are required.
 - Inputs: existing window dimensions, facade anchors, video 00:13/01:19.
@@ -101,7 +103,7 @@ needed. Do not use generated perspective sheets as uninspected runtime atlases.
 
 ## Package P2 — Paired arches and stone relief
 
-- Status: planned. Owner: Terra session. Dependency: accepted P1.
+- Status: done. Owner: current implementation session. Dependency: P1 executor review.
 - Allowed: `lourizan-arches.svg` under the architecture directory; only the arch
   ornament placement in `build_palace()` if needed.
 - Inputs: video 00:40, existing 4.15x3.26 facade module and solid terrace contract.
@@ -112,7 +114,7 @@ needed. Do not use generated perspective sheets as uninspected runtime atlases.
 
 ## Package P3 — Stair rails and sculpture silhouettes
 
-- Status: planned. Owner: Terra session. Dependency: P2.
+- Status: done. Owner: current implementation session. Dependency: P2.
 - Allowed: `lourizan-baluster.svg`, `lourizan-statue.svg`; `carved_post()`,
   `balustrade()`, decorative portions of `build_stairs()` and `statue()` only.
 - Inputs: video 00:26/00:53, unchanged step heights and collision ramps.
@@ -124,7 +126,7 @@ needed. Do not use generated perspective sheets as uninspected runtime atlases.
 
 ## Package P4 — Clock, dormers and mansard readability
 
-- Status: planned. Owner: Terra session. Dependency: P3.
+- Status: done. Owner: current implementation session. Dependency: P3.
 - Allowed: `lourizan-clock.svg`, `lourizan-dormer.svg`; decorative roof/clock
   placement in `build_palace()` and `roof()` only, preserving structural footprint.
 - Inputs: video 00:13/00:26, existing skyline and P1 palette.
@@ -135,7 +137,7 @@ needed. Do not use generated perspective sheets as uninspected runtime atlases.
 
 ## Package P5 — Integrate the facade
 
-- Status: planned. Owner: Terra session. Dependency: P4.
+- Status: done. Owner: current implementation session. Dependency: P4.
 - Allowed: completed architecture SVGs, decorative placement in exterior script,
   `lourizan_architecture.gdshader` only if a documented material mismatch remains.
 - Steps: align trim widths and color ramps; remove duplicate/overlapping decorative
@@ -148,7 +150,7 @@ needed. Do not use generated perspective sheets as uninspected runtime atlases.
 
 ## Package P6 — Route and release readiness
 
-- Status: planned. Owner/integrator: Terra session. Dependency: P5.
+- Status: done. Owner/integrator: current implementation session. Dependency: P5.
 - Allowed: evidence and documentation; localized corrections return to their owner
   package and are recorded before final acceptance.
 - Inspect arrival → paired arches → both stairs → gallery → salon threshold → exit,
@@ -185,5 +187,25 @@ Acceptance: technical review / developer art review:
 Next bounded phase:
 ```
 
-Next action: developer selects Terra and authorizes P0–P1 execution. No work has
-been launched by creating this plan.
+## Execution record — 2026-10-13
+
+P0 captured the existing arrival and terrace images. The observed defects were
+uniform glazing, generic sculptural relief and arches whose recess was too flat.
+The supplied video remains the reference: galleries 00:13/01:19, clock 00:26,
+paired vaults 00:40 and stairs 00:53.
+
+P1 redraws the single canonical gallery bay before its existing repetitions are
+instantiated: unequal reflection clusters, deep muted panes, wider cream mullions
+and a stepped sill/cornice. P2 redraws the paired vaults with continuous stepped
+archivolts, capitals, a central pier and separate dark recess planes. P3 redraws
+the baluster and draped figure silhouettes. P4 redraws the clock and dormer so
+they do not share the same circular motif. P5 keeps the shared warm-stone/slate
+palette and leaves geometry, routes, collision, camera, backdrop and lighting
+untouched.
+
+P6 evidence: `build/verification/terra-palace/`. Native captures at 1280x720 and
+844x390 include arrival, terrace and stairs at 13:00/01:00. `test_lourizan_exterior`
+passed 41 checks, `test_location_travel` passed 119 checks; formatting, lint,
+documentation validation, import and Web export passed. The existing gdtoolkit
+`pkg_resources` deprecation warning remains. No physical browser/mobile review is
+claimed. The remaining decision is developer visual acceptance of the new Pazo art.

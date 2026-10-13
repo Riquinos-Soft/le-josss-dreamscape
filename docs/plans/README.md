@@ -10,7 +10,8 @@ the English-only specification rule applies to every document in `docs/specs/`.
 These are execution records, not the current task queue. No listed plan is
 currently awaiting automatic execution. Plans 010–014 delivered their code;
 remaining developer/device acceptance is consolidated in [the roadmap](../roadmap.md).
-Plan 015 is a newly requested Terra handoff, planned but not launched.
+Plan 015 was executed serially after explicit developer authorization; its visual
+acceptance remains open.
 Older candidate work requires renewed scope/prioritization before execution.
 Specs 017–018 were bounded sequential changes and did not require a separate
 multi-agent plan. Keep existing plan/spec IDs and historical evidence intact.

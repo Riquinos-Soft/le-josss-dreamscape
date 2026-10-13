@@ -16,9 +16,9 @@ unifies Pazo/background pixel art and local day/night color. This explicit user
 steering comes before configurable characters; finish and review it with the same
 route checkpoint below.
 
-A sequential Terra art handoff is recorded in [Plan 015](plans/015-terra-palace-pixel-polish.md).
-Only planning is authorized by that request; execution has not started. It assumes
-the recent “house” request refers to the Pazo, not the separate Casa location.
+A sequential Pazo pixel-art pass is recorded in [Plan 015](plans/015-terra-palace-pixel-polish.md).
+It was executed after explicit developer authorization and awaits visual acceptance.
+It assumes the recent “house” request refers to the Pazo, not the separate Casa location.
 
 Current playable scope is [Spec 018](specs/018-residents-and-beer-errand.md), plus remaining
 visual/device acceptance of [015](specs/015-retro-character-clarity.md) and

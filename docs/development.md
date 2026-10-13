@@ -6,10 +6,17 @@ Created [Plan 015](plans/015-terra-palace-pixel-polish.md) at base `7fff4ce`, cl
 working tree. Seven serial packages: baseline, one approved gallery sample, arches,
 stairs/sculptures, roofs/clock, integration and route review. Explicit file limits,
 reference timestamps, matching captures and per-phase handoff prevent another
-unbounded art rewrite. Terra is requested but not callable/selected here; no agent
-was launched. “House” is interpreted as the current Pazo; Casa needs a revised
-reference contract if that assumption is wrong. Planning only, no runtime change.
-Documentation check and whitespace check passed; no gameplay tests run.
+unbounded art rewrite. Terra was requested but not callable/selected here. The
+subsequent explicit request authorized uninterrupted execution in the current
+session. “House” is interpreted as the current Pazo; Casa needs a revised reference
+contract if that assumption is wrong.
+
+The implemented pass redraws canonical window, paired-arch, baluster, statue,
+clock and dormer SVG ornaments. It keeps every structural/collision path intact.
+Native 1280x720 and compact 844x390 captures at 13:00/01:00, `test_lourizan_exterior`
+(41 checks), `test_location_travel` (119 checks), import/lint/format/docs and Web
+export passed. Evidence is in `build/verification/terra-palace/`; existing
+gdtoolkit deprecation warning remains. No physical browser/device review is claimed.
 
 
 ## Inactive exit and portrait HUD — 2026-10-13
