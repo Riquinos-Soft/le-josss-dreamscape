@@ -9,6 +9,7 @@ const NAMES := {&"street": "Calle Jacobo Risa", &"home": "Casa", &"lourizan": "P
 var current: StringName = &"street"
 var selected: StringName = &""
 var is_open := false
+var keyboard_hints := true
 var prompt: PanelContainer
 var guide: PanelContainer
 var guide_label: Label
@@ -110,8 +111,8 @@ func _ready() -> void:
 
 
 func show_prompt(available: bool) -> void:
-	prompt.visible = available and not is_open
-	guide.visible = not available and not is_open
+	prompt.visible = keyboard_hints and available and not is_open
+	guide.visible = keyboard_hints and not available and not is_open
 
 
 func set_guide(message: String) -> void:

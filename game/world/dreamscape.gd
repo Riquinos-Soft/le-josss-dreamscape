@@ -52,6 +52,8 @@ func _ready() -> void:
 	daylight.name = "Daylight"
 	daylight.set_script(preload("res://world/daylight.gd"))
 	add_child(daylight)
+	map_ui.keyboard_hints = not touch_controls.enabled
+	map_ui.show_prompt(false)
 	street_environment = street.get_node("Environment").environment
 	map_ui.open_requested.connect(open_map)
 	map_ui.cancel_requested.connect(close_map)

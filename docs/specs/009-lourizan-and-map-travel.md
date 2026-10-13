@@ -26,7 +26,9 @@ The captured façade and paved approach form the initial Pazo location. The link
 
 - A fresh session starts in Lourizán. The production street and home scan remain available as map destinations. The same player, camera, sprite, world pixel pass, item scene and touch controls survive travel.
 - A marked edge opens the map via M, prompt button or mobile Map action. The map cannot open elsewhere. Selection requires confirmation; Escape/Back cancels in place.
-- Before reaching an exit, an on-screen direction and distance guide identifies it. At the exit, the map action is visible away from the existing street HUD.
+- On desktop, an on-screen direction/distance guide identifies the exit and offers M.
+  Developer follow-up, 2026-10-13: hide that guide and keyboard M prompt on mobile;
+  the existing touch Map action remains available at the exit.
 - During the map and loading, movement stops. Travel returns the same player instance to a grounded arrival outside the exit, resets velocity and camera position, and updates fall recovery.
 - A missing or invalid destination leaves the origin playable and shows an error.
 - Captured geometry and simplified collision stay in offline-prepared assets; Godot runs from a clean checkout without reconstruction tools. One unit is one metre provisionally until a real dimension is supplied.

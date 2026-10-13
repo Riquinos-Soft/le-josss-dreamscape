@@ -1,5 +1,14 @@
 # Development setup and verified baseline
 
+## Mobile map hint removal — 2026-10-13
+
+Developer requested removal of the map-exit/M instruction on mobile. TravelMap
+now suppresses its keyboard prompt and direction/distance panel when touch controls
+are enabled; the existing touch Map action and exit availability are unchanged.
+Desktop retains its guide. Native `--touch` inspection and Web export are recorded
+under `build/verification/pixel-environment/`. No physical-device acceptance claimed.
+
+
 ## Pixel environments and local day/night — 2026-10-13
 
 [Spec 019](specs/019-coherent-pixel-environment.md) replaces the detailed foliage
