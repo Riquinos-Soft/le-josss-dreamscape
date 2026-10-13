@@ -87,3 +87,15 @@ Respect the existing product vision and accepted ADRs:
   is not an acceptable finished location.
 - Identify the place's defining landmarks first, then inspect the actual gameplay
   camera composition and walkable route before declaring a visual improvement.
+
+## Current art direction
+
+- New world art must match Jacobo Risa's deliberate pixel-art language: crisp
+  nearest sampling, readable color clusters, restrained earthy palettes and
+  consistent pixel density at the gameplay camera. See docs/place-authoring.md
+  and Spec 019 for the current environment contract.
+- Avoid photoreal foliage, smooth illustrated backgrounds or highly detailed
+  textures beside low-resolution sprites. Prepare normalized runtime derivatives
+  and inspect them in-game; a full-screen mosaic alone is not an art pass.
+- Background and world must share the same day/night palette. Preserve HUD
+  readability and character identity when applying lighting grades.

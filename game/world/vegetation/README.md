@@ -9,9 +9,11 @@ Keep large canopies outside narrow player corridors. Billboard direction uses
 the actual camera and nearest sampling. Large canopies reveal the tracked player
 using the shared wall-opacity shader, keeping dense planting readable. The fern reuses the existing woodland atlas.
 
-The original `lourizan_botanical_v01.png` atlas contains cedar/metasequoia on the
-upper row and magnolia/camellia on the lower row. Metadata and references are next
-to the image. These are stylized botanical interpretations, not exact historic trees.
+The current `lourizan_botanical.png` atlas is 256x256 with four 128px cells:
+cedar/metasequoia above, magnolia/camellia below, foot baseline 124 per cell.
+The [master and prompt](../../../assets/source/vegetation/lourizan_botanical.md)
+are prepared with `tools/prepare_pixel_environment.gd`. The former detailed atlas
+is superseded. These are stylized interpretations, not exact historic trees.
 
 `grass.tres` and `gravel.tres` share a fixed, metre-scale ground shader with coarse
 color variation, aggregate, moss edges and leaf litter. When reusing gravel,

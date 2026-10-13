@@ -11,10 +11,15 @@ Implementation baseline: `b9a3ede`, pushed to main. Its CI/deployment run is
 CI and deployment completed successfully on 2026-10-13. Production baseline is
 `b9a3ede`. A successful deployment does not imply developer gameplay acceptance.
 
-Current scope is [Spec 018](specs/018-residents-and-beer-errand.md), plus remaining
+Authorized follow-up implemented: [Spec 019](specs/019-coherent-pixel-environment.md)
+unifies Pazo/background pixel art and local day/night color. This explicit user
+steering comes before configurable characters; finish and review it with the same
+route checkpoint below.
+
+Current playable scope is [Spec 018](specs/018-residents-and-beer-errand.md), plus remaining
 visual/device acceptance of [015](specs/015-retro-character-clarity.md) and
 [016](specs/016-lourizan-galleries-and-salon.md). Implementation is complete;
-developer acceptance is open. No additional feature is currently in implementation.
+developer acceptance is open. Spec 019 implementation is complete; its art/device review joins this checkpoint.
 
 Review one route on the deployed build:
 

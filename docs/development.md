@@ -1,5 +1,34 @@
 # Development setup and verified baseline
 
+## Pixel environments and local day/night — 2026-10-13
+
+[Spec 019](specs/019-coherent-pixel-environment.md) replaces the detailed foliage
+and purple castle image with authored pixel art matching Jacobo Risa. Built-in
+imagegen masters/prompts are in `assets/source/vegetation/` and
+`assets/source/backgrounds/`. `tools/prepare_pixel_environment.gd` produces one
+256x256 botanical atlas and a 480x270 nearest-sampled backdrop. Obsolete botanical
+PNG/import/metadata were removed. Fixed cell baselines keep trunks on the ground;
+existing placement/collision and architectural geometry remain intact.
+Architecture and salon use discrete shade bands and local 12-sample/m patterns;
+garden ground uses grouped patch colors. New-art guidance is in AGENTS.md and
+place-authoring.md. No full-screen pixel mosaic was enabled.
+
+The `Daylight` node samples local device time once per second and grades the
+complete rendered world/background before HUD layers. Day is neutral, night cool
+and dark, dawn/dusk transitional. This is approximate art timing, not astronomical
+sunrise, and requires no network or persistence. Offline capture override uses
+13:00 and 01:00; normal play uses device time after reload and across map travel.
+
+Godot 4.7.2 import, `make export-web`, `gdformat --check game`, `gdlint game`,
+`python3 tools/check_docs.py` and `git diff --check` passed. Native arrival/boundary
+captures inspected at 1280x720 and 844x390, plus compact terrace captures. Evidence:
+`build/verification/pixel-environment/`. One native capture waited while the app
+was unfocused and completed after activation; no runtime errors were logged.
+Existing gdtoolkit `pkg_resources` deprecation warning remains. No full gameplay
+suite or physical mobile/browser acceptance is claimed. Local implementation is
+ready for developer visual review and has not been pushed in this task.
+
+
 ## Roadmap reconciliation and release status — 2026-10-13
 
 Developer requested a clear order after accumulated iterations. Replaced stale

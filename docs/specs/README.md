@@ -7,8 +7,9 @@ None of these documents silently authorizes unrelated work.
 
 ## Current work, not numerical order
 
-Implementation through Spec 018 is pushed in `b9a3ede`; current work is release
-and developer acceptance of that playable loop. Specs 015–016 retain visual/mobile
+Implementation through Spec 018 is deployed in `b9a3ede`. The developer then
+authorized Spec 019 for pixel environments and synchronized day/night color.
+The playable loop remains awaiting developer acceptance. Specs 015–016 retain visual/mobile
 review. Spec 008 waits for real-place references and is not being actively built.
 Configurable character appearance is the proposed next spec, not an existing one.
 See [the roadmap](../roadmap.md) for the single current priority sequence.
@@ -36,8 +37,9 @@ See [the roadmap](../roadmap.md) for the single current priority sequence.
 | 016 | [Lourizán galleries, residents and dream salon](016-lourizan-galleries-and-salon.md) | implemented | Developer art and physical-device acceptance |
 | 017 | [Asset workspace cleanup](017-asset-workspace-cleanup.md) | implemented | Inventory, import and Web export verified |
 | 018 | [Residents and Lucas beer errand](018-residents-and-beer-errand.md) | implemented | Native delivery verified; developer mobile/art review pending |
+| 019 | [Coherent pixel environment art](019-coherent-pixel-environment.md) | implemented | Day/night captures and Web export passed; developer visual review pending |
 
-Next available spec ID: **019**. Recompute from this registry before reserving;
+Next available spec ID: **020**. Recompute from this registry before reserving;
 this line is not a standing reservation for an agent or a feature.
 
 ## Language and file naming

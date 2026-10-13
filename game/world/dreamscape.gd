@@ -48,6 +48,10 @@ func _ready() -> void:
 	backdrop.name = "DreamCastles"
 	backdrop.set_script(preload("res://world/dream_castles.gd"))
 	add_child(backdrop)
+	var daylight := Node.new()
+	daylight.name = "Daylight"
+	daylight.set_script(preload("res://world/daylight.gd"))
+	add_child(daylight)
 	street_environment = street.get_node("Environment").environment
 	map_ui.open_requested.connect(open_map)
 	map_ui.cancel_requested.connect(close_map)

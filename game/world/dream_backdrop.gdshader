@@ -1,7 +1,7 @@
 shader_type spatial;
 render_mode unshaded, cull_disabled, depth_draw_never, fog_disabled;
 
-uniform sampler2D illustration : source_color, filter_linear, repeat_disable;
+uniform sampler2D illustration : source_color, filter_nearest, repeat_disable;
 
 void vertex() {
 	// Compatibility renderer: reversed-Z far depth is -1 in clip space.

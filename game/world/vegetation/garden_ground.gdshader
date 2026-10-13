@@ -15,13 +15,13 @@ float patches(vec2 p) {
 }
 void vertex() { local_point = VERTEX; }
 void fragment() {
- vec2 p = local_point.xz;
+ vec2 p = floor(local_point.xz * 12.0) / 12.0;
  vec2 pixel = floor(p * 12.0);
  float grain = hash(pixel);
- float patch = patches(floor(p * 12.0) / 12.0 * 0.7);
+ float patch = floor(patches(p * 0.7) * 4.0) / 4.0;
  vec3 grass = mix(vec3(0.16, 0.23, 0.13), vec3(0.27, 0.34, 0.19), patch);
  grass += vec3(0.035, 0.035, 0.015) * step(0.77, grain);
- vec3 stone = mix(vec3(0.38, 0.38, 0.33), vec3(0.51, 0.49, 0.41), patch * 0.45 + grain * 0.55);
+ vec3 stone = mix(vec3(0.38, 0.38, 0.33), vec3(0.51, 0.49, 0.41), patch * 0.45 + floor(grain * 4.0) / 4.0 * 0.55);
  // Small fixed aggregate and sparse fallen leaves, sampled in world-sized pixels.
  stone = mix(stone, vec3(0.60, 0.57, 0.46), step(0.975, grain));
  float edge = smoothstep(path_half_width * 0.64, path_half_width * 0.99, abs(p.x - path_center_x));

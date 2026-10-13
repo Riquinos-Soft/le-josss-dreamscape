@@ -4,10 +4,10 @@ extends Node3D
 
 const HEIGHTS := [10.0, 14.0, 8.0, 3.0, 0.85]
 const REGIONS := [
-	Rect2(0, 0, 690, 670),
-	Rect2(700, 0, 550, 670),
-	Rect2(0, 675, 662, 550),
-	Rect2(665, 675, 585, 550)
+	Rect2(0, 0, 128, 128),
+	Rect2(128, 0, 128, 128),
+	Rect2(0, 128, 128, 128),
+	Rect2(128, 128, 128, 128)
 ]
 
 @export_enum("Cedar", "Metasequoia", "Magnolia", "Camellia", "Fern") var species := 0
@@ -24,13 +24,13 @@ func _ready() -> void:
 	visual.mesh = quad
 	var material := ShaderMaterial.new()
 	material.shader = preload("res://world/street_decor.gdshader")
-	var texture_path := "res://assets/art/vegetation/lourizan_botanical_v01.png"
+	var texture_path := "res://assets/art/vegetation/lourizan_botanical.png"
 	var region: Rect2 = REGIONS[mini(species, 3)]
-	var atlas_scale := region.size / 1254.0
-	var atlas_offset := region.position / 1254.0
+	var atlas_scale := region.size / 256.0
+	var atlas_offset := region.position / 256.0
 	if species < 4:
 		quad.size.x = height * region.size.x / region.size.y
-		var baseline := 643.0 if species < 2 else 1206.0
+		var baseline := 124.0 if species < 2 else 252.0
 		quad.center_offset.y = height * ((baseline - region.position.y) / region.size.y - 0.5)
 	if species == 4:
 		texture_path = "res://assets/art/vegetation/plant_jacobo_woodland_v01.png"

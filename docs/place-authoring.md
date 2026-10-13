@@ -46,3 +46,18 @@ mansards, clock pavilion, terrace and the shape of the paired stairs. Establish
 reusable window, cornice, stone and stair modules as those parts are authored.
 Screenshot references inform the visual vocabulary; commercial game sprites or
 textures must not enter runtime assets.
+
+## Current pixel environment contract — 2026-10-13
+
+Developer direction: use Jacobo Risa as the visual authority for all new artwork.
+Author grouped pixels and distinct shade bands rather than realistic leaves or
+continuous material detail. The current Pazo kit uses four 128px botanical cells
+and a 480x270 illustrated horizon, nearest sampled. These are concrete current
+assets, not mandatory dimensions for every future prop: judge pixel density next
+to Joss in the real gameplay camera. Stone/slate/ground patterns use a fixed local
+12-sample-per-metre grid and discrete shades; keep walkable architecture intact.
+
+The complete scene and backdrop share local-device day/night color grading with
+smooth dawn/dusk transitions. This is an art cycle, not geographical solar timing.
+HUD layers retain their original colors. Inspect both day and night before
+accepting a new environment. See [Spec 019](specs/019-coherent-pixel-environment.md).

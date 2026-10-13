@@ -6,6 +6,9 @@ uniform sampler2D screen_texture : hint_screen_texture, filter_nearest, repeat_d
 // Nonzero values are retained for offline comparisons with the historical beta.
 uniform float world_pixel_height : hint_range(0.0, 360.0) = 0.0;
 
+uniform float daylight : hint_range(0.0, 1.0) = 1.0;
+uniform float twilight : hint_range(0.0, 1.0) = 0.0;
+
 void fragment() {
 	vec2 sample_uv = SCREEN_UV;
 	if (world_pixel_height > 0.0) {
@@ -13,5 +16,9 @@ void fragment() {
 		vec2 grid = SCREEN_PIXEL_SIZE * block;
 		sample_uv = (floor(SCREEN_UV / grid) + 0.5) * grid;
 	}
-	COLOR = vec4(textureLod(screen_texture, sample_uv, 0.0).rgb, 1.0);
+	vec3 color = textureLod(screen_texture, sample_uv, 0.0).rgb;
+	// One grade keeps the map and background in the same time of day.
+	vec3 tint = mix(vec3(0.36, 0.46, 0.68), vec3(1.0), daylight);
+	tint = mix(tint, tint * vec3(1.12, 0.94, 0.86), twilight * 0.45);
+	COLOR = vec4(color * tint, 1.0);
 }
