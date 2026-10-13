@@ -4,6 +4,7 @@ extends Control
 signal map_requested
 signal talk_requested
 signal bag_requested
+signal mount_requested
 
 const RADIUS := 110.0
 var enabled: bool = false
@@ -11,6 +12,8 @@ var input_enabled: bool = true
 var travel_available: bool = false
 var travel_only: bool = false
 var talk_available: bool = false
+var mount_available := false
+var mounted := false
 var talk_name := "Lucas Maconheiro"
 var bag_button: BaseButton
 var stick_finger: int = -1
@@ -140,6 +143,8 @@ func handle_touch(event: InputEvent) -> void:
 					talk_requested.emit()
 				elif action == "bag":
 					bag_requested.emit()
+				elif action == "mount":
+					mount_requested.emit()
 				else:
 					items.commands.append(StringName(action))
 				feedback_action = action
@@ -179,6 +184,8 @@ func _process(delta: float) -> void:
 		message.text = "Gira el móvil\npara jugar en horizontal"
 	elif talk_available:
 		message.text = talk_name + " · Pulsa Hablar"
+	elif mount_available:
+		message.text = "Gallina · Pulsa Bajar" if mounted else "Gallina · Pulsa Montar"
 	elif travel_only:
 		message.text = "Pazo de Lourizán · explora el lugar"
 	elif items.placement_active:
@@ -208,6 +215,8 @@ func update_actions() -> void:
 		names = ["bag"]
 	elif items.can_pickup():
 		names = ["pickup"]
+	if mount_available and not items.placement_active:
+		names.append("mount")
 	if action_rects.keys() == names:
 		return
 	action_rects.clear()
@@ -235,7 +244,8 @@ func _draw() -> void:
 		"confirm": "Confirmar",
 		"map": "Mapa",
 		"talk": "Hablar",
-		"bag": "Bolsa"
+		"bag": "Bolsa",
+		"mount": "Bajar" if mounted else "Montar"
 	}
 	var font := ThemeDB.fallback_font
 	for action in action_rects:

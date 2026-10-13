@@ -6,6 +6,7 @@ const DirectionalAnimation = preload("res://player/directional_animation.gd")
 @export var movement_actor: CharacterBody3D
 @export var movement_view: Camera3D
 var facing: StringName = &"up"
+var riding := false
 var _just_respawned: bool = false
 
 
@@ -26,7 +27,7 @@ func _physics_process(_delta: float) -> void:
 	var walking := motion.length() > (0.06 if was_walking else 0.12)
 	if walking:
 		facing = DirectionalAnimation.resolve_facing(motion, movement_view, facing, was_walking)
-	DirectionalAnimation.play_direction(self, facing, walking)
+	DirectionalAnimation.play_direction(self, facing, walking and not riding)
 
 
 func _on_respawned() -> void:

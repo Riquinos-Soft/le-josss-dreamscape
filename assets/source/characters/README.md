@@ -9,6 +9,7 @@ Historical candidates were removed from the working tree and remain in Git.
 - [Lucas walk](lucas_walk.md): four-phase walking master with retained prompt.
 - [Lucas standing](lucas_idle.md): matching directional standing lower body.
 - [Residents](residents.md): Inés, Brais and Narci restyled to compact proportions.
+- [Chicken](chicken.md): rideable hen, directional idle and alternating steps.
 
 Preparation and runtime addressing are documented in the
 [character contract](../../../game/assets/art/characters/README.md).

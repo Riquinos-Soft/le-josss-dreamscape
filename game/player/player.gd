@@ -15,6 +15,7 @@ var mouse_steering_active: bool = false
 var input_locked: bool = false
 var touch_direction := Vector2.ZERO
 var spawn_transform: Transform3D
+var movement_speed_multiplier := 1.0
 
 @onready var visual: Node3D = $Visual
 
@@ -64,8 +65,8 @@ func _physics_process(delta: float) -> void:
 		direction = mouse_movement_direction()
 	if prevent_ledge_fall and is_on_floor() and not has_ground_ahead(direction):
 		direction = Vector3.ZERO
-	velocity.x = direction.x * speed
-	velocity.z = direction.z * speed
+	velocity.x = direction.x * speed * movement_speed_multiplier
+	velocity.z = direction.z * speed * movement_speed_multiplier
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 	if step_height > 0 and is_on_floor():

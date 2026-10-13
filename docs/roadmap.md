@@ -1,6 +1,6 @@
 # Roadmap and current checkpoint
 
-Updated: 2026-10-13. This is the entry point for current priorities. Spec numbers
+Updated: 2026-10-14. This is the entry point for current priorities. Spec numbers
 are identifiers, not execution order. Proposed work below is not implementation
 authorization. Older roadmap wording is retained in Git history.
 
@@ -25,6 +25,10 @@ quest state must survive reload and server restart. Provider, capacity and share
 quest-item decisions stay explicit in Spec 020.
 
 ## 2. Legacy release and comparison route
+
+Explicit bounded follow-up: [Spec 021](specs/021-chicken-mount.md) adds the requested
+chicken mount and travel companionship before returning to Plan 016 P0. Native
+presentation and Web export completed; mobile/art acceptance remains open.
 
 Recorded implementation/deployment baseline: `ab91b89`, pushed to main. Its
 [CI/deployment run](https://github.com/Riquinos-Soft/le-josss-dreamscape/actions/runs/38393362916)

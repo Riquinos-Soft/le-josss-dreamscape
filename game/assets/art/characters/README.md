@@ -35,6 +35,17 @@ Run Godot with absolute input/output paths:
 
 ## Future appearance configuration
 
+### Chicken mount
+
+`chicken.png` is a 192×256 nearest-sampled runtime derivative of the original
+transparent master. `tools/normalize_chicken.gd` prepares 64px cells, common scale
+within each row, maximum extent 56px and grounded baseline y=60. Rows: down, left,
+up, down-left. Columns: idle, left step, right step. Right-facing views mirror
+left; rear diagonals share the rear view. The local mount builds SpriteFrames
+from these twelve cells and uses the existing player collision body while ridden.
+
+### Configurable human characters
+
 These atlases are transitional art, not a dynamic customization system. NPC names,
 dialogue and behavior remain independent of SpriteFrames resources. The requested
 next spec will define composition from face, hair, clothing and body style and

@@ -1,5 +1,26 @@
 # Development setup and verified baseline
 
+## Chicken mount — 2026-10-14
+
+Spec 021 adds a pixel-art hen at the lower-left street end, F/touch interaction,
+1.8× movement and stationary rider legs. After first mounting, map travel and
+salon transitions carry the hen, preserving mounted state. Dismount restores 1×;
+respawn restores walking and brings the recruited hen to the spawn. The same
+player collision body remains authoritative. Source/prompt: `assets/source/characters/chicken.md`;
+runtime derivative: `game/assets/art/characters/chicken.png`.
+
+Commands: Godot `--headless --script tools/normalize_chicken.gd`,
+`--headless --path game --import --quit`, native
+`--path game --fixed-fps 60 --script ../build/verification/mount/capture.gd`
+(also with `-- --touch`), `make export-web GODOT=/Applications/Godot.app/Contents/MacOS/Godot`,
+targeted `gdformat`/`gdlint`, `python3 tools/check_docs.py`, `git diff --check`.
+Evidence: `build/verification/mount/` import/export/native logs and screenshots.
+Native captures cover idle/walk, dismount and mounted Pazo arrival; logged arrival
+multiplier is 1.8. Export succeeds. No gameplay tests added/run locally; no browser
+or physical-device validation. Existing gdtoolkit `pkg_resources` deprecation
+warning persists. Developer art acceptance remains open.
+
+
 ## Persistent online V2 plan — 2026-10-13
 
 At clean base `ab91b89`, the developer authorized a controlled rebuild plan and

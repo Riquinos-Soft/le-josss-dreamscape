@@ -30,6 +30,7 @@ var last_dialogue_index := -1
 var beer_errand_started := false
 var beer_errand_completed := false
 var coins := 0
+var chicken_mount: Node3D
 
 @onready var street: Node3D = $Street
 @onready var player: CharacterBody3D = $Street/Player
@@ -44,6 +45,10 @@ var coins := 0
 
 
 func _ready() -> void:
+	chicken_mount = preload("res://world/chicken_mount.gd").new()
+	chicken_mount.name = "ChickenMount"
+	chicken_mount.session = self
+	street.add_child(chicken_mount)
 	var lanterns := Node3D.new()
 	lanterns.name = "Lanterns"
 	street.add_child(lanterns)
@@ -401,6 +406,7 @@ func _use_passage(passage: Area3D) -> void:
 	player.velocity = Vector3.ZERO
 	player.reset_physics_interpolation()
 	inside_salon = passage.indoors
+	chicken_mount.arrive_with_player()
 	near_exit = null
 	map_ui.show_prompt(false)
 	camera_rig.snap_to_target()
@@ -514,6 +520,7 @@ func travel_to(destination: StringName) -> bool:
 	player.velocity = Vector3.ZERO
 	player.prevent_ledge_fall = destination != &"street"
 	player.step_height = 0.25 if destination != &"street" else 0.0
+	chicken_mount.arrive_with_player()
 	player.reset_physics_interpolation()
 	camera_rig.base_orthographic_size = 13.5
 	camera_rig.focus_height = 0.9
