@@ -30,6 +30,10 @@ Platform priority: Web, macOS development, Android, iOS, possibly other desktop 
 
 ## Documentation
 
+Start with [the roadmap and current checkpoint](docs/roadmap.md), then open the
+relevant spec. The lists below are references, not execution order.
+
+
 - [Repository and minimal architecture](docs/architecture.md)
 - [Spec 001: vertical slice](docs/specs/001-vertical-slice.md)
 - [Spec 006: branded boot splash](docs/specs/006-boot-branding.md)
@@ -44,7 +48,7 @@ Platform priority: Web, macOS development, Android, iOS, possibly other desktop 
 - [Plan and execution status: Joss animation and street art](docs/plans/008-joss-animation-and-street-art.md)
 - [Spec index, English authoring rules and template](docs/specs/README.md)
 - [Plan index](docs/plans/README.md)
-- [General roadmap proposal](docs/roadmap.md)
+- [Roadmap and current checkpoint](docs/roadmap.md)
 - [Development environment and Web risks](docs/development.md)
 - [OVH deployment and operations](deploy/ovh/README.md)
 - [ADR 001: engine and Web baseline](docs/adr/001-engine-and-web-baseline.md)

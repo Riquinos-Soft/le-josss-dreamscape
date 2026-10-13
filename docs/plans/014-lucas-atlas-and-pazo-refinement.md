@@ -1,13 +1,14 @@
 # Plan 014 — Lucas atlas and Pazo refinement
 
 - Status: implemented; developer visual and physical mobile acceptance pending. Updated 2026-10-07.
+- Current handoff: implementation complete; later character/backdrop work is in Specs 015–018. See [roadmap](../roadmap.md) for priority.
 - Objective: integrate coherent Lucas art and proper walking/standing poses for Joss and Lucas and refine the recognizable Pazo facade
   and paired stairs without disturbing the playable route.
 - Governing specs: [014](../specs/014-lucas-garden-patrol.md),
   [010](../specs/010-camera-scale-and-lourizan-art.md),
   [015](../specs/015-retro-character-clarity.md).
 - Authorization: on 2026-10-07 the developer requested continuing Lucas/Pazo work
-  and preparing this plan for a lower-cost model. This delivery is planning only.
+  and preparing this plan for a lower-cost model. The plan was subsequently executed.
   Proceeding is authorized; prior mobile acceptance is not inferred.
 - Design references: [place authoring](../place-authoring.md),
   [on-site video notes](../../references/lourizan-video-2026-10-06.md), and the

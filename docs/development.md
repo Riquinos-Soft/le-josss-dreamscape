@@ -1,5 +1,24 @@
 # Development setup and verified baseline
 
+## Roadmap reconciliation and release status — 2026-10-13
+
+Developer requested a clear order after accumulated iterations. Replaced stale
+roadmap proposals with one current acceptance checkpoint (Spec 018 beer route,
+plus 015/016 visual/mobile review), configurable appearance as the proposed next
+spec, Casa-to-Bar waiting for real references, and an unscheduled backlog.
+Spec 009 is implemented, with its scan-only art scope explicitly superseded by
+010/016/017. Spec 008 remains incomplete and is not active execution. Removed
+obsolete "execute next" and "local pending publication" statements; plans are
+historical execution records, not a competing queue. No IDs were renumbered or
+reserved and no new gameplay work was authorized by this documentation update.
+
+`gh run view 38328916165 --json status,conclusion` returned completed/success:
+`b9a3ede` is deployed. This supersedes earlier local/pending-release statements
+below. Developer art/device acceptance remains open. Documentation-only checks:
+`python3 tools/check_docs.py` returned zero errors; `git diff --check` passed.
+No gameplay tests were needed or run for this reconciliation.
+
+
 ## Residents, Lucas gait and beer errand — 2026-10-13
 
 [Spec 018](specs/018-residents-and-beer-errand.md) implements the developer's

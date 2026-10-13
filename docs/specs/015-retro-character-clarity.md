@@ -1,7 +1,7 @@
 # Spec 015 — Retro character clarity and stable walking
 
 Status: implemented
-Updated: 2026-10-07
+Updated: 2026-10-13
 Language: en
 
 Authorization: developer requested Secret of Evermore-inspired restyling,
@@ -81,8 +81,8 @@ spec. Physical-device and developer visual acceptance remain separate.
 - AC2 — Automated movement covers eight directions, noisy analog sector edges,
   deliberate turns, uninterrupted phase, wall stop and respawn. Lucas dialogue
   and patrol regressions pass.
-- AC3 — Existing tests and Web export pass. The current refactor is committed
-  locally for review; prior deployment evidence applies to earlier releases.
+- AC3 — Existing tests and Web export pass. The canonical refactor shipped
+  in the successful `a5a0285` deployment. Later Lucas/resident art is in Spec 018.
 - AC4 — Keep only active character atlases/resources with stable unversioned
   names and retained source provenance. Record configurable appearance as the
   next spec without implementing a generator in this cleanup.

@@ -56,8 +56,9 @@ format and Web export succeeded. Existing gdtoolkit deprecation warning remains.
 No new automated tests or full gameplay suite were run; prior dialogue assertions
 were updated for four frames and randomized dialogue after the initial offer.
 Evidence: `build/verification/residents-errand/`. Developer mobile review pending.
-Next: review the new art; publication of this follow-up remains separate from
-the already completed push/deployment of `a5a0285`.
+Published as `b9a3ede`; CI/deployment run `38328916165` completed successfully.
+Next: developer review of the complete beer route and new art per
+[the roadmap](../roadmap.md).
 
 ## Open questions
 

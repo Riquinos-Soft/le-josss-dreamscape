@@ -20,7 +20,7 @@ fighting. Character screenshots show the old production build: remote main is
 `45af87e`, before the canonical identity fix in local `eaae8ba`. Preserve that fix.
 Acceptance: native boundary/salon captures inspected at 1280x720 and 844x390;
 import and Web export succeeded. No gameplay suite or physical-device acceptance
-is inferred. Local commit pending publication.
+is inferred. Published in `a5a0285`; CI/deployment run `38327159982` succeeded.
 
 ## Objective
 
@@ -86,7 +86,7 @@ for galleries, readable salon furniture/route, doorway labels and floating
 castles. Full `make check` and Web export passed; evidence and limitations are
 recorded in [development](../development.md). The furniture is simplified authored
 geometry and the interior is fictional. No physical iOS/Android or browser
-acceptance is claimed. Next: production CI/deployment and developer art review.
+acceptance is claimed. Production deployment is complete; developer art review remains open.
 
 ## Open questions
 

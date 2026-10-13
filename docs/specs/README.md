@@ -5,6 +5,15 @@ accepted ADRs define durable technical decisions, and each spec defines a bounde
 deliverable. Plans describe execution; the [roadmap](../roadmap.md) proposes order.
 None of these documents silently authorizes unrelated work.
 
+## Current work, not numerical order
+
+Implementation through Spec 018 is pushed in `b9a3ede`; current work is release
+and developer acceptance of that playable loop. Specs 015–016 retain visual/mobile
+review. Spec 008 waits for real-place references and is not being actively built.
+Configurable character appearance is the proposed next spec, not an existing one.
+See [the roadmap](../roadmap.md) for the single current priority sequence.
+`implemented` means the deliverable exists; it does not imply accepted or deployed.
+
 ## Registry
 
 | ID | Specification | Status | Remaining acceptance |
@@ -17,12 +26,12 @@ None of these documents silently authorizes unrelated work.
 | 006 | [Branded boot splash](006-boot-branding.md) | implemented | Manual visual acceptance |
 | 007 | [OVH hosting preparation](007-vps-hosting.md) | implemented | Operational checks tracked separately; no multiplayer runtime |
 | 008 | [Connected real home microzone](008-real-home-microzone.md) | in-progress | Home-to-bar route awaits location references |
-| 009 | [Lourizán and map travel](009-lourizan-and-map-travel.md) | in-progress | Developer visual/browser acceptance pending |
-| 010 | [Camera clearance, place scale and Lourizán pixel art](010-camera-scale-and-lourizan-art.md) | implemented | Browser/developer review; authorized facade follow-up in Plan 014 |
+| 009 | [Lourizán and map travel](009-lourizan-and-map-travel.md) | implemented | Developer visual/browser acceptance pending |
+| 010 | [Camera clearance, place scale and Lourizán pixel art](010-camera-scale-and-lourizan-art.md) | implemented | Browser/developer review; facade follow-up implemented |
 | 011 | [Reusable botanical assets and garden ground](011-botanical-assets.md) | implemented | Developer visual review |
 | 012 | [Eight-slot bag and travelling objects](012-eight-slot-bag.md) | implemented | Developer art review and physical mobile gameplay |
 | 013 | [Lourizán guide and paged dialogue](013-lourizan-guide-dialogue.md) | implemented | Developer dialogue/art review and browser/physical-device gameplay |
-| 014 | [Lucas garden patrol and character art](014-lucas-garden-patrol.md) | implemented | Developer review; authorized atlas follow-up in Plan 014 |
+| 014 | [Lucas garden patrol and character art](014-lucas-garden-patrol.md) | implemented | Developer review; art/cadence superseded by 015 and 018 |
 | 015 | [Retro character clarity and stable walking](015-retro-character-clarity.md) | implemented | Canonical character refactor; developer visual/mobile review pending |
 | 016 | [Lourizán galleries, residents and dream salon](016-lourizan-galleries-and-salon.md) | implemented | Developer art and physical-device acceptance |
 | 017 | [Asset workspace cleanup](017-asset-workspace-cleanup.md) | implemented | Inventory, import and Web export verified |

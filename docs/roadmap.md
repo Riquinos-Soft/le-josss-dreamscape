@@ -1,103 +1,84 @@
-# General roadmap proposal
+# Roadmap and current checkpoint
 
-Status: draft for developer discussion. Updated: 2026-10-07.
-This is an ordering proposal, not authorization for all listed work, a release
-promise or a new architectural decision. Final priorities will be agreed next.
+Updated: 2026-10-13. This is the entry point for current priorities. Spec numbers
+are identifiers, not execution order. Proposed work below is not implementation
+authorization. Older roadmap wording is retained in Git history.
 
-## Established direction and current baseline
+## 1. Current checkpoint: finish the existing playable loop
 
-An explorable home world grounded in recognizable places, classic pixel RPG
-presentation, material object interaction and eventual journeys into the
-impossible. The current public street is a bounded art/playability experiment,
-not the complete Casa → Bar slice described by the Game Bible.
+Implementation baseline: `b9a3ede`, pushed to main. Its CI/deployment run is
+[38328916165](https://github.com/Riquinos-Soft/le-josss-dreamscape/actions/runs/38328916165).
+CI and deployment completed successfully on 2026-10-13. Production baseline is
+`b9a3ede`. A successful deployment does not imply developer gameplay acceptance.
 
-Implemented foundations: Godot Compatibility/Web, movement, session-local item
-identity and placement, eight-direction Joss walking, bounded street traversal,
-fall recovery, smooth occlusion, touch controls and static Web deployment.
-VPS/database preparation does not mean multiplayer or persistence is implemented.
-Developer art acceptance, full gameplay checks on physical mobile/Safari, and
-sustained performance/download measurements remain open.
+Current scope is [Spec 018](specs/018-residents-and-beer-errand.md), plus remaining
+visual/device acceptance of [015](specs/015-retro-character-clarity.md) and
+[016](specs/016-lourizan-galleries-and-salon.md). Implementation is complete;
+developer acceptance is open. No additional feature is currently in implementation.
 
-## Authorized next iteration — 2026-10-07
+Review one route on the deployed build:
 
-The developer requested [Plan 014](plans/014-lucas-atlas-and-pazo-refinement.md)
-for economical sequential execution: proper walking and straight-legged standing
-for Joss/Lucas, then reference-led facade and stairs. This specific continuation
-is authorized; the broader roadmap remains a proposal. Mobile acceptance of the
-previous release remains open but is no longer a prerequisite to this work.
-The character and facade packages are now implemented in commits `3451cb8` and
-`a4e2320`. The developer then specified straight legs side by side in both idle
-poses, Lourizán as the fresh-session spawn, and ten randomized Lucas conversations
-with two Brazil jokes. That follow-up shipped in `0aaed2e`; the CI deploy verified
-production. Developer visual and physical mobile acceptance remain next.
+1. Start at Lourizan; inspect Joss, Lucas and residents standing/walking.
+2. Speak to Lucas and receive the beer errand.
+3. Travel to Jacobo Risa, collect the beer into the bag and return.
+4. Deliver it: beer leaves the bag, balance becomes 20; repeat conversation must
+   not pay again. Travel must retain the balance; reload resets the session.
+5. Enter/leave the salon, inspect furniture for flicker, then inspect the castle
+   illustration outside the map. Check touch bag/dialogue/map controls.
 
-The developer subsequently authorized [Spec 016](specs/016-lourizan-galleries-and-salon.md):
-video-led gallery/paving details, three fictional residents, a luxurious dream
-salon and floating castle scenery beyond the playable boundary. This bounded
-expansion is implemented; visual/physical-device acceptance remains open.
+Exit: deployed build confirmed, route reviewed on physical mobile, and concrete
+blocking defects resolved. Native checks/export already exist; they do not replace
+this review. Current screenshots report issues, not blanket acceptance.
 
-## Current feature sequence
+## 2. Proposed next feature: configurable character appearance
 
-Current visual checkpoint: [Spec 015](specs/015-retro-character-clarity.md) improves
-character clarity and walking stability and is implemented with dedicated standing art and true walking frames; mobile review
-remains pending. The developer's [on-site video](../references/lourizan-video-2026-10-06.md)
-guided the double-arch and paired-stair refinement; developer review and mobile
-playtesting remain pending.
+Requested by the developer; not yet specified or authorized for implementation.
+After the current checkpoint, draft one bounded spec for face, hair, clothing and
+shared body proportions for Joss/NPCs. Decide composition and authoring strategy,
+then prove one character can change appearance without changing gait/identity.
+Define that acceptance before extending the NPC roster or regenerating more
+independent full-body atlases. Do not reserve an ID until drafting begins.
 
-The developer requested both feature specs and sequential execution plans. Lucas,
-the travelling bag and the [Lucas visual upgrade and short garden patrol](specs/014-lucas-garden-patrol.md)
-are implemented through [Plan 013](plans/013-lucas-garden-patrol.md).
+## 3. Waiting for input: Casa to Bar
 
-1. Implemented: [Lucas Maconheiro and paged dialogue](specs/013-lourizan-guide-dialogue.md),
-   [Plan 012](plans/012-lourizan-guide.md): a hippie forest-worker NPC in Lourizán,
-   overhead classic RPG speech balloon and ten randomized Spanish conversations,
-   including source-backed historical details and two Brazil jokes.
-2. Implemented: [Eight-slot bag and travelling objects](specs/012-eight-slot-bag.md),
-   [Plan 011](plans/011-eight-slot-bag.md): pickup directly into slots, select to
-   place, a Dreamscape beer and preservation across location travel within a session.
+[Spec 008](specs/008-real-home-microzone.md) is partially implemented: the captured
+home exterior exists. The connected route, real interior and bar do not. It is
+waiting for entrance/stair/floor references, street-to-bar layout and a measured
+span. Its lifecycle remains in-progress because scope is incomplete; it is not
+an active execution task. Resume only with the required references and priority.
 
-The implementation baseline now also includes Casa/Lourizán map travel,
-authored Pazo architecture, camera corrections and the initial reusable botanical
-kit (Specs 009–011). Visual/browser acceptance is still tracked separately. These
-feature candidates refine the older contextual-interaction proposal below.
+## 4. Implemented baseline, not a feature queue
 
-## Next character appearance spec requested
+- Foundations and controls: Specs 001–007. Web engine, movement, item identity,
+  touch, boot screen and deployment. Individual acceptance limits stay in specs.
+- Places/travel: 009–011. Map travel, authored Pazo/camera and botanical kit.
+- Inventory/NPCs: 012–014. Eight-slot bag, dialogue and local Lucas patrol.
+- Presentation: 015–017. Canonical character resources, salon/illustrated dream
+  backdrop and source/runtime asset cleanup.
+- Current gameplay loop: 018. Revised residents, Narci, Lucas smoking/walk and
+  the session-only 20-coin beer errand.
 
-The developer intends a separate spec for configurable face, hair, clothes and
-body style with dynamically composed character/NPC visuals. The current character
-cleanup supplies canonical style references and separates presentation resources
-from identity. Decide layers/generation strategy and authoring contracts in that
-spec; this note does not authorize a runtime generator or customization UI.
+These are implemented, not universally accepted. Hosting preparation does not
+mean persistence or multiplayer. The beer errand does not imply a quest framework,
+shops or durable currency.
 
-## Proposed sequence and exit criteria
+## 5. Unscheduled ideas
 
-| Stage | Outcome | Exit criteria and dependencies | Authority |
-| --- | --- | --- | --- |
-| Now: street composition | A coherent test street with grounded vegetation, readable route and clear garage access | Bank implementation verified; developer visual review remains pending | Existing [Spec 002](specs/002-street-trial.md), [plan 009](plans/009-street-bank-composition.md) |
-| Next: settle the presentation | Consistent character/environment pixel scale and readable occlusion/UI | Review one agreed route; physical mobile/Safari input and visibility checks; measure load/FPS before promising budgets | Continue 002/004/005; request Astra only if changing a cross-project standard |
-| Then: one contextual interaction | Approach a recognizable garage/fence location, see an Observe prompt and read a short response | Correct proximity/input behavior, no clash with pickup/placement, works on desktop and touch | Proposed; agree a bounded spec before implementation |
-| Then: Casa → Bar playable slice | A small purposeful route using the accepted art and interaction vocabulary | Agree locations, boundaries and player objective from the Bible; deliver one complete route before expanding | Proposed; read current Bible and define a new spec/plan |
-| Initial kit implemented; extend when needed | Botanical scenes and ground materials exist; add props supporting the playable slice | Spec 011 kit is implemented, with developer art acceptance pending; preserve pivots, dimensions and provenance | [Spec 011](specs/011-botanical-assets.md); further extensions require scoped work |
-| Later: first impossible event | One readable anomaly connecting the familiar world to Dreamscape | Agree a minimal experience and state boundaries; no generalized multiverse system | Proposed feature and spec |
-| Future: durable/shared world | Accounts, authoritative interaction and persistence, if selected as the next product milestone | Player/load targets, save/reconnect rules, recovery/offsite backups and end-to-end validation agreed first | [ADR 004](adr/004-hosting-and-persistent-server-direction.md) is a proposed runtime boundary; Astra review and implementation spec required |
+Further contextual interactions, impossible events, more authored places,
+housing, containers, trading, crafting, combat, persistent/shared worlds.
+No date, order or implementation authorization is assigned. Do not turn this list
+into parallel work. The original Casa/Bar vision remains; repeated Pazo art work
+must not silently replace it as the overall product goal.
 
-Housing, containers, trading, crafting, quests and combat remain future candidates.
-Their order is not fixed, and this roadmap does not authorize their infrastructure.
+## Where each kind of information lives
 
-## Decisions to settle together next
+- This roadmap: current checkpoint, proposed next feature, waiting input, backlog.
+- [Spec registry](specs/README.md): scope and acceptance status; IDs stay stable.
+- [Plan registry](plans/README.md): bounded execution breakdowns and historical
+  work records, not another competing priority list.
+- [Development](development.md): commands, evidence, known limitations and release
+  snapshots. Older entries are historical when superseded by newer records.
 
-1. Is the street the ongoing test map or will the next feature be built in the
-   Casa → Bar slice? Avoid polishing a test map indefinitely without playable goals.
-2. After visual review, prioritize the first contextual interaction or more
-   environmental fidelity; choose one observable milestone.
-3. Select physical Android/iOS devices and define the next release acceptance
-   route and measurements. Do not invent devices, dates or performance results.
-4. Decide when persistence/shared play should displace single-player slice work.
-   Hosting readiness alone is not a reason to start it.
-
-## Maintenance
-
-Keep this document in English. After a developer decision, update the stage,
-link the approved spec and a bounded execution plan, and record actual evidence.
-Use the [spec registry](specs/README.md) to allocate IDs only when a distinct
-deliverable is ready to specify. Do not reserve speculative specs for every row.
+Recommended cadence: complete/review the current checkpoint, agree the next
+bounded spec, implement it, record verification and deployment, then review before
+starting another feature. Developer steering can change priorities explicitly.

@@ -5,6 +5,15 @@ Use the [task template](task-template.md) for new plans and write new/reworked
 plans in English. Historical Spanish execution records remain as evidence;
 the English-only specification rule applies to every document in `docs/specs/`.
 
+## How to use this index
+
+These are execution records, not the current task queue. No listed plan is
+currently awaiting automatic execution. Plans 010–014 delivered their code;
+remaining developer/device acceptance is consolidated in [the roadmap](../roadmap.md).
+Older candidate work requires renewed scope/prioritization before execution.
+Specs 017–018 were bounded sequential changes and did not require a separate
+multi-agent plan. Keep existing plan/spec IDs and historical evidence intact.
+
 | ID | Plan | Governing spec |
 | --- | --- | --- |
 | 004 | [Mobile touch](004-mobile-touch.md) | [004](../specs/004-mobile-touch.md) |

@@ -1,10 +1,20 @@
 # Spec 009 — Lourizán and map travel
 
-Status: in-progress
-Updated: 2026-10-05
+Status: implemented
+Updated: 2026-10-13
 Language: en
 
-## Objective
+## Current status
+
+Travel implementation is complete; developer/browser acceptance remains open.
+The original scan-based Pazo art below is historical: Spec 010 replaced it with
+[authored architecture](010-camera-scale-and-lourizan-art.md), Spec 016 added the
+[fictional salon](016-lourizan-galleries-and-salon.md), and Spec 017 moved the scan
+outside runtime. These successors supersede the original scan-only art scope and
+AC2's captured-paving requirement. Current route acceptance is consolidated in
+[the roadmap](../roadmap.md); no new travel system is pending implementation.
+
+## Original objective
 
 Add a first walkable Pazo de Lourizán location from the developer's Scaniverse mesh. At a marked edge, the player opens a map, chooses a destination and travels among the production Calle Jacobo Risa scene, the captured home exterior and Lourizán. Keep the existing sprite, orthographic camera, screen pixel pass, movement and touch controls.
 

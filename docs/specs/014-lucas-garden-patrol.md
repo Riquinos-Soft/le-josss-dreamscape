@@ -1,7 +1,7 @@
 # Spec 014 — Lucas garden patrol and character art
 
 Status: implemented
-Updated: 2026-10-07
+Updated: 2026-10-13
 Language: en
 
 Authorization: the developer requested a visual upgrade that makes Lucas read
@@ -9,7 +9,15 @@ like the protagonist and asked for him to walk around the palace gardens. The
 same request authorizes implementation, testing, push and deployment after the
 travelling bag release.
 
-## Authorized follow-up — 2026-10-07
+## Current status — 2026-10-13
+
+Patrol implementation is complete. Plan 014 is executed, not the next task.
+Canonical assets are defined by Spec 015 and the four-phase Lucas gait/smoking
+follow-up by [Spec 018](018-residents-and-beer-errand.md). The versioned assets and
+two-frame descriptions below record historical iterations. Developer art/device
+acceptance remains open; use [the roadmap](../roadmap.md) for current priorities.
+
+## Historical follow-up — 2026-10-07
 
 The developer authorized continuing Lucas and Pazo improvements and requested
 a bounded plan for an economical executor. [Plan 014](../plans/014-lucas-atlas-and-pazo-refinement.md)
@@ -24,7 +32,7 @@ Current follow-up: inspect/integrate the pending Lucas atlas, with real
 eight-direction standing poses (legs extended and feet planted) and readable
 alternating walking steps. Preserve patrol, dialogue freeze/resume and collision.
 Acceptance: Plan L1 native eight-direction start/walk/turn/stop captures, dialogue
-and placement regressions, full gate and Web export. Next: execute L1.
+and placement regressions, full gate and Web export. L1 was executed; its art has since been superseded by Specs 015/018.
 
 ## Asset scale correction — 2026-10-07
 

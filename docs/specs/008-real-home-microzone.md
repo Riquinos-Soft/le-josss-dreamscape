@@ -1,8 +1,14 @@
 # Spec 008 — Connected real home microzone
 
 Status: in-progress
-Updated: 2026-10-05
+Updated: 2026-10-13
 Language: en
+
+## Current status
+
+Partially implemented and waiting for developer references; not an active
+execution task. The captured home is playable, but AC2–AC3 are unfinished.
+Priority and required inputs are listed in [the roadmap](../roadmap.md).
 
 ## Objective
 
@@ -12,7 +18,7 @@ Build a recognizable, walkable connection from the developer's real three-storey
 
 The approved home exterior is playable as `world/home_exterior.tscn` and available as a map destination through `world/locations/home.tscn`. A reusable stair flight and three-level fixture have been verified. The real entrance, floor layout, bar position and appearance are not established by the capture. Do not present invented geometry as the real location. This route is pending more user references.
 
-The current production entry point is the pixel-art Jacobo Risa street, governed by [Spec 002](002-street-trial.md). The captured home exterior is reachable from the map; its physically connected street and bar remain pending real references. The [Lourizán travel slice](009-lourizan-and-map-travel.md) is a distinct current milestone.
+The current production entry point is Lourizán. The pixel-art Jacobo Risa street, governed by [Spec 002](002-street-trial.md), remains a map destination. The captured home exterior is reachable from the map; its physically connected street and bar remain pending real references. The [Lourizán travel slice](009-lourizan-and-map-travel.md) is a distinct current milestone.
 
 ## Acceptance
 

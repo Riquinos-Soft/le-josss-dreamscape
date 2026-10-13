@@ -1,14 +1,14 @@
 # Spec 010 — Camera clearance, place scale and Lourizán pixel art
 
 Status: implemented
-Updated: 2026-10-07
+Updated: 2026-10-13
 Language: en
 
 ## Authorized follow-up — 2026-10-07
 
 The developer authorized continuing Lucas and Pazo improvements and requested
 a bounded plan for an economical executor. [Plan 014](../plans/014-lucas-atlas-and-pazo-refinement.md)
-is ready; implementation has not started. Earlier validation applies to the
+was executed; implementation is complete. Earlier validation applies to the
 previous release only. Mobile and developer visual acceptance remain pending;
 the new request authorizes proceeding without treating that acceptance as passed.
 

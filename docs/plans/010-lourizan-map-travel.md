@@ -1,6 +1,11 @@
 # Plan 010 — Lourizán map travel
 
-Governing spec: [009](../specs/009-lourizan-and-map-travel.md). Status: in progress, 2026-10-05. The developer authorized implementation with Sol Medium. Integrate on current branch; keep local commits and do not push automatically. Use the current production street and its pixel pass as the visual/runtime baseline.
+Governing spec: [009](../specs/009-lourizan-and-map-travel.md). Status: implementation complete; developer/device acceptance pending, 2026-10-13. The developer authorized implementation with Sol Medium. Integrate on current branch; keep local commits and do not push automatically. Use the current production street and its pixel pass as the visual/runtime baseline.
+
+Current priority is the consolidated route review in [the roadmap](../roadmap.md).
+The phases below record the initial scan-based implementation; authored Pazo and
+fictional salon scope subsequently shipped under Specs 010/016. Phase 4 is a
+historical candidate, not an active instruction to expand the estate.
 
 ## Phase 1 — Capture and provenance (done)
 
