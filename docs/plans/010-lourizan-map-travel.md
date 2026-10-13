@@ -4,7 +4,7 @@ Governing spec: [009](../specs/009-lourizan-and-map-travel.md). Status: in progr
 
 ## Phase 1 — Capture and provenance (done)
 
-Decode the supplied Scaniverse Draco mesh offline, prepare the runtime GLB and record source hashes and known coverage. Inspect UV direction and geometry in Godot. The linked video is excluded per developer instruction. Evidence: `assets/source/lourizan/`, `tools/prepare_lourizan_scan.py`, `game/assets/lourizan/` and `test_lourizan_exterior.gd`.
+Decode the supplied Scaniverse Draco mesh offline, prepare the runtime GLB and record source hashes and known coverage. Inspect UV direction and geometry in Godot. The linked video is excluded per developer instruction. Evidence: `assets/source/lourizan/`, `tools/prepare_lourizan_scan.py`, `assets/source/lourizan/exterior.glb` (moved out of runtime by Spec 017) and `test_lourizan_exterior.gd`.
 
 ## Phase 2 — Production integration (done)
 

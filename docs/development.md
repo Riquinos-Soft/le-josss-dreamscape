@@ -1,5 +1,29 @@
 # Development setup and verified baseline
 
+## Asset workspace cleanup — 2026-10-13
+
+[Spec 017](specs/017-asset-workspace-cleanup.md) documents the source/runtime
+boundary. Root `assets/source/` keeps offline masters/provenance; `game/assets/`
+keeps imported resources. SHA-256 audit found no identical complete tracked files.
+Embedded-image inspection found two matching extracted JPEGs. Kept the home JPEG:
+its imported material uses it in the emission channel, then the scene wrapper
+assigns that to albedo. Removed the unused Lourizan JPEG (4,440,259 bytes) and its
+import settings, plus the unreferenced legacy shrub SVG/import. Moved the unchanged
+12,982,644-byte Lourizan reference GLB into `assets/source/lourizan/`, removed its
+obsolete import settings/export exclusion, and updated the preparation output.
+No source master, reference capture or historical verification evidence was lost.
+
+Verification with Godot 4.7.2: `--headless --path game --import --quit` and
+`make export-web GODOT=/Applications/Godot.app/Contents/MacOS/Godot` succeeded.
+`python3 tools/check_docs.py` and `git diff --check` passed. The imported home
+material resolves its 4096x4096 texture. Logs and inventory live under
+`build/verification/asset-cleanup/` (`import-final.log`, `export-final.log`,
+`home-texture.log`, `inventory.txt`). An initial experiment changing home image
+import reported a stale deleted-image UID; the original home files/settings were
+restored. Final import/export report no warnings/errors. No gameplay suite or
+manual browser/device validation was performed for this asset-only cleanup.
+
+
 ## Canonical character assets and matching idle identity — 2026-10-07
 
 The developer requested a bounded character cleanup before further world work.

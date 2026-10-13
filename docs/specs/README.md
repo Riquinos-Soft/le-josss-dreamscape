@@ -25,8 +25,9 @@ None of these documents silently authorizes unrelated work.
 | 014 | [Lucas garden patrol and character art](014-lucas-garden-patrol.md) | implemented | Developer review; authorized atlas follow-up in Plan 014 |
 | 015 | [Retro character clarity and stable walking](015-retro-character-clarity.md) | implemented | Canonical character refactor; developer visual/mobile review pending |
 | 016 | [Lourizán galleries, residents and dream salon](016-lourizan-galleries-and-salon.md) | implemented | Developer art and physical-device acceptance |
+| 017 | [Asset workspace cleanup](017-asset-workspace-cleanup.md) | implemented | Inventory, import and Web export verified |
 
-Next available spec ID: **017**. Recompute from this registry before reserving;
+Next available spec ID: **018**. Recompute from this registry before reserving;
 this line is not a standing reservation for an agent or a feature.
 
 ## Language and file naming

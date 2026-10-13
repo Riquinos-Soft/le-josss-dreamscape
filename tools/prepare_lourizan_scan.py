@@ -18,7 +18,7 @@ from PIL import Image
 root = Path(__file__).resolve().parents[1]
 source_mesh = Path(sys.argv[1]).resolve()
 source_texture = Path(sys.argv[2]).resolve()
-output = root / 'game/assets/lourizan/exterior.glb'
+output = root / 'assets/source/lourizan/exterior.glb'
 mesh = DracoPy.decode(source_mesh.read_bytes())
 assert mesh.faces.shape[0] == 264177, 'Unexpected source: review before exporting'
 assert mesh.tex_coord.shape[0] == mesh.points.shape[0], 'Texture coordinates missing'

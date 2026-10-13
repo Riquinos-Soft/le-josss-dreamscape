@@ -1,11 +1,22 @@
-# Asset authoring workspace
+# Offline asset workspace
 
-Root `assets/` is for authoring inputs, not Godot runtime resources. Create `source/` for intentional Blender/art source files when needed. Put reviewed exports in `game/assets/`.
+This directory is outside Godot's `res://` root and is never exported with the
+game. It contains inputs and provenance used to prepare the runtime resources in
+[`game/assets/`](../game/assets/README.md).
 
-`captures/` and `work/` are ignored local scratch locations for future raw photos/video and reconstruction work. They do not exist yet and Git will not back them up; choose storage and backup arrangements before gathering important captures. Do not download models or reconstruction datasets for Spec 001.
+- `source/characters/`: original generated masters, prompts and normalization
+  instructions. These are larger than and different from the runtime atlases.
+- `source/ai/`: vegetation masters and their preparation instructions.
+- `source/home_scan/`: provenance and preparation report; the original capture
+  remains at the owner's external path documented there.
+- `source/lourizan/`: offline scan reference, provenance and preparation report.
+  The playable Pazo uses authored geometry, not this scan.
 
-When introducing a real asset, record its source, permission/license, authoring-tool version, and export settings beside the source. Use meters, apply/check transforms, and verify orientation, materials, triangle counts, texture sizes, and a sensible origin in Godot. Treat imported visuals as children of game-authored scenes so re-exporting does not overwrite behavior. Use deliberately simplified collision.
+Keep one current source per artifact and one runtime derivative when conversion
+is required. Do not copy an SVG or other directly usable source here merely to
+mirror `game/assets/`. Git retains superseded variants. A source master and its
+cropped, scaled or palette-reduced derivative are not redundant copies.
 
-For reusable Dreamscape pieces, keep an editable `.blend` source per character or modular prop in `assets/source/`, and a reviewed `.glb` export in `game/assets/`. A street can then be composed from separate road, wall, facade, vegetation, and decor models. The current capsule player is a scale and control placeholder; a future character model can replace its visual child without rewriting movement or camera behavior. The [pixel RPG reference](../references/dreamscape-pixel-rpg-reference.png) guides silhouette, palette, lighting, and restrained texture resolution rather than serving as a texture atlas.
-
-Budgets live in [Spec 001](../docs/specs/001-vertical-slice.md). Versioning large binary sources and capture privacy/rights should be resolved when that work enters scope, not through a pipeline built in advance.
+`captures/` and `work/` are ignored scratch locations, not Git backups. Preserve
+important originals separately. Record source permissions and preparation steps
+beside each intentional source; keep runtime import settings beside the export.
