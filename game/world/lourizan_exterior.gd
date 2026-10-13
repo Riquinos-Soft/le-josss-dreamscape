@@ -303,9 +303,10 @@ func build_garden_furniture() -> void:
 				box(Vector3(x + side, 0.27, z), Vector3(0.09, 0.5, 0.62), iron)
 				box(Vector3(x + side, 0.7, z - 0.35), Vector3(0.07, 1.0, 0.09), iron)
 		for x in [3.0, 14.0]:
-			column(Vector3(x, 1.6, z), 0.065, 3.2, iron)
-			box(Vector3(x, 3.25, z), Vector3(0.38, 0.45, 0.38), gold)
-			box(Vector3(x, 3.55, z), Vector3(0.5, 0.12, 0.5), iron)
+			var lantern := Node3D.new()
+			lantern.set_script(preload("res://world/pixel_lantern.gd"))
+			lantern.position = Vector3(x, 0.04, z)
+			architecture.add_child(lantern)
 
 
 func build_garden() -> void:

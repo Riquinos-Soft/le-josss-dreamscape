@@ -97,3 +97,18 @@ Import, Web export, formatting, lint and documentation checks are recorded in
 `build/verification/palace-pixel/`. No full gameplay suite or browser/device review
 is claimed. Next step: developer visual acceptance, especially the stair rail and
 vault composition. This is a stylized reconstruction, not a measured replica.
+
+## Authorized lighting correction — 2026-10-13
+
+Developer rejected the backdrop's constant twilight. Add a daylight sky and a
+night sky with stars visible only at night, synchronized to the existing local
+clock. Convert the four garden lamps to period-compatible pixel lanterns, add
+exactly two to Jacobo Risa, and provide permanent warm chandelier illumination
+inside the salon. Lighting must work with the existing unshaded pixel materials;
+use bounded painted light pools/halos, not an unrelated renderer replacement.
+Outdoor lamps switch off by day. Salon lighting must remain on at every hour.
+Implemented with bounded screen-space painted light pools and warm halos (no
+physical shadows or occlusion simulation). Native captures cover garden, street,
+map boundary and salon at 13:00/01:00. Import/lint/format/docs/Web export evidence
+is in `build/verification/night-lights/`. Browser/device and user art acceptance
+remain pending.

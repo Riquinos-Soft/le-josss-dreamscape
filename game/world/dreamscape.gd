@@ -44,6 +44,15 @@ var coins := 0
 
 
 func _ready() -> void:
+	var lanterns := Node3D.new()
+	lanterns.name = "Lanterns"
+	street.add_child(lanterns)
+	for at in [Vector3(4.35, 1.60, 0), Vector3(0.10, 1.49, 10)]:
+		var lantern := Node3D.new()
+		lantern.set_script(preload("res://world/pixel_lantern.gd"))
+		lantern.place_id = &"street"
+		lantern.position = at * street.PLACE_SCALE
+		lanterns.add_child(lantern)
 	var backdrop := Node3D.new()
 	backdrop.name = "DreamCastles"
 	backdrop.set_script(preload("res://world/dream_castles.gd"))
@@ -433,7 +442,7 @@ func on_bag_slot_selected(index: int) -> void:
 
 
 func set_street_active(active: bool) -> void:
-	for name in ["StreetVisual", "Walkway", "GarageFacade", "GarageDoor", "PixelDecor"]:
+	for name in ["StreetVisual", "Walkway", "GarageFacade", "GarageDoor", "PixelDecor", "Lanterns"]:
 		street.get_node(name).visible = active and name != "StreetVisual"
 	street.get_node("StreetCollision").collision_layer = 1 if active else 0
 	street.get_node("Exit").monitoring = active

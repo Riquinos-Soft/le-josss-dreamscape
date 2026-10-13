@@ -191,6 +191,14 @@ func build_furniture() -> void:
 func build_chandelier() -> void:
 	# Suspended towards the back; it never covers the arrival or central walking lane.
 	var center := Vector3(0, 3.9, -4.8)
+	var illumination := Node3D.new()
+	illumination.set_script(preload("res://world/pixel_lantern.gd"))
+	illumination.fixture = false
+	illumination.indoors = true
+	illumination.radius = 7.0
+	illumination.bulb_height = 3.9
+	illumination.position = Vector3(0, 0.1, -4.8)
+	add_child(illumination)
 	column(center + Vector3.UP * 0.55, 0.06, 1.0, gold)
 	ball(center, 0.20, gold)
 	var ring := TorusMesh.new()

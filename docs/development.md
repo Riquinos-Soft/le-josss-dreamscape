@@ -1,5 +1,21 @@
 # Development setup and verified baseline
 
+## Night sky and lanterns — 2026-10-13
+
+Spec 019 follow-up separates bright daytime sky from night sky and pixel stars.
+The same local clock controls four Pazo lanterns and exactly two Jacobo Risa
+lanterns, replacing the Pazo's decorative posts with original pixel silhouettes.
+Salon chandelier has permanent warm illumination and indoor ambient tint.
+Bounded screen-space color pools illuminate the unshaded art; these are stylized
+lights without physical shadow/occlusion, and may tint overlapping foreground art.
+Only active-place/interior sources contribute; hidden street lanterns are disabled.
+
+Godot import/native captures (13:00/01:00, garden/street/sky/salon), gdformat/gdlint,
+docs check and Web export: `build/verification/night-lights/`. Known gdtoolkit
+pkg_resources warning remains. No gameplay suite or physical browser review run.
+Next: user visual acceptance. No push performed for this follow-up.
+
+
 ## Palace pixel architectural follow-up — 2026-10-13
 
 Spec 019's first material pass did not satisfy the developer's architectural
