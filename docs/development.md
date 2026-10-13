@@ -1,5 +1,35 @@
 # Development setup and verified baseline
 
+## Residents, Lucas gait and beer errand — 2026-10-13
+
+[Spec 018](specs/018-residents-and-beer-errand.md) implements the developer's
+confirmed 20-coin errand. First Lucas conversation requests the beer; a subsequent
+conversation transfers the expected real inventory instance, credits 20 coins,
+and marks completion on the session root. Travel does not reset it. The bag shows
+balance/objective; reload resets the session. Existing ten randomized conversations
+remain after the offer/turn-in. No shops, persistence or generic quest system.
+
+Alba is now Narci in runtime scene/resource paths and dialogue. Resident masters
+were redrawn with Joss proportions. Lucas now has four generated walk phases per
+direction at 6fps and a slightly quicker 1m/s patrol. Idle keeps straight legs and
+the exact new walking upper body. The normalizer discards disconnected neighboring
+row fragments before scale measurement. Removed the obsolete two-frame normalizer.
+Only current masters remain, with built-in imagegen prompts beside them. Lucas
+smokes during patrol pauses; ten small CPU particles stop emitting while walking
+or talking. The safe patrol waypoints remain unchanged.
+
+First, pushed `a5a0285` as requested; GitHub CI/deployment run `38327159982` succeeded.
+For the new follow-up, native Godot 4.7.2 captures at 844x390 and 1280x720 inspect
+NPCs, offer and reward bag. The capture script used the real street item pickup
+and map travel calls after relocating the player. Logs show `PICKUP true`,
+`DELIVERY coins=20 completed=true bag=0`, `REPEAT coins=20`.
+Evidence: `build/verification/residents-errand/` (native logs and PNG captures).
+Import and `make export-web` succeeded. `gdformat --check game`, `gdlint game`,
+`python3 tools/check_docs.py` and whitespace checks passed. The existing gdtoolkit
+`pkg_resources` deprecation warning remains. No full gameplay suite or physical
+mobile acceptance is claimed. New follow-up remains local pending publication.
+
+
 ## Illustrated dream backdrop and stable furniture — 2026-10-13
 
 Spec 016 follow-up replaces the rejected castle meshes/procedural star plane with

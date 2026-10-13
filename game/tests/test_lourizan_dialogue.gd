@@ -15,6 +15,7 @@ func _initialize() -> void:
 
 func run() -> void:
 	session = load("res://world/dreamscape.tscn").instantiate()
+	session.beer_errand_started = true
 	root.add_child(session)
 	current_scene = session
 	player = session.get_node("Street/Player")
@@ -74,8 +75,8 @@ func run() -> void:
 			"Lucas stands still " + direction
 		)
 		check(
-			guide_sprite.sprite_frames.get_frame_count(walk_clip) == 2,
-			"Lucas has alternating walk poses " + direction
+			guide_sprite.sprite_frames.get_frame_count(walk_clip) == 4,
+			"Lucas has four walk phases " + direction
 		)
 		check(
 			idle_image.get_used_rect().end.y == 60, "Lucas standing feet are grounded " + direction

@@ -56,7 +56,7 @@ func run() -> void:
 		finish()
 		return
 	await capture("pazo-salon-detail")
-	for path in ["Salon/BraisAnfitrion", "InesBotanica", "AlbaVisitante"]:
+	for path in ["Salon/BraisAnfitrion", "InesBotanica", "NarciVisitante"]:
 		var npc: Node3D = scene.active_location.get_node(path)
 		player.position = npc.global_position + Vector3(1.25, 0.1, 0)
 		player.velocity = Vector3.ZERO

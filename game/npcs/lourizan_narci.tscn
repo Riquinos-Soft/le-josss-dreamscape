@@ -1,10 +1,10 @@
 [gd_scene load_steps=3 format=3]
 
 [ext_resource type="PackedScene" path="res://npcs/lourizan_guide.tscn" id="1"]
-[ext_resource type="SpriteFrames" path="res://assets/art/characters/alba.tres" id="2"]
+[ext_resource type="SpriteFrames" path="res://assets/art/characters/narci.tres" id="2"]
 
-[node name="AlbaVisitante" instance=ExtResource("1")]
-speaker_name = "Alba · Visitante"
+[node name="NarciVisitante" instance=ExtResource("1")]
+speaker_name = "Narci · Visitante"
 dialogue_pages = PackedStringArray("Desde esta terraza me gusta mirar las galerías y los tejados de pizarra.", "Más allá de los jardines flotan castillos. En este sueño, las vistas nunca terminan.")
 patrol_enabled = false
 

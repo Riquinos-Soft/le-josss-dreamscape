@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" path="res://world/lourizan_salon.tscn" id="7_salon"]
 [ext_resource type="Script" path="res://world/lourizan_passage.gd" id="8_passage"]
 [ext_resource type="PackedScene" path="res://npcs/lourizan_ines.tscn" id="9_ines"]
-[ext_resource type="PackedScene" path="res://npcs/lourizan_alba.tscn" id="10_alba"]
+[ext_resource type="PackedScene" path="res://npcs/lourizan_narci.tscn" id="10_narci"]
 
 [sub_resource type="Environment" id="Environment_scan"]
 background_mode = 1
@@ -37,6 +37,7 @@ position = Vector3(6, 0.2, -4)
 
 [node name="LucasMaconheiro" parent="." instance=ExtResource("6_guide")]
 position = Vector3(5, 0.2, 4.5)
+smoking_enabled = true
 
 [node name="Salon" parent="." instance=ExtResource("7_salon")]
 position = Vector3(-90, 0, 0)
@@ -53,5 +54,5 @@ indoors = true
 [node name="InesBotanica" parent="." instance=ExtResource("9_ines")]
 position = Vector3(11.0, 0.02, 20.0)
 
-[node name="AlbaVisitante" parent="." instance=ExtResource("10_alba")]
+[node name="NarciVisitante" parent="." instance=ExtResource("10_narci")]
 position = Vector3(-0.4, 4.44, -5.5)

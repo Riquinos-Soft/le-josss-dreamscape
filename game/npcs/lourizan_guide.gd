@@ -6,8 +6,10 @@ const DirectionalAnimation = preload("res://player/directional_animation.gd")
 @export var speaker_name := "Lucas Maconheiro"
 @export var dialogue_pages: PackedStringArray = []
 @export var patrol_enabled := true
-@export var walk_speed := 0.8
-@export var waypoint_pause := 1.25
+@export var walk_speed := 1.0
+@export var waypoint_pause := 2.0
+@export var smoking_enabled := false
+var smoking: Node3D
 var patrol_offsets := PackedVector3Array(
 	[
 		Vector3.ZERO,
@@ -33,6 +35,10 @@ func _ready() -> void:
 	add_to_group("lourizan_guide" if patrol_enabled else "lourizan_resident")
 	add_to_group("lourizan_speaker")
 	talk_marker.hide()
+	if smoking_enabled:
+		smoking = Node3D.new()
+		smoking.set_script(preload("res://npcs/smoking_pause.gd"))
+		add_child(smoking)
 	patrol_origin = position
 	_play_animation(false)
 
@@ -99,4 +105,6 @@ func _update_facing(motion: Vector3) -> void:
 
 
 func _play_animation(walking: bool) -> void:
+	if smoking != null:
+		smoking.set_smoking(not walking and pause_remaining > 0.3 and not conversation_active)
 	DirectionalAnimation.play_direction(sprite, facing, walking)

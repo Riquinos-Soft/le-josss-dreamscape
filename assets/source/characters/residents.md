@@ -1,14 +1,7 @@
-# residents source
+# residents
 
-Built-in image_gen edit, 2026-10-07. Transparent source: `residents.png`.
-Reference identities came from commit 45af87e. Current canonical walking references
-are `joss_walk.png` and `lucas_walk.png`; superseded portraits remain in Git history.
+Generated 2026-10-13 using built-in imagegen, referenced current Lucas/residents and Joss walking art. Replaces the prior source in place. Normalize with tools/normalize_resident_atlas.gd. Lucas idle keeps its straight standing lower body and receives the new walking upper body through prepare_character_idle.gd. Runtime uses 64px cells, maximum 48px height, feet at y60.
 
-Prompt:
+## Exact prompt
 
-Redraw first reference three stationary NPCs with EXACTLY the compact big-headed 16-bit RPG proportions and chunky pixel detail of Joss in the second reference. First image identities left to right: Inés auburn bun teal coat botanical notebook; Brais grey hair moustache burgundy jacket cream waistcoat; Alba dark bob ochre jacket plum scarf shoulder bag. Each body 48 effective pixels high, head about 17 pixels high and 22 wide, compact torso, short straight parallel legs boots together. Do NOT keep the current long slender realistic body proportions. Preserve distinct identity, faces, colors and outfit. Transparent THREE columns ONE row. Full bodies at equal height and same baseline, front three-quarter facing. No labels, ground or cast shadows. Crisp dark outline, restrained clustered shading exactly matching the Joss walking art vocabulary.
-
-Runtime preparation: normalize into 64px cells, 48px body/feet y=60.
-For Joss and Lucas, `tools/prepare_character_idle.gd` retains the canonical
-walking head/torso above row 43 and fits the generated standing lower body.
-This guarantees identical identity pixels at the idle/walk boundary.
+Redraw the three NPCs in the first reference as a transparent horizontal sprite strip of exactly 3 equally spaced characters, facing down/front, full bodies, straight legs together, boots aligned. First Ines brown hair teal green botany coat, second Brais grey hair burgundy formal coat, third Narci dark hair mustard jacket. The second reference Joss is the EXACT proportion and pixel-art rendering authority: big broad round head occupying about 40% total height, stout short body, short thick legs, broad shoulders, not slender or realistic adult proportions. Each character should read as the same game as Joss. Crisp richly shaded pixel sprites, clean dark outlines, no text, no floor, no shadows, truly transparent background. Do not change reference identities, only harmonize their proportions and style.

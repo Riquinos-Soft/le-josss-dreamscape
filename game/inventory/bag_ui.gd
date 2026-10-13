@@ -14,6 +14,7 @@ var open_button: Button
 var panel: PanelContainer
 var occupancy: Label
 var feedback: Label
+var errand_status: Label
 var slot_buttons: Array[Button] = []
 
 
@@ -80,6 +81,10 @@ func build_ui() -> void:
 	close_button.custom_minimum_size = Vector2(48, 48)
 	close_button.pressed.connect(func(): close_requested.emit())
 	heading.add_child(close_button)
+	errand_status = Label.new()
+	errand_status.text = "0 monedas"
+	errand_status.add_theme_font_size_override("font_size", 14)
+	rows.add_child(errand_status)
 	var grid := GridContainer.new()
 	grid.name = "SlotGrid"
 	grid.columns = 4
@@ -161,7 +166,7 @@ func update_layout() -> void:
 	var viewport_size := get_viewport().get_visible_rect().size
 	open_button.position = Vector2(viewport_size.x - 84.0, minf(220.0, viewport_size.y - 84.0))
 	var compact := viewport_size.y < 500.0
-	var panel_size := Vector2(390, 272 if compact else 292)
+	var panel_size := Vector2(390, 302 if compact else 322)
 	panel.size = panel_size
 	panel.position = (viewport_size - panel_size) * 0.5
 	for button in slot_buttons:
@@ -179,3 +184,12 @@ func _unhandled_input(event: InputEvent) -> void:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT and is_node_ready() and is_open:
 		close_requested.emit()
+
+
+func set_errand_status(balance: int, started: bool, completed: bool) -> void:
+	var objective := ""
+	if completed:
+		objective = " · Recado completado"
+	elif started:
+		objective = " · Lleva la birra a Lucas"
+	errand_status.text = "%d monedas%s" % [balance, objective]

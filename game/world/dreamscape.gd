@@ -27,6 +27,9 @@ var speakers: Array[Node3D] = []
 var inside_salon := false
 var dialogue_controls_owned := false
 var last_dialogue_index := -1
+var beer_errand_started := false
+var beer_errand_completed := false
+var coins := 0
 
 @onready var street: Node3D = $Street
 @onready var player: CharacterBody3D = $Street/Player
@@ -284,11 +287,33 @@ func open_dialogue() -> void:
 	active_guide.set_conversation_active(true)
 	var pages: Array[String] = []
 	if active_guide.dialogue_pages.is_empty():
-		last_dialogue_index = LourizanHistory.choose_dialogue(last_dialogue_index)
-		pages.assign(LourizanHistory.DIALOGUES[last_dialogue_index])
+		pages = _lucas_conversation()
 	else:
 		pages.assign(active_guide.dialogue_pages)
 	dialogue.open(active_guide.speaker_name, active_guide.get_node("Head"), pages)
+
+
+func _lucas_conversation() -> Array[String]:
+	if not beer_errand_started:
+		beer_errand_started = true
+		return [
+			"¿Me haces un recado? Hay una Birra Dreamscape en la calle de Jacobo Risa.",
+			"Guárdala en la bolsa y vuelve a hablar conmigo para entregármela. Te daré 20 monedas."
+		]
+	if not beer_errand_completed:
+		for index in item_loop.inventory.CAPACITY:
+			var item = item_loop.inventory.get_item(index)
+			if item != null and item.definition.type_id == &"birra_dreamscape":
+				if item_loop.inventory.take_at(index, item) != null:
+					beer_errand_completed = true
+					coins += 20
+					bag_ui.set_errand_status(coins, true, true)
+					bag_ui.show_feedback("Birra entregada · +20 monedas")
+					return ["¡Esa es la birra! Gracias por el paseo. Aquí tienes tus 20 monedas."]
+	last_dialogue_index = LourizanHistory.choose_dialogue(last_dialogue_index)
+	var pages: Array[String] = []
+	pages.assign(LourizanHistory.DIALOGUES[last_dialogue_index])
+	return pages
 
 
 func close_dialogue() -> void:
@@ -379,6 +404,7 @@ func open_bag() -> void:
 	touch_controls.reset_touch()
 	map_ui.guide.hide()
 	map_ui.prompt.hide()
+	bag_ui.set_errand_status(coins, beer_errand_started, beer_errand_completed)
 	bag_ui.open_bag()
 
 

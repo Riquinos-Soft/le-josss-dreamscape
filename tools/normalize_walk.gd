@@ -28,6 +28,7 @@ func _initialize() -> void:
 			var right := roundi((column + 1) * source.get_width() / 4.0)
 			var bottom := roundi((row + 1) * source.get_height() / 8.0)
 			var frame := source.get_region(Rect2i(left, top, right - left, bottom - top))
+			frame = main_body_band(frame)
 			var bounds := frame.get_used_rect()
 			if bounds.size.y == 0:
 				push_error("Empty walk frame %d,%d" % [row, column])
@@ -55,3 +56,27 @@ func _initialize() -> void:
 			)
 		print("Walk row %d: common scale %.4f, feet at 60" % [row, scale])
 	quit(0 if result.save_png(args[1]) == OK else 1)
+
+
+func main_body_band(frame: Image) -> Image:
+	# Ignore disconnected spill from a neighboring generated grid row.
+	var best_start := 0
+	var best_height := 0
+	var start := -1
+	for y in range(frame.get_height() + 1):
+		var occupied := false
+		if y < frame.get_height():
+			for x in frame.get_width():
+				if frame.get_pixel(x, y).a >= 0.5:
+					occupied = true
+					break
+		if occupied and start < 0:
+			start = y
+		if not occupied and start >= 0:
+			if y - start > best_height:
+				best_start = start
+				best_height = y - start
+			start = -1
+	if best_height == 0:
+		return frame
+	return frame.get_region(Rect2i(0, best_start, frame.get_width(), best_height))

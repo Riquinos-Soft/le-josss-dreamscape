@@ -26,8 +26,9 @@ None of these documents silently authorizes unrelated work.
 | 015 | [Retro character clarity and stable walking](015-retro-character-clarity.md) | implemented | Canonical character refactor; developer visual/mobile review pending |
 | 016 | [Lourizán galleries, residents and dream salon](016-lourizan-galleries-and-salon.md) | implemented | Developer art and physical-device acceptance |
 | 017 | [Asset workspace cleanup](017-asset-workspace-cleanup.md) | implemented | Inventory, import and Web export verified |
+| 018 | [Residents and Lucas beer errand](018-residents-and-beer-errand.md) | implemented | Native delivery verified; developer mobile/art review pending |
 
-Next available spec ID: **018**. Recompute from this registry before reserving;
+Next available spec ID: **019**. Recompute from this registry before reserving;
 this line is not a standing reservation for an agent or a feature.
 
 ## Language and file naming
