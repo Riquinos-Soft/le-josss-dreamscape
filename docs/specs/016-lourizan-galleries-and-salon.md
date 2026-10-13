@@ -1,13 +1,26 @@
 # Spec 016 — Lourizán galleries, residents and dream salon
 
 Status: implemented
-Updated: 2026-10-07
+Updated: 2026-10-13
 Language: en
 
 Authorization: the developer requested a substantial video-led Pazo improvement,
 more NPCs, a luxurious interior area and push/deployment on 2026-10-07.
 Acceptance: authored expansion implemented and native route/camera checked;
 developer art and physical-device review remain open.
+
+## Authorized visual correction — 2026-10-13
+
+Replace the rejected polygonal castle props/star plane with one detailed
+illustrated floating-castle backdrop matching the boot artwork. It fills the
+viewport behind geometry, preserves image proportions, has no collision and
+never overlays the HUD or playable world. Remove the superseded backdrop code.
+Separate overlapping sofa seat/back/arm surfaces that caused visible depth
+fighting. Character screenshots show the old production build: remote main is
+`45af87e`, before the canonical identity fix in local `eaae8ba`. Preserve that fix.
+Acceptance: native boundary/salon captures inspected at 1280x720 and 844x390;
+import and Web export succeeded. No gameplay suite or physical-device acceptance
+is inferred. Local commit pending publication.
 
 ## Objective
 
@@ -47,9 +60,10 @@ NPC manager, navigation system, persistence, multiplayer or renderer change.
   tall windows/curtains, chandelier, seating and display furniture. Use a cutaway
   presentation to keep the player visible. Match collision to solid furniture;
   preserve item identity and existing floor placement within the location.
-- R7 — Surround the playable map with non-colliding floating castle islands,
-  purple starry void and warm windows inspired by the existing cover. Preserve
-  safe boundaries and avoid blocking the palace camera composition.
+- R7 — Surround the playable map with a detailed illustrated castle realm,
+  purple nebulae and warm windows inspired by the existing cover. Use an
+  aspect-preserving background image behind geometry, with no castle prop meshes
+  or collision. Preserve safe boundaries and palace camera composition.
 - R6 — Keep Web/Compatibility and the existing unit, camera and sprite contracts.
   Batch static architecture by material; no runtime external asset services.
 

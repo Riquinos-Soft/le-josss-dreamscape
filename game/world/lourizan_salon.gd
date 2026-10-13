@@ -137,8 +137,9 @@ func window(z: float) -> void:
 
 
 func sofa(at: Vector3) -> void:
-	box(at + Vector3.UP * 0.43, Vector3(2.8, 0.48, 1.0), velvet, true)
-	box(at + Vector3(0, 0.9, -0.43), Vector3(2.8, 0.8, 0.22), velvet, true)
+	# Seat and back fit between arms; no coincident outer faces at x = +/-1.4.
+	box(at + Vector3.UP * 0.43, Vector3(2.4, 0.48, 1.0), velvet, true)
+	box(at + Vector3(0, 0.9, -0.43), Vector3(2.4, 0.8, 0.22), velvet, true)
 	for x in [-1.3, 1.3]:
 		box(at + Vector3(x, 0.65, 0), Vector3(0.2, 0.65, 1.0), gold)
 		for z in [-0.35, 0.35]:

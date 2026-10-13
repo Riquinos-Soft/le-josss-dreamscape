@@ -1,5 +1,31 @@
 # Development setup and verified baseline
 
+## Illustrated dream backdrop and stable furniture — 2026-10-13
+
+Spec 016 follow-up replaces the rejected castle meshes/procedural star plane with
+one full-viewport illustrated background. Built-in imagegen used the boot art as
+style reference; the exact prompt is in
+[background provenance](../assets/source/backgrounds/dream_castles.md). The original
+PNG is used directly by Godot, so no redundant source copy is retained. The shader
+preserves aspect and writes Compatibility reversed-Z far clip position (-1).
+It retains depth testing and never writes depth or creates collision. Native
+inspection caught and corrected an initial near-depth placement before completion.
+
+Sofa seats/backs now fit between the arms (2.4m width), eliminating coincident
+outer faces at x=+/-1.4m that produced depth fighting. This keeps outer dimensions
+and blocks traversal through the furniture. The reported face mismatch matches
+old production assets: `git ls-remote origin refs/heads/main` returned `45af87e`,
+before local canonical character fix `eaae8ba`. That fix remains intact.
+
+Godot 4.7.2 import and `make export-web` succeeded. Native scene captures at
+1280x720 and 844x390 were inspected at the map boundary and inside the salon.
+Evidence/logs: `build/verification/visual-polish/`; the temporary capture script
+loads the real scene and relocates the player, without adding a test suite.
+`python3 tools/check_docs.py` and `git diff --check` passed. No gameplay suite or
+physical mobile/browser flicker validation is claimed. Changes remain local until
+publication; developer visual acceptance remains pending.
+
+
 ## Asset workspace cleanup — 2026-10-13
 
 [Spec 017](specs/017-asset-workspace-cleanup.md) documents the source/runtime
