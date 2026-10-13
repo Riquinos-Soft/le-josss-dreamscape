@@ -1,5 +1,17 @@
 # Development setup and verified baseline
 
+## Terra incremental palace plan — 2026-10-13
+
+Created [Plan 015](plans/015-terra-palace-pixel-polish.md) at base `7fff4ce`, clean
+working tree. Seven serial packages: baseline, one approved gallery sample, arches,
+stairs/sculptures, roofs/clock, integration and route review. Explicit file limits,
+reference timestamps, matching captures and per-phase handoff prevent another
+unbounded art rewrite. Terra is requested but not callable/selected here; no agent
+was launched. “House” is interpreted as the current Pazo; Casa needs a revised
+reference contract if that assumption is wrong. Planning only, no runtime change.
+Documentation check and whitespace check passed; no gameplay tests run.
+
+
 ## Inactive exit and portrait HUD — 2026-10-13
 
 The floating turquoise marker was the street Exit still visible during Pazo visits.
