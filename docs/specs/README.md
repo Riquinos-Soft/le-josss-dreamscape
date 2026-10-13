@@ -11,7 +11,9 @@ Implementation through Spec 018 is deployed in `b9a3ede`. The developer then
 authorized Spec 019 for pixel environments and synchronized day/night color.
 The playable loop remains awaiting developer acceptance. Specs 015–016 retain visual/mobile
 review. Spec 008 waits for real-place references and is not being actively built.
-Configurable character appearance is the proposed next spec, not an existing one.
+Spec 020 now defines the requested V2 rebuild, including configurable characters,
+registration, durable progress and online play. Product scope is authorized;
+consequential technical decisions remain open before implementation.
 See [the roadmap](../roadmap.md) for the single current priority sequence.
 `implemented` means the deliverable exists; it does not imply accepted or deployed.
 
@@ -38,8 +40,9 @@ See [the roadmap](../roadmap.md) for the single current priority sequence.
 | 017 | [Asset workspace cleanup](017-asset-workspace-cleanup.md) | implemented | Inventory, import and Web export verified |
 | 018 | [Residents and Lucas beer errand](018-residents-and-beer-errand.md) | implemented | Native delivery verified; developer mobile/art review pending |
 | 019 | [Coherent pixel environment art](019-coherent-pixel-environment.md) | implemented | Day/night captures and Web export passed; developer visual review pending |
+| 020 | [Persistent online vertical rebuild](020-persistent-online-vertical.md) | draft | Scope authorized; visual, identity, authority and recovery contracts need review |
 
-Next available spec ID: **020**. Recompute from this registry before reserving;
+Next available spec ID: **021**. Recompute from this registry before reserving;
 this line is not a standing reservation for an agent or a feature.
 
 ## Language and file naming

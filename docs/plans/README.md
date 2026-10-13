@@ -7,8 +7,9 @@ the English-only specification rule applies to every document in `docs/specs/`.
 
 ## How to use this index
 
-These are execution records, not the current task queue. No listed plan is
-currently awaiting automatic execution. Plans 010–014 delivered their code;
+These are execution records, not a competing task queue. Plan 016 now describes
+the authorized V2 direction; preparation is next, with architecture decisions open.
+Plans 010–014 delivered their code;
 remaining developer/device acceptance is consolidated in [the roadmap](../roadmap.md).
 Plan 015 was executed serially after explicit developer authorization; its visual
 acceptance remains open.
@@ -30,8 +31,9 @@ multi-agent plan. Keep existing plan/spec IDs and historical evidence intact.
 | 013 | [Lucas garden patrol](013-lucas-garden-patrol.md) | [014](../specs/014-lucas-garden-patrol.md) |
 | 014 | [Lucas atlas and Pazo refinement](014-lucas-atlas-and-pazo-refinement.md) | [014](../specs/014-lucas-garden-patrol.md), [010](../specs/010-camera-scale-and-lourizan-art.md), [015](../specs/015-retro-character-clarity.md) |
 | 015 | [Terra palace pixel polish](015-terra-palace-pixel-polish.md) | [019](../specs/019-coherent-pixel-environment.md), [010](../specs/010-camera-scale-and-lourizan-art.md) |
+| 016 | [Persistent vertical rebuild](016-persistent-vertical-rebuild.md) | [020](../specs/020-persistent-online-vertical.md) |
 
-Next available plan ID: **016**. IDs 001–003 are not backfilled. Plan IDs are
+Next available plan ID: **017**. IDs 001–003 are not backfilled. Plan IDs are
 independent of specs and ADRs. Reserve a unique next ID here, use
 `NNN-short-english-kebab-case.md` and title `# Plan NNN — English title`, and update
 references in the same change. Existing IDs remain stable. During parallel work

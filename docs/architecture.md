@@ -1,5 +1,15 @@
 # Repository and vertical-slice architecture
 
+## V2 planning direction — 2026-10-13
+
+[Spec 020](specs/020-persistent-online-vertical.md) and
+[Plan 016](plans/016-persistent-vertical-rebuild.md) now cover the developer-requested
+rebuild with registration, configurable characters, online play and persistence.
+The implementation below describes the legacy release, not a proven online design.
+Its earlier backend/persistence exclusions remain true for V1; they do not prohibit
+the newly authorized V2 scope. Durable identity and authority contracts require
+Spec 003 review before implementation. No runtime services were added by this plan.
+
 Current local entry point is `world/dreamscape.tscn`. It hosts the production pixel-art Jacobo Risa street and keeps its player, sprite, orthographic camera, pixel pass, item loop, touch controls and dialogue layer during travel to the captured home or Pazo exteriors. The home exterior is a map destination; its physically connected home-to-bar route remains pending real layout references. See [Spec 009](specs/009-lourizan-and-map-travel.md) and [Spec 008](specs/008-real-home-microzone.md).
 
 ## Captured exterior

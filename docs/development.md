@@ -1,5 +1,22 @@
 # Development setup and verified baseline
 
+## Persistent online V2 plan — 2026-10-13
+
+At clean base `ab91b89`, the developer authorized a controlled rebuild plan and
+explicitly added registration, character creation, online play and persistent
+progress. Reserved Spec 020 and Plan 016 in their independent indexes. The roadmap
+now prioritizes the small V2 street over further open-ended Pazo iterations.
+Accounts, authority, durable item/reward transfers, reconnect/restart recovery,
+backup restoration, art/collision gates and targeted retirement are explicit.
+ADR 004's deployment direction is reused; its runtime proposal is not silently
+promoted to a settled architecture. D1–D4 record the decisions and their owners.
+
+No runtime files, service configuration, databases, providers or production state
+changed. Next step: Plan 016 P0 inventory, then the consequential P1 review under
+Spec 003 before dependent implementation. Earlier session-only and proposed-feature
+records below are historical descriptions of V1. Documentation/whitespace checks
+apply to this change; no runtime tests are needed for the planning documents.
+
 ## Terra incremental palace plan — 2026-10-13
 
 Created [Plan 015](plans/015-terra-palace-pixel-polish.md) at base `7fff4ce`, clean

@@ -4,17 +4,36 @@ Updated: 2026-10-13. This is the entry point for current priorities. Spec number
 are identifiers, not execution order. Proposed work below is not implementation
 authorization. Older roadmap wording is retained in Git history.
 
-## 1. Current checkpoint: finish the existing playable loop
+## 1. Current priority: controlled persistent online rebuild
 
-Implementation baseline: `b9a3ede`, pushed to main. Its CI/deployment run is
-[38328916165](https://github.com/Riquinos-Soft/le-josss-dreamscape/actions/runs/38328916165).
-CI and deployment completed successfully on 2026-10-13. Production baseline is
-`b9a3ede`. A successful deployment does not imply developer gameplay acceptance.
+The developer requested the V2 refactor plan, including registration, character
+creation, online play and durable progress. [Spec 020](specs/020-persistent-online-vertical.md)
+records authorized product scope and unresolved architecture;
+[Plan 016](plans/016-persistent-vertical-rebuild.md) is the execution sequence.
+This steering supersedes further open-ended V1 art polishing as the main priority.
+No V2 runtime or backend has been implemented by the planning change.
+
+Order: baseline inventory → art/authority/data contracts → modular character and
+collision laboratory → small Jacobo Risa section → registration/character creation
+→ durable inventory/progress → two-player street → migrated beer/travel loop
+→ Pazo/salon → restore drill, cutover and proven-unused-file cleanup.
+
+Next: P0 inventory, followed by the consequential P1 review under Spec 003 before
+implementing new global art or backend contracts. Review ADR 004's proposed
+headless Godot/WSS and account-service boundaries. Character, inventory, money and
+quest state must survive reload and server restart. Provider, capacity and shared
+quest-item decisions stay explicit in Spec 020.
+
+## 2. Legacy release and comparison route
+
+Recorded implementation/deployment baseline: `ab91b89`, pushed to main. Its
+[CI/deployment run](https://github.com/Riquinos-Soft/le-josss-dreamscape/actions/runs/38393362916)
+was confirmed successful earlier in this session. Preserve it as the V2 comparison
+and rollback reference; successful deployment does not imply art acceptance.
 
 Authorized follow-up implemented: [Spec 019](specs/019-coherent-pixel-environment.md)
-unifies Pazo/background pixel art and local day/night color. This explicit user
-steering comes before configurable characters; finish and review it with the same
-route checkpoint below.
+unifies Pazo/background pixel art and local day/night color. Use it as the current
+reference for the route checkpoint below.
 
 A sequential Pazo pixel-art pass is recorded in [Plan 015](plans/015-terra-palace-pixel-polish.md).
 It was executed after explicit developer authorization and awaits visual acceptance.
@@ -39,14 +58,9 @@ Exit: deployed build confirmed, route reviewed on physical mobile, and concrete
 blocking defects resolved. Native checks/export already exist; they do not replace
 this review. Current screenshots report issues, not blanket acceptance.
 
-## 2. Proposed next feature: configurable character appearance
-
-Requested by the developer; not yet specified or authorized for implementation.
-After the current checkpoint, draft one bounded spec for face, hair, clothing and
-shared body proportions for Joss/NPCs. Decide composition and authoring strategy,
-then prove one character can change appearance without changing gait/identity.
-Define that acceptance before extending the NPC roster or regenerating more
-independent full-body atlases. Do not reserve an ID until drafting begins.
+Configurable character appearance is now part of Spec 020 and Plan 016 P2/P4,
+including registration and character creation. It is no longer a separate proposed
+next feature. Prove one compatible body/pose format before expanding the roster.
 
 ## 3. Waiting for input: Casa to Bar
 
@@ -74,7 +88,7 @@ shops or durable currency.
 ## 5. Unscheduled ideas
 
 Further contextual interactions, impossible events, more authored places,
-housing, containers, trading, crafting, combat, persistent/shared worlds.
+housing, containers, trading, crafting and combat beyond the V2 vertical.
 No date, order or implementation authorization is assigned. Do not turn this list
 into parallel work. The original Casa/Bar vision remains; repeated Pazo art work
 must not silently replace it as the overall product goal.
