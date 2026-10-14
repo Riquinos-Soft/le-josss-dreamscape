@@ -1,16 +1,17 @@
 # Spec 020 — Persistent online vertical rebuild
 
-Status: draft
-Updated: 2026-10-13
+Status: in-progress
+Updated: 2026-10-14
 Language: en
 
 Authorization: developer requested a controlled rebuild plan on 2026-10-13,
 explicitly adding registration, character creation, online play and persistence.
 This authorizes these features as product scope. Infrastructure provisioning,
 provider selection and production replacement are not implied by writing the plan.
-Acceptance: planning only; no V2 runtime, accounts, online server or persistent
-gameplay has been implemented. Draft status reflects unresolved technical decisions,
-not a request to reauthorize the already requested product scope.
+The developer subsequently authorized beginning execution and pushing increments
+on 2026-10-14. Acceptance: P0 inventory/build reference complete; no V2 runtime,
+accounts, online server or persistent gameplay implemented. P1 decisions remain
+open. See [baseline inventory](../refactor-baseline.md).
 
 ## Objective
 
@@ -124,6 +125,14 @@ before the new route is usable.
   obsolete resources only after imports, references and Web export pass.
 
 ## Validation
+
+Current: Plan 016 P0 completed against deployed `753e31c`, with explicit addition
+inventory for surf `14d2be5`. Eight native reference views, bounded render samples,
+resource/caller/hash review and Web payload recorded in
+[the baseline](../refactor-baseline.md). AC1 inventory/build-reference portion
+complete; no gameplay/backend/account/migration validation inferred. Next: P1.
+
+Historical planning record (superseded as current progress):
 
 Documentation-only preparation based on clean `ab91b89`, whose CI/deployment
 previously completed successfully in run 38393362916. Read Spec 003, ADRs 003/004,

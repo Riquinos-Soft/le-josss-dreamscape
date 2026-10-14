@@ -1,5 +1,31 @@
 # Development setup and verified baseline
 
+## V2 P0 inventory complete — 2026-10-14
+
+[Baseline/migration inventory](refactor-baseline.md) records actual dependencies,
+retention/replacement boundaries and the finite P2–P9 checklist. Captured reference
+`753e31c` passed CI/deployment (38487188852); surf `14d2be5` is a separate addition.
+Eight native reference views include day/night, terrace, salon and compact street.
+Commands: `python3 build/verification/v2/P0/inventory.py`, Godot
+`--path game --script ../build/verification/v2/P0/capture.gd`, documentation check
+and `git diff --check`. Existing successful Web export reused, not repeated for
+documentation. Logs/scripts/captures are in `build/verification/v2/P0/`.
+
+No identical complete tracked artwork files found. `gravel.tres` has no caller;
+dynamic ornaments/plants, GLB-dependent JPEG and fixture scenes are retained.
+Nothing deleted. Native samples are short, capped at 60fps and not browser/mobile
+performance acceptance; initial unwarmed timing output was superseded explicitly.
+World screenshots use scripted positioning, not a manual traversal claim. No
+gameplay tests added/run for P0. Current uncompressed baseline export is 73.34 MiB.
+
+Spec 020 is now in-progress: AC1 inventory/build reference complete, other V2 gates
+open. Next is P1 contract review; registration, configurable parts and persistent
+authority remain unimplemented. User authorized continuing after the Spec 003
+review request; no model switch or external review is claimed.
+Surf `14d2be5` subsequently passed CI and deployment in run 38487990020. These
+existing CI gameplay checks are distinct from the local capture-only evidence.
+
+
 ## Lucas surf arcade — 2026-10-14
 
 Spec 022 adds a 25% nonconsecutive invitation among Lucas's ordinary conversations;

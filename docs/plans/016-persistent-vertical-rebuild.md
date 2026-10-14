@@ -9,8 +9,9 @@
   approvals of every current implementation. No new Bible content was fetched.
 - Base: `ab91b89`, main, clean working tree. Previous deploy succeeded; production
   art/device acceptance remains open. This change adds planning documents only.
-- Status: planned, 2026-10-13. Product expansion authorized in the user's request;
-  no backend/runtime execution or service connection is claimed.
+- Status: P0 complete, 2026-10-14; P1 is next. Developer explicitly authorized
+  starting the refactor and pushing completed increments. No V2 runtime/service
+  connection is claimed. See [baseline inventory](../refactor-baseline.md).
 - Settled: Godot 4.7.2 Compatibility, Web first, metres, stable item identity,
   same repository, small scenes, a street sample before Pazo migration.
 - Unresolved: D1–D4 in Spec 020. Request Astra for the consequential decisions
@@ -45,11 +46,16 @@ At every package handoff record base SHA, changed paths, completed acceptance
 criteria, actual commands/results, capture/log paths, warnings, next unresolved
 step and measured cost/time only when available. The integrator reviews the diff,
 checks scope, updates Spec 020 and this plan, and commits the working package.
-No automatic production push is authorized by this planning request.
+The subsequent 2026-10-14 request authorizes pushing completed refactor increments;
+it does not authorize unreviewed service provisioning or replacing production with
+an incomplete V2 scene.
 
 ## P0 — Baseline and dependency inventory
 
-- Status: ready for preparation; owner: integrator. Dependency: none.
+- Status: done, 2026-10-14; owner: integrator. Dependency: none.
+- Output: [baseline and migration inventory](../refactor-baseline.md); native
+  captures/reference scan under `build/verification/v2/P0/`. Runtime comparison
+  base is `753e31c`; subsequent surf increment is `14d2be5`.
 - Context: current entry point and direct dependencies, export/deploy setup,
   current asset manifests, Specs 012/018/019 and ADRs 002/003.
 - Allowed: reference inventory, ignored captures and planning/evidence docs.
@@ -150,6 +156,8 @@ No automatic production push is authorized by this planning request.
 - Steps: retain Lucas's dialogue content and 20-coin beer task; apply the D3 policy
   so one player consuming beer cannot permanently deny another player's mission.
   Port contextual bag/dialogue/touch interactions and reconnectable place transitions.
+  Preserve Specs 021/022 companion travel and surf diversion; durable surf rewards
+  require authority validation rather than accepting an arbitrary client coin total.
 - Gate: accept → collect → deliver across login/reload; exactly one reward per
   eligible character; replay and concurrent requests are safe. Scene replacement
   never becomes the owner of persistent item or quest data.
@@ -182,8 +190,9 @@ No automatic production push is authorized by this planning request.
 
 ## Next action
 
-Begin P0's bounded inventory. Before implementing P1's unresolved architecture,
-request Astra review as specified by repository Spec 003. User authorization for
+P0 is complete. Continue P1's visual/authority review under repository Spec 003;
+the developer authorized proceeding after the review request on 2026-10-14.
+No external reviewer/model switch is claimed. User authorization for
 accounts/online/persistence is already recorded; do not ask to approve that scope
 again. Select providers and release operations only after their concrete decisions
 and environments are known.

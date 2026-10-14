@@ -2,6 +2,11 @@
 
 ## V2 planning direction — 2026-10-13
 
+Current checkpoint (2026-10-14): [P0 dependency inventory](refactor-baseline.md)
+is complete. It identifies current callers and migration boundaries; older
+prototype-specific descriptions below are historical where they conflict with
+that inventory. P1 contracts remain open; no online implementation is claimed.
+
 [Spec 020](specs/020-persistent-online-vertical.md) and
 [Plan 016](plans/016-persistent-vertical-rebuild.md) now cover the developer-requested
 rebuild with registration, configurable characters, online play and persistence.

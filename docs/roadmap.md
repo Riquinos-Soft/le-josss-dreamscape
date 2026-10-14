@@ -11,14 +11,15 @@ creation, online play and durable progress. [Spec 020](specs/020-persistent-onli
 records authorized product scope and unresolved architecture;
 [Plan 016](plans/016-persistent-vertical-rebuild.md) is the execution sequence.
 This steering supersedes further open-ended V1 art polishing as the main priority.
-No V2 runtime or backend has been implemented by the planning change.
+P0 is complete: [baseline and migration inventory](refactor-baseline.md).
+No V2 runtime or backend has been implemented.
 
 Order: baseline inventory → art/authority/data contracts → modular character and
 collision laboratory → small Jacobo Risa section → registration/character creation
 → durable inventory/progress → two-player street → migrated beer/travel loop
 → Pazo/salon → restore drill, cutover and proven-unused-file cleanup.
 
-Next: P0 inventory, followed by the consequential P1 review under Spec 003 before
+Next: consequential P1 review under Spec 003 before
 implementing new global art or backend contracts. Review ADR 004's proposed
 headless Godot/WSS and account-service boundaries. Character, inventory, money and
 quest state must survive reload and server restart. Provider, capacity and shared
@@ -37,6 +38,8 @@ Recorded implementation/deployment baseline: `ab91b89`, pushed to main. Its
 [CI/deployment run](https://github.com/Riquinos-Soft/le-josss-dreamscape/actions/runs/38393362916)
 was confirmed successful earlier in this session. Preserve it as the V2 comparison
 and rollback reference; successful deployment does not imply art acceptance.
+Updated P0 capture reference `753e31c` also passed CI and deployment in run
+38487188852. Surf is the subsequent `14d2be5` increment with separate native evidence.
 
 Authorized follow-up implemented: [Spec 019](specs/019-coherent-pixel-environment.md)
 unifies Pazo/background pixel art and local day/night color. Use it as the current
