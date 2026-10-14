@@ -104,6 +104,8 @@ an incomplete V2 scene.
   Separate laboratory Web export is reproducible with `tools/export_v2_laboratory.py`.
   P2c: the same 19 collision/input assertions pass in Chrome WebAssembly at desktop
   and 844×390 for both appearances; the laboratory includes a repeatable route button.
+  CI now publishes an isolated `/v2/` HTTPS preview alongside the root game for
+  physical review; both V2 tests are part of its deployment gates.
   Physical target is iPhone 16 Pro + Chrome. Developer art/manual movement review,
   sustained performance and physical-device acceptance remain pending; P3 stays gated.
 - Allowed: `game/v2/characters/`, `game/v2/validation/`, directly related tests;

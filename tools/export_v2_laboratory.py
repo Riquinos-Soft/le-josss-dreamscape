@@ -11,9 +11,10 @@ import tempfile
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--godot", default="godot")
+    parser.add_argument("--output", type=Path, help="Web output directory (default: build/v2-laboratory)")
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
-    output = root / "build" / "v2-laboratory"
+    output = args.output.resolve() if args.output else root / "build" / "v2-laboratory"
     output.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="project-", dir=output) as temporary:
         project = Path(temporary)

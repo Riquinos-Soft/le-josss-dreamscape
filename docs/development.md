@@ -1,5 +1,36 @@
 # Development setup and verified baseline
 
+## V2 production preview publication — 2026-10-14
+
+Developer reported that the new work did not work in production. Investigation
+confirmed successful CI/deployment run 38572860692 and public `/release.txt` at
+`e5fab04725606bddad8fd0664952894bdd3d1015`; the root game loaded in desktop Chrome
+155.0.8059.40 without engine errors. The laboratory had only a separate local
+export, so pushing its source did not create a public laboratory entry. A more
+specific iPhone failure description was requested; physical results remain pending.
+
+The fix publishes the laboratory at `/v2/` in the same CI-tested release while the
+root retains the existing game. `tools/export_v2_laboratory.py --output build/web/v2`
+builds a disposable project copy. CI now runs the 203 appearance and 19 route checks,
+exports both entries, and checks preview HTML/WASM/PCK on public HTTPS after deploy.
+No server receiver, proxy, account, database or production main-scene change.
+The nested export duplicates engine/game files on the host, but each entry loads
+only its own files; the combined release remains below the receiver's 256 MiB limit.
+
+Local verification: both V2 tests pass; default and nested Web exports pass;
+workflow YAML and all 11 shell steps parse; all five deployment receiver tests pass;
+documentation and whitespace checks pass. Logs are in ignored
+`build/verification/v2/production-preview/`. This is deployment packaging/tooling
+work; the native route evidence from P2c is retained without another visual/art pass.
+Existing gdtoolkit and browser extension warnings remain as previously recorded.
+
+Release verification is enforced by the workflow after publication. Reproduce:
+`gh run list --branch main`, inspect the new run's gates/deploy result, then verify
+`/release.txt` and open
+https://dreamscape.198.244.233.153.sslip.io/v2/ in Chrome. Use "Verificar recorrido"
+for 19/19 before the iPhone 16 Pro + Chrome physical review. This preview is a
+public review entry, not acceptance or a replacement of the production world.
+
 ## V2 P2c Web collision route and physical target — 2026-10-14
 
 Base `7feec2d`, main synchronized; the requested push reported everything up to date.

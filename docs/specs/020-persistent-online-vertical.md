@@ -136,7 +136,10 @@ collision/input route inside Chrome WebAssembly at desktop and 844×390, with
 19/19 passing for both appearances. Developer art/manual traversal, sustained
 performance and physical-device acceptance remain open. The developer confirmed
 iPhone 16 Pro + Chrome as the physical target.
-Next is P2 review; P3 stays gated. Reproduction and warnings are in
+Production follow-up: developer reported the new work was unavailable in production.
+CI now exports the isolated laboratory to `/v2/` alongside the existing root game,
+and runs its two tests before deploying. Preview publication is not art/mobile
+acceptance or a V2 production cutover. Next is P2 review; P3 stays gated. Reproduction and warnings are in
 [development](../development.md).
 
 P1 completed: ADRs 006/007 settle the scene/pose, service, authority and transaction
