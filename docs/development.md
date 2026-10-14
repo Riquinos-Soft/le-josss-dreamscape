@@ -20,8 +20,12 @@ only its own files; the combined release remains below the receiver's 256 MiB li
 First deployment attempt for this fix (run 38575219497) passed game tests but
 failed at preview export with `python3: not found`. The Godot CI container now
 installs Python 3 explicitly before running the export helper; this installation
-is confined to the ephemeral build container. Production remains on the prior
-working release until the new gates pass.
+is confined to the ephemeral build container. The next attempt (38575628340)
+exposed `Unable to load fontconfig, system font support is disabled` during the
+fresh preview import. Strict error scanning rejected that import despite Godot's
+zero exit status. The job now installs `libfontconfig1` together with Python before
+any import, addressing the missing system dependency for both exports. Production
+remains on the prior working release until the new gates pass.
 
 Local verification: both V2 tests pass; default and nested Web exports pass;
 workflow YAML and all 12 shell steps parse; all five deployment receiver tests pass;
