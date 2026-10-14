@@ -2,6 +2,7 @@ GODOT ?= godot
 PYTHON ?= python3
 
 TESTS := \
+	test_v2_laboratory.gd \
 	test_touch_controls.gd \
 	test_movement_direction.gd \
 	test_keyboard_input.gd \

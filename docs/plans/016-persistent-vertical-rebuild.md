@@ -7,13 +7,13 @@
 - Design references: [place authoring](../place-authoring.md), ADRs 001–004 linked
   from Spec 020; existing Joss and Jacobo Risa are art references, not automatic
   approvals of every current implementation. No new Bible content was fetched.
-- Base: `ab91b89`, main, clean working tree. Previous deploy succeeded; production
-  art/device acceptance remains open. This change adds planning documents only.
-- Status: P0 complete; P1 contracts reviewed, 2026-10-14. P2 is ready.
+- Original planning base: `ab91b89`, main. Current P2a implementation base: `931fcc4`.
+  Production art/device acceptance remains open.
+- Status: P0 complete; P1 contracts reviewed, 2026-10-14. P2a collision laboratory implemented; P2b appearance work is next.
   Physical validation device is still awaiting developer information.
   Developer explicitly authorized
-  starting the refactor and pushing completed increments. No V2 runtime/service
-  connection is claimed. See [baseline inventory](../refactor-baseline.md).
+  starting the refactor and pushing completed increments. V2 has only an isolated
+  local laboratory; no service connection is claimed. See [baseline inventory](../refactor-baseline.md).
 - Settled: Godot 4.7.2 Compatibility, Web first, metres, stable item identity,
   same repository, small scenes, a street sample before Pazo migration.
 - Settled by P1: [ADR 006](../adr/006-v2-character-and-scene-contract.md) defines
@@ -95,7 +95,10 @@ an incomplete V2 scene.
 
 ## P2 — A character and collision laboratory
 
-- Status: ready; owner: executor/integrator. Dependency: ADR 006 delivered.
+- Status: running; owner: executor/integrator. Dependency: ADR 006 delivered.
+- P2a completed: isolated collision route, intent controller, keyboard/touch adapter
+  and provisional Joss presenter; 17 headless/native checks, captures and Web export.
+  P2b next: shared-pose parts, two appearances and NPC; no art/device acceptance yet.
 - Allowed: `game/v2/characters/`, `game/v2/validation/`, directly related tests;
   original character source art outside `game/` and normalized derivatives inside.
 - Input/output: one body/pose format → configurable face, hair, skin and clothes

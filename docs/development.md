@@ -1,5 +1,39 @@
 # Development setup and verified baseline
 
+## V2 P2a collision laboratory — 2026-10-14
+
+Base `931fcc4` closes the inherited P1 contract documents and offline preview.
+P2a adds an isolated `game/v2/validation/laboratory.tscn`, a world-intent actor and
+keyboard/touch adapter. Floor, corner, 1.6m doorway, five 0.2m risers and a 1m ledge
+have matching visible dimensions and colliders. The actor retains the 1.8m capsule,
+4m/s speed, 0.25m step limit and safe fall respawn. It reuses Joss and the resolved-
+motion presenter temporarily; no configurable appearance implementation is claimed.
+
+Reproduce with `/Applications/Godot.app/Contents/MacOS/Godot --path game
+res://v2/validation/laboratory.tscn`. Automated route:
+`/Applications/Godot.app/Contents/MacOS/Godot --headless --path game --fixed-fps 60
+--script res://tests/test_v2_laboratory.gd`; omit `--headless` for native captures.
+The test is included in `make test`. All 17 assertions pass headless and natively:
+intent bounds/nonfinite rejection, grounded spawn, wall/corner/door, stair ascent/
+descent, blocked high ledge, fall recovery, blocked idle, synthetic touch and focus
+release. Synthetic touch invokes the adapter directly, not OS touch delivery.
+The initial 70-frame stair route was too short; 130 frames covers the full ascent.
+Native desktop/compact and landing captures are under `build/verification/v2/P2/`.
+Desktop/compact framing inspected; these are calibration blocks, not finished art.
+
+Godot import, targeted gdformat/gdlint, Web export (`make export-web
+GODOT=/Applications/Godot.app/Contents/MacOS/Godot`), documentation and whitespace
+checks pass. Production entry point remains unchanged. Web export packages the
+laboratory; no Chrome/Safari or physical-device playtest is claimed. Successful
+Godot runs contain no warnings/errors. Existing gdtoolkit `pkg_resources`
+deprecation remains; tools were found at `/private/tmp/dreamscape-dev/bin` after
+bare commands were unavailable. Initial test/lint failures were fixed before commit.
+
+Next: P2b shared pose anchors and compatible body/face/hair/clothing parts, two
+appearances and an NPC, eight-direction captures and Web/device review. P2 remains
+in progress; do not start P3 or claim final art/collision feel acceptance. Services,
+accounts and production deployment are outside this increment.
+
 ## V2 P1 contract review — 2026-10-14
 
 Base `358be75`, clean working tree. User explicitly requested P1 and confirmed one

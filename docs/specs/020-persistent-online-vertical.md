@@ -9,9 +9,9 @@ explicitly adding registration, character creation, online play and persistence.
 This authorizes these features as product scope. Infrastructure provisioning,
 provider selection and production replacement are not implied by writing the plan.
 The developer subsequently authorized beginning execution and pushing increments
-on 2026-10-14. Acceptance: P0 inventory/build reference complete; no V2 runtime,
-accounts, online server or persistent gameplay implemented. P1 technical contracts
-are now reviewed in ADRs 006/007; P2 is ready. Physical device information and D4
+on 2026-10-14. Acceptance: P0 inventory/build reference and P2a isolated collision laboratory
+complete; accounts, online server and persistent gameplay remain unimplemented. P1 technical contracts
+are now reviewed in ADRs 006/007; P2 is in progress. Physical device information and D4
 launch choices remain open. See [baseline inventory](../refactor-baseline.md).
 
 ## Objective
@@ -127,12 +127,20 @@ before the new route is usable.
 
 ## Validation
 
-P1 current: ADRs 006/007 settle the scene/pose, service, authority and transaction
+P2a current: isolated collision laboratory and separated intent/input boundaries
+implemented. Seventeen checks pass headless/natively; native captures and Web
+export completed. Joss remains provisional. No configurable-part, browser or
+physical-device acceptance is claimed. Next: shared pose/part authoring, two
+appearances and NPC in P2b; P3 remains gated. Reproduction and limitations are in
+[development](../development.md).
+
+
+P1 completed: ADRs 006/007 settle the scene/pose, service, authority and transaction
 contracts. Developer confirmed one character/account, two-client correctness and
 personal quest beer. Native calibration script renders current Joss/Lucas against
 one authored floor/wall sample at 1280×720 and 844×390. This proves only calibration
 visibility; it does not prove layered appearance, collision, Web accounts or online
-play. Evidence/command: [development](../development.md). P2 is the next increment.
+play. Evidence/command: [development](../development.md). P2a follows this contract; P2b remains pending.
 
 P0: Plan 016 inventory completed against deployed `753e31c`, with explicit addition
 inventory for surf `14d2be5`. Eight native reference views, bounded render samples,
