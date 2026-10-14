@@ -12,8 +12,8 @@
 - Status: P0 complete; P1 contracts reviewed, 2026-10-14. P2 implementation complete; visual/gameplay review is next.
   Physical target: iPhone 16 Pro + Chrome; hands-on validation remains pending.
   Developer explicitly authorized
-  starting the refactor and pushing completed increments. V2 has only an isolated
-  local laboratory; no service connection is claimed. See [baseline inventory](../refactor-baseline.md).
+  starting the refactor and pushing completed increments. V2 now has a locally verified account entry/character checkpoint slice; production
+  activation awaits administrator access. See [baseline inventory](../refactor-baseline.md).
 - Settled: Godot 4.7.2 Compatibility, Web first, metres, stable item identity,
   same repository, small scenes, a street sample before Pazo migration.
 - Settled by P1: [ADR 006](../adr/006-v2-character-and-scene-contract.md) defines
@@ -26,7 +26,11 @@
   execution resumes after contract review. No model availability or cost assumed.
 - Non-goals: speculative frameworks, engine migration, mass art regeneration,
   new game features beyond Spec 020, or an unbounded legacy cleanup.
-- Order: P0 → P1 → P2 → P3 → P4 → P5 → P6 → P7 → P8 → P9.
+- Updated priority (developer correction, 2026-10-14): login/register → existing
+  character resume or first character creation → play. Defer P3 authoring; execute
+  P4 and the P5 movement-checkpoint slice using the existing validation location.
+  The original order below is superseded for this entry/resume increment.
+- Original order: P0 → P1 → P2 → P3 → P4 → P5 → P6 → P7 → P8 → P9.
   No parallel agent work authorized. Each package is split further if its first
   working increment cannot be reviewed independently.
 - Integrator-owned shared files: indexes, roadmap, development log, architecture
@@ -150,7 +154,14 @@ an incomplete V2 scene.
 
 ## P4 — Registration and persistent character creation
 
-- Status: planned; owner: executor/integrator. Dependency: P1 service contracts, P3.
+- Status: local test slice implemented; production activation pending.
+  Owner: executor/integrator. Dependency: P1 service contracts, P2.
+  Developer explicitly prioritized account entry/resume over P3 on 2026-10-14,
+  then selected a single `test:test` account with public registration disabled.
+  Login/creation/preview, PostgreSQL ownership, session/ticket lifecycle and the
+  safe movement checkpoint portion of P5 are implemented and tested locally.
+  The world is still the P2 fixture; P6 shared-player replication is not implemented.
+  See `backend/README.md` and `deploy/ovh/ACCOUNTS.md`.
 - Allowed: selected account service under `backend/`, reviewed database migrations,
   `game/v2/account/`, `game/v2/character_creation/`, and service integration tests.
 - Steps: isolated local/staging database; register/login/logout/recovery flow;

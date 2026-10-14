@@ -12,6 +12,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--godot", default="godot")
     parser.add_argument("--output", type=Path, help="Web output directory (default: build/v2-laboratory)")
+    parser.add_argument("--scene", choices=["laboratory", "account"], default="laboratory")
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     output = args.output.resolve() if args.output else root / "build" / "v2-laboratory"
@@ -25,7 +26,7 @@ def main():
         config = project / "project.godot"
         text, count = re.subn(
             r"^run/main_scene=.*$",
-            'run/main_scene="res://v2/validation/laboratory.tscn"',
+            'run/main_scene="res://v2/' + ('account/session.tscn' if args.scene == 'account' else 'validation/laboratory.tscn') + '"',
             config.read_text(), count=1, flags=re.MULTILINE,
         )
         if count != 1:

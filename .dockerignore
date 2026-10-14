@@ -1,0 +1,10 @@
+.git
+build
+assets
+references
+game/.godot
+game/.export_credentials.cfg
+**/__pycache__
+deploy/ovh/.secrets
+deploy/ovh/backups
+deploy/ovh/www

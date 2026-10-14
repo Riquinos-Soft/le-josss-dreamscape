@@ -1,0 +1,47 @@
+# Explicit opt-in overlay: docker compose -f compose.yaml -f compose.accounts.yaml ...
+# Build context is the repository copied to /opt/dreamscape/source.
+services:
+  web:
+    volumes:
+      - ./nginx.accounts.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./source/backend/accounts/static:/srv/account-static:ro
+      - ./source/game/v2/characters/parts:/srv/account-parts:ro
+    networks: [default, application]
+    depends_on: [accounts, authority]
+  accounts:
+    build:
+      context: ./source
+      dockerfile: backend/Dockerfile
+    restart: unless-stopped
+    env_file: ./.secrets/accounts.env
+    networks: [application, data]
+    mem_limit: 512m
+    cpus: 1.0
+    security_opt: [no-new-privileges:true]
+    read_only: true
+    tmpfs: [/tmp]
+    logging:
+      driver: json-file
+      options: {max-size: 10m, max-file: "3"}
+  authority:
+    build:
+      context: ./source
+      dockerfile: deploy/ovh/authority.Dockerfile
+    restart: unless-stopped
+    environment:
+      GAME_BIND: 0.0.0.0
+      ACCOUNT_INTERNAL_URL: http://accounts:8000/internal/
+    env_file: ./.secrets/authority.env
+    networks: [application]
+    depends_on: [accounts]
+    mem_limit: 384m
+    cpus: 1.0
+    security_opt: [no-new-privileges:true]
+    read_only: true
+    tmpfs: [/tmp, /home/authority/.local/share/godot]
+    logging:
+      driver: json-file
+      options: {max-size: 10m, max-file: "3"}
+networks:
+  application:
+    internal: true

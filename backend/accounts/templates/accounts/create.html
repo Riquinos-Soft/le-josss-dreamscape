@@ -1,0 +1,8 @@
+{% extends 'accounts/base.html' %}{% load static %}{% block content %}
+<p class="eyebrow">TU PRIMERA AVENTURA</p><h1>Crea tu personaje</h1>
+<p class="muted">Elige su nombre y su aspecto.</p>
+<div class="creator"><div class="portrait"><canvas id="preview" width="64" height="64" aria-label="Vista previa de tu personaje"></canvas><p id="preview-status" role="status">Cargando personaje…</p><button id="turn" type="button" class="secondary">Girar</button><button id="walk" type="button" class="secondary">Caminar</button></div>
+<form method="post" id="creator">{% csrf_token %}{{ form.as_p }}<button id="create-button">Crear y entrar</button></form></div>
+<form method="post" action="/logout/">{% csrf_token %}<button class="secondary">Cerrar sesión</button></form>
+{{ appearance|json_script:'initial-appearance' }}<script src="{% static 'accounts/preview.js' %}" defer></script>
+{% endblock %}

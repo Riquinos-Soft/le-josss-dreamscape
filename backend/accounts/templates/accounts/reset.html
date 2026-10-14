@@ -1,0 +1,1 @@
+{% extends 'accounts/base.html' %}{% block content %}<h1>Nueva contraseña</h1>{% if validlink %}<form method="post">{% csrf_token %}{{ form.as_p }}<button>Guardar contraseña</button></form>{% else %}<p>Este enlace no es válido o ha caducado.</p><a href="/recover/">Pedir otro enlace</a>{% endif %}{% endblock %}

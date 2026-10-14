@@ -14,3 +14,7 @@ game/.export_credentials.cfg
 # Blender recovery files; keep intentional .blend source files.
 *.blend1
 *.blend2
+# Python bytecode and collected backend assets.
+__pycache__/
+*.pyc
+/backend/static-collected/

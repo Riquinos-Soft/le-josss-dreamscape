@@ -1,5 +1,50 @@
 # Development setup and verified baseline
 
+## Account-first test slice — 2026-10-14
+
+Base `d89d3ec`, clean main. Developer corrected P3 priority to login/register →
+first character creation or existing character resume, then explicitly requested
+only `test:test` initially. Public registration is disabled; mail delivery is deferred.
+Implemented Django/PostgreSQL account ownership and migrations, native HTML login
+and creation with the P2 part preview, session/CSRF/rate limits, single-use tickets,
+a private persistence boundary, headless Godot movement simulation, fenced sessions/
+authority and 5-second grounded checkpoints. Logout waits for commit acknowledgement.
+The playable location is the existing validation room, not migrated Jacobo Risa.
+
+Checks: 12 backend tests on PostgreSQL 18.4; real HTTP/WebSocket round trip in a new
+disposable database (creation, movement, fresh-browser resume, same appearance/ID,
+replayed ticket, forged position, duplicate login fencing, authority restart and
+unknown command rejection); 19 collision checks headless and natively; 203 appearance
+checks; account Web export; backend Docker image build. A local PostgreSQL dump was
+restored into a separate disposable database and compared for character ID, name,
+appearance and position. No offsite/production restore or recovery-time claim.
+Commands are in `backend/README.md`; logs/export are under ignored
+`build/verification/v2/accounts/`, `build/account-*.log`, and `build/account-game/`.
+
+Chrome UI evidence: login with `test:test`, first creation of local test character
+Joss, preview with hairstyle/clothing options, Web entry, logout to login and return
+login bypassing creation. Login layout inspected at 844×390. During the first UI
+logout test the server committed but closed the WebSocket before the client consumed
+its acknowledgement; the server now allows the client to close after `left`, with
+a bounded timeout. Retested successfully in Chrome. A compact viewport is not a
+physical iPhone test. Keyboard taps were exercised but no sustained manual traversal
+is claimed; real movement/checkpoint evidence comes from the integration client.
+
+Warnings: gdtoolkit emits its existing `pkg_resources` deprecation; Chrome emits
+existing MetaMask extension listener/orphaned-stream warnings. An early disposable
+integration script used a deprecated websockets call; the committed integration
+uses context managers and passes without that warning. Native UI automation permissions
+were unavailable, so browser verification used the existing Chrome extension.
+
+Deployment: source and explicit opt-in Compose/nginx/migration helper are prepared;
+CI tests accounts and packages the account Web client alongside legacy and `/v2/`.
+Administrator SSH attempt returned `Permission denied (publickey,password)`; no
+production schema/container/proxy changes were made. The restricted static receiver
+cannot activate backend services. See `deploy/ovh/ACCOUNTS.md` for activation and
+non-destructive rollback. Next: obtain administrator access, deploy the reviewed
+services/roles/additive migration, verify public login/resume, then physical-device
+and world migration work. Do not describe local success as a production fix.
+
 ## V2 production preview publication — 2026-10-14
 
 Developer reported that the new work did not work in production. Investigation

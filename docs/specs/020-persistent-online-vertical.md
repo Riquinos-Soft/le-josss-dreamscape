@@ -10,9 +10,26 @@ This authorizes these features as product scope. Infrastructure provisioning,
 provider selection and production replacement are not implied by writing the plan.
 The developer subsequently authorized beginning execution and pushing increments
 on 2026-10-14. Acceptance: P0 inventory/build reference and P2 laboratory implementation
-complete; accounts, online server and persistent gameplay remain unimplemented. P1 technical contracts
+complete; the account-entry/character-checkpoint test slice is implemented locally,
+with production activation blocked by administrator SSH access. Inventory, quests
+and multiplayer replication remain unimplemented. P1 technical contracts
 are now reviewed in ADRs 006/007; P2 awaits visual/gameplay review. The physical target is iPhone 16 Pro + Chrome; physical
 acceptance and D4 launch choices remain open. See [baseline inventory](../refactor-baseline.md).
+
+## Current priority — developer clarification, 2026-10-14
+
+The developer corrected the sequence: arrival must show login/registration; an
+existing account resumes its owned character at its last committed position, while
+a first-time account creates one named character with modest Ultima Online-style
+appearance choices and a preview. Account and character data must live in the
+database. Prioritize this entry/resume vertical before further street authoring.
+P3 is deferred; P4 and the movement-checkpoint portion of P5 may use the existing
+validation location while the authored street remains pending. This is not
+authorization to claim the laboratory is the finished world. Preserve the accepted
+Django/PostgreSQL and headless-Godot authority contracts. The developer subsequently specified exactly one initial `test:test` account.
+Public registration is disabled for this phase; no mail provider is needed for the
+shared test account. Public account launch later requires actual mail delivery and
+the documented recovery arrangements.
 
 ## Objective
 
@@ -127,6 +144,21 @@ before the new route is usable.
 
 ## Validation
 
+Current entry/resume slice: login-first HTML entry, database-backed one-character
+creation with P2 part preview, single-use game tickets, headless Godot intent
+simulation and safe position checkpoints are implemented. Twelve PostgreSQL account
+tests pass, as does a real HTTP/WebSocket round trip covering fresh login, movement,
+logout acknowledgement, replay rejection, duplicate session fencing and authority
+restart. A local dump was restored into a separate database and compared for ID,
+name, appearance and position. Chrome exercised first creation, entry, logout and
+return login, including compact layout. These are local tests, not production or
+physical iPhone acceptance. Current location remains the P2 validation room.
+Next unresolved step: activate and verify the prepared account service deployment
+when administrator SSH access is available; then physical iPhone review and the
+authored world migration. No public registration or legacy progress migration claimed.
+
+Historical P2 validation follows:
+
 P2 current: shared-pose body/face/hair/clothing parts, two configurable appearances,
 NPC reuse and the isolated collision route are implemented. Appearance (203) and
 collision/input (19) checks pass headless/natively; eight pose sheets and production/
@@ -141,7 +173,8 @@ CI now exports the isolated laboratory to `/v2/` alongside the existing root gam
 and runs its two tests before deploying. Run 38576229271 deployed `fc009d2`;
 the public preview loaded and its route passed 19/19 in desktop Chrome.
 Preview publication is not art/mobile
-acceptance or a V2 production cutover. Next is P2 review; P3 stays gated. Reproduction and warnings are in
+acceptance or a V2 production cutover. The later account-first clarification above
+supersedes the former P2-review/P3-first sequence. Reproduction and warnings are in
 [development](../development.md).
 
 P1 completed: ADRs 006/007 settle the scene/pose, service, authority and transaction

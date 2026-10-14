@@ -1,0 +1,7 @@
+{% extends 'accounts/base.html' %}{% block content %}
+<p class="eyebrow">LE JOSSS · DREAMSCAPE</p>
+<h1>{% if register %}Crear cuenta{% else %}Vuelve a tu mundo{% endif %}</h1>
+<p class="muted">{% if register %}Tu personaje y su historia, guardados para tu próxima visita.{% else %}Tu personaje te espera donde lo dejaste.{% endif %}</p>
+<form method="post" class="credentials">{% csrf_token %}{{ form.as_p }}<button type="submit">{% if register %}Registrarme{% else %}Entrar{% endif %}</button></form>
+<nav>{% if register %}<a href="/">Ya tengo cuenta</a>{% else %}<a href="/register/">Crear cuenta</a><a href="/recover/">Recuperar contraseña</a>{% endif %}</nav>
+{% endblock %}

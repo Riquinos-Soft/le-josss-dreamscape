@@ -14,18 +14,19 @@ This steering supersedes further open-ended V1 art polishing as the main priorit
 P0 is complete: [baseline and migration inventory](refactor-baseline.md).
 P1 technical contracts are reviewed in [ADR 006](adr/006-v2-character-and-scene-contract.md)
 and [ADR 007](adr/007-authoritative-persistent-vertical.md). P2 character/collision laboratory is implemented and awaiting review.
-An isolated V2 character/collision laboratory exists; no backend has been implemented.
+The developer corrected the priority: login/register on arrival, create a first
+character or resume the existing character at its saved position. A single
+`test:test` account is authorized initially; public registration stays disabled.
+The account entry and movement checkpoint slice is implemented and verified locally
+with PostgreSQL and the headless Godot authority. It currently enters the P2
+validation room. Further P3 street authoring is deferred.
 
-Order: baseline inventory → art/authority/data contracts → modular character and
-collision laboratory → small Jacobo Risa section → registration/character creation
-→ durable inventory/progress → two-player street → migrated beer/travel loop
-→ Pazo/salon → restore drill, cutover and proven-unused-file cleanup.
-
-Next: review P2 shared-pose art and manual movement on iPhone 16 Pro + Chrome
-before P3. The scripted collision route passes in desktop Chrome WebAssembly.
-Keep the live entry point intact. One character/account, two-client first validation
-and personal quest beer are developer-confirmed. Physical acceptance remains pending;
-mail/backup/retention launch choices stay open in D4. No service rollout during P2.
+Next: activate the prepared account services and test public resume once administrator
+SSH access is restored (the available key was rejected). The existing static-only
+CI cannot activate database/services. Then validate iPhone 16 Pro + Chrome and
+continue the authored route, inventory/quests and two-player replication. D4 mail,
+retention and offsite backup choices still gate public registration, not the requested
+single shared test-account implementation. Physical-device acceptance remains open.
 
 ## 2. Legacy release and comparison route
 

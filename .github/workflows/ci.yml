@@ -36,6 +36,46 @@ jobs:
       - name: Test deployment safety
         run: python3 -m unittest discover -s deploy/ovh -p 'test_*.py'
 
+  accounts:
+    name: Account persistence and authority round trip
+    runs-on: ubuntu-24.04
+    container:
+      image: barichello/godot-ci:4.7.2@sha256:cdcca31e9194fd59a68a63f4b1b9c3981716819c520cd6f7966c5d72ca7246bd
+    services:
+      postgres:
+        image: postgres:18.4-alpine
+        env:
+          POSTGRES_USER: dreamscape_ci
+          POSTGRES_PASSWORD: disposable-ci-password
+          POSTGRES_DB: dreamscape_accounts_ci
+        options: >-
+          --health-cmd "pg_isready -U dreamscape_ci"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      PGHOST: postgres
+      PGPORT: '5432'
+      PGUSER: dreamscape_ci
+      PGPASSWORD: disposable-ci-password
+      PGDATABASE: dreamscape_accounts_ci
+      DJANGO_SECRET_KEY: disposable-ci-only-django-secret
+      AUTHORITY_SECRET: disposable-ci-only-authority-secret-32
+      DREAMSCAPE_DEV: '1'
+      REGISTRATION_ENABLED: '0'
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - name: Install account test tooling
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends python3 python3-venv libfontconfig1
+          python3 -m venv /tmp/accounts-env
+          /tmp/accounts-env/bin/pip install -r backend/requirements-test.txt
+      - name: Test account and persistence boundaries
+        run: |
+          /tmp/accounts-env/bin/python backend/manage.py test accounts
+          /tmp/accounts-env/bin/python backend/manage.py makemigrations --check --dry-run
+          godot --headless --path game --import --quit
+          /tmp/accounts-env/bin/python tools/test_account_roundtrip.py --godot godot
+
   godot:
     name: Godot tests and Web export
     runs-on: ubuntu-24.04
@@ -99,6 +139,9 @@ jobs:
       - name: Export V2 laboratory preview
         run: python3 tools/export_v2_laboratory.py --godot godot --output build/web/v2
 
+      - name: Export account client
+        run: python3 tools/export_v2_laboratory.py --godot godot --scene account --output build/web/account-game
+
       - name: Upload Web build
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
@@ -109,7 +152,7 @@ jobs:
 
   deploy:
     name: Deploy Web to OVH
-    needs: [static-checks, godot]
+    needs: [static-checks, godot, accounts]
     if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-24.04
     timeout-minutes: 10

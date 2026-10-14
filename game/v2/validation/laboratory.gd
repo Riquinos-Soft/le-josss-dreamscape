@@ -22,24 +22,7 @@ var verification_status: Label
 
 
 func _ready() -> void:
-	var location := Node3D.new()
-	location.name = "Location"
-	add_child(location)
-	box(location, "Floor", Vector3(0, -0.2, 0), Vector3(14, 0.4, 12), "69745f")
-	box(location, "WestWall", Vector3(-6, 1.3, -1), Vector3(0.3, 2.6, 8), "93947e")
-	box(location, "DoorLeft", Vector3(-3.4, 1.3, -3), Vector3(5.2, 2.6, 0.3), "a4a08a")
-	box(location, "DoorRight", Vector3(3.4, 1.3, -3), Vector3(5.2, 2.6, 0.3), "a4a08a")
-	box(location, "Lintel", Vector3(0, 2.4, -3), Vector3(1.6, 0.4, 0.3), "c0b79c")
-	for step in 5:
-		var height := (step + 1) * 0.2
-		box(
-			location,
-			"Step%d" % step,
-			Vector3(1.3 + step * 0.6, height / 2, 0),
-			Vector3(0.6, height, 2),
-			"b0a78c"
-		)
-	box(location, "Landing", Vector3(4.8, 0.5, 0), Vector3(1.6, 1, 2), "c0b79c")
+	add_child(preload("res://v2/validation/location.gd").new())
 	var environment := WorldEnvironment.new()
 	environment.environment = Environment.new()
 	environment.environment.background_mode = Environment.BG_COLOR
@@ -143,24 +126,3 @@ func _physics_process(_delta: float) -> void:
 	elif npc.position.x < -3.7:
 		patrol_direction = 1.0
 	npc.set_movement_intent(Vector3(patrol_direction * 0.25, 0, 0))
-
-
-func box(parent: Node3D, label: String, at: Vector3, dimensions: Vector3, color: String) -> void:
-	var body := StaticBody3D.new()
-	body.name = label
-	body.position = at
-	parent.add_child(body)
-	var collider := CollisionShape3D.new()
-	var shape := BoxShape3D.new()
-	shape.size = dimensions
-	collider.shape = shape
-	body.add_child(collider)
-	var visual := MeshInstance3D.new()
-	var mesh := BoxMesh.new()
-	mesh.size = dimensions
-	visual.mesh = mesh
-	var material := StandardMaterial3D.new()
-	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	material.albedo_color = Color(color)
-	visual.material_override = material
-	body.add_child(visual)
