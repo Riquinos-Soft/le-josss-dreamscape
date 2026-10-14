@@ -9,9 +9,9 @@ explicitly adding registration, character creation, online play and persistence.
 This authorizes these features as product scope. Infrastructure provisioning,
 provider selection and production replacement are not implied by writing the plan.
 The developer subsequently authorized beginning execution and pushing increments
-on 2026-10-14. Acceptance: P0 inventory/build reference and P2a isolated collision laboratory
+on 2026-10-14. Acceptance: P0 inventory/build reference and P2 laboratory implementation
 complete; accounts, online server and persistent gameplay remain unimplemented. P1 technical contracts
-are now reviewed in ADRs 006/007; P2 is in progress. Physical device information and D4
+are now reviewed in ADRs 006/007; P2 awaits visual/gameplay review. Physical device information and D4
 launch choices remain open. See [baseline inventory](../refactor-baseline.md).
 
 ## Objective
@@ -127,20 +127,21 @@ before the new route is usable.
 
 ## Validation
 
-P2a current: isolated collision laboratory and separated intent/input boundaries
-implemented. Seventeen checks pass headless/natively; native captures and Web
-export completed. Joss remains provisional. No configurable-part, browser or
-physical-device acceptance is claimed. Next: shared pose/part authoring, two
-appearances and NPC in P2b; P3 remains gated. Reproduction and limitations are in
+P2 current: shared-pose body/face/hair/clothing parts, two configurable appearances,
+NPC reuse and the isolated collision route are implemented. Appearance (203) and
+collision/input (19) checks pass headless/natively; eight pose sheets and production/
+laboratory Web exports completed. Bounded Chrome render, appearance switch, keyboard,
+resize and reload were executed successfully. Developer art review, full Web
+traversal, sustained performance and physical-device acceptance remain open.
+Next is P2 review; P3 stays gated. Reproduction and warnings are in
 [development](../development.md).
-
 
 P1 completed: ADRs 006/007 settle the scene/pose, service, authority and transaction
 contracts. Developer confirmed one character/account, two-client correctness and
 personal quest beer. Native calibration script renders current Joss/Lucas against
 one authored floor/wall sample at 1280×720 and 844×390. This proves only calibration
 visibility; it does not prove layered appearance, collision, Web accounts or online
-play. Evidence/command: [development](../development.md). P2a follows this contract; P2b remains pending.
+play. Evidence/command: [development](../development.md). P2 implementation follows this contract; final sample review remains pending.
 
 P0: Plan 016 inventory completed against deployed `753e31c`, with explicit addition
 inventory for surf `14d2be5`. Eight native reference views, bounded render samples,

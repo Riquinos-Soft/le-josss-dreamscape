@@ -4,9 +4,10 @@
 
 Current checkpoint (2026-10-14): [P0 dependency inventory](refactor-baseline.md)
 is complete. P1 contracts are in [ADR 006](adr/006-v2-character-and-scene-contract.md)
-and [ADR 007](adr/007-authoritative-persistent-vertical.md), with P2 in progress.
+and [ADR 007](adr/007-authoritative-persistent-vertical.md), with P2 implementation awaiting review.
 The isolated laboratory composes a location, world-intent actor, input adapter and
-camera; presentation temporarily reuses Joss until P2b shared parts are ready.
+camera. The appearance presenter composes shared-pose parts from validated catalog
+IDs; matching configurations share frames while in use. Player and NPC reuse it.
 The inventory identifies current callers and migration boundaries; older
 prototype-specific descriptions below are historical where they conflict with
 that inventory. No online implementation is claimed.

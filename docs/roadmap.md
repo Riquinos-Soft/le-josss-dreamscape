@@ -13,15 +13,15 @@ records authorized product scope and unresolved architecture;
 This steering supersedes further open-ended V1 art polishing as the main priority.
 P0 is complete: [baseline and migration inventory](refactor-baseline.md).
 P1 technical contracts are reviewed in [ADR 006](adr/006-v2-character-and-scene-contract.md)
-and [ADR 007](adr/007-authoritative-persistent-vertical.md). P2a collision laboratory is implemented.
-An isolated V2 collision laboratory exists; no backend has been implemented.
+and [ADR 007](adr/007-authoritative-persistent-vertical.md). P2 character/collision laboratory is implemented and awaiting review.
+An isolated V2 character/collision laboratory exists; no backend has been implemented.
 
 Order: baseline inventory → art/authority/data contracts → modular character and
 collision laboratory → small Jacobo Risa section → registration/character creation
 → durable inventory/progress → two-player street → migrated beer/travel loop
 → Pazo/salon → restore drill, cutover and proven-unused-file cleanup.
 
-Next: P2b shared-pose character parts and configurable appearances in the laboratory. Keep the live
+Next: review P2 shared-pose art, full Web traversal and device behavior before P3. Keep the live
 entry point intact. One character/account, two-client first validation and personal
 quest beer are developer-confirmed. The physical phone/browser remains requested;
 mail/backup/retention launch choices stay open in D4. No service rollout during P2.

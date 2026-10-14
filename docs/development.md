@@ -1,5 +1,68 @@
 # Development setup and verified baseline
 
+## V2 P2b shared appearance laboratory — 2026-10-14
+
+Base `adc6f6d`; clean tree after the developer-requested push of P1/P2a.
+Shared 64px pose parts now compose two appearances and a patrolling NPC. The
+player can switch appearance during motion. Catalog validation rejects unknown
+IDs/palettes/fields and unsupported versions. Known unavailable optional hair/face
+uses an explicit fallback without altering stored IDs; required parts fail clearly.
+Matching configurations share SpriteFrames; the final presenter releases the cached
+composition. Physics and animation phase survive an appearance change.
+
+Editable master and reproduction notes:
+[shared human parts](../assets/source/characters/parts/README.md). Original integer
+pixel shapes use shared head/neck/pelvis/foot anchors for all eight directions and
+five poses; runtime parts are lossless/no-mipmap, nearest-sampled at 0.0375m/pixel.
+These sample characters require developer art review; they do not establish Joss's
+final replacement design. The laboratory retains the calibrated camera/capsule.
+Touch release now preserves a held keyboard action; focus loss still clears both.
+
+Commands (engine: `/Applications/Godot.app/Contents/MacOS/Godot`):
+
+- `--headless --script assets/source/characters/parts/author_parts.gd` from root,
+  then `--headless --path game --import --quit`.
+- `--headless --path game --fixed-fps 60 --script res://tests/test_v2_appearance.gd`:
+  **203 checks pass**, including exact head-region pixels after translation in every
+  walk phase, grounded idle/walk baselines, shared NPC compositions, optional fallback,
+  schema rejection and actor/phase preservation. Native repeat also passes.
+- `--headless --path game --fixed-fps 60 --script res://tests/test_v2_laboratory.gd`:
+  **19 checks pass**, including held-key preservation after synthetic touch release.
+  Native repeat passes with desktop/compact/stair captures under the P2 directory.
+- `--path game --script ../tools/capture_v2_appearance.gd`: all eight native direction
+  sheets captured under `build/verification/v2/P2b/`; inspected all directions and
+  the revised profile strides, plus actual laboratory scale in native and Chrome.
+- `make export-web GODOT=/Applications/Godot.app/Contents/MacOS/Godot` passes;
+  `python3 tools/export_v2_laboratory.py --godot /Applications/Godot.app/Contents/MacOS/Godot`
+  exports a separate laboratory to `build/v2-laboratory/` using a disposable copy,
+  keeping the production main scene intact. Serve it with `python3 -m http.server
+  8004 --bind 127.0.0.1 --directory build/v2-laboratory`.
+- Targeted gdformat/gdlint, `python3 tools/check_docs.py` and `git diff --check` pass.
+  No complete legacy gameplay suite rerun for this isolated addition.
+
+Chrome **155.0.8059.40**, automated via the connected extension: laboratory renders,
+button switches to alternate parts, repeated D input changes position/facing, NPC
+patrol is visible, 844×390 resize retains rendering and reload restores the default.
+Screenshots were inspected in the tool transcript. This is a bounded desktop Chrome
+check, not a complete Web collision route, touch-device or Safari acceptance.
+Console has extension-origin MaxListenersExceededWarning/ObjectMultiplex warnings;
+no new engine error after the separate laboratory export loaded/reloaded.
+The first attempt used a scene argument on the release export and failed because
+Godot disables path overrides (`null function` after startup rejection). The
+separate export fixes this validation setup; no template or engine change was made.
+The unavailable in-app browser was bypassed using the connected Chrome browser.
+
+Successful native/import/export logs are clean. The existing gdtoolkit
+`pkg_resources` deprecation persists. Initial author/test parse issues were fixed;
+all logs are in ignored `build/verification/v2/P2b/`. Functional test timing was
+157ms headless/293ms native on this machine; these include assertions/composition
+and are not a sustained frame-time, browser latency or device performance budget.
+
+Handoff: P2 implementation is ready for visual/gameplay review. Next unresolved
+step is developer review of the shared-pose sample, full Web traversal and physical
+phone/browser information. P3 remains gated by that review; accounts, backend,
+production scene migration and deployment are not part of this increment.
+
 ## V2 P2a collision laboratory — 2026-10-14
 
 Base `931fcc4` closes the inherited P1 contract documents and offline preview.

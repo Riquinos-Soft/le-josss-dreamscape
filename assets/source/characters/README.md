@@ -9,9 +9,10 @@ Historical candidates were removed from the working tree and remain in Git.
 - [Lucas walk](lucas_walk.md): four-phase walking master with retained prompt.
 - [Lucas standing](lucas_idle.md): matching directional standing lower body.
 - [Residents](residents.md): Inés, Brais and Narci restyled to compact proportions.
+- [Shared human parts](parts/README.md): editable pixel master and common pose anchors.
 - [Chicken](chicken.md): rideable hen, directional idle and alternating steps.
 
 Preparation and runtime addressing are documented in the
 [character contract](../../../game/assets/art/characters/README.md).
 These source images are offline references; the game imports only normalized
-runtime assets. Face/hair/clothing configuration belongs to the requested next spec.
+runtime assets. The isolated V2 laboratory composes face/hair/clothes under Spec 020 and ADR 006.

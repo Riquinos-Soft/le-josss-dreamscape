@@ -47,7 +47,6 @@ from these twelve cells and uses the existing player collision body while ridden
 ### Configurable human characters
 
 These atlases are transitional art, not a dynamic customization system. NPC names,
-dialogue and behavior remain independent of SpriteFrames resources. The requested
-next spec will define composition from face, hair, clothing and body style and
-how it replaces these presentation resources. Do not add unused configuration
-fields or a generator until that contract is settled.
+dialogue and behavior remain independent of SpriteFrames resources. The isolated V2 laboratory under Spec 020 / ADR 006 now composes shared-pose
+face, hair, skin and clothes from `game/v2/characters/parts/`. These legacy atlases
+remain the production presentation until the sample and migration are accepted.

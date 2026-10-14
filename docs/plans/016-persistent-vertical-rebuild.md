@@ -7,9 +7,9 @@
 - Design references: [place authoring](../place-authoring.md), ADRs 001–004 linked
   from Spec 020; existing Joss and Jacobo Risa are art references, not automatic
   approvals of every current implementation. No new Bible content was fetched.
-- Original planning base: `ab91b89`, main. Current P2a implementation base: `931fcc4`.
+- Original planning base: `ab91b89`, main. P2a base: `931fcc4`; P2b base: `adc6f6d`.
   Production art/device acceptance remains open.
-- Status: P0 complete; P1 contracts reviewed, 2026-10-14. P2a collision laboratory implemented; P2b appearance work is next.
+- Status: P0 complete; P1 contracts reviewed, 2026-10-14. P2 implementation complete; visual/gameplay review is next.
   Physical validation device is still awaiting developer information.
   Developer explicitly authorized
   starting the refactor and pushing completed increments. V2 has only an isolated
@@ -95,10 +95,14 @@ an incomplete V2 scene.
 
 ## P2 — A character and collision laboratory
 
-- Status: running; owner: executor/integrator. Dependency: ADR 006 delivered.
+- Status: review; owner: executor/integrator. Dependency: ADR 006 delivered.
 - P2a completed: isolated collision route, intent controller, keyboard/touch adapter
   and provisional Joss presenter; 17 headless/native checks, captures and Web export.
-  P2b next: shared-pose parts, two appearances and NPC; no art/device acceptance yet.
+  P2b implemented: shared-pose parts, two configurations and a patrolling NPC,
+  appearance/cache/rejection checks (203), expanded input/collision checks (19),
+  eight native pose sheets and a bounded Chrome render/switch/input/resize/reload check.
+  Separate laboratory Web export is reproducible with `tools/export_v2_laboratory.py`.
+  No final art, full Web traversal or physical-device acceptance yet. P3 stays gated.
 - Allowed: `game/v2/characters/`, `game/v2/validation/`, directly related tests;
   original character source art outside `game/` and normalized derivatives inside.
 - Input/output: one body/pose format → configurable face, hair, skin and clothes

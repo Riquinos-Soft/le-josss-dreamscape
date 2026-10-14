@@ -14,7 +14,7 @@ review. Spec 008 waits for real-place references and is not being actively built
 Spec 020 now defines the requested V2 rebuild, including configurable characters,
 registration, durable progress and online play. Product scope is authorized;
 consequential technical decisions remain open before implementation.
-P1 now records the implementation contracts in ADRs 006/007; P2a collision laboratory is implemented; P2b appearance work is next, with
+P1 now records the implementation contracts in ADRs 006/007; P2 laboratory is implemented and awaits visual/gameplay review, with
 physical-device details and operational release decisions still open.
 See [the roadmap](../roadmap.md) for the single current priority sequence.
 `implemented` means the deliverable exists; it does not imply accepted or deployed.
@@ -42,7 +42,7 @@ See [the roadmap](../roadmap.md) for the single current priority sequence.
 | 017 | [Asset workspace cleanup](017-asset-workspace-cleanup.md) | implemented | Inventory, import and Web export verified |
 | 018 | [Residents and Lucas beer errand](018-residents-and-beer-errand.md) | implemented | Native delivery verified; developer mobile/art review pending |
 | 019 | [Coherent pixel environment art](019-coherent-pixel-environment.md) | implemented | Day/night captures and Web export passed; developer visual review pending |
-| 020 | [Persistent online vertical rebuild](020-persistent-online-vertical.md) | in-progress | P2a collision laboratory implemented; appearance, device and launch acceptance remain |
+| 020 | [Persistent online vertical rebuild](020-persistent-online-vertical.md) | in-progress | P2 shared-pose laboratory implemented; art, device and launch acceptance remain |
 | 021 | [Jacobo Risa chicken mount](021-chicken-mount.md) | implemented | Developer art and physical-device review; regression suite pending |
 | 022 | [Lucas surf arcade](022-lucas-surf-arcade.md) | implemented | Complete-round and physical-device acceptance |
 

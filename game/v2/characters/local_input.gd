@@ -32,7 +32,7 @@ func _input(event: InputEvent) -> void:
 func handle_touch(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:
 		if event.index == finger and (not event.pressed or event.canceled):
-			clear_input()
+			clear_touch()
 		elif event.pressed and finger == -1 and event.position.x < size.x * 0.5:
 			finger = event.index
 			center = event.position
@@ -46,9 +46,14 @@ func _notification(what: int) -> void:
 		clear_input()
 
 
-func clear_input() -> void:
+func clear_touch() -> void:
 	finger = -1
 	touch_value = Vector2.ZERO
+	queue_redraw()
+
+
+func clear_input() -> void:
+	clear_touch()
 	actor.set_movement_intent(Vector3.ZERO)
 	for action in ["move_left", "move_right", "move_forward", "move_back"]:
 		Input.action_release(action)

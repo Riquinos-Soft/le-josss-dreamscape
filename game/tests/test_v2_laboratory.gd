@@ -64,6 +64,12 @@ func run() -> void:
 	scene.input_adapter.handle_touch(drag)
 	await frames(2)
 	check(actor.movement_intent.length() > 0.99, "touch adapter provides bounded world intent")
+	Input.action_press("move_forward")
+	touch.pressed = false
+	scene.input_adapter.handle_touch(touch)
+	await frames(2)
+	check(Input.is_action_pressed("move_forward"), "touch release preserves held keyboard input")
+	check(actor.movement_intent.length() > 0.99, "keyboard continues after touch release")
 	scene.input_adapter.notification(Node.NOTIFICATION_APPLICATION_FOCUS_OUT)
 	check(actor.movement_intent == Vector3.ZERO, "focus loss clears motion")
 	check(scene.input_adapter.finger == -1, "focus loss releases touch ownership")

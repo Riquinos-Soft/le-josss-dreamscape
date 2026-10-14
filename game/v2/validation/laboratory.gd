@@ -1,13 +1,19 @@
 extends Node3D
-## Isolated P2 collision route. Joss is a temporary scale/presentation reference.
+## Isolated P2 collision and appearance route.
 
 const Actor = preload("res://v2/characters/actor.gd")
 const LocalInput = preload("res://v2/characters/local_input.gd")
-const Presenter = preload("res://player/street_character.gd")
+const Presenter = preload("res://v2/characters/appearance_presenter.gd")
+const Catalog = preload("res://v2/characters/appearance_catalog.gd")
 var actor: CharacterBody3D
 var camera: Camera3D
 var input_adapter: Control
 var presenter: AnimatedSprite3D
+var catalog := Catalog.new()
+var npc: CharacterBody3D
+var npc_presenter: AnimatedSprite3D
+var alternate := false
+var patrol_direction := 1.0
 
 
 func _ready() -> void:
@@ -46,16 +52,12 @@ func _ready() -> void:
 	actor.name = "Actor"
 	actor.position = Vector3(-2, 0.05, 1)
 	add_child(actor)
-	presenter = Presenter.new()
-	presenter.sprite_frames = preload("res://assets/art/characters/joss.tres")
-	presenter.movement_actor = actor
-	presenter.movement_view = camera
-	presenter.pixel_size = 0.0375
-	presenter.position.y = 1.05
-	presenter.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
-	presenter.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	presenter.alpha_cut = SpriteBase3D.ALPHA_CUT_DISCARD
-	actor.add_child(presenter)
+	presenter = make_presenter(actor, false)
+	npc = Actor.new()
+	npc.name = "SampleNPC"
+	npc.position = Vector3(-3, 0.05, 3)
+	add_child(npc)
+	npc_presenter = make_presenter(npc, true)
 	var hud := CanvasLayer.new()
 	add_child(hud)
 	input_adapter = LocalInput.new()
@@ -64,13 +66,48 @@ func _ready() -> void:
 	hud.add_child(input_adapter)
 	var label := Label.new()
 	label.text = (
-		"Laboratorio V2 · Joss provisional\n"
+		"Laboratorio V2 · personajes por piezas\n"
 		+ "WASD / flechas · arrastra a la izquierda para caminar"
 	)
 	label.position = Vector2(18, 12)
 	label.add_theme_font_size_override("font_size", 18)
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hud.add_child(label)
+	var button := Button.new()
+	button.text = "Cambiar apariencia"
+	button.position = Vector2(18, 68)
+	button.pressed.connect(toggle_appearance)
+	hud.add_child(button)
+
+
+func make_presenter(body: CharacterBody3D, alternative: bool) -> AnimatedSprite3D:
+	var visual := Presenter.new()
+	visual.catalog = catalog
+	visual.movement_actor = body
+	visual.movement_view = camera
+	visual.pixel_size = 0.0375
+	visual.position.y = 1.05
+	visual.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+	visual.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	visual.alpha_cut = SpriteBase3D.ALPHA_CUT_DISCARD
+	var error := visual.apply_appearance(Catalog.preset(alternative))
+	assert(error == "", error)
+	body.add_child(visual)
+	return visual
+
+
+func toggle_appearance() -> void:
+	alternate = not alternate
+	var error: String = presenter.apply_appearance(Catalog.preset(alternate))
+	assert(error == "", error)
+
+
+func _physics_process(_delta: float) -> void:
+	if npc.position.x > -2.3:
+		patrol_direction = -1.0
+	elif npc.position.x < -3.7:
+		patrol_direction = 1.0
+	npc.set_movement_intent(Vector3(patrol_direction * 0.25, 0, 0))
 
 
 func box(parent: Node3D, label: String, at: Vector3, dimensions: Vector3, color: String) -> void:
