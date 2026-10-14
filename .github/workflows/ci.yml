@@ -91,6 +91,11 @@ jobs:
           test -f build/web/index.wasm
           test -f build/web/index.pck
 
+      - name: Install preview export tooling
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends python3
+
       - name: Export V2 laboratory preview
         run: python3 tools/export_v2_laboratory.py --godot godot --output build/web/v2
 

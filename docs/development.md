@@ -17,8 +17,14 @@ No server receiver, proxy, account, database or production main-scene change.
 The nested export duplicates engine/game files on the host, but each entry loads
 only its own files; the combined release remains below the receiver's 256 MiB limit.
 
+First deployment attempt for this fix (run 38575219497) passed game tests but
+failed at preview export with `python3: not found`. The Godot CI container now
+installs Python 3 explicitly before running the export helper; this installation
+is confined to the ephemeral build container. Production remains on the prior
+working release until the new gates pass.
+
 Local verification: both V2 tests pass; default and nested Web exports pass;
-workflow YAML and all 11 shell steps parse; all five deployment receiver tests pass;
+workflow YAML and all 12 shell steps parse; all five deployment receiver tests pass;
 documentation and whitespace checks pass. Logs are in ignored
 `build/verification/v2/production-preview/`. This is deployment packaging/tooling
 work; the native route evidence from P2c is retained without another visual/art pass.
