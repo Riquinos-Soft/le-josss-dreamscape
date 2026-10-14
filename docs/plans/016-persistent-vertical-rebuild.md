@@ -10,7 +10,7 @@
 - Original planning base: `ab91b89`, main. P2a base: `931fcc4`; P2b base: `adc6f6d`.
   Production art/device acceptance remains open.
 - Status: P0 complete; P1 contracts reviewed, 2026-10-14. P2 implementation complete; visual/gameplay review is next.
-  Physical validation device is still awaiting developer information.
+  Physical target: iPhone 16 Pro + Chrome; hands-on validation remains pending.
   Developer explicitly authorized
   starting the refactor and pushing completed increments. V2 has only an isolated
   local laboratory; no service connection is claimed. See [baseline inventory](../refactor-baseline.md).
@@ -20,7 +20,7 @@
   scene/appearance contracts; [ADR 007](../adr/007-authoritative-persistent-vertical.md)
   defines service, authority, identity and recovery boundaries. Review was explicitly
   authorized after the Spec 003 escalation; no external reviewer/model switch claimed.
-- Remaining: D2 physical device information and D4 operational launch decisions.
+- Remaining: D2 physical-device acceptance and D4 operational launch decisions.
   Neither blocks the isolated P2 laboratory; they block later acceptance/release.
 - Single integrator: current executing session; no workers assigned. Economical
   execution resumes after contract review. No model availability or cost assumed.
@@ -73,7 +73,7 @@ an incomplete V2 scene.
 
 ## P1 — Settle the visual and online contracts
 
-- Status: contracts complete, physical-device target pending; owner: integrator.
+- Status: contracts complete, physical target selected (iPhone 16 Pro + Chrome); owner: integrator.
   Dependency: P0 complete. Developer authorized this review and confirmed the
   bounded product defaults on 2026-10-14.
 - Output: ADRs 006/007; offline `tools/preview_v2_contract.gd` calibration at
@@ -102,7 +102,10 @@ an incomplete V2 scene.
   appearance/cache/rejection checks (203), expanded input/collision checks (19),
   eight native pose sheets and a bounded Chrome render/switch/input/resize/reload check.
   Separate laboratory Web export is reproducible with `tools/export_v2_laboratory.py`.
-  No final art, full Web traversal or physical-device acceptance yet. P3 stays gated.
+  P2c: the same 19 collision/input assertions pass in Chrome WebAssembly at desktop
+  and 844×390 for both appearances; the laboratory includes a repeatable route button.
+  Physical target is iPhone 16 Pro + Chrome. Developer art/manual movement review,
+  sustained performance and physical-device acceptance remain pending; P3 stays gated.
 - Allowed: `game/v2/characters/`, `game/v2/validation/`, directly related tests;
   original character source art outside `game/` and normalized derivatives inside.
 - Input/output: one body/pose format → configurable face, hair, skin and clothes
@@ -227,7 +230,7 @@ an incomplete V2 scene.
 
 Implement P2's isolated character/collision laboratory under ADR 006. P1 review
 is recorded in ADRs 006/007; do not reopen those decisions for routine execution.
-Physical phone/browser details remain requested for later device acceptance.
+Physical target is iPhone 16 Pro + Chrome; physical results remain pending.
 D4 recovery provider/retention/offsite objectives remain explicit launch gates.
 Authorization for accounts/online/persistence is already recorded; no new product
 approval is needed to execute these bounded packages.

@@ -4,6 +4,7 @@ extends Node3D
 const Actor = preload("res://v2/characters/actor.gd")
 const LocalInput = preload("res://v2/characters/local_input.gd")
 const Presenter = preload("res://v2/characters/appearance_presenter.gd")
+const Route = preload("res://v2/validation/collision_route.gd")
 const Catalog = preload("res://v2/characters/appearance_catalog.gd")
 var actor: CharacterBody3D
 var camera: Camera3D
@@ -14,6 +15,10 @@ var npc: CharacterBody3D
 var npc_presenter: AnimatedSprite3D
 var alternate := false
 var patrol_direction := 1.0
+var verification_running := false
+var verification_button: Button
+var appearance_button: Button
+var verification_status: Label
 
 
 func _ready() -> void:
@@ -73,11 +78,41 @@ func _ready() -> void:
 	label.add_theme_font_size_override("font_size", 18)
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hud.add_child(label)
-	var button := Button.new()
+	appearance_button = Button.new()
+	var button := appearance_button
 	button.text = "Cambiar apariencia"
 	button.position = Vector2(18, 68)
 	button.pressed.connect(toggle_appearance)
 	hud.add_child(button)
+	verification_button = Button.new()
+	verification_button.text = "Verificar recorrido"
+	verification_button.position = Vector2(215, 68)
+	verification_button.pressed.connect(verify_route)
+	hud.add_child(verification_button)
+	verification_status = Label.new()
+	verification_status.position = Vector2(18, 108)
+	verification_status.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hud.add_child(verification_status)
+	if "--verify-route" in OS.get_cmdline_user_args():
+		call_deferred("verify_route")
+
+
+func verify_route() -> void:
+	if verification_running:
+		return
+	verification_running = true
+	verification_button.disabled = true
+	appearance_button.disabled = true
+	verification_status.text = "Verificando paredes, puerta, escalera e input…"
+	var result: Dictionary = await Route.new().run(self)
+	verification_status.text = (
+		"Recorrido: %d/%d correctas" % [result.checks - result.failures, result.checks]
+	)
+	verification_status.modulate = Color("a8dba0") if result.failures == 0 else Color("e58b7d")
+	print("V2 route result: " + JSON.stringify(result))
+	verification_running = false
+	verification_button.disabled = false
+	appearance_button.disabled = false
 
 
 func make_presenter(body: CharacterBody3D, alternative: bool) -> AnimatedSprite3D:

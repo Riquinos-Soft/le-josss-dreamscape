@@ -1,5 +1,59 @@
 # Development setup and verified baseline
 
+## V2 P2c Web collision route and physical target — 2026-10-14
+
+Base `7feec2d`, main synchronized; the requested push reported everything up to date.
+Extracted the existing 19 collision/input checks into
+`game/v2/validation/collision_route.gd`, reused by the native test and a laboratory
+"Verificar recorrido" button. The route resets to its known spawn, disables the
+appearance/route buttons and normal movement polling for collision cases, reports
+failed assertions and positions, then restores local input. The native test starts
+it below the fall threshold to verify repeatable initialization. It can also start
+with `-- --verify-route` in a native laboratory launch. This adds validation tooling
+in the isolated scene; no controller rule or production entry point changed.
+
+Commands: Godot `--headless --path game --fixed-fps 60 --script
+res://tests/test_v2_laboratory.gd` and the native repeat both pass **19/19**.
+`test_v2_appearance.gd` still passes **203/203**. Targeted gdformat/gdlint,
+`python3 tools/check_docs.py`, `git diff --check`, production Web export and
+`python3 tools/export_v2_laboratory.py --godot /Applications/Godot.app/Contents/MacOS/Godot`
+pass. Evidence is under ignored `build/verification/v2/P2c/`.
+
+Chrome 155.0.8059.40 via the extension ran the real exported WebAssembly route:
+19/19 at the normal desktop viewport, then 19/19 at 844×390 with the alternate
+appearance. Console results: `{"checks":19,"errors":[],"failures":0}` at
+13:26:22.554 UTC and 13:27:41.005 UTC; the green on-screen result was inspected.
+After hardening route initialization, the final export also passed 19/19 at
+13:33:09.669 UTC.
+These are actual Web collision/animation/input-code assertions, with scripted
+starting positions and movement intent. Synthetic touch/focus calls do not certify
+OS touch delivery, finger ergonomics, manual traversal feel or background recovery
+on a physical phone. No engine errors observed; the previously documented browser
+extension warnings and gdtoolkit deprecation remain visible.
+
+Developer confirmed **iPhone 16 Pro + Chrome** as the physical target in this turn.
+iOS/Chrome versions, physical results and a sustained performance budget are not
+assumed. A local HTTP server serves `build/v2-laboratory/` on the Mac's LAN IPv4,
+port 8006; HTML and WASM respond 200 (WASM MIME `application/wasm`). Initial probes
+timed out before the listener became ready; later probes succeeded. No firewall,
+router, TLS or production hosting changes were made. Phone reachability remains
+unverified until the developer opens it from the same Wi-Fi.
+
+Physical review procedure: serve the export with `python3 -m http.server 8006
+--bind MAC_LAN_IP --directory build/v2-laboratory` (replace MAC_LAN_IP with the
+Mac's current Wi-Fi IPv4; `ipconfig getifaddr en0` on this Mac). On the iPhone,
+open `http://MAC_LAN_IP:8006/` in Chrome, in landscape. Run "Verificar recorrido"
+and wait for 19/19 without using movement. Then manually use the left-side touch
+stick through the doorway, stairs and edges; release/drag a second finger, switch
+appearance, background/return and rotate back to landscape. Review head identity,
+feet/occlusion, HUD readability and sustained play feel. Record iOS/Chrome versions,
+duration, exact failures/warnings and developer art verdict. A passing scripted
+route alone does not mark physical acceptance.
+
+Next: developer visual/physical review with the now-known target, then resolve the
+P2 expansion gate. P3 remains pending the art/movement review required by Plan 016;
+no approval inferred from the request to continue or from automated assertions.
+
 ## V2 P2b shared appearance laboratory — 2026-10-14
 
 Base `adc6f6d`; clean tree after the developer-requested push of P1/P2a.

@@ -104,7 +104,8 @@ and exact face identity instead of accepting those variations as the new templat
 
 P2 is ready to implement this laboratory. Stop expansion if parts cannot preserve
 identity or feet drift; fix the shared template before generating more variants.
-Physical mobile acceptance remains pending the developer's device information.
+Physical mobile acceptance remains pending on the developer-confirmed
+iPhone 16 Pro + Chrome.
 
 References: [Spec 020](../specs/020-persistent-online-vertical.md),
 [Plan 016](../plans/016-persistent-vertical-rebuild.md),

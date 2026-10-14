@@ -166,8 +166,9 @@ an additional WebRTC signaling/relay setup, at the cost of TCP head-of-line dela
 
 This is a reviewed contract, not a running system. No auth/network/recovery/load
 test was performed in P1 and no database was connected. Two players prove the
-first interaction semantics, not VPS capacity. The user's physical phone/browser
-is still requested; local native/compact captures are not device acceptance.
+first interaction semantics, not VPS capacity. The physical target is now
+developer-confirmed as iPhone 16 Pro + Chrome; local native/compact captures
+are not physical-device acceptance.
 
 Implementation gates: P4 cookie/CSRF/ticket and ownership round trip; P5 lost-response
 and restart recovery; P6 two-client contention, forged/stale commands and reconnect;

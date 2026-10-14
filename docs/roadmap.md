@@ -21,9 +21,10 @@ collision laboratory → small Jacobo Risa section → registration/character cr
 → durable inventory/progress → two-player street → migrated beer/travel loop
 → Pazo/salon → restore drill, cutover and proven-unused-file cleanup.
 
-Next: review P2 shared-pose art, full Web traversal and device behavior before P3. Keep the live
-entry point intact. One character/account, two-client first validation and personal
-quest beer are developer-confirmed. The physical phone/browser remains requested;
+Next: review P2 shared-pose art and manual movement on iPhone 16 Pro + Chrome
+before P3. The scripted collision route passes in desktop Chrome WebAssembly.
+Keep the live entry point intact. One character/account, two-client first validation
+and personal quest beer are developer-confirmed. Physical acceptance remains pending;
 mail/backup/retention launch choices stay open in D4. No service rollout during P2.
 
 ## 2. Legacy release and comparison route

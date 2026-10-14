@@ -15,7 +15,8 @@ Spec 020 now defines the requested V2 rebuild, including configurable characters
 registration, durable progress and online play. Product scope is authorized;
 consequential technical decisions remain open before implementation.
 P1 now records the implementation contracts in ADRs 006/007; P2 laboratory is implemented and awaits visual/gameplay review, with
-physical-device details and operational release decisions still open.
+physical acceptance on the selected iPhone 16 Pro + Chrome and operational
+release decisions still open.
 See [the roadmap](../roadmap.md) for the single current priority sequence.
 `implemented` means the deliverable exists; it does not imply accepted or deployed.
 

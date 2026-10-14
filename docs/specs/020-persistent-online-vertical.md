@@ -11,8 +11,8 @@ provider selection and production replacement are not implied by writing the pla
 The developer subsequently authorized beginning execution and pushing increments
 on 2026-10-14. Acceptance: P0 inventory/build reference and P2 laboratory implementation
 complete; accounts, online server and persistent gameplay remain unimplemented. P1 technical contracts
-are now reviewed in ADRs 006/007; P2 awaits visual/gameplay review. Physical device information and D4
-launch choices remain open. See [baseline inventory](../refactor-baseline.md).
+are now reviewed in ADRs 006/007; P2 awaits visual/gameplay review. The physical target is iPhone 16 Pro + Chrome; physical
+acceptance and D4 launch choices remain open. See [baseline inventory](../refactor-baseline.md).
 
 ## Objective
 
@@ -131,8 +131,11 @@ P2 current: shared-pose body/face/hair/clothing parts, two configurable appearan
 NPC reuse and the isolated collision route are implemented. Appearance (203) and
 collision/input (19) checks pass headless/natively; eight pose sheets and production/
 laboratory Web exports completed. Bounded Chrome render, appearance switch, keyboard,
-resize and reload were executed successfully. Developer art review, full Web
-traversal, sustained performance and physical-device acceptance remain open.
+resize and reload were executed successfully. P2c also runs the shared 19-case
+collision/input route inside Chrome WebAssembly at desktop and 844×390, with
+19/19 passing for both appearances. Developer art/manual traversal, sustained
+performance and physical-device acceptance remain open. The developer confirmed
+iPhone 16 Pro + Chrome as the physical target.
 Next is P2 review; P3 stays gated. Reproduction and warnings are in
 [development](../development.md).
 
@@ -164,9 +167,11 @@ whitespace checks for this change; runtime acceptance is future work.
   authorized review. P2 must demonstrate composable art; P4–P6 must demonstrate
   the account/authority/recovery contracts. A document is not runtime acceptance.
 - D2 — Developer confirmed one character/account and two simultaneous clients for
-  first correctness validation on 2026-10-14. Physical phone/browser details still
-  requested; no model or sustained performance budget assumed. Blocks physical
-  device acceptance, not local P2 work. Capacity is measured separately in P6/P9.
+  first correctness validation on 2026-10-14. Physical target is iPhone 16 Pro +
+  Chrome, confirmed in the subsequent continuation on 2026-10-14. Physical play results, OS/browser
+  versions and a sustained performance budget remain pending. Target selection is
+  resolved; physical acceptance is still open and does not block local P2 work.
+  Capacity is measured separately in P6/P9.
 - D3 — Developer confirmed personal quest beer; ordinary objects remain shared.
   ADR 007 specifies private quest representation, single reward and common-object
   contention. No trading or unrestricted client reward submission.
