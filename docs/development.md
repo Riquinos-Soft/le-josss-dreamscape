@@ -34,6 +34,17 @@ documentation and whitespace checks pass. Logs are in ignored
 work; the native route evidence from P2c is retained without another visual/art pass.
 Existing gdtoolkit and browser extension warnings remain as previously recorded.
 
+Successful publication: run **38576229271** passed lint/deployment safety, Godot
+checks, both Web exports and OVH deployment. Public `/release.txt` returned
+`fc009d24325b3ca64957d0b637f3c059aeb77cd2`; `/v2/` and `/v2/index.wasm` returned
+200 with correct MIME. Desktop Chrome loaded the public preview and "Verificar
+recorrido" returned **19/19**, with `{"checks":19,"errors":[],"failures":0}` at
+14:01:33.770 UTC. The green result was inspected. Full CI log scan found no
+`ERROR:`, `SCRIPT ERROR` or `WARNING:` entries. Browser extension warnings remain;
+no game error was observed. Physical iPhone review and clarification of any
+separate root-game/touch failure remain pending; this proves the previously missing
+public laboratory entry works, not an unobserved phone result.
+
 Release verification is enforced by the workflow after publication. Reproduce:
 `gh run list --branch main`, inspect the new run's gates/deploy result, then verify
 `/release.txt` and open
