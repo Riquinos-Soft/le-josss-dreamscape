@@ -1,5 +1,24 @@
 # Development setup and verified baseline
 
+## Lucas surf arcade — 2026-10-14
+
+Spec 022 adds a 25% nonconsecutive invitation among Lucas's ordinary conversations;
+beer introduction/delivery keep priority. Explicit yes/no choices lead to a local
+beach arcade: 45 seconds, three hearts, coin lanes, rocks, touch/keyboard/drag
+steering, focus pause and one reward on return. World simulation/input are suspended
+under the arcade; the existing portrait blocker stays above it. Joss reuses the
+canonical sprite, with a code-authored pixel ocean, shoreline, board and props.
+
+Godot import; native `--path game --fixed-fps 60 --script
+../build/verification/surf/capture.gd -- --touch`; targeted gdformat/gdlint;
+`make export-web GODOT=/Applications/Godot.app/Contents/MacOS/Godot`;
+documentation and whitespace checks. Evidence: `build/verification/surf/`.
+Capture shows invitation → accept → nine collected coins → early result → return
+to Lourizán with nine coins and busy=false. The scene capture ends the run early;
+full timer, repeated collisions, focus and physical touch are not accepted by it.
+No gameplay tests added/run locally. Existing gdtoolkit deprecation warning remains.
+
+
 ## Chicken mount — 2026-10-14
 
 Spec 021 adds a pixel-art hen at the lower-left street end, F/touch interaction,

@@ -42,8 +42,9 @@ See [the roadmap](../roadmap.md) for the single current priority sequence.
 | 019 | [Coherent pixel environment art](019-coherent-pixel-environment.md) | implemented | Day/night captures and Web export passed; developer visual review pending |
 | 020 | [Persistent online vertical rebuild](020-persistent-online-vertical.md) | draft | Scope authorized; visual, identity, authority and recovery contracts need review |
 | 021 | [Jacobo Risa chicken mount](021-chicken-mount.md) | implemented | Developer art and physical-device review; regression suite pending |
+| 022 | [Lucas surf arcade](022-lucas-surf-arcade.md) | implemented | Complete-round and physical-device acceptance |
 
-Next available spec ID: **022**. Recompute from this registry before reserving;
+Next available spec ID: **023**. Recompute from this registry before reserving;
 this line is not a standing reservation for an agent or a feature.
 
 ## Language and file naming

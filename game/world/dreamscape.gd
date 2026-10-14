@@ -31,6 +31,9 @@ var beer_errand_started := false
 var beer_errand_completed := false
 var coins := 0
 var chicken_mount: Node3D
+var surf_offered := false
+var surf_game: Control
+var surf_layer: CanvasLayer
 
 @onready var street: Node3D = $Street
 @onready var player: CharacterBody3D = $Street/Player
@@ -79,6 +82,7 @@ func _ready() -> void:
 	item_loop.bag_requested.connect(open_bag)
 	item_loop.feedback_requested.connect(bag_ui.show_feedback)
 	dialogue.closed.connect(on_dialogue_closed)
+	dialogue.choice_made.connect(_on_surf_choice)
 	bag_ui.open_requested.connect(open_bag)
 	bag_ui.close_requested.connect(close_bag)
 	bag_ui.slot_selected.connect(on_bag_slot_selected)
@@ -157,6 +161,8 @@ func item_supports(location: Node3D) -> Array[CollisionObject3D]:
 
 
 func _process(_delta: float) -> void:
+	if is_instance_valid(surf_game):
+		return
 	if not dialogue.is_open:
 		_select_nearby_speaker()
 	var can_talk: bool = (
@@ -306,11 +312,14 @@ func open_dialogue() -> void:
 	active_guide.set_prompt_visible(false)
 	active_guide.set_conversation_active(true)
 	var pages: Array[String] = []
+	surf_offered = false
 	if active_guide.dialogue_pages.is_empty():
 		pages = _lucas_conversation()
 	else:
 		pages.assign(active_guide.dialogue_pages)
 	dialogue.open(active_guide.speaker_name, active_guide.get_node("Head"), pages)
+	if surf_offered:
+		dialogue.offer_choice()
 
 
 func _lucas_conversation() -> Array[String]:
@@ -330,10 +339,55 @@ func _lucas_conversation() -> Array[String]:
 					bag_ui.set_errand_status(coins, true, true)
 					bag_ui.show_feedback("Birra entregada · +20 monedas")
 					return ["¡Esa es la birra! Gracias por el paseo. Aquí tienes tus 20 monedas."]
+	if last_dialogue_index != -2 and randf() < 0.25:
+		surf_offered = true
+		last_dialogue_index = -2
+		return ["¿Surf?\nNos vamos a la playa: olas, monedas y un poco de equilibrio."]
 	last_dialogue_index = LourizanHistory.choose_dialogue(last_dialogue_index)
 	var pages: Array[String] = []
 	pages.assign(LourizanHistory.DIALOGUES[last_dialogue_index])
 	return pages
+
+
+func _on_surf_choice(accepted: bool) -> void:
+	if not surf_offered:
+		return
+	surf_offered = false
+	if not accepted or busy or is_instance_valid(surf_game):
+		return
+	busy = true
+	player.set_input_locked(true)
+	touch_controls.reset_touch()
+	touch_controls.input_enabled = false
+	street.process_mode = Node.PROCESS_MODE_DISABLED
+	if is_instance_valid(active_location):
+		active_location.process_mode = Node.PROCESS_MODE_DISABLED
+	map_ui.guide.hide()
+	map_ui.prompt.hide()
+	surf_layer = CanvasLayer.new()
+	surf_layer.layer = 40
+	add_child(surf_layer)
+	surf_game = preload("res://minigames/surf_arcade.gd").new()
+	surf_layer.add_child(surf_game)
+	surf_game.finished.connect(_on_surf_finished)
+
+
+func _on_surf_finished(reward: int) -> void:
+	if not is_instance_valid(surf_game):
+		return
+	coins += maxi(0, reward)
+	surf_game = null
+	surf_layer.queue_free()
+	street.process_mode = Node.PROCESS_MODE_INHERIT
+	if is_instance_valid(active_location):
+		active_location.process_mode = Node.PROCESS_MODE_INHERIT
+	player.set_input_locked(false)
+	touch_controls.reset_touch()
+	touch_controls.input_enabled = true
+	busy = false
+	bag_ui.set_errand_status(coins, beer_errand_started, beer_errand_completed)
+	bag_ui.show_feedback("Surf · +%d monedas" % maxi(0, reward))
+	map_ui.show_prompt(near_exit != null and is_instance_valid(near_exit))
 
 
 func close_dialogue() -> void:

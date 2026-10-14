@@ -2,6 +2,7 @@ extends CanvasLayer
 ## A screen-clamped, speaker-anchored paged balloon for one active conversation.
 
 signal closed
+signal choice_made(accepted: bool)
 
 var is_open := false
 var page_index := 0
@@ -13,6 +14,8 @@ var body_label: Label
 var continue_button: Button
 var close_button: Button
 var tail: Label
+var choice_active := false
+var decline_button: Button
 
 
 func _ready() -> void:
@@ -59,11 +62,20 @@ func build_ui() -> void:
 	body_label.add_theme_color_override("font_color", Color("f4f0dc"))
 	body_label.add_theme_font_size_override("font_size", 18)
 	rows.add_child(body_label)
+	var actions := HBoxContainer.new()
+	actions.alignment = BoxContainer.ALIGNMENT_END
+	rows.add_child(actions)
+	decline_button = Button.new()
+	decline_button.text = "Ahora no"
+	decline_button.custom_minimum_size = Vector2(150, 48)
+	decline_button.pressed.connect(func(): choose(false))
+	actions.add_child(decline_button)
+	decline_button.hide()
 	continue_button = Button.new()
 	continue_button.custom_minimum_size = Vector2(150, 48)
 	continue_button.size_flags_horizontal = Control.SIZE_SHRINK_END
 	continue_button.pressed.connect(advance)
-	rows.add_child(continue_button)
+	actions.add_child(continue_button)
 	tail = Label.new()
 	tail.text = "▼"
 	tail.add_theme_color_override("font_color", Color("d0b66a"))
@@ -78,6 +90,8 @@ func open(speaker: String, speaker_anchor: Node3D, paragraphs: Array[String]) ->
 	if paragraphs.is_empty() or not is_instance_valid(speaker_anchor):
 		return
 	is_open = true
+	choice_active = false
+	decline_button.hide()
 	page_index = 0
 	pages = paragraphs.duplicate()
 	anchor = speaker_anchor
@@ -92,6 +106,9 @@ func open(speaker: String, speaker_anchor: Node3D, paragraphs: Array[String]) ->
 func advance() -> void:
 	if not is_open:
 		return
+	if choice_active:
+		choose(true)
+		return
 	if page_index >= pages.size() - 1:
 		close()
 		return
@@ -103,12 +120,28 @@ func close() -> void:
 	if not is_open:
 		return
 	is_open = false
+	choice_active = false
+	decline_button.hide()
 	pages.clear()
 	anchor = null
 	panel.hide()
 	tail.hide()
 	get_viewport().gui_release_focus()
 	closed.emit()
+
+
+func offer_choice() -> void:
+	choice_active = true
+	continue_button.text = "Sí, ¡vamos!"
+	decline_button.show()
+	call_deferred("update_layout")
+
+
+func choose(accepted: bool) -> void:
+	if not is_open or not choice_active:
+		return
+	close()
+	choice_made.emit(accepted)
 
 
 func show_page() -> void:

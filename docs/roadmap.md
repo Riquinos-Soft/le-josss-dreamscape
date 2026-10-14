@@ -29,6 +29,9 @@ quest-item decisions stay explicit in Spec 020.
 Explicit bounded follow-up: [Spec 021](specs/021-chicken-mount.md) adds the requested
 chicken mount and travel companionship before returning to Plan 016 P0. Native
 presentation and Web export completed; mobile/art acceptance remains open.
+The developer subsequently requested [Spec 022](specs/022-lucas-surf-arcade.md):
+Lucas randomly offers a local beach coin arcade. It is implemented with native
+presentation evidence; complete-round and physical-device acceptance remain open.
 
 Recorded implementation/deployment baseline: `ab91b89`, pushed to main. Its
 [CI/deployment run](https://github.com/Riquinos-Soft/le-josss-dreamscape/actions/runs/38393362916)
