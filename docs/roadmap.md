@@ -12,6 +12,8 @@ records authorized product scope and unresolved architecture;
 [Plan 016](plans/016-persistent-vertical-rebuild.md) is the execution sequence.
 This steering supersedes further open-ended V1 art polishing as the main priority.
 P0 is complete: [baseline and migration inventory](refactor-baseline.md).
+P1 technical contracts are reviewed in [ADR 006](adr/006-v2-character-and-scene-contract.md)
+and [ADR 007](adr/007-authoritative-persistent-vertical.md). P2 is ready.
 No V2 runtime or backend has been implemented.
 
 Order: baseline inventory → art/authority/data contracts → modular character and
@@ -19,11 +21,10 @@ collision laboratory → small Jacobo Risa section → registration/character cr
 → durable inventory/progress → two-player street → migrated beer/travel loop
 → Pazo/salon → restore drill, cutover and proven-unused-file cleanup.
 
-Next: consequential P1 review under Spec 003 before
-implementing new global art or backend contracts. Review ADR 004's proposed
-headless Godot/WSS and account-service boundaries. Character, inventory, money and
-quest state must survive reload and server restart. Provider, capacity and shared
-quest-item decisions stay explicit in Spec 020.
+Next: P2's isolated configurable-character and collision laboratory. Keep the live
+entry point intact. One character/account, two-client first validation and personal
+quest beer are developer-confirmed. The physical phone/browser remains requested;
+mail/backup/retention launch choices stay open in D4. No service rollout during P2.
 
 ## 2. Legacy release and comparison route
 

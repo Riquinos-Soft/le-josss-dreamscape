@@ -1,5 +1,35 @@
 # Development setup and verified baseline
 
+## V2 P1 contract review — 2026-10-14
+
+Base `358be75`, clean working tree. User explicitly requested P1 and confirmed one
+character/account, two-client correctness and personal quest beer; physical phone/
+browser details remain requested. ADR 006 defines shared pose parts, scene ownership
+and pixel calibration; ADR 007 settles Godot authority/WSS, Python/Django accounts
+and PostgreSQL transactions, receipts, reconnect/save boundaries and reward policy.
+It replaces ADR 004's provisional runtime boundary, preserving hosting isolation.
+Review is this session's work; no external reviewer/model switch is claimed.
+
+Native command: `/Applications/Godot.app/Contents/MacOS/Godot --path game --script
+../tools/preview_v2_contract.gd`. Current sprites and a small authored surface sample
+captured at 1280×720 and 844×390 in `build/verification/v2/P1/`; inspected both.
+The preview is outside runtime and uses existing resources. It establishes scale/
+comparison, not configurable-part identity, completed architecture or collision.
+Common face/head anchors remain an explicit P2 requirement because current generated
+poses still vary. No runtime entry/assets, database or provider configuration changed.
+
+Read official Godot Web/WebSocket/JavaScriptBridge and Django auth/password docs
+plus OWASP password storage for the service boundary; exact source links are in
+ADR 007. No dependency installed or version pin guessed. Run targeted script
+format/lint, `python3 tools/check_docs.py` and `git diff --check` for this package.
+No gameplay test suite or Web export rerun for an offline preview/document change.
+Existing gdtoolkit `pkg_resources` deprecation warning remains.
+
+P1 technical work is complete; physical validation device is pending. P2 is ready
+with a bounded first increment in Plan 016. D4 still blocks public account/durable
+launch; documentation is not proof of recovery, multiplayer or production capacity.
+
+
 ## V2 P0 inventory complete — 2026-10-14
 
 [Baseline/migration inventory](refactor-baseline.md) records actual dependencies,

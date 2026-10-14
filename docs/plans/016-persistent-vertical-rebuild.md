@@ -9,14 +9,19 @@
   approvals of every current implementation. No new Bible content was fetched.
 - Base: `ab91b89`, main, clean working tree. Previous deploy succeeded; production
   art/device acceptance remains open. This change adds planning documents only.
-- Status: P0 complete, 2026-10-14; P1 is next. Developer explicitly authorized
+- Status: P0 complete; P1 contracts reviewed, 2026-10-14. P2 is ready.
+  Physical validation device is still awaiting developer information.
+  Developer explicitly authorized
   starting the refactor and pushing completed increments. No V2 runtime/service
   connection is claimed. See [baseline inventory](../refactor-baseline.md).
 - Settled: Godot 4.7.2 Compatibility, Web first, metres, stable item identity,
   same repository, small scenes, a street sample before Pazo migration.
-- Unresolved: D1–D4 in Spec 020. Request Astra for the consequential decisions
-  before implementing those contracts, as required by Spec 003. Preparation and
-  inventory can proceed without reopening existing engine decisions.
+- Settled by P1: [ADR 006](../adr/006-v2-character-and-scene-contract.md) defines
+  scene/appearance contracts; [ADR 007](../adr/007-authoritative-persistent-vertical.md)
+  defines service, authority, identity and recovery boundaries. Review was explicitly
+  authorized after the Spec 003 escalation; no external reviewer/model switch claimed.
+- Remaining: D2 physical device information and D4 operational launch decisions.
+  Neither blocks the isolated P2 laboratory; they block later acceptance/release.
 - Single integrator: current executing session; no workers assigned. Economical
   execution resumes after contract review. No model availability or cost assumed.
 - Non-goals: speculative frameworks, engine migration, mass art regeneration,
@@ -68,7 +73,12 @@ an incomplete V2 scene.
 
 ## P1 — Settle the visual and online contracts
 
-- Status: planned; owner: integrator with Astra review per Spec 003. Dependency: P0.
+- Status: contracts complete, physical-device target pending; owner: integrator.
+  Dependency: P0 complete. Developer authorized this review and confirmed the
+  bounded product defaults on 2026-10-14.
+- Output: ADRs 006/007; offline `tools/preview_v2_contract.gd` calibration at
+  1280×720/844×390, evidence `build/verification/v2/P1/`. No service or database
+  implementation. Art sample is calibration, not final user art acceptance.
 - Allowed: contract documents, narrowly scoped disposable art/protocol experiments
   and new ADRs only for consequential decisions; no production service rollout.
 - Steps: compare a small in-game art sample; decide logical pixel/camera/pose and
@@ -79,11 +89,13 @@ an incomplete V2 scene.
   device and measured-load target, and the multiplayer quest-item policy.
 - Gate: D1–D3 resolved for the next increment, with reasons and failure cases.
   Independent art preparation can proceed while operational D4 is settled.
-  No provider, numeric capacity or database schema is treated as chosen by this plan.
+  Confirmed correctness target: two simultaneous clients, one character/account,
+  personal quest beer. This is not an MMO capacity commitment. Device details and
+  measured operating capacity remain open; no production schema/provider deployed.
 
 ## P2 — A character and collision laboratory
 
-- Status: planned; owner: executor/integrator. Dependency: P1 visual contract.
+- Status: ready; owner: executor/integrator. Dependency: ADR 006 delivered.
 - Allowed: `game/v2/characters/`, `game/v2/validation/`, directly related tests;
   original character source art outside `game/` and normalized derivatives inside.
 - Input/output: one body/pose format → configurable face, hair, skin and clothes
@@ -95,6 +107,22 @@ an incomplete V2 scene.
 - Gate: grounded feet, straight idle legs, consistent head/body proportions,
   smooth direction changes and no penetration or stair catches. Capture actual
   gameplay scale in native/Web. Performance and art are reviewed before expansion.
+
+### P2 first working increment
+
+- Minimum context: ADR 006, `player/movement_direction.gd`, current
+  `player/player.gd` and `player/directional_animation.gd`, canonical atlas README.
+- Start with an isolated scene under `game/v2/validation/`, not the production
+  entry point. Build explicit floor/wall/corner/door/stair/ledge collision and
+  compose an actor, input adapter, appearance presenter and camera as defined.
+- Use Joss only as a temporary reference while preparing the shared pose template.
+  Then compose two configurations from compatible skin/face/hair/clothing parts
+  and reuse one as an NPC. Do not generate another complete character atlas per style.
+- Configuration changes rebuild presentation, not physics. Unknown IDs must have
+  explicit errors; compare all eight idle/walk directions and feet at actual scale.
+- Output includes source/anchor notes, normalized runtime parts, idle/walk captures,
+  route evidence and native/Web limitations. Keep schema/account/network/service
+  files untouched in this increment. Do not start P3 until the sample is reviewed.
 
 ## P3 — First authored Jacobo Risa section
 
@@ -190,9 +218,9 @@ an incomplete V2 scene.
 
 ## Next action
 
-P0 is complete. Continue P1's visual/authority review under repository Spec 003;
-the developer authorized proceeding after the review request on 2026-10-14.
-No external reviewer/model switch is claimed. User authorization for
-accounts/online/persistence is already recorded; do not ask to approve that scope
-again. Select providers and release operations only after their concrete decisions
-and environments are known.
+Implement P2's isolated character/collision laboratory under ADR 006. P1 review
+is recorded in ADRs 006/007; do not reopen those decisions for routine execution.
+Physical phone/browser details remain requested for later device acceptance.
+D4 recovery provider/retention/offsite objectives remain explicit launch gates.
+Authorization for accounts/online/persistence is already recorded; no new product
+approval is needed to execute these bounded packages.

@@ -3,6 +3,10 @@
 Date: 2026-09-25. Hosting/database preparation authorized; runtime design is a
 proposed direction until its implementation spec is agreed.
 
+Update 2026-10-14: the runtime proposal is superseded by
+[ADR 007](007-authoritative-persistent-vertical.md) for Spec 020. Hosting/database
+isolation decisions below remain in force; no runtime service deployment is implied.
+
 ## Context
 
 The developer now requests a persistent multiplayer game with accounts, hosted on

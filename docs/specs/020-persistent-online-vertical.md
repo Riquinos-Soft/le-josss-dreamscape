@@ -10,8 +10,9 @@ This authorizes these features as product scope. Infrastructure provisioning,
 provider selection and production replacement are not implied by writing the plan.
 The developer subsequently authorized beginning execution and pushing increments
 on 2026-10-14. Acceptance: P0 inventory/build reference complete; no V2 runtime,
-accounts, online server or persistent gameplay implemented. P1 decisions remain
-open. See [baseline inventory](../refactor-baseline.md).
+accounts, online server or persistent gameplay implemented. P1 technical contracts
+are now reviewed in ADRs 006/007; P2 is ready. Physical device information and D4
+launch choices remain open. See [baseline inventory](../refactor-baseline.md).
 
 ## Objective
 
@@ -126,7 +127,14 @@ before the new route is usable.
 
 ## Validation
 
-Current: Plan 016 P0 completed against deployed `753e31c`, with explicit addition
+P1 current: ADRs 006/007 settle the scene/pose, service, authority and transaction
+contracts. Developer confirmed one character/account, two-client correctness and
+personal quest beer. Native calibration script renders current Joss/Lucas against
+one authored floor/wall sample at 1280×720 and 844×390. This proves only calibration
+visibility; it does not prove layered appearance, collision, Web accounts or online
+play. Evidence/command: [development](../development.md). P2 is the next increment.
+
+P0: Plan 016 inventory completed against deployed `753e31c`, with explicit addition
 inventory for surf `14d2be5`. Eight native reference views, bounded render samples,
 resource/caller/hash review and Web payload recorded in
 [the baseline](../refactor-baseline.md). AC1 inventory/build-reference portion
@@ -140,20 +148,19 @@ the existing art/roadmap contracts and current runtime entry point. No backend,
 load, account, new art or migration validation is claimed. Run documentation and
 whitespace checks for this change; runtime acceptance is future work.
 
-## Open questions
+## Decisions and remaining questions
 
-- D1 — Integrator/Astra architectural review: finalize pixel/pose contract and
-  scene composition; confirm authoritative server/WSS approach; choose account
-  service/authentication method and durable save/transaction boundaries. These
-  consequential choices block dependent implementation under Spec 003.
-- D2 — Developer product choice during D1: expected concurrent players and target
-  device; whether one character per account is sufficient initially. Proposed
-  bounded default: one character and two-client acceptance, with capacity measured
-  separately. These defaults are recommendations, not scale commitments.
-- D3 — Developer/integrator before shared quest migration: the current single beer
-  instance cannot be consumed once globally and satisfy every account. Decide
-  quest-specific instancing versus shared replenishment, and who may move each
-  category of placed object. Test shared ownership with a separate common object.
+- D1 — Resolved for implementation by [ADR 006](../adr/006-v2-character-and-scene-contract.md)
+  and [ADR 007](../adr/007-authoritative-persistent-vertical.md), following the
+  authorized review. P2 must demonstrate composable art; P4–P6 must demonstrate
+  the account/authority/recovery contracts. A document is not runtime acceptance.
+- D2 — Developer confirmed one character/account and two simultaneous clients for
+  first correctness validation on 2026-10-14. Physical phone/browser details still
+  requested; no model or sustained performance budget assumed. Blocks physical
+  device acceptance, not local P2 work. Capacity is measured separately in P6/P9.
+- D3 — Developer confirmed personal quest beer; ordinary objects remain shared.
+  ADR 007 specifies private quest representation, single reward and common-object
+  contention. No trading or unrestricted client reward submission.
 - D4 — Developer/operator before external account launch: recovery method, account
   deletion/data retention, offsite backup destination and recovery objectives.
   No provider purchases, production migrations or customer-data resets are implied.
@@ -168,5 +175,7 @@ whitespace checks for this change; runtime acceptance is future work.
 - [Offline asset boundary](../adr/002-offline-asset-boundary.md)
 - [Item identity](../adr/003-item-identity-and-world-representation.md)
 - [Hosting and proposed persistent server](../adr/004-hosting-and-persistent-server-direction.md)
+- [V2 scene/appearance contract](../adr/006-v2-character-and-scene-contract.md)
+- [V2 authority/persistence contract](../adr/007-authoritative-persistent-vertical.md)
 - [Current bag](012-eight-slot-bag.md), [beer loop](018-residents-and-beer-errand.md)
   and [pixel environments](019-coherent-pixel-environment.md)
