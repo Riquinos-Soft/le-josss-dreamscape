@@ -2,6 +2,23 @@
 
 ## Bar Scandale — 2026-10-15
 
+Follow-up release verification on 2026-10-15: all 23 suites in `make check`
+pass, including 125 Scandale checks; import, format, lint and Web export pass.
+Command: `PATH="$PWD/build/verification/scandale/tools-env/bin:$PATH" make check
+GODOT=/Applications/Godot.app/Contents/MacOS/Godot` (one shell line).
+Evidence: `build/verification/scandale/pre-push-check.log`. The initial attempt
+stopped because `gdformat` was absent from PATH; an ignored local virtualenv using
+`requirements-dev.txt` resolved it. The known `pkg_resources` warning remains;
+no Godot runtime errors or warnings were reported.
+Desktop Chrome loaded the existing Scandale Web export at `http://127.0.0.1:8013/`
+and showed the initial Pazo scene with a small keyboard-driven movement. Browser
+automation sent brief taps, so this is only a startup/input smoke check, not a
+completed browser bar route. Native route evidence above remains authoritative
+for the bar interactions; Safari and physical-device acceptance remain pending.
+The developer explicitly authorized pushing the completed bar work, including
+the preceding local account-first commit, on this continuation.
+
+
 Spec 023 adds the requested destination to the existing travel map, with an authored
 photo-inspired interior, blond/blue-shirt bartender and 12 Spanish dark jokes with
 no immediate repeat. Five supplied HEIF photos were inspected via ignored PNG

@@ -59,7 +59,10 @@ controller travel, counter collision and keyboard/touch dialogue. Native arrival
 dialogue day/night and compact-map captures were inspected. Web export passes.
 Appearance (203), travel (119) and backend (12) regression checks pass.
 See [development evidence](../development.md) for commands, warnings and limitations.
-No Chrome/Safari or physical iPhone validation is claimed for this increment.
+Follow-up: all 23 Makefile suites and Web export pass. Desktop Chrome startup/input
+smoke check passed in the initial Pazo scene; a complete browser bar route, Safari
+and physical iPhone validation remain pending. Next: publish the authorized commits
+and review the deployed bar route; final visual likeness still needs developer review.
 
 ## Open questions
 
