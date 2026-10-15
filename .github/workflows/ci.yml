@@ -106,6 +106,7 @@ jobs:
         run: |
           set -euo pipefail
           for test in \
+            test_scandale.gd \
             test_v2_appearance.gd \
             test_v2_laboratory.gd \
             test_touch_controls.gd \

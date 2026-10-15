@@ -5,7 +5,12 @@ signal open_requested
 signal cancel_requested
 signal destination_confirmed(destination: StringName)
 
-const NAMES := {&"street": "Calle Jacobo Risa", &"home": "Casa", &"lourizan": "Pazo de Lourizán"}
+const NAMES := {
+	&"street": "Calle Jacobo Risa",
+	&"home": "Casa",
+	&"lourizan": "Pazo de Lourizán",
+	&"scandale": "Bar Scandale"
+}
 var current: StringName = &"street"
 var selected: StringName = &""
 var is_open := false
@@ -19,6 +24,8 @@ var status: Label
 var street_button: Button
 var home_button: Button
 var lourizan_button: Button
+var scandale_button: Button
+var scandale_dot: ColorRect
 var travel_button: Button
 var back_button: Button
 var street_dot: ColorRect
@@ -95,6 +102,9 @@ func _ready() -> void:
 	lourizan_button = Button.new()
 	lourizan_button.pressed.connect(func(): select(&"lourizan"))
 	rows.add_child(lourizan_button)
+	scandale_button = Button.new()
+	scandale_button.pressed.connect(func(): select(&"scandale"))
+	rows.add_child(scandale_button)
 	status = Label.new()
 	rows.add_child(status)
 	var actions := HBoxContainer.new()
@@ -130,6 +140,7 @@ func open_map(location: StringName) -> void:
 	street_button.disabled = current == &"street"
 	home_button.disabled = current == &"home"
 	lourizan_button.disabled = current == &"lourizan"
+	scandale_button.disabled = current == &"scandale"
 	travel_button.disabled = true
 	back_button.disabled = false
 	update_labels()
@@ -152,6 +163,7 @@ func set_loading() -> void:
 	street_button.disabled = true
 	home_button.disabled = true
 	lourizan_button.disabled = true
+	scandale_button.disabled = true
 	back_button.disabled = true
 
 
@@ -161,6 +173,7 @@ func show_error(message: String) -> void:
 	street_button.disabled = current == &"street"
 	home_button.disabled = current == &"home"
 	lourizan_button.disabled = current == &"lourizan"
+	scandale_button.disabled = current == &"scandale"
 	travel_button.disabled = selected == &""
 	back_button.grab_focus()
 
@@ -175,6 +188,16 @@ func close_map() -> void:
 
 
 func update_labels() -> void:
+	scandale_button.text = (
+		("✓ " if selected == &"scandale" else "")
+		+ "Bar Scandale"
+		+ (" · Estás aquí" if current == &"scandale" else "")
+	)
+	scandale_dot.color = (
+		Color(0.22, 0.96, 0.81)
+		if current == &"scandale" or selected == &"scandale"
+		else Color(0.52, 0.65, 0.68)
+	)
 	street_dot.color = (
 		Color(0.22, 0.96, 0.81)
 		if current == &"street" or selected == &"street"
@@ -211,36 +234,30 @@ func make_map_diagram() -> Control:
 	var diagram := Control.new()
 	diagram.custom_minimum_size = Vector2(390, 86)
 	var line := Line2D.new()
-	line.points = PackedVector2Array([Vector2(68, 29), Vector2(322, 29)])
+	line.points = PackedVector2Array([Vector2(45, 29), Vector2(345, 29)])
 	line.width = 3.0
 	line.default_color = Color(0.31, 0.64, 0.64, 1)
 	diagram.add_child(line)
-	street_dot = ColorRect.new()
-	street_dot.position = Vector2(62, 23)
-	street_dot.size = Vector2(12, 12)
-	diagram.add_child(street_dot)
-	home_dot = ColorRect.new()
-	home_dot.position = Vector2(192, 23)
-	home_dot.size = Vector2(12, 12)
-	diagram.add_child(home_dot)
-	lourizan_dot = ColorRect.new()
-	lourizan_dot.position = Vector2(316, 23)
-	lourizan_dot.size = Vector2(12, 12)
-	diagram.add_child(lourizan_dot)
-	var street_label := Label.new()
-	street_label.position = Vector2(44, 43)
-	street_label.text = "Calle"
-	diagram.add_child(street_label)
-	var home_label := Label.new()
-	home_label.position = Vector2(178, 43)
-	home_label.text = "Casa"
-	diagram.add_child(home_label)
-	var lourizan_label := Label.new()
-	lourizan_label.position = Vector2(258, 43)
-	lourizan_label.text = "Lourizán"
-	diagram.add_child(lourizan_label)
+	var dots: Array[ColorRect] = []
+	var labels := ["Calle", "Casa", "Lourizán", "Scandale"]
+	for i in 4:
+		var dot := ColorRect.new()
+		dot.position = Vector2(39 + i * 100, 23)
+		dot.size = Vector2(12, 12)
+		diagram.add_child(dot)
+		dots.append(dot)
+		var label := Label.new()
+		label.position = Vector2(7 + i * 100, 43)
+		label.size.x = 76
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.text = labels[i]
+		diagram.add_child(label)
+	street_dot = dots[0]
+	home_dot = dots[1]
+	lourizan_dot = dots[2]
+	scandale_dot = dots[3]
 	var scale_note := Label.new()
-	scale_note.position = Vector2(145, 62)
+	scale_note.position = Vector2(105, 65)
 	scale_note.text = "Esquema · no a escala"
 	scale_note.add_theme_color_override("font_color", Color(0.68, 0.76, 0.76, 1))
 	diagram.add_child(scale_note)

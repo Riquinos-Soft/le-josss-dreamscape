@@ -26,12 +26,14 @@ const OPTIONS := {
 	"lower": ["trousers"],
 	"shoes": ["boots"],
 	"skin_palette": ["warm", "olive", "deep"],
-	"hair_palette": ["chestnut", "ink"],
-	"upper_palette": ["teal", "ochre"],
+	"hair_palette": ["chestnut", "ink", "blond"],
+	"upper_palette": ["teal", "ochre", "navy"],
 	"lower_palette": ["charcoal", "earth"],
 	"shoe_palette": ["leather"]
 }
 const PALETTES := {
+	"blond": ["211e25", "8d713d", "c4a664", "e1cd8f"],
+	"navy": ["211e25", "273f51", "38586c", "628094"],
 	"warm": ["211e25", "a36549", "d99a6b", "f0c291"],
 	"olive": ["211e25", "8a6649", "bb9567", "dbb886"],
 	"deep": ["211e25", "573a32", "875c43", "b6835f"],

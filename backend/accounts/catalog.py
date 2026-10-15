@@ -2,13 +2,13 @@
 OPTIONS = {
     "body": ["human_v1"], "face": ["plain", "freckles"], "hair": ["short", "tied"],
     "upper": ["shirt"], "lower": ["trousers"], "shoes": ["boots"],
-    "skin_palette": ["warm", "olive", "deep"], "hair_palette": ["chestnut", "ink"],
-    "upper_palette": ["teal", "ochre"], "lower_palette": ["charcoal", "earth"],
+    "skin_palette": ["warm", "olive", "deep"], "hair_palette": ["chestnut", "ink", "blond"],
+    "upper_palette": ["teal", "ochre", "navy"], "lower_palette": ["charcoal", "earth"],
     "shoe_palette": ["leather"]}
 DEFAULT = {"version": 1, **{key: values[0] for key, values in OPTIONS.items()}}
 LABELS = {"face": "Rostro", "hair": "Peinado", "skin_palette": "Piel",
           "hair_palette": "Color del pelo", "upper_palette": "Camisa", "lower_palette": "Pantalón"}
-SPANISH = {"plain": "Sin pecas", "freckles": "Con pecas", "short": "Corto", "tied": "Recogido",
+SPANISH = {"blond": "Rubio", "navy": "Azul marino", "plain": "Sin pecas", "freckles": "Con pecas", "short": "Corto", "tied": "Recogido",
            "warm": "Cálida", "olive": "Oliva", "deep": "Oscura", "chestnut": "Castaño",
            "ink": "Negro", "teal": "Verde azulado", "ochre": "Ocre", "charcoal": "Gris", "earth": "Tierra"}
 

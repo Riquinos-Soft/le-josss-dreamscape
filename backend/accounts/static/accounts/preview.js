@@ -4,6 +4,7 @@
   const form = document.querySelector('#creator'), status = document.querySelector('#preview-status');
   const base = JSON.parse(document.querySelector('#initial-appearance').textContent);
   const palettes = {
+    blond:["211e25","8d713d","c4a664","e1cd8f"],navy:["211e25","273f51","38586c","628094"],
     warm:['211e25','a36549','d99a6b','f0c291'],olive:['211e25','8a6649','bb9567','dbb886'],deep:['211e25','573a32','875c43','b6835f'],
     chestnut:['211e25','613e32','8e593c','b78150'],ink:['211e25','30303a','49464a','68616a'],
     teal:['211e25','315b60','42858a','73a9a0'],ochre:['211e25','856035','b58b47','d8b968'],

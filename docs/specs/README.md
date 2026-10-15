@@ -46,8 +46,9 @@ See [the roadmap](../roadmap.md) for the single current priority sequence.
 | 020 | [Persistent online vertical rebuild](020-persistent-online-vertical.md) | in-progress | Account entry/resume verified locally; production activation, world migration and device acceptance remain |
 | 021 | [Jacobo Risa chicken mount](021-chicken-mount.md) | implemented | Developer art and physical-device review; regression suite pending |
 | 022 | [Lucas surf arcade](022-lucas-surf-arcade.md) | implemented | Complete-round and physical-device acceptance |
+| 023 | [Bar Scandale and bartender jokes](023-bar-scandale.md) | implemented | Developer art review and browser/physical-device gameplay |
 
-Next available spec ID: **023**. Recompute from this registry before reserving;
+Next available spec ID: **024**. Recompute from this registry before reserving;
 this line is not a standing reservation for an agent or a feature.
 
 ## Language and file naming

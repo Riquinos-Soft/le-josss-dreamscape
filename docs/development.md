@@ -1,5 +1,44 @@
 # Development setup and verified baseline
 
+## Bar Scandale — 2026-10-15
+
+Spec 023 adds the requested destination to the existing travel map, with an authored
+photo-inspired interior, blond/blue-shirt bartender and 12 Spanish dark jokes with
+no immediate repeat. Five supplied HEIF photos were inspected via ignored PNG
+conversions. No scan or measured dimensions were supplied; the 6 × 10 m cutaway is
+an estimate. Provenance: `assets/source/environments/scandale/README.md`.
+The new blond/navy palettes also appear consistently in account creation previews.
+
+Godot 4.7.2 commands from the repository root:
+
+```sh
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path game --script res://tests/test_scandale.gd
+/Applications/Godot.app/Contents/MacOS/Godot --path game --script res://tests/test_scandale.gd -- --capture
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path game --script res://tests/test_location_travel.gd
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path game --script res://tests/test_lourizan_dialogue.gd
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path game --script res://tests/test_v2_appearance.gd
+python3 tools/account_dev.py manage test accounts
+mkdir -p build/scandale-web
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path game --export-release Web ../build/scandale-web/index.html
+```
+
+Scandale: 125 checks pass headless and natively on Apple M5 / OpenGL Compatibility.
+Travel: 119; Lucas dialogue: 183; appearance: 203; backend/PostgreSQL: 12. Native captures inspected at
+1280×720 and 844×390: arrival, conversation day/night and compact travel map.
+The real controller walks the aisle, collides with the counter and returns to the
+exit; keyboard and touch dialogue share the existing interaction flow. The hanging
+ball and stool geometry were refined after capture inspection for player readability.
+Logs/captures: ignored `build/verification/scandale/`; Web output: `build/scandale-web/`.
+
+The existing Lucas dialogue test could randomly accept a surf offer and become
+stuck in the minigame. Its dialogue-only setup now excludes that offer explicitly;
+production surf behavior is unchanged. The first export attempt lacked its output
+directory; creating it resolved the failure. gdtoolkit retains its existing
+`pkg_resources` deprecation warning. Developer visual acceptance and browser/physical
+iPhone 16 Pro + Chrome gameplay remain unverified for this increment. Account-service
+production activation remains blocked on administrator SSH access; this location
+uses existing world travel and makes no new durable-progress claim.
+
 ## Account-first test slice — 2026-10-14
 
 Base `d89d3ec`, clean main. Developer corrected P3 priority to login/register →

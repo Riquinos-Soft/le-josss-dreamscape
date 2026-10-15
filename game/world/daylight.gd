@@ -42,10 +42,11 @@ func _update_pools() -> void:
 	var world := get_parent()
 	var camera: Camera3D = world.camera_rig.get_node("Camera")
 	var viewport_size := get_viewport().get_visible_rect().size
+	var indoors: bool = world.inside_salon or world.current_id == &"scandale"
 	var pools := PackedVector4Array()
 	var bulbs := PackedVector2Array()
 	for source in get_tree().get_nodes_in_group("pixel_lights"):
-		if source.place_id != world.current_id or source.indoors != world.inside_salon:
+		if source.place_id != world.current_id or source.indoors != indoors:
 			continue
 		if not source.is_visible_in_tree() or camera.is_position_behind(source.global_position):
 			continue
@@ -72,4 +73,4 @@ func _update_pools() -> void:
 	material.set_shader_parameter("light_pools", pools)
 	material.set_shader_parameter("light_bulbs", bulbs)
 	# The enclosed salon stays warmly lit even when its exterior is night.
-	material.set_shader_parameter("indoors", world.inside_salon)
+	material.set_shader_parameter("indoors", indoors)

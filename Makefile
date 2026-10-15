@@ -2,6 +2,7 @@ GODOT ?= godot
 PYTHON ?= python3
 
 TESTS := \
+	test_scandale.gd \
 	test_v2_appearance.gd \
 	test_v2_laboratory.gd \
 	test_touch_controls.gd \

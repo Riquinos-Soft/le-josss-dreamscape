@@ -3,6 +3,7 @@ extends Node3D
 
 const LourizanHistory = preload("res://dialogue/lourizan_history.gd")
 const LOCATION_PATHS := {
+	&"scandale": "res://world/locations/scandale.tscn",
 	&"home": "res://world/locations/home.tscn",
 	&"lourizan": "res://world/locations/lourizan.tscn",
 }
@@ -313,7 +314,9 @@ func open_dialogue() -> void:
 	active_guide.set_conversation_active(true)
 	var pages: Array[String] = []
 	surf_offered = false
-	if active_guide.dialogue_pages.is_empty():
+	if active_guide.has_method("next_dialogue_pages"):
+		pages = active_guide.next_dialogue_pages()
+	elif active_guide.dialogue_pages.is_empty():
 		pages = _lucas_conversation()
 	else:
 		pages.assign(active_guide.dialogue_pages)
@@ -424,6 +427,10 @@ func bind_active_guide() -> void:
 			var passage := active_location.get_node_or_null(path)
 			if passage != null and not passage.passage_requested.is_connected(_use_passage):
 				passage.passage_requested.connect(_use_passage)
+	if current_id == &"scandale" and is_instance_valid(active_location):
+		active_guide = active_location.get_node("Bartender")
+		speakers.append(active_guide)
+		active_guide.set_movement_view(camera_rig.get_node("Camera"))
 	touch_controls.talk_available = false
 	touch_controls.update_actions()
 

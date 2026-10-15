@@ -1,6 +1,6 @@
 # Roadmap and current checkpoint
 
-Updated: 2026-10-14. This is the entry point for current priorities. Spec numbers
+Updated: 2026-10-15. This is the entry point for current priorities. Spec numbers
 are identifiers, not execution order. Proposed work below is not implementation
 authorization. Older roadmap wording is retained in Git history.
 
@@ -29,6 +29,12 @@ retention and offsite backup choices still gate public registration, not the req
 single shared test-account implementation. Physical-device acceptance remains open.
 
 ## 2. Legacy release and comparison route
+
+The developer also requested [Spec 023](specs/023-bar-scandale.md): a photo-inspired
+pixel Bar Scandale with a blond bartender and random dark jokes. Implemented in the
+existing travel world, with native route/captures and Web export verified. Art and
+physical-device review remain open. This does not migrate the bar into persistent
+account travel or change the account-service activation requirements.
 
 Explicit bounded follow-up: [Spec 021](specs/021-chicken-mount.md) adds the requested
 chicken mount and travel companionship before returning to Plan 016 P0. Native
