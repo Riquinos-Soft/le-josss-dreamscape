@@ -78,7 +78,9 @@ and keep the visible result unaccepted.
 The production character editor exists, but its simplified V2 art is rejected.
 Restoring the earlier design/walk while retaining coherent customization is open.
 The Lourizán replacement and removal of the upper play bar remain local; native
-validation is intermittent and the shared animation contract requires review. Do
+validation is intermittent. The shared animation review is now closed in ADR 006:
+preserve the original per-phase pixels and derive compatible layers/masks, rather
+than enforce a new fixed-head walk. Implementation and visual checks remain. Do
 not describe these corrections as deployed. Registration/mail setup remains separate.
 See the active spec and development log for the next unresolved step. Update this
 checkpoint when it is superseded; do not turn this contract into a second roadmap.

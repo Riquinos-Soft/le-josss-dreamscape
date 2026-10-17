@@ -67,9 +67,28 @@ in progress. Seventeen backend tests, the local HTTP/WSS round trip, headless
 but repeated native runs intermittently stall with a Jolt job-system warning.
 The V2 character design/walk has also been explicitly rejected. Next: resolve the
 canonical-animation/shared-pose conflict and native stall before OVH rollout.
-An Astra Medium review was requested under AGENTS/Spec 003; no model switch or
-review outcome is claimed. Keep the prepared runtime correction local until those
-issues are resolved.
+The developer authorized the requested review on 2026-10-17. The decision is now
+closed in [ADR 006](../adr/006-v2-character-and-scene-contract.md): derive lossless
+layers and explicit material masks from the original per-phase Joss pixels;
+preserve existing appearance IDs, actor, direction helper and cadence. Replace
+the incorrect fixed-head oracle with exact default reconstruction of the canonical
+poses and matching editor/game compositions. Implementation and visual acceptance
+are still pending; keep the prepared runtime correction local until the character
+correction and native failure investigation pass. Plan 016 records the bounded
+execution sequence. No further architecture approval is needed for that sequence.
+
+### Design fit for the character correction
+
+- Exact reference: `game/assets/art/characters/joss_walk.png`, `joss_idle.png`
+  and `joss.tres`; Lucas is the second style reference.
+- Preserve original silhouette, clusters, per-phase motion, eight directions,
+  8 fps walk, idle/walk0 upper-body identity, grounding and turn/stop continuity.
+  Personalization changes only authored material masks and compatible overlays.
+- Reuse the existing presenter, actor, direction helper and cache. Keep saved
+  appearance IDs and all offered choices; no new identity or animation system.
+- Compare reference/default/alternate in motion at the same gameplay camera and
+  in the editor, all eight directions. Default composition must exactly reproduce
+  the original pixels. Compare HTML and Godot output pixels as well as appearance.
 
 ## Objective
 

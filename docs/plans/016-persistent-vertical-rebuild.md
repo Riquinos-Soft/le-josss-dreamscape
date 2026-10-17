@@ -38,6 +38,71 @@
 
 ## Common package contract
 
+### Active correction packages — reviewed 2026-10-17
+
+This sequence supersedes P2's pending visual review and the temporary public
+laboratory entry. Base: `63bd5bd`, with the existing uncommitted Lourizán/account
+correction listed in the development checkpoint. ADR 006's canonical-pose review
+is complete. One executor/integrator works serially; no delegation is authorized.
+No new architecture, identity schema or art direction decision remains open.
+
+**C1 — Lossless canonical character, ready for execution.**
+
+- Read ADR 006's correction, the canonical character README, the catalog/presenter,
+  `preview.js`, `test_v2_appearance.gd` and the parts source README. Do not reopen
+  unrelated world/backend contracts.
+- Allowed: `assets/source/characters/parts/`, runtime character derivatives and
+  catalog, HTML preview and its shared catalog metadata, appearance tests and
+  capture tools. Preserve the canonical Joss/Lucas sources and account schema.
+- First deliver a complete down-facing idle + four walk row with default and
+  alternate choices. Extract source pixels into aligned layers with explicit
+  material masks; preserve detailed shading and exact default reconstruction.
+  Author compatible hair/face alternatives. Inspect motion before expanding to
+  all eight rows. Replace the rejected procedural master after the derivative is
+  reproducible; do not leave two competing current pipelines.
+- Keep all existing IDs and options. Use one palette/mask specification for Godot
+  and HTML. Do not silently fall back, remove controls or rewrite saved appearance.
+- Replace only the obsolete translated-head checks. Retain rejection/cache/phase
+  checks, add exact reconstruction against the independent original images,
+  material isolation, variant-mask alignment and actual JS/Godot pixel parity.
+- Run the appearance test, native matched-scale comparisons of all eight
+  directions and start/turn/stop sequences, and account Web export. Compare the
+  editor to gameplay. Record warnings and visual limitations separately from
+  passing counts. Do not commit the candidate as finished on static sheets alone.
+
+**C2 — Native route diagnosis, in progress.**
+
+- Allowed: the existing `game/tests/test_account_location.gd`, ignored diagnostic
+  drivers/logs and the directly implicated runtime code if a cause is demonstrated.
+- Reproduce the stall with only one native Godot process; capture process stacks
+  and route progress before termination. Distinguish a blocked physics job from a
+  missing render callback or test wait. Do not infer the cause from the warning.
+- Make the smallest evidence-supported correction. Re-run the affected route
+  natively and headless, both stair directions, arrival, day/night and compact
+  dimensions; confirm errors/warnings and no orphan test process. Engine change
+  or global physics/thread tuning is outside this package without new evidence.
+
+**C3 — Account-world integration and rollout, waiting for C1/C2.**
+
+- Own the inherited account place/migration/UI/authority/CI/nginx files already
+  listed in the development checkpoint. Keep the durable character ID, appearance
+  and existing Lourizán positions. Relocate only old laboratory saves once.
+- Run account tests and the real HTTP/WSS persistence round trip after integration,
+  including existing-character edit/resume, session fencing and reconnect. Export
+  the final Web build, inspect the entry/editor/world route at desktop and compact
+  size. The laboratory route is inaccessible; fullscreen play has no upper bar.
+- Deploy only the final verified assets and matching preview metadata with the
+  authorized account-world change, using the existing OVH procedure and a fresh
+  database backup. Verify readiness, migration and resume without overwriting the
+  developer's saved appearance or active browser edits. Preserve rollback assets.
+- Record production checks honestly; physical iPhone acceptance remains separate.
+  Mail configuration/public signup remains a separate pending sender dependency.
+
+Each working package receives its own local atomic commit. No additional model
+request is needed for this reviewed implementation sequence. Follow the current
+user Git instructions; the historical push authorization below is not an automatic
+push of this correction.
+
 Each package uses its stated input, edit boundary, output and gate below. Before
 starting, inspect current branch/status and record inherited work. Read only the
 listed relevant subsystem and its tests. Proposed `game/v2/` and `backend/` paths

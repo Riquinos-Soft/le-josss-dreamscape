@@ -1,6 +1,51 @@
 # Development setup and verified baseline
 
+## Canonical character review closed — 2026-10-17
+
+The developer confirmed the requested Astra review and instructed execution to
+continue carefully. Reviewed the canonical Joss atlas/resource, current compositor,
+presenter/direction integration, HTML preview, appearance tests and ADR 006. Base
+`63bd5bd`; the inherited runtime correction remains uncommitted and undeployed.
+No subagent or separate reviewer was used. No model was changed programmatically.
+
+Decision: preserve original per-phase pixels, derive lossless aligned layers and
+authored material masks, and keep compatible face/hair variants and saved IDs.
+Default composition must exactly reconstruct the original 40 poses; the old
+translated-head assertion is the wrong oracle. The current actor, presenter,
+direction helper, 8 fps cadence and cache remain. The four-gray-shade source format
+may be replaced to preserve canonical shading, with shared preview/game metadata.
+ADR 006 records alternatives/boundaries; Spec 020 and Plan 016 C1–C3 record design
+fit, bounded implementation, native diagnosis and the rollout gate. This closes
+the architecture decision, not the character implementation or visual acceptance.
+
+Native investigation during review:
+
+- Ran `Godot --path game --script res://tests/test_account_location.gd -- --capture`
+  alone. It produced arrival-day but did not finish after more than 90 seconds.
+  Unlike prior failed runs it emitted no Jolt warning. A three-second macOS
+  `sample` captured stacks; the main thread was predominantly sleeping in the
+  event loop, with stripped Godot symbols. This does not establish a physics
+  deadlock or its cause. Stopped only this test process (PID 66551) with TERM.
+- Added route/frame/capture progress to an ignored copy of the existing test and
+  reran with `--print-fps`. It completed both stair routes and day/night captures:
+  **25 checks, 0 failures**, without a Jolt warning. This is another isolated
+  success, not proof that the intermittent failure is fixed. No runtime/engine
+  settings were changed in this review.
+- Evidence: `build/verification/v2/accounts/lourizan-review-native.log`,
+  `lourizan-review-native.sample.txt`, `debug_location.gd` and
+  `lourizan-review-trace.log`; captures remain in `build/verification/v2/lourizan/`.
+
+Next: execute C1's first complete canonical row and inspect it in motion, then
+extend the proven technique to eight directions. C2 still needs a reproducible
+diagnosis of incomplete native runs. C3/OVH rollout awaits C1/C2. No character
+asset, database record or production service changed during this review. Public
+registration still awaits outgoing-mail setup. Do not claim visual repair from
+this documentation commit or the native route test.
+
 ## Design consistency rule and active correction handoff — 2026-10-17
+
+Historical review request: superseded by the closed decision above. Runtime
+verification records below remain evidence with their stated limitations.
 
 The developer rejected the simplified V2 character design/walking and asked for a
 standing rule preventing new features from diverging from the game. Added the
