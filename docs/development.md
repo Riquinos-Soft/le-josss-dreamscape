@@ -1,5 +1,57 @@
 # Development setup and verified baseline
 
+## OVH account activation and registration checkpoint — 2026-10-17
+
+This supersedes the historical administrator-SSH blocker below. Source baseline
+`b5e9089` was staged from tracked files only at `/opt/dreamscape/source`.
+Administrator SSH access was restored; existing PostgreSQL 18.4 data/volume,
+static releases and TLS gateway were retained. A pre-migration dump was taken,
+`prepare_accounts.py init` created isolated roles/schema, both images built, and
+`prepare_accounts.py migrate` applied the additive migrations and seeded `test`.
+No passwords or generated runtime credentials belong in this record.
+
+Initial production logs exposed three deployment defects: the private `accounts`
+hostname was absent from Django's allowlist, Godot's tmpfs was root-owned, and
+Gunicorn's unused control socket targeted its read-only home. Corrected all three;
+added account readiness gating and dependent restarts to avoid authority startup
+races and stale nginx container addresses. The first HTTP smoke attempt overlapped
+container replacement and returned 502; after nginx restart it passed. The final
+Compose setup was then validated by recreating accounts, authority and web together.
+The nginx entrypoint still reports that its read-only configuration cannot be
+modified for IPv6; `nginx -t` passes and the explicit IPv4 listener serves the gateway.
+
+Production checks using HTTPS and WSS at
+`https://dreamscape.198.244.233.153.sslip.io/` passed: first character creation
+(Joss on the shared test account), movement, acknowledged logout, Secure/HttpOnly
+session cookie, fresh-session resume, and preservation of character ID, appearance
+and position after service recreation. `/internal/start/` returned 404; `/game/`,
+`/legacy/` and `/v2/` returned 200. Commands include the deployment sequence in
+[ACCOUNTS.md](../deploy/ovh/ACCOUNTS.md), `nginx -t`, and the ignored HTTP/WSS driver
+`build/account-venv/bin/python build/verification/v2/accounts/production_smoke.py`.
+These are programmatic public endpoint checks, not a manual Chrome or physical
+phone gameplay pass. No game/export code changed; the existing deployed Web export
+was served successfully.
+
+A fresh production dump, `dreamscape-20261017T211553Z.dump` (43,468 bytes), was
+restored into a new disposable database. Character ID, ownership, name, appearance,
+place and position matched production; the disposable database was removed.
+The first comparison used a dump taken during the active smoke test and failed;
+repeating after logout with a fresh dump passed. Helper/evidence is under ignored
+`build/verification/v2/accounts/verify_production_restore.py`. Local disk backup
+retention is seven days; offsite recovery and D4 operator choices remain unresolved.
+
+The developer explicitly requested public self-registration and outgoing mail.
+`python3 tools/account_dev.py manage test accounts` passes 13 tests, including a
+new registration → verification → first creation → fresh-session resume/isolation
+check with in-memory mail. No real sender/domain is configured; Gmail with an app
+password was offered as a provisional option, pending operator selection. Public
+registration is still disabled. Next: sender setup, actual verification/recovery
+mail tests, test credential retirement and D4 recovery choices. The developer then
+reported that the existing test character bypasses creation and requested clearer
+access to personalization; that follow-up is being implemented without deleting
+or resetting the existing character or saved position.
+
+
 ## Bar Scandale — 2026-10-15
 
 Follow-up release verification on 2026-10-15: all 23 suites in `make check`

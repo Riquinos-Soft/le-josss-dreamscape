@@ -1,6 +1,6 @@
 # Roadmap and current checkpoint
 
-Updated: 2026-10-15. This is the entry point for current priorities. Spec numbers
+Updated: 2026-10-17. This is the entry point for current priorities. Spec numbers
 are identifiers, not execution order. Proposed work below is not implementation
 authorization. Older roadmap wording is retained in Git history.
 
@@ -16,17 +16,23 @@ P1 technical contracts are reviewed in [ADR 006](adr/006-v2-character-and-scene-
 and [ADR 007](adr/007-authoritative-persistent-vertical.md). P2 character/collision laboratory is implemented and awaiting review.
 The developer corrected the priority: login/register on arrival, create a first
 character or resume the existing character at its saved position. A single
-`test:test` account is authorized initially; public registration stays disabled.
-The account entry and movement checkpoint slice is implemented and verified locally
-with PostgreSQL and the headless Godot authority. It currently enters the P2
-validation room. Further P3 street authoring is deferred.
+`test:test` account was authorized initially. On 2026-10-17 the developer
+explicitly requested public registration and outgoing mail configuration, superseding
+the single-account product restriction. The registration/verification code exists;
+13 local PostgreSQL tests pass, including first character creation and fresh-session
+resume after verification. The developer has no custom domain or SMTP service yet.
+Public registration remains disabled pending working delivery and D4 recovery choices.
 
-Next: activate the prepared account services and test public resume once administrator
-SSH access is restored (the available key was rejected). The existing static-only
-CI cannot activate database/services. Then validate iPhone 16 Pro + Chrome and
-continue the authored route, inventory/quests and two-player replication. D4 mail,
-retention and offsite backup choices still gate public registration, not the requested
-single shared test-account implementation. Physical-device acceptance remains open.
+The account entry and movement checkpoint services are now deployed on OVH.
+HTTPS login, first character creation, WSS movement, acknowledged logout, fresh-session
+resume and recovery after service recreation passed. The current account location
+is the P2 validation room; further P3 street authoring remains deferred.
+
+Next: configure an operator-selected mail sender, verify delivery and recovery,
+retire the shared test credential and close D4 retention/offsite recovery choices
+before enabling public registration. Then validate iPhone 16 Pro + Chrome and
+continue the authored route, inventory/quests and two-player replication.
+Physical-device acceptance remains open.
 
 ## 2. Legacy release and comparison route
 

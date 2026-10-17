@@ -1,7 +1,7 @@
 # Spec 020 — Persistent online vertical rebuild
 
 Status: in-progress
-Updated: 2026-10-14
+Updated: 2026-10-17
 Language: en
 
 Authorization: developer requested a controlled rebuild plan on 2026-10-13,
@@ -10,8 +10,8 @@ This authorizes these features as product scope. Infrastructure provisioning,
 provider selection and production replacement are not implied by writing the plan.
 The developer subsequently authorized beginning execution and pushing increments
 on 2026-10-14. Acceptance: P0 inventory/build reference and P2 laboratory implementation
-complete; the account-entry/character-checkpoint test slice is implemented locally,
-with production activation blocked by administrator SSH access. Inventory, quests
+complete; the account-entry/character-checkpoint test slice is deployed on OVH,
+with HTTPS/WSS creation, movement, logout/resume and restart recovery verified. Inventory, quests
 and multiplayer replication remain unimplemented. P1 technical contracts
 are now reviewed in ADRs 006/007; P2 awaits visual/gameplay review. The physical target is iPhone 16 Pro + Chrome; physical
 acceptance and D4 launch choices remain open. See [baseline inventory](../refactor-baseline.md).
@@ -27,9 +27,14 @@ P3 is deferred; P4 and the movement-checkpoint portion of P5 may use the existin
 validation location while the authored street remains pending. This is not
 authorization to claim the laboratory is the finished world. Preserve the accepted
 Django/PostgreSQL and headless-Godot authority contracts. The developer subsequently specified exactly one initial `test:test` account.
-Public registration is disabled for this phase; no mail provider is needed for the
-shared test account. Public account launch later requires actual mail delivery and
-the documented recovery arrangements.
+That initial restriction was superseded on 2026-10-17: the developer explicitly
+authorized public self-registration and configuring outgoing mail. The existing
+email/password, verification and recovery contract remains in force. No custom
+domain or SMTP service is currently configured; sender/provider setup and the D4
+recovery arrangements remain the next unresolved launch steps. Until those work,
+production registration remains disabled rather than creating unusable accounts.
+First verified login opens the existing character creator; subsequent logins
+resume that owned character. Editing appearance after creation is not implemented.
 
 ## Objective
 
@@ -153,9 +158,17 @@ restart. A local dump was restored into a separate database and compared for ID,
 name, appearance and position. Chrome exercised first creation, entry, logout and
 return login, including compact layout. These are local tests, not production or
 physical iPhone acceptance. Current location remains the P2 validation room.
-Next unresolved step: activate and verify the prepared account service deployment
-when administrator SSH access is available; then physical iPhone review and the
-authored world migration. No public registration or legacy progress migration claimed.
+Production follow-up on 2026-10-17: account services are active. Public HTTPS/WSS
+checks passed first character creation, movement, acknowledged logout, fresh-session
+resume, Secure/HttpOnly sessions and service-restart recovery. The character used
+for the shared test account is named Joss. Thirteen local PostgreSQL tests now pass,
+including registration → verification → first creation → fresh-session resume and
+isolation from the test account. Email in those tests uses an in-memory sink; real
+mail delivery and public registration remain unverified. Next: configure the
+operator-selected sender, verify actual delivery/recovery and resolve D4 launch
+choices before enabling registration; then physical iPhone review and authored
+world migration. See the current deployment record in [development](../development.md).
+No legacy progress migration is claimed.
 
 Historical P2 validation follows:
 

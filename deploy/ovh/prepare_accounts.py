@@ -37,7 +37,7 @@ if args.action == "init":
             "DJANGO_SECRET_KEY": secrets.token_urlsafe(40), "AUTHORITY_SECRET": authority_secret,
             "PGHOST": "db", "PGPORT": "5432", "PGDATABASE": "dreamscape", "PGUSER": "dreamscape_runtime",
             "PGPASSWORD": secrets.token_urlsafe(40), "REGISTRATION_ENABLED": "0",
-            "DJANGO_ALLOWED_HOSTS": "dreamscape.198.244.233.153.sslip.io",
+            "DJANGO_ALLOWED_HOSTS": "dreamscape.198.244.233.153.sslip.io,accounts",
             "DJANGO_TRUSTED_ORIGINS": "https://dreamscape.198.244.233.153.sslip.io",
             "PUBLIC_ORIGIN": "https://dreamscape.198.244.233.153.sslip.io",
             "GAME_SOCKET_URL": "wss://dreamscape.198.244.233.153.sslip.io/ws/"})

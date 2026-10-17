@@ -1,10 +1,11 @@
-# Opt-in test account deployment
+# Account service deployment
 
-This package is prepared for the developer's single `test:test` account. It is not
-currently activated. The static-only Actions deployment cannot create services or
-migrate PostgreSQL. Administrator access is required; the current Mac's attempt as
-`j0se@198.244.233.153` returned `Permission denied (publickey,password)` on 2026-10-14.
-No remote credentials, schema, containers or gateway configuration were changed.
+The single-test-account deployment was activated on OVH on 2026-10-17, after
+administrator SSH access was restored. PostgreSQL migrations, HTTPS/WSS creation,
+movement, logout/resume and service-restart recovery passed. The developer has
+now authorized public registration; it remains disabled until outgoing mail and
+the documented public launch requirements below are configured and verified.
+The static-only Actions deployment cannot create services or migrate PostgreSQL.
 
 ## Reviewable deployment
 
@@ -34,7 +35,7 @@ sudo docker compose -f compose.yaml -f compose.accounts.yaml build accounts auth
 sudo python3 prepare_accounts.py migrate
 sudo docker compose -f compose.yaml -f compose.accounts.yaml config --quiet
 # Activation after the additive migration and image builds succeed:
-sudo docker compose -f compose.yaml -f compose.accounts.yaml up -d accounts authority web
+sudo docker compose -f compose.yaml -f compose.accounts.yaml up -d --force-recreate accounts authority web
 sudo docker compose -f compose.yaml -f compose.accounts.yaml exec -T web nginx -t
 ```
 
@@ -46,6 +47,14 @@ The runtime role gets data access through schema-scoped default privileges, not
 DDL or administrative privileges. `migrate` uses migration credentials only for
 Django's additive migration, then creates the test account with runtime credentials.
 It does not delete or recreate an existing character. The helper never enables nginx.
+
+The account health check gates authority startup; dependent restarts refresh
+nginx upstream addresses after container replacement. Godot has a writable tmpfs
+owned by UID/GID 10001, and Gunicorn disables its unused control socket so both
+services can retain read-only root filesystems. `DJANGO_ALLOWED_HOSTS` must include
+the private `accounts` service name as well as the public hostname. Existing
+secret files are preserved by `init`; add that private hostname when upgrading
+an earlier prepared environment, without changing any credentials.
 
 Before calling activation successful, verify public login, first character creation,
 logout/relogin and changed-position recovery. Check that `/internal/start/` returns
@@ -75,8 +84,16 @@ all committed characters for a later retry. An old static client cannot load acc
 progress; it is the preserved comparison release. Future account releases must
 retain migration compatibility or use an expand/contract schema rollout.
 
-Registration remains `REGISTRATION_ENABLED=0`; the seed password is the developer's
+Public registration was requested on 2026-10-17. It remains
+`REGISTRATION_ENABLED=0` until actual mail delivery and recovery are verified; the seed password is the developer's
 explicitly requested shared test credential. No real-user mail or personal data is
 needed for this phase. Public registration requires mail delivery, test credential
 retirement and the D4 retention/offsite recovery decisions. See
 [backend operation](../../backend/README.md) and [Spec 020](../../docs/specs/020-persistent-online-vertical.md).
+
+SMTP is not configured in the generated environment. Configure the selected
+`EMAIL_HOST`, `EMAIL_PORT` (STARTTLS), `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD` and
+`DEFAULT_FROM_EMAIL` directly in the protected runtime environment; never commit
+them. The current account networks are internal, so SMTP setup must also provide
+outbound connectivity for the account service while keeping PostgreSQL and the
+authority private. Do not enable registration using a development mail sink.

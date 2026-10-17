@@ -7,7 +7,9 @@ services:
       - ./source/backend/accounts/static:/srv/account-static:ro
       - ./source/game/v2/characters/parts:/srv/account-parts:ro
     networks: [default, application]
-    depends_on: [accounts, authority]
+    depends_on:
+      accounts: {condition: service_healthy, restart: true}
+      authority: {condition: service_started, restart: true}
   accounts:
     build:
       context: ./source
@@ -20,6 +22,12 @@ services:
     security_opt: [no-new-privileges:true]
     read_only: true
     tmpfs: [/tmp]
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://accounts:8000/', timeout=3).close()"]
+      interval: 5s
+      timeout: 4s
+      retries: 6
+      start_period: 10s
     logging:
       driver: json-file
       options: {max-size: 10m, max-file: "3"}
@@ -33,12 +41,15 @@ services:
       ACCOUNT_INTERNAL_URL: http://accounts:8000/internal/
     env_file: ./.secrets/authority.env
     networks: [application]
-    depends_on: [accounts]
+    depends_on:
+      accounts: {condition: service_healthy, restart: true}
     mem_limit: 384m
     cpus: 1.0
     security_opt: [no-new-privileges:true]
     read_only: true
-    tmpfs: [/tmp, /home/authority/.local/share/godot]
+    tmpfs:
+      - /tmp
+      - /home/authority/.local/share/godot:uid=10001,gid=10001,mode=0700
     logging:
       driver: json-file
       options: {max-size: 10m, max-file: "3"}

@@ -114,6 +114,27 @@ class AccountTests(TestCase):
         account.refresh_from_db()
         self.assertTrue(account.is_active)
 
+    @override_settings(REGISTRATION_ENABLED=True)
+    def test_registered_account_creates_and_resumes_owned_character(self):
+        data = {"email": "traveler@example.invalid", "password": "A-strong-8430-password", "confirmation": "A-strong-8430-password"}
+        self.client.post("/register/", data)
+        account = get_user_model().objects.get(email=data["email"])
+        self.client.post("/", data)
+        self.assertNotIn("_auth_user_id", self.client.session)
+        url = re.search(r"http[^\s]+", mail.outbox[0].body)[0].split(settings.PUBLIC_ORIGIN)[1]
+        self.client.post(url)
+        self.client.post("/", data)
+        self.assertRedirects(self.client.get("/"), "/character/create/", fetch_redirect_response=False)
+        self.client.post("/character/create/", {"name": "Viajera", **DEFAULT})
+        character = Character.objects.get(account=account)
+        self.client.post("/logout/")
+        fresh = Client()
+        fresh.post("/", data)
+        self.assertRedirects(fresh.get("/"), "/play/", fetch_redirect_response=False)
+        self.assertContains(fresh.get("/play/"), "Viajera")
+        self.assertEqual(Character.objects.get(account=account).id, character.id)
+        self.assertFalse(Character.objects.filter(account=self.user).exists())
+
     def test_ticket_single_use_expiry_and_logout(self):
         epoch, ticket, char = self.connect()
         self.assertEqual(self.private("consume", {"epoch": epoch, "ticket": ticket}).status_code, 401)
