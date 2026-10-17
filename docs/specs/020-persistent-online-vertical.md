@@ -33,8 +33,16 @@ email/password, verification and recovery contract remains in force. No custom
 domain or SMTP service is currently configured; sender/provider setup and the D4
 recovery arrangements remain the next unresolved launch steps. Until those work,
 production registration remains disabled rather than creating unusable accounts.
-First verified login opens the existing character creator; subsequent logins
-resume that owned character. Editing appearance after creation is not implemented.
+First verified login opens the character creator. On 2026-10-17 the developer
+reported that the existing test character skipped creation and went directly to
+the validation room. The bounded correction shows the owned character's name and
+appearance editor before entering on return visits, with a continue-without-changes
+action. Saving must preserve character identity, ownership, place and position;
+validate the same appearance choices as creation and fence older game sessions.
+An in-game return to this screen must acknowledge the movement save before leaving.
+This correction is deployed. Fifteen account tests and the local real HTTP/WSS
+round trip pass; production Chrome loaded the editor and preview. Full physical
+phone acceptance remains open. Public signup still awaits working outgoing mail.
 
 ## Objective
 
@@ -129,8 +137,11 @@ before the new route is usable.
   narrow doorway and exposed edge has reproducible native/Web evidence. Collision
   probes and regression tests cover failures rather than scene-node counts alone.
 - AC4 — Register → create character → play → logout → login in a fresh browser
-  session restores the same durable character. Invalid input and cross-account
-  access are rejected without partial creation or state leakage.
+  session restores the same durable character in the personalization screen.
+  Saving a new name/appearance preserves identity, ownership, place and position;
+  continuing without changes does not modify state. Returning from play to edit
+  waits for the save acknowledgement. Invalid input and cross-account access are
+  rejected without partial creation or state leakage.
 - AC5 — Two authenticated browser clients share the zone; simultaneous pickup,
   stale actions, invalid movement and repeated delivery do not corrupt ownership
   or rewards. Record latency/reconnect conditions and actual player count.
@@ -161,7 +172,7 @@ physical iPhone acceptance. Current location remains the P2 validation room.
 Production follow-up on 2026-10-17: account services are active. Public HTTPS/WSS
 checks passed first character creation, movement, acknowledged logout, fresh-session
 resume, Secure/HttpOnly sessions and service-restart recovery. The character used
-for the shared test account is named Joss. Thirteen local PostgreSQL tests now pass,
+for the shared test account is named Joss. Fifteen local PostgreSQL tests now pass,
 including registration → verification → first creation → fresh-session resume and
 isolation from the test account. Email in those tests uses an in-memory sink; real
 mail delivery and public registration remain unverified. Next: configure the

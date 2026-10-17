@@ -50,7 +50,7 @@ def notice(request, message, status=200):
 
 def entry(request):
     if request.user.is_authenticated:
-        return redirect("play" if Character.objects.filter(account=request.user).exists() else "create")
+        return redirect("edit" if Character.objects.filter(account=request.user).exists() else "create")
     form = Credentials(request.POST or None)
     if request.method == "POST":
         if limited(request, request.POST.get("email", "")):
@@ -146,6 +146,27 @@ def create(request):
                 "name": form.cleaned_data["name"], "appearance": form.appearance(), "position": [-2, 0.05, 1]})
         return redirect("play")
     return render(request, "accounts/create.html", {"form": form, "appearance": DEFAULT})
+
+
+@login_required(login_url="/")
+def edit(request):
+    character = Character.objects.filter(account=request.user).first()
+    if character is None:
+        return redirect("create")
+    form = CharacterForm(request.POST or None, initial={"name": character.name, **character.appearance})
+    if request.method == "POST" and form.is_valid():
+        with transaction.atomic():
+            Account.objects.select_for_update().get(pk=request.user.pk)
+            character = Character.objects.select_for_update().get(account=request.user)
+            character.name = form.cleaned_data["name"]
+            character.appearance = form.appearance()
+            character.generation += 1
+            character.revision += 1
+            character.active_session = ""
+            character.save(update_fields=["name", "appearance", "generation", "revision", "active_session", "saved_at"])
+            GameTicket.objects.filter(character=character).delete()
+        return redirect("play")
+    return render(request, "accounts/create.html", {"form": form, "appearance": character.appearance, "editing": True})
 
 
 @login_required(login_url="/")

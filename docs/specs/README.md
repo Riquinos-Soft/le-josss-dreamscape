@@ -43,7 +43,7 @@ See [the roadmap](../roadmap.md) for the single current priority sequence.
 | 017 | [Asset workspace cleanup](017-asset-workspace-cleanup.md) | implemented | Inventory, import and Web export verified |
 | 018 | [Residents and Lucas beer errand](018-residents-and-beer-errand.md) | implemented | Native delivery verified; developer mobile/art review pending |
 | 019 | [Coherent pixel environment art](019-coherent-pixel-environment.md) | implemented | Day/night captures and Web export passed; developer visual review pending |
-| 020 | [Persistent online vertical rebuild](020-persistent-online-vertical.md) | in-progress | Account entry/resume verified locally; production activation, world migration and device acceptance remain |
+| 020 | [Persistent online vertical rebuild](020-persistent-online-vertical.md) | in-progress | OVH entry/resume active; personalization tested; public mail/registration, world migration and device acceptance remain |
 | 021 | [Jacobo Risa chicken mount](021-chicken-mount.md) | implemented | Developer art and physical-device review; regression suite pending |
 | 022 | [Lucas surf arcade](022-lucas-surf-arcade.md) | implemented | Complete-round and physical-device acceptance |
 | 023 | [Bar Scandale and bartender jokes](023-bar-scandale.md) | implemented | Developer art review and browser/physical-device gameplay |

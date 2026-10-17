@@ -1,5 +1,43 @@
 # Development setup and verified baseline
 
+## Character personalization before returning to play — 2026-10-17
+
+Follow-up to the deployment checkpoint below, based on `aea884e`. The developer
+reported that login entered an unrelated room instead of character creation. The
+shared test account had already been initialized by the production persistence
+smoke check. Corrected the return flow: login now opens the owned character editor
+with its current name and appearance, `Guardar y entrar` and `Continuar sin cambios`.
+New accounts retain first creation. `Mi personaje` in play waits for a confirmed
+movement save before navigating back to the editor. Editing updates only the
+owned character's name/appearance and session fencing fields, preserving its ID,
+ownership, place and position; unused tickets and older generations are invalidated.
+No schema migration or game export change is required.
+
+Checks:
+
+- `python3 tools/account_dev.py manage test accounts`: 15 tests pass, including
+  invalid edits, ownership, preserved progress, GET without mutation and fencing
+  of the previous game generation/tickets.
+- `python3 tools/account_dev.py build/account-venv/bin/python tools/test_account_roundtrip.py --godot /Applications/Godot.app/Contents/MacOS/Godot`:
+  real HTTP/WebSocket/PostgreSQL round trip passes in a disposable local database,
+  including appearance/name editing, unchanged position and returning to the editor.
+- `node build/verification/v2/accounts/test_play_exit.cjs`: ignored fixture driver
+  executes the actual `play.js`; both personalization and logout wait for a trusted
+  `left` acknowledgement before form navigation, and forged-origin messages do not
+  navigate. This is a bounded script check, not a full browser game interaction.
+- Updated backend image built on OVH; account, authority and web recreation passed
+  account readiness gating. Chrome desktop loaded the deployed `/character/edit/`
+  page with current name/options, pixel preview and entry controls. Screenshot
+  evidence: `build/verification/v2/accounts/personalization-chrome.png`. The page
+  was visibly inspected with the computer-use skill; no complete manual save/return
+  cycle, console review, Safari or physical iPhone acceptance is claimed.
+
+The active location is still the P2 validation room. Public registration and real
+verification/recovery mail remain disabled pending sender configuration and D4
+launch choices. The developer has no domain; Gmail with an app password was offered
+as a provisional sender, and a sender account is still required. No mail was sent.
+
+
 ## OVH account activation and registration checkpoint — 2026-10-17
 
 This supersedes the historical administrator-SSH blocker below. Source baseline
@@ -48,8 +86,8 @@ password was offered as a provisional option, pending operator selection. Public
 registration is still disabled. Next: sender setup, actual verification/recovery
 mail tests, test credential retirement and D4 recovery choices. The developer then
 reported that the existing test character bypasses creation and requested clearer
-access to personalization; that follow-up is being implemented without deleting
-or resetting the existing character or saved position.
+access to personalization; the implemented follow-up above supersedes that UI
+checkpoint without deleting or resetting the existing character or saved position.
 
 
 ## Bar Scandale — 2026-10-15

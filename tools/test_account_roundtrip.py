@@ -139,8 +139,21 @@ try:
         # Unsupported mutation never reaches a persistence endpoint.
         send(final_ws, "teleport", position=[100, 10, 100])
         assert receive(final_ws, "error")["error"] == "unknown_command"
+        post(fresh, fresh_jar, "/character/edit/", {"name": "Viajero Nuevo", "face": "freckles", "hair": "short",
+             "skin_palette": "olive", "hair_palette": "ink", "upper_palette": "ochre", "lower_palette": "earth"})
+        edited_ws, edited, _ = join(stack, fresh, fresh_jar)
+        assert edited["id"] == final["id"] and edited["appearance"]["hair"] == "short"
+        assert edited["name"] == "Viajero Nuevo"
+        assert all(abs(a - b) < .01 for a, b in zip(edited["position"], final["position"]))
+        send(edited_ws, "leave")
+        receive(edited_ws, "left")
+        edited_ws.close()
+        post(fresh, fresh_jar, "/logout/")
+        returning, _ = login()
+        assert b'value="Viajero Nuevo"' in returning.open(origin).read()
         print("PASS: first creation, fresh-browser resume, appearance, movement, save acknowledgement,")
-        print("ticket replay, forged position, duplicate session fencing, authority restart, invalid command.")
+        print("ticket replay, forged position, duplicate session fencing, authority restart, invalid command,")
+        print("appearance/name editing, preserved position and return to personalization.")
 finally:
     for process in reversed(processes):
         if process.poll() is None:

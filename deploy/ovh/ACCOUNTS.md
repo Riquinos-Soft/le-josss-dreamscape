@@ -57,7 +57,9 @@ secret files are preserved by `init`; add that private hostname when upgrading
 an earlier prepared environment, without changing any credentials.
 
 Before calling activation successful, verify public login, first character creation,
-logout/relogin and changed-position recovery. Check that `/internal/start/` returns
+logout/relogin, character personalization without position reset, and
+changed-position recovery. Return logins show the existing character editor before
+entering; `Mi personaje` returns there after the game save acknowledgement. Check that `/internal/start/` returns
 404 publicly, `/ws/` connects over TLS, account cookies are Secure/HttpOnly, and
 other hosted sites remain healthy. Confirm the 5-second save indicator and disconnect
 feedback. Run a PostgreSQL dump/restore comparison with the actual test character

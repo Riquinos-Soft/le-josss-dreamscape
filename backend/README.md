@@ -1,7 +1,7 @@
 # Account entry and durable character test slice
 
 Implements Spec 020's reprioritized entry flow: login → first character creation
-or owned character resume → an authenticated Godot session. The developer requested
+or owned character personalization → an authenticated Godot session. The developer requested
 one shared `test` / `test` account initially. `REGISTRATION_ENABLED=0` is the default;
 `seed_test_account` creates only that account and never resets an existing password,
 character or progress. It bypasses password validators only for this explicit seed.
@@ -32,7 +32,11 @@ Open http://127.0.0.1:8008/ and sign in as `test` / `test`. On the first visit,
 choose a name, face, hairstyle, skin, hair and clothing colors. The preview uses
 the same source parts, indexed palettes and directional poses as Godot. Creation
 is atomic and one character/account is enforced by a database uniqueness constraint.
-A later login goes straight to the saved character. The HTML entry uses native
+A later login opens the saved character in the same preview/editor before play.
+`Guardar y entrar` updates its name/appearance while preserving identity, ownership
+and saved position; `Continuar sin cambios` enters without modifying it. The
+in-game `Mi personaje` action waits for the movement-save acknowledgement before
+returning to the editor. An edit fences earlier game sessions and unused tickets. The HTML entry uses native
 form controls for browser password managers and mobile keyboards.
 
 `account_dev.py database` creates an isolated `dreamscape-accounts-dev` container

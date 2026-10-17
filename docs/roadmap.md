@@ -19,14 +19,17 @@ character or resume the existing character at its saved position. A single
 `test:test` account was authorized initially. On 2026-10-17 the developer
 explicitly requested public registration and outgoing mail configuration, superseding
 the single-account product restriction. The registration/verification code exists;
-13 local PostgreSQL tests pass, including first character creation and fresh-session
+15 local PostgreSQL tests pass, including first character creation and fresh-session
 resume after verification. The developer has no custom domain or SMTP service yet.
 Public registration remains disabled pending working delivery and D4 recovery choices.
 
 The account entry and movement checkpoint services are now deployed on OVH.
 HTTPS login, first character creation, WSS movement, acknowledged logout, fresh-session
 resume and recovery after service recreation passed. The current account location
-is the P2 validation room; further P3 street authoring remains deferred.
+is the P2 validation room; further P3 street authoring remains deferred. Return
+logins now show the saved character editor before play, and `Mi personaje` returns
+to it from the game after save acknowledgement. Editing preserves identity and
+position; first accounts still create exactly one character.
 
 Next: configure an operator-selected mail sender, verify delivery and recovery,
 retire the shared test credential and close D4 retention/offsite recovery choices
