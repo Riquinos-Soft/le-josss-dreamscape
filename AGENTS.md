@@ -88,6 +88,13 @@ Respect the existing product vision and accepted ADRs:
 - Identify the place's defining landmarks first, then inspect the actual gameplay
   camera composition and walkable route before declaring a visual improvement.
 
+## Game-wide consistency
+
+- Follow [the design contract](docs/design-contract.md) for every player-facing change, including art, animation, UI, world entry and new interactions.
+- In the active spec, name the concrete existing reference, preserved design/motion/scale and the in-game comparison before implementation. Prefer reuse over replacement.
+- The canonical Joss/Lucas sprites define character design and walking. The developer rejected the simplified V2 character art; do not treat it as the new baseline or ship it based on technical tests alone.
+- Inspect the actual player flow and comparable idle/walk/world views before claiming visual success. Record evidence and limitations; tests/export do not imply visual acceptance. Do not expose technical test rooms or the rejected permanent upper character/logout bar in public play.
+
 ## Current art direction
 
 - New world art must match Jacobo Risa's deliberate pixel-art language: crisp

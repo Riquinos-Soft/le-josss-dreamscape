@@ -48,6 +48,7 @@ relevant spec. The lists below are references, not execution order.
 - [Plan and execution status: Joss animation and street art](docs/plans/008-joss-animation-and-street-art.md)
 - [Spec index, English authoring rules and template](docs/specs/README.md)
 - [Plan index](docs/plans/README.md)
+- [Game-wide design and visual consistency contract](docs/design-contract.md)
 - [Roadmap and current checkpoint](docs/roadmap.md)
 - [Development environment and Web risks](docs/development.md)
 - [OVH deployment and operations](deploy/ovh/README.md)

@@ -19,6 +19,13 @@ List affected behavior and the smallest deliverable. Link the governing contract
 
 List adjacent features and systems excluded from this change.
 
+## Design fit (for player-facing changes)
+
+Name the concrete existing asset/scene/interaction reference, the identity/motion/
+scale/behavior to preserve, the components to reuse and the actual gameplay
+comparison. Follow [the design contract](../design-contract.md). Omit this section
+for changes without a visible or player-experience effect.
+
 ## Requirements
 
 - R1 — Given a concrete state/input, specify the observable result.

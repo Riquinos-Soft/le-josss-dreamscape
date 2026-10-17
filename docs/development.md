@@ -1,5 +1,41 @@
 # Development setup and verified baseline
 
+## Design consistency rule and active correction handoff — 2026-10-17
+
+The developer rejected the simplified V2 character design/walking and asked for a
+standing rule preventing new features from diverging from the game. Added the
+[design contract](design-contract.md), a short always-applied Cursor rule,
+AGENTS guidance and a design-fit section in the spec template. Canonical Joss/Lucas
+sprites and Jacobo Risa are concrete references; technical tests are distinct from
+visual acceptance. This is a documentation/rule change, not visual correction or
+approval of the current V2 assets.
+
+Active runtime work based on `babc22d` remains separate and uncommitted: replace the
+account laboratory with the existing authored Lourizán exterior; remove the upper
+play bar and keep only temporary connection feedback; relocate only
+`laboratory_v1` character positions through migration 0002, preserving identities
+and appearance. Native/headless location driver `test_account_location.gd` passes
+25 checks headless, including both stair routes and camera follow. Seventeen
+PostgreSQL account tests pass, including migration idempotency and preservation of
+already-saved Lourizán progress. The real local HTTP/WebSocket round trip passes;
+`makemigrations --check --dry-run` reports no changes. Account Web export completed
+at `build/account-lourizan-web`; targeted GDScript lint/format passes with the
+existing `pkg_resources` deprecation warning.
+
+The first native run produced an arrival capture, then reported the Jolt maximum
+job-system warning and did not complete. That process was stopped; an isolated
+native retry is in progress. Logs/captures: ignored `build/verification/v2/accounts/`
+and `build/verification/v2/lourizan/`. The captured scene still uses the rejected
+V2 character, so the runtime replacement has not been deployed. Production remains
+the previously deployed editor plus test room. Mail/sender setup is also pending.
+
+Next unresolved step: reconcile canonical character design/walk with ADR 006's
+shared-pose composition and its pixel-identity tests before changing the art
+pipeline. Preview and in-game results must match; do not replace the richer legacy
+sprites with another procedural approximation. Finish the native check and record
+the outcome, then review the visual contract before publishing the replacement.
+
+
 ## Character personalization before returning to play — 2026-10-17
 
 Follow-up to the deployment checkpoint below, based on `aea884e`. The developer

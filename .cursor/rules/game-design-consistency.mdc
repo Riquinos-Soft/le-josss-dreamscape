@@ -1,0 +1,22 @@
+---
+description: Preserve the game's established visual identity and player experience in every feature
+alwaysApply: true
+---
+
+# Game-wide design consistency
+
+Follow `docs/design-contract.md` for every player-facing change.
+Before implementing, name the concrete existing reference in the active spec,
+state what must remain consistent, and define a comparison in the actual game.
+Reuse canonical art, animation and components before inventing replacements.
+Joss/Lucas's existing sprites define character design and walking; the rejected
+simplified V2 parts are not a new baseline. Jacobo Risa and Spec 019 define the
+current environment language. Customization must match in preview and gameplay.
+Public login must lead into the authored world, without a technical test room
+or the rejected permanent upper character/logout bar.
+Compare motion, scale, palette, UI and interactions, not just functional output.
+Record real visual evidence and remaining limitations. Technical tests and Web
+export never imply visual acceptance or permission to ship a rejected candidate.
+Resolve conflicts with current developer direction before changing the affected
+contract. Keep routine conforming fixes autonomous; do not repeatedly ask for
+permission to follow already established design.
