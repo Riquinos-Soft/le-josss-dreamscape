@@ -10,7 +10,8 @@ sprites and Jacobo Risa are concrete references; technical tests are distinct fr
 visual acceptance. This is a documentation/rule change, not visual correction or
 approval of the current V2 assets.
 
-Active runtime work based on `babc22d` remains separate and uncommitted: replace the
+Active runtime work based on `babc22d` remains separate and uncommitted after the
+rule commit `1e371c8`: replace the
 account laboratory with the existing authored Lourizán exterior; remove the upper
 play bar and keep only temporary connection feedback; relocate only
 `laboratory_v1` character positions through migration 0002, preserving identities
@@ -23,17 +24,32 @@ at `build/account-lourizan-web`; targeted GDScript lint/format passes with the
 existing `pkg_resources` deprecation warning.
 
 The first native run produced an arrival capture, then reported the Jolt maximum
-job-system warning and did not complete. That process was stopped; an isolated
-native retry is in progress. Logs/captures: ignored `build/verification/v2/accounts/`
+job-system warning and did not complete. That process was stopped. An isolated
+native retry passed all 25 checks with day/night and terrace captures. A subsequent
+run, adjusting the initial capture wait so the forced daytime grade had time to
+apply, hit the same Jolt warning and stalled again; it was stopped. Native validation
+is therefore intermittent, not clean or complete. The final blocked log is
+`build/verification/v2/accounts/lourizan-native-final.log`; the successful retry is
+`build/verification/v2/accounts/lourizan-native-retry.log`. Logs/captures: ignored `build/verification/v2/accounts/`
 and `build/verification/v2/lourizan/`. The captured scene still uses the rejected
 V2 character, so the runtime replacement has not been deployed. Production remains
 the previously deployed editor plus test room. Mail/sender setup is also pending.
 
-Next unresolved step: reconcile canonical character design/walk with ADR 006's
-shared-pose composition and its pixel-identity tests before changing the art
-pipeline. Preview and in-game results must match; do not replace the richer legacy
-sprites with another procedural approximation. Finish the native check and record
-the outcome, then review the visual contract before publishing the replacement.
+Additional checks: the legacy salon/daylight regression passes 25 checks; all
+five deployment-safety tests pass. The ignored `test_connection_notice.cjs` driver
+executes the updated `play.js` and verifies hiding connection feedback on join,
+showing errors, origin rejection and reconnection.
+
+Next unresolved step: an Astra Medium review was requested under AGENTS/Spec 003
+before changing the shared animation/art contract. Reconcile canonical character
+design/walk with ADR 006's shared-pose composition and its pixel-identity tests
+before changing the art pipeline. An offline read-only atlas comparison found
+that the original Joss head regions are not identical between walk phases even
+after translation, whereas `test_v2_appearance.gd` requires exact identity. Evidence:
+`build/verification/v2/accounts/canonical-head-comparison.log`. Also triage the
+intermittent native Jolt stall before deployment. Preview and in-game results must match; do not replace the richer legacy
+sprites with another procedural approximation. Review the visual contract and the native failure before publishing the
+replacement. No rejected replacement art was created or uploaded.
 
 
 ## Character personalization before returning to play — 2026-10-17

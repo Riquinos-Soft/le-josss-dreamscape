@@ -44,6 +44,33 @@ This correction is deployed. Fifteen account tests and the local real HTTP/WSS
 round trip pass; production Chrome loaded the editor and preview. Full physical
 phone acceptance remains open. Public signup still awaits working outgoing mail.
 
+## Current correction — remove the public test room, 2026-10-17
+
+The developer explicitly rejected entering the validation room and requested its
+removal from public play, together with the upper character/logout bar. This
+supersedes the temporary laboratory destination and the in-game personalization
+button described above. Use the existing authored Lourizán exterior as the bounded
+account destination, with the same visible geometry/collision on client and trusted
+authority. Preserve one owned character and its appearance; relocate only existing
+`laboratory_v1` saves to Lourizán's safe arrival through an additive data migration.
+Subsequent Lourizán saves must resume without relocation. Reuse the existing scene,
+camera, background and day/night components instead of importing the legacy world
+root or inventing new art. Travel/NPC/economy migration remains separate.
+
+Play must fill the page without a permanent top bar, character label or logout
+button. Show a reconnect notice only while connecting or after a connection error;
+hide it when play is connected. Keep character personalization at account entry.
+Stop publishing the laboratory preview route/export. Collision fixtures may remain
+internal automated test inputs; they are not player destinations. Current status:
+in progress. Seventeen backend tests, the local HTTP/WSS round trip, headless
+25-check route and account Web export pass. One native route run passed 25 checks,
+but repeated native runs intermittently stall with a Jolt job-system warning.
+The V2 character design/walk has also been explicitly rejected. Next: resolve the
+canonical-animation/shared-pose conflict and native stall before OVH rollout.
+An Astra Medium review was requested under AGENTS/Spec 003; no model switch or
+review outcome is claimed. Keep the prepared runtime correction local until those
+issues are resolved.
+
 ## Objective
 
 Build one small, coherent pixel-art playable route with reliable movement and
