@@ -46,6 +46,16 @@ phone acceptance remains open. Public signup still awaits working outgoing mail.
 
 ## Current correction — remove the public test room, 2026-10-17
 
+2026-10-18 scope update: the developer explicitly requested restoring the detailed
+Joss character, original NPCs and map travel to all existing authored destinations
+except Casa. Include Calle Jacobo Risa, Pazo de Lourizán (including its salon) and
+Bar Scandale. Reuse their existing art, speakers/dialogue and marked exits. Casa
+must not be selectable or reachable through a forged destination request. This
+supersedes the earlier deferral of NPC/travel migration for this correction.
+Account play must retain identity and save both destination and position; a separate
+legacy preview is not completion of the account-world restoration. Keep server
+authority over movement and travel; do not trust client-submitted coordinates.
+
 The developer explicitly rejected entering the validation room and requested its
 removal from public play, together with the upper character/logout bar. This
 supersedes the temporary laboratory destination and the in-game personalization
@@ -72,8 +82,10 @@ closed in [ADR 006](../adr/006-v2-character-and-scene-contract.md): derive lossl
 layers and explicit material masks from the original per-phase Joss pixels;
 preserve existing appearance IDs, actor, direction helper and cadence. Replace
 the incorrect fixed-head oracle with exact default reconstruction of the canonical
-poses and matching editor/game compositions. Implementation and visual acceptance
-are still pending; keep the prepared runtime correction local until the character
+poses and matching editor/game compositions. The canonical character implementation is locally verified (195 appearance
+checks, 120 HTML/Godot composition matches, 382 native motion checks and account
+Web export); developer art acceptance and full account-world browser checks remain.
+Full NPC/map integration is pending; keep the prepared runtime correction local until the character
 correction and native failure investigation pass. Plan 016 records the bounded
 execution sequence. No further architecture approval is needed for that sequence.
 

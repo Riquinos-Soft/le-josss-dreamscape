@@ -46,15 +46,26 @@ func run() -> void:
 			check(
 				idle_image.get_used_rect().end.y == 60, "idle feet use fixed baseline: " + direction
 			)
-			var head := idle_image.get_region(Rect2i(19, 13, 28, 20)).get_data()
+			var head := visible_pixels(idle_image.get_region(Rect2i(0, 0, 64, 43)))
 			for phase in 4:
 				var image := frames.get_frame_texture(walk, phase).get_image()
-				var bob := -1 if phase in [1, 3] else 0
 				check(image.get_used_rect().end.y == 60, "walk foot baseline: " + direction)
-				check(
-					image.get_region(Rect2i(19, 13 + bob, 28, 20)).get_data() == head,
-					"exact head identity after anchor translation: " + direction
-				)
+				if phase == 0:
+					check(
+						visible_pixels(image.get_region(Rect2i(0, 0, 64, 43))) == head,
+						"idle retains canonical walk0 upper body: " + direction
+					)
+	# The independent original is the oracle, not newly generated part shapes.
+	var canonical: SpriteFrames = load("res://assets/art/characters/joss.tres")
+	for name in canonical.get_animation_names():
+		for phase in canonical.get_frame_count(name):
+			var expected := canonical.get_frame_texture(name, phase).get_image()
+			var actual: Image = first.frames.get_frame_texture(name, phase).get_image()
+			check(
+				visible_pixels(actual) == visible_pixels(expected),
+				"exact original pose: %s/%d" % [name, phase]
+			)
+
 	for direction in ["up", "up_left", "up_right"]:
 		var row := Catalog.DIRECTIONS.find(direction)
 		for face in ["face_plain", "face_freckles"]:
@@ -140,3 +151,14 @@ func check(condition: bool, message: String) -> void:
 	if not condition:
 		failures += 1
 		push_error(message)
+
+
+func visible_pixels(image: Image) -> PackedByteArray:
+	var data := image.get_data()
+	# Texture import pads RGB into transparent edges; those colors are not visible.
+	for offset in range(0, data.size(), 4):
+		if data[offset + 3] == 0:
+			data[offset] = 0
+			data[offset + 1] = 0
+			data[offset + 2] = 0
+	return data

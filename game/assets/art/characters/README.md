@@ -46,7 +46,9 @@ from these twelve cells and uses the existing player collision body while ridden
 
 ### Configurable human characters
 
-These atlases are transitional art, not a dynamic customization system. NPC names,
-dialogue and behavior remain independent of SpriteFrames resources. The isolated V2 laboratory under Spec 020 / ADR 006 now composes shared-pose
-face, hair, skin and clothes from `game/v2/characters/parts/`. These legacy atlases
-remain the production presentation until the sample and migration are accepted.
+These atlases are the canonical visual authority. NPC names, dialogue and behavior
+remain independent of SpriteFrames resources. V2 customization now derives lossless
+RGBA material layers from Joss rather than replacing the body and walk. See the
+[source pipeline](../../../../assets/source/characters/parts/README.md) and ADR 006.
+Lucas retains his own original full-body atlas. Final variant art and full
+account-world integration still require their recorded visual checks.

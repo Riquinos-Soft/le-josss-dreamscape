@@ -76,11 +76,13 @@ and keep the visible result unaccepted.
 ## Current checkpoint
 
 The production character editor exists, but its simplified V2 art is rejected.
-Restoring the earlier design/walk while retaining coherent customization is open.
+The local canonical correction now reproduces the original default poses and
+retains configurable material/face/hair choices; comparisons and evidence are in
+the development log. Developer acceptance and account-world integration remain.
 The Lourizán replacement and removal of the upper play bar remain local; native
 validation is intermittent. The shared animation review is now closed in ADR 006:
 preserve the original per-phase pixels and derive compatible layers/masks, rather
-than enforce a new fixed-head walk. Implementation and visual checks remain. Do
+than enforce a new fixed-head walk. The local character checks pass; integrated world/browser checks remain. Do
 not describe these corrections as deployed. Registration/mail setup remains separate.
 See the active spec and development log for the next unresolved step. Update this
 checkpoint when it is superseded; do not turn this contract into a second roadmap.

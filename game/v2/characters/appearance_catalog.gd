@@ -31,21 +31,11 @@ const OPTIONS := {
 	"lower_palette": ["charcoal", "earth"],
 	"shoe_palette": ["leather"]
 }
-const PALETTES := {
-	"blond": ["211e25", "8d713d", "c4a664", "e1cd8f"],
-	"navy": ["211e25", "273f51", "38586c", "628094"],
-	"warm": ["211e25", "a36549", "d99a6b", "f0c291"],
-	"olive": ["211e25", "8a6649", "bb9567", "dbb886"],
-	"deep": ["211e25", "573a32", "875c43", "b6835f"],
-	"chestnut": ["211e25", "613e32", "8e593c", "b78150"],
-	"ink": ["211e25", "30303a", "49464a", "68616a"],
-	"teal": ["211e25", "315b60", "42858a", "73a9a0"],
-	"ochre": ["211e25", "856035", "b58b47", "d8b968"],
-	"charcoal": ["211e25", "373641", "53515b", "77717b"],
-	"earth": ["211e25", "51493e", "756b51", "9d9270"],
-	"leather": ["211e25", "544539", "82684f", "c0ae8c"]
-}
+var palette_data: Dictionary = JSON.parse_string(
+	FileAccess.get_file_as_string("res://v2/characters/parts/palettes.json")
+)
 var textures := {
+	"skin": preload("res://v2/characters/parts/skin.png"),
 	"body": preload("res://v2/characters/parts/body.png"),
 	"face_plain": preload("res://v2/characters/parts/face_plain.png"),
 	"face_freckles": preload("res://v2/characters/parts/face_freckles.png"),
@@ -132,6 +122,7 @@ func compose(config: Dictionary) -> Dictionary:
 		hair = "hair_short"
 	var palettes := {
 		"body": config.skin_palette,
+		"skin": config.skin_palette,
 		face: config.skin_palette,
 		hair + "_back": config.hair_palette,
 		hair + "_front": config.hair_palette,
@@ -146,14 +137,18 @@ func compose(config: Dictionary) -> Dictionary:
 		var source: Image = textures[part].get_image()
 		if source.get_size() != Vector2i(320, 512):
 			return {"ok": false, "error": "invalid_part_size:" + part}
-		images[part] = colorize(source, palettes[part])
+		images[part] = colorize(source, palettes[part], part)
 	var frames := SpriteFrames.new()
 	frames.remove_animation(&"default")
 	for row in 8:
 		# Rear hair falls over the shirt when viewed from behind.
-		var order := [hair + "_back", "body", "lower", "shoes", "upper", face, hair + "_front"]
+		var order := [
+			hair + "_back", "body", "skin", "lower", "shoes", "upper", face, hair + "_front"
+		]
 		if DIRECTIONS[row].begins_with("up"):
-			order = ["body", "lower", "shoes", "upper", hair + "_back", face, hair + "_front"]
+			order = [
+				"body", "skin", "lower", "shoes", "upper", hair + "_back", face, hair + "_front"
+			]
 		for walking in [false, true]:
 			var name := StringName(("walk_" if walking else "idle_") + DIRECTIONS[row])
 			frames.add_animation(name)
@@ -161,27 +156,47 @@ func compose(config: Dictionary) -> Dictionary:
 			frames.set_animation_loop(name, true)
 			for phase in 4 if walking else 1:
 				var column: int = phase + 1 if walking else 0
-				var image := Image.create(64, 64, false, Image.FORMAT_RGBA8)
+				var image: Image = images.body.get_region(Rect2i(column * 64, row * 64, 64, 64))
 				for part in order:
-					image.blend_rect(
-						images[part], Rect2i(column * 64, row * 64, 64, 64), Vector2i.ZERO
-					)
+					if part == "body":
+						continue
+					var region := Rect2i(column * 64, row * 64, 64, 64)
+					if part == hair + "_back" and not DIRECTIONS[row].begins_with("up"):
+						for y in 64:
+							for x in 64:
+								var pixel: Color = images[part].get_pixel(
+									region.position.x + x, region.position.y + y
+								)
+								if image.get_pixel(x, y).a == 0 and pixel.a > 0:
+									image.set_pixel(x, y, pixel)
+					else:
+						image.blit_rect_mask(images[part], images[part], region, Vector2i.ZERO)
+
 				frames.add_frame(name, ImageTexture.create_from_image(image))
 	return {"ok": true, "frames": frames, "warnings": warnings}
 
 
-func colorize(source: Image, palette: String) -> Image:
+func colorize(source: Image, palette: String, part: String) -> Image:
+	# Default material colors are a byte-for-byte no-op on the canonical art.
 	var image := source.duplicate() as Image
-	var shades: Array = PALETTES[palette]
+	if part == "body" or palette == palette_data.defaults[part]:
+		return image
+	var target: Array = palette_data.colors[palette]
+	var anchor := int(palette_data.luminance[part])
 	for y in image.get_height():
 		for x in image.get_width():
 			var pixel := image.get_pixel(x, y)
-			if pixel.a < 0.5:
+			if pixel.a8 == 0:
 				continue
-			var index := (
-				0
-				if pixel == Color("211e25")
-				else (1 if pixel.r < 0.5 else (2 if pixel.r < 0.9 else 3))
+			var light := 54 * pixel.r8 + 183 * pixel.g8 + 19 * pixel.b8
+			image.set_pixel(
+				x,
+				y,
+				Color8(
+					mini(255, int(light * int(target[0]) / (256.0 * anchor))),
+					mini(255, int(light * int(target[1]) / (256.0 * anchor))),
+					mini(255, int(light * int(target[2]) / (256.0 * anchor))),
+					pixel.a8
+				)
 			)
-			image.set_pixel(x, y, Color(shades[index]))
 	return image

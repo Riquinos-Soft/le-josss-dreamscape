@@ -1,0 +1,89 @@
+{
+  "version": 1,
+  "colors": {
+    "warm": [
+      217,
+      154,
+      107
+    ],
+    "olive": [
+      187,
+      149,
+      103
+    ],
+    "deep": [
+      135,
+      92,
+      67
+    ],
+    "chestnut": [
+      142,
+      89,
+      60
+    ],
+    "ink": [
+      73,
+      70,
+      74
+    ],
+    "blond": [
+      196,
+      166,
+      100
+    ],
+    "teal": [
+      66,
+      133,
+      138
+    ],
+    "ochre": [
+      181,
+      139,
+      71
+    ],
+    "navy": [
+      56,
+      88,
+      108
+    ],
+    "charcoal": [
+      83,
+      81,
+      91
+    ],
+    "earth": [
+      117,
+      107,
+      81
+    ],
+    "leather": [
+      130,
+      104,
+      79
+    ]
+  },
+  "defaults": {
+    "skin": "warm",
+    "face_plain": "warm",
+    "face_freckles": "warm",
+    "hair_short_back": "chestnut",
+    "hair_short_front": "chestnut",
+    "hair_tied_back": "chestnut",
+    "hair_tied_front": "chestnut",
+    "upper": "teal",
+    "lower": "charcoal",
+    "shoes": "leather"
+  },
+  "luminance": {
+    "skin": 164,
+    "face_plain": 164,
+    "face_freckles": 164,
+    "hair_short_back": 88,
+    "hair_short_front": 88,
+    "hair_tied_back": 88,
+    "hair_tied_front": 88,
+    "upper": 118,
+    "lower": 82,
+    "shoes": 105
+  }
+}

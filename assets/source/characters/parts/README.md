@@ -1,46 +1,53 @@
-# Shared human pose parts
+# Canonical human appearance parts
 
-Original, code-authored pixel masters for ADR 006 / Plan 016 P2b. The editable
-master is [author_parts.gd](author_parts.gd); it draws opaque integer rectangles
-and scan-converted polygons, with no generated whole-character atlas, external
-image input, smoothing or rescaling. Joss is the proportion reference, not a claim
-that this new sample has developer art approval. The sample uses deliberate small
-clusters, an earthy palette and a compact large head; visual review remains open.
+The editable master is [author_parts.gd](author_parts.gd), using the unchanged
+canonical Joss walk/idle atlases and [material_masks.png](material_masks.png).
+This replaces the rejected simplified procedural body under ADR 006's correction.
+No new body, head template or walk cycle is drawn. Default composition preserves
+all visible source RGBA and alpha in all 40 poses; RGB in fully transparent pixels
+may be padded by texture import and is not visible.
 
-From the repository root:
+Run from the repository root:
 
 ```sh
 /Applications/Godot.app/Contents/MacOS/Godot --headless --script assets/source/characters/parts/author_parts.gd
 /Applications/Godot.app/Contents/MacOS/Godot --headless --path game --import --quit
 ```
 
-Output: `game/v2/characters/parts/`, one stable derivative per compatible part.
-Every atlas is 320×512: five 64×64 cells per row (straight-leg idle, four walking
-phases), eight rows (down, up, left, right, down_left, down_right, up_left, up_right).
-Maximum extent is 48px. Feet touch y=59 (baseline y=60, exclusive). Head, neck,
-pelvis and foot anchors for every cell are recorded in `poses.json` alongside the
-parts. The foot anchor is fixed; the torso/head translate by one pixel in alternate
-walking phases. Direction-specific head positions, nose, facial omissions, arm and
-leg offsets are authored directly; asymmetric freckles are never blindly mirrored.
+Runtime derivatives live in `game/v2/characters/parts/`, 320×512: five 64px cells
+per row (idle, walk0–3), eight rows in the original direction order. The mask's red
+byte labels 0=unchanged, 1=skin, 2=hair, 3=upper clothing, 4=lower clothing, 5=shoes.
+It is an explicit offline source asset; no runtime hue or rectangle classification
+occurs. Material layers copy the source pixels and their alpha losslessly. The
+complete base retains facial detail, backpack, outlines and unlabelled pixels.
 
-Parts: skin/body, plain/freckled face, short/tied rear/front hair, shirt, trousers
-and boots. The master uses four indexed opaque swatches (`211e25`, `555555`,
-`aaaaaa`, `ffffff`); the runtime catalog maps these to permitted outline/shadow/
-base/light palettes. Transparent pixels remain transparent. This makes skin,
-hair and clothes independently configurable without storing rendered images.
+Short hair uses the original pixels. The tied accessory is a small code-authored
+pixel cluster attached to each original head pose; freckles only touch labelled
+facial skin and are absent in rear views. Their code remains editable in the
+master. These variants retain the original body and per-phase motion. Default
+parts are copied rather than repeatedly alpha-blended, preserving the original
+partially transparent idle legs.
 
-The rear hair moves behind the body in front/side views and over the shirt in
-rear views. Facial detail is transparent in all three rear-facing rows. The head
-region remains pixel-identical between idle and walking after the anchor offset.
-Idle legs stay straight; walking alternates raised feet and translated arms, with
-side-view strides using explicit horizontal offsets.
+`palettes.json` in the runtime directory is the single palette specification used
+by Godot and the HTML preview. Default palette IDs are a no-op. Other choices map
+source luminance `(54R+183G+19B)` to the target RGB using the part's documented
+anchor: `floor(light * channel / (256 * anchor))`, clamped at 255. Alpha is retained.
+`poses.json` records the canonical head bounds and baseline for each cell; it is
+metadata, not a synthetic translation template. Appearance IDs/schema stay v1.
 
-Runtime imports are lossless, without mipmaps. The presenter uses nearest sampling,
-0.0375m/pixel and 1.05m sprite centre above the actor origin. This puts the pixel
-baseline at the actor's foot plane. Actor physics remains a separate 1.8m capsule.
+Verification:
 
-Inspect all eight direction sheets with:
-`Godot --path game --script ../tools/capture_v2_appearance.gd` (absolute engine path
-as above). Captures go to ignored `build/verification/v2/P2b/`; each sheet shows
-all five poses for both appearances and the matching NPC at the contracted scale.
-Final art, browser interaction and physical-device acceptance remain separate gates.
+```sh
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path game --script res://tests/test_v2_appearance.gd
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path game --script ../tools/export_appearance_fixture.gd
+node tools/test_appearance_preview.cjs
+/Applications/Godot.app/Contents/MacOS/Godot --path game --fixed-fps 60 --script ../tools/capture_character_motion.gd
+```
+
+The parity check compares the actual HTML composition functions against Godot RGBA
+outputs for default, alternate and blond/navy/olive appearances, all 40 poses.
+It proves pixel-function parity with the same decoded inputs; browser PNG decoding
+and the full account UI still require browser validation. Native captures compare
+unchanged Joss, restored default and alternate at 0.0375m/pixel, camera size13.5.
+Technical checks and inspected comparisons do not claim developer art acceptance
+or physical iPhone acceptance.

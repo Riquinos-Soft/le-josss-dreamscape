@@ -30,7 +30,7 @@ python3 tools/account_dev.py /Applications/Godot.app/Contents/MacOS/Godot --head
 
 Open http://127.0.0.1:8008/ and sign in as `test` / `test`. On the first visit,
 choose a name, face, hairstyle, skin, hair and clothing colors. The preview uses
-the same source parts, indexed palettes and directional poses as Godot. Creation
+the same canonical RGBA parts, material palettes and directional poses as Godot. Creation
 is atomic and one character/account is enforced by a database uniqueness constraint.
 A later login opens the saved character in the same preview/editor before play.
 `Guardar y entrar` updates its name/appearance while preserving identity, ownership

@@ -46,7 +46,11 @@ correction listed in the development checkpoint. ADR 006's canonical-pose review
 is complete. One executor/integrator works serially; no delegation is authorized.
 No new architecture, identity schema or art direction decision remains open.
 
-**C1 — Lossless canonical character, ready for execution.**
+**C1 — Lossless canonical character, locally verified 2026-10-18.**
+
+195 appearance checks, 120 HTML/Godot RGBA composition matches, 382 native real-clock
+checks and Web export pass. Eight static sheets inspected. Developer/physical-device
+acceptance and full browser flow remain separate; see development evidence.
 
 - Read ADR 006's correction, the canonical character README, the catalog/presenter,
   `preview.js`, `test_v2_appearance.gd` and the parts source README. Do not reopen

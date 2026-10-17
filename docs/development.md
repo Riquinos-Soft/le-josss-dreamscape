@@ -1,5 +1,52 @@
 # Development setup and verified baseline
 
+## Recovery and canonical character implementation — 2026-10-18
+
+Recovered on main at `f231247`; preserved every inherited runtime change. The
+model/recovery policy is now in AGENTS and Spec003 (commit `a4a81a8`), superseding
+the old Grok preference/blanket Astra gate. Developer confirmed Sol6.1 for the
+active task. `.codex/SESSION_HANDOFF.md` is local, excluded through Git info/exclude
+and never automatically staged. Global Orca instructions were not configured.
+
+The character correction now uses unchanged Joss pixels, explicit source material
+masks, lossless RGBA derivatives and small aligned face/hair accessories. Saved
+version1 appearance IDs/options remain. Default colors are a no-op; original body,
+backpack, detail, silhouette and each walk phase are preserved. Shared palettes
+and pixel-copy rules serve Godot and HTML. The obsolete four-shade/translated-head
+pipeline and tests have been replaced, including regenerated per-pose metadata.
+
+Checks/evidence:
+
+- Appearance test: **195 checks, 0 failures**, including all40 original visible
+  RGBA/alpha poses, idle/walk0 identity, grounding, cache/fallback/phase continuity.
+  Initial exact-byte failures exposed padded RGB under alpha0 and partial idle
+  alpha being blended twice. The compositor now copies material RGBA; comparison
+  ignores only RGB under fully transparent pixels and still checks every alpha.
+- Actual HTML pixel functions vs Godot decoded inputs: **120 full RGBA frames
+  match**, three configurations × eight directions × five poses. Commands:
+  `Godot --headless --path game --script ../tools/export_appearance_fixture.gd`,
+  then `node tools/test_appearance_preview.cjs`. Browser decoding/full UI is a
+  separate remaining check; this does not claim a browser interaction.
+- Native real-clock comparison: **382 checks, 0 failures** through all directions,
+  start/stop/turn transitions, at gameplay scale. Command:
+  `Godot --path game --fixed-fps 60 --script ../tools/capture_character_motion.gd`.
+  Screens: `build/verification/canonical-motion/`. All eight static pose sheets in
+  `build/verification/v2/P2b/` were inspected against the original and alternate.
+- Account Web export succeeds at `build/account-lourizan-web`; log
+  `build/verification/v2/accounts/canonical-web-export.log`. Targeted GDScript
+  lint/format and docs/diff checks pass. Existing gdtoolkit `pkg_resources`
+  deprecation warning remains; no engine warning occurred in the motion driver.
+
+The local Django listener remains8008, authority9080, and this export now contains
+the restored character. The current account scene still lacks the original NPCs
+and travel: next integrate the full location scenes, speakers and marked exits
+for street/Lourizán/salon/Scandale, excluding Casa in UI and trusted travel. The
+inherited no-Casa legacy tests passed112 travel/36 bag checks. The earlier native
+Pazo incomplete-run issue remains unresolved until the integrated route is checked.
+Production and mail setup remain unchanged. Developer/physical-device acceptance
+is not claimed from automated or native comparison evidence.
+
+
 ## Canonical character review closed — 2026-10-17
 
 The developer confirmed the requested Astra review and instructed execution to
