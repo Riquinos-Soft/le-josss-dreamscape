@@ -1,17 +1,19 @@
 # Spec 003 — Astra escalation and economical-agent workflow
 
 Status: implemented
-Updated: 2026-09-26
+Updated: 2026-10-18
 Language: en
 
-Acceptance: the requested protocol is documented. Automatic Grok execution is
-not connected or validated in this session; documentation is not automation.
+Acceptance: the requested protocol is documented, including the 2026-10-18
+model-selection and recovery policy. No automatic model switching is implemented.
 
 ## Objective and scope
 
-Reserve Astra for decisions with substantial rework risk and hand bounded tasks
-to Grok or another available economical model. Reduce total cost, including
-retries and review, rather than optimizing the cost of a single call.
+Use Sol 6.1 Medium for ordinary implementation and integration. Use available
+Luna Low/Medium for small fully specified work, Sol 6.1 High for difficult
+reasoning/debugging, and Astra Medium/High for especially critical architecture,
+security, distributed systems, deep audits or problems Sol cannot resolve. Reduce
+total cost, including retries and recovery; quality and security remain required.
 
 This protocol adds no orchestrator, backend, agent framework or game dependency.
 It does not change the engine or accepted repository architecture. The Notion
@@ -21,52 +23,46 @@ a spec for every subtask or treat a proposal as approved.
 
 ## Requirements
 
-### When to request Astra
+### Model selection before a new task
 
-Stop before implementing the affected part when resolving:
+The distribution and exact Spanish notification format in [AGENTS.md](../../AGENTS.md)
+are authoritative. Check the selected model through Orca when exposed, or use the
+developer's confirmation. Never invent the selected model/effort or switch it.
+Before affected work, recommend an available substantially cheaper sufficient
+model or a necessary stronger model, then stop until the developer switches or
+explicitly authorizes the current model. Do not repeat an approved task notice.
+Ask about an unknown model only when needed; avoid blocking minor work needlessly.
 
-- Changes to architecture, shared contracts or an accepted ADR.
-- A cross-project visual standard: final logical resolution, units, shared
-  camera, master animation format or asset pipeline.
-- Conflicts between the Bible, a spec and code likely to require migration or
-  rebuilding multiple assets/systems.
-- Demonstrated cross-system failures, or measured optimizations that compromise
-  design or Web compatibility.
-- Scope expansion or costly-to-reverse alternatives not settled in the task.
+Resolve shared-contract decisions before implementing their consequences, using
+the least expensive sufficient model. Ordinary integration, routine refactoring,
+known tests and settled contracts do not automatically require Astra. Escalate
+first to Sol 6.1 High for difficult work when sufficient; reserve Astra for the
+critical cases above. A long task alone is not an escalation criterion.
 
-Routine renaming, imports, syntax errors, locally understood test failures,
-documentation and implementation of settled contracts do not require Astra.
-A long task is not automatically an architectural decision.
-
-Use a brief escalation report:
-
-```text
-Decision requiring Astra:
-Stopped task/step:
-Evidence: failure, measurements, requirements, files and lines:
-Options A/B, consequences and recommendation:
-Risk of proceeding without resolution:
-Independent work that can continue:
-```
-
-Ask the developer to switch only when Astra is not already active or authorized
-for that decision. Do not repeat the request or pretend to change the selected
-model. Review must close the decision, update the contract and return routine
-execution to the executor.
+A focused escalation records the stopped step, evidence, viable alternatives,
+recommendation and the risk of proceeding. Close the decision in the relevant
+contract and continue bounded execution without repeated approval.
 
 ### Roles and ownership
 
 | Role | Responsibility | Boundaries |
 | --- | --- | --- |
-| Astra planner/reviewer, when needed | Resolve consequential decisions, contracts and risks | Do not reopen settled ADRs without evidence or take over routine execution |
-| Grok/economical executor | Implement a bounded package, verify it and provide evidence | Do not change shared contracts, expand scope or mark developer art acceptance complete |
+| Stronger-model planner/reviewer, when justified | Resolve consequential decisions, contracts and risks | Do not reopen settled ADRs without evidence or take over routine execution |
+| Sol 6.1 Medium / available economical executor | Implement a bounded package, verify it and provide evidence | Do not change shared contracts, expand scope or mark developer art acceptance complete |
 | Single integrator | Reserve files, inspect results, run integration checks and commit | Do not accept unverified summaries or automatically push |
 | Developer | Product direction, art acceptance and requested decisions | Do not request confirmation again for already authorized reversible work |
 
-Grok is a preference, not an assumed capability. Check available agents/models
-before assigning work. If unavailable, prepare a package for an external session
-or use the already authorized executor. Do not install providers, spend credits,
-invent prices or claim parallel work that did not happen.
+Availability is not assumed. No subagent work is authorized by this policy.
+Do not install providers, spend credits or claim parallel work without the
+required authorization and verified capability.
+
+### Recovery checkpoint
+
+Maintain `.codex/SESSION_HANDOFF.md` after meaningful phases with the active goal,
+modified paths, completed and pending work, actual checks and next concrete step.
+Keep it local and excluded from automatic commits; never put secrets there.
+Recovery checks branch/status/recent commits/diffs before editing, preserves all
+existing work and reports any specific missing fact rather than inventing it.
 
 ### Task lifecycle
 
@@ -109,7 +105,7 @@ invent prices or claim parallel work that did not happen.
   a request to audit the whole repository for each task.
 - Do not implement the same task with two models merely to compare them.
 - After two targeted failed attempts, summarize evidence and revisit the diagnosis.
-  Request Astra only when an escalation criterion applies; repeated local errors
+  Recommend a stronger model only when justified; repeated local errors
   do not authorize migration or automatic escalation.
 - Record elapsed time, retries and actual tokens/cost when available. Otherwise
   write `unavailable`; do not present estimated savings as facts.
@@ -125,11 +121,11 @@ publication follows merely from implementing this protocol.
 
 - A concrete plan records dependencies and copyable bounded packages.
 - Each package specifies output, file ownership and verification without guessing.
-- Astra blockers include evidence and a clearly stated decision.
+- Model changes pause work with evidence and the required notification.
 - Shared files and integration commits have one responsible integrator.
 - Documentation readiness is distinct from connected automation.
 
 ## Validation
 
 The protocol and task template exist and were reviewed for the requested workflow.
-Grok connectivity, model selection and cost savings are not claimed.
+Automatic model switching, global Orca instructions and cost savings are not claimed.

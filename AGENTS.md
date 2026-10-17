@@ -60,15 +60,24 @@ For gameplay or runtime changes:
 
 ## Model and token efficiency
 
-- Follow `docs/specs/003-agent-workflow.md` for escalation, low-cost execution, file ownership, and integration. Prepare delegable plans with `docs/plans/task-template.md` before multi-agent implementation. Prefer Grok for bounded execution when available and authorized; never claim it is connected or selected without checking.
-- Request Astra before implementing unresolved consequential decisions described in that protocol. Continue routine work under already settled contracts without repeated confirmation. During parallel work, only the assigned integrator commits shared-workspace results; this refines the automatic commit rule without authorizing branches, pushes, or unrelated edits.
+- Before each new task, choose the least expensive available model sufficient for the work. Check Orca's selected model when exposed; otherwise use the developer's explicit confirmation. Never invent availability, the selected effort, costs or savings, and never change models yourself.
+- Luna Low/Medium: small, fully specified edits, simple documentation/configuration, basic unit tests and repetitive cleanup.
+- Sol 6.1 Medium is the principal model for ordinary features, game development, refactoring, bug fixes, integration, UI, backend and tests.
+- Sol 6.1 High: complex reasoning, difficult architectural refactoring and debugging after reasonable focused attempts.
+- Astra Medium/High: especially critical architecture, important security problems, complex distributed-system design, deep audits, or problems Sol cannot resolve satisfactorily. Settled contracts and routine integration do not require repeated escalation.
+- If another available model is substantially cheaper and sufficient, or a stronger model is needed, notify the developer BEFORE starting the affected task, then STOP until they switch or explicitly authorize the current model. Use exactly:
 
-- Treat expensive, high-reasoning models as an architectural resource, not the default implementation engine.
-- Use the session's normal, efficient implementation model for routine implementation, tests, local refactors, documentation, and straightforward fixes.
-- Do not request or recommend a higher-reasoning model for routine work.
-- If work reaches a genuinely consequential architectural decision, difficult cross-system debugging, major performance investigation, or ambiguity likely to cause expensive rework, stop before implementing that part and briefly recommend switching to a higher-reasoning model such as Astra Medium. Do not repeat the recommendation or assume agents can change Orca's selected model.
-- Inspect only relevant repository areas. Prefer targeted searches, do not summarize unchanged files or repeat established context, and do not reopen every spec or ADR without cause.
-- Stop when the requested scope is complete.
+  ⚙️ Cambio recomendado: [modelo actual] → [modelo recomendado]
+
+  Motivo: [explicación en una frase].
+
+  Cuando cambies el modelo, dime "continuamos" y retomaré la tarea.
+
+- Do not repeat an approved task's model notice. If the selected model is unknown, ask only when that information is necessary to decide; do not unnecessarily block small tasks. Never pretend an agent can change Orca's selected model.
+- Follow `docs/specs/003-agent-workflow.md` for focused diagnostics, ownership and integration. This distribution supersedes the earlier Grok preference and blanket Astra gate. Sub-agents still require an explicit request; prepare bounded packages with `docs/plans/task-template.md` before authorized delegation.
+- Use selective searches and diffs; reuse unchanged findings. Split large work into small verifiable phases, stop unproductive retry loops and preserve code quality, tests and security.
+- Keep a short recovery checkpoint at `.codex/SESSION_HANDOFF.md`: active goal, modified paths, completed/pending work, actual checks and next concrete step. Update after meaningful phases. Never store secrets or credentials there and never include it in an automatic commit.
+- At recovery, inspect current branch, status, recent commits and the checkpoint before editing. Preserve existing work; never invent an interrupted task's state. Stop when the requested scope is complete.
 
 ## Project philosophy
 
