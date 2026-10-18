@@ -83,9 +83,7 @@ func box(position: Vector3, size: Vector3, material: Material, solid := false) -
 		collision(position, shape)
 
 
-func collision(
-	position: Vector3, shape: Shape3D, rotation: Vector3 = Vector3.ZERO
-) -> void:
+func collision(position: Vector3, shape: Shape3D, rotation: Vector3 = Vector3.ZERO) -> void:
 	var body := StaticBody3D.new()
 	body.position = position
 	body.rotation = rotation
