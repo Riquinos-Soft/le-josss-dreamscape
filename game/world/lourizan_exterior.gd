@@ -221,10 +221,11 @@ func build_stairs() -> void:
 			var rail_position := Vector3(5.85 + cos(angle) * 2.0, 0.42, z + sin(angle) * 2.0)
 			var post_base := rail_position - Vector3.UP * 0.34
 			carved_post(post_base, 0.90)
-			var post_shape := CylinderShape3D.new()
-			post_shape.height = 0.90
-			post_shape.radius = 0.13
-			collision(post_base + Vector3.UP * 0.45, post_shape)
+			if index in [0, 8]:
+				var post_shape := CylinderShape3D.new()
+				post_shape.height = 0.90
+				post_shape.radius = 0.13
+				collision(post_base + Vector3.UP * 0.45, post_shape)
 		for step in 18:
 			var height := (18 - step) * 0.2
 			box(Vector3(1.5 + step * 0.24, height / 2, z), Vector3(0.26, height, 4.2), stone)

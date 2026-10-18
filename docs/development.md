@@ -13,8 +13,9 @@ Account Web export succeeds with no Godot script or export errors:
 `build/verification/v2/accounts/collision-facing-export.log`. LAN page and game
 asset endpoints return HTTP 200. Local authority restarted from updated scene and listens
 on 9080; LAN web service remains at 192.168.1.49:8008. No automated gameplay tests
-were run in this step. Chrome/iPhone visual collision and all eight direction
-acceptance remains with the developer; instruct a full page reload for fresh assets.
+were run in this step. The 54 check account world fixture and full HTTP/WebSocket/PostgreSQL roundtrip pass
+with the new colliders; the roundtrip verifies NPC movement and walking state. Chrome/iPhone
+visual collision and all eight direction acceptance remains with the developer; instruct a full page reload for fresh assets.
 No production changes.
 
 ## Local reconnect and Lucas patrol recovery — 2026-10-18

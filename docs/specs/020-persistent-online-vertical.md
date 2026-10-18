@@ -328,8 +328,8 @@ whitespace checks for this change; runtime acceptance is future work.
 
 ### Pazo collision and account facing correction — 2026-10-18
 
-Visible stair handrails, baluster posts and statue pedestals now have matching
-player collision. Existing vegetation trunks already block movement. Account NPCs
+Stair handrails, stair-side baluster posts and statue pedestals now have matching
+player collision. Decorative landing posts retain their authored access gaps to both stairs. Existing vegetation trunks already block movement. Account NPCs
 resolve their original eight-direction facing from authoritative snapshot deltas
 projected through the account camera; position interpolation remains visual only.
 The updated account export is ready locally for developer review. Chrome/iPhone
