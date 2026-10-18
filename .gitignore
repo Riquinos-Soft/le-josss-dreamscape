@@ -18,3 +18,5 @@ game/.export_credentials.cfg
 __pycache__/
 *.pyc
 /backend/static-collected/
+# Local recovery checkpoint; never include credentials or auto-commit it.
+/.codex/SESSION_HANDOFF.md
