@@ -17,31 +17,13 @@ func run() -> void:
 		"architecture batches keep node count bounded"
 	)
 	await capture("lourizan-start")
-	var south_crossings := 0
-	for z in [-10, -8, -6, -4, -2, 0, 2, 4, 6, 4, 2, 0, -2, -4, -6]:
-		if z == -6:
-			# The forecourt's south statue has a solid pedestal. Walk around it
-			# on the east at the end of the outward and return portions.
-			var side_z := -8 if south_crossings == 0 else -4
-			if not await walk_to(Vector3(8, 0, side_z) * scene.place_scale):
-				finish()
-				return
-			var exit_z := -4 if south_crossings == 0 else -12
-			if not await walk_to(Vector3(8, 0, exit_z) * scene.place_scale):
-				finish()
-				return
-			if south_crossings > 0:
-				if not await walk_to(Vector3(6, 0, -12) * scene.place_scale):
-					finish()
-					return
-				break
-			south_crossings += 1
-		if not await walk_to(Vector3(6, 0, z) * scene.place_scale):
-			finish()
-			return
+	if not await walk_forecourt_round_trip():
+		finish()
+		return
 	check(player.is_on_floor(), "forecourt round trip stays grounded")
 	for point in [
-		Vector3(7, 0, -12),
+		Vector3(8, 0, -12),
+		Vector3(8, 0, 9),
 		Vector3(7, 0, 9),
 		Vector3(5.6, 0, 9),
 		Vector3(3.5, 0, 9),
@@ -74,6 +56,28 @@ func run() -> void:
 			return
 	check(player.position.y < 0.5, "second stair returns to the forecourt")
 	finish()
+
+
+func walk_forecourt_round_trip() -> bool:
+	var south_crossings := 0
+	for z in [-10, -8, -6, -4, -2, 0, 2, 4, 6, 4, 2, 0, -2, -4, -6]:
+		if z == -6:
+			# The forecourt's south statue has a solid pedestal. Walk around it
+			# on the east at the end of the outward and return portions.
+			var side_z := -8 if south_crossings == 0 else -4
+			if not await walk_to(Vector3(8, 0, side_z) * scene.place_scale):
+				return false
+			var exit_z := -4 if south_crossings == 0 else -12
+			if not await walk_to(Vector3(8, 0, exit_z) * scene.place_scale):
+				return false
+			if south_crossings > 0:
+				if not await walk_to(Vector3(6, 0, -12) * scene.place_scale):
+					return false
+				return true
+			south_crossings += 1
+		if not await walk_to(Vector3(6, 0, z) * scene.place_scale):
+			return false
+	return false
 
 
 func finish() -> void:

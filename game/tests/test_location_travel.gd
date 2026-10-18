@@ -122,9 +122,11 @@ func run() -> void:
 		)
 		check(session.near_exit == null, "arrival does not reopen map")
 		if cycle == 0:
-			for z in [-10, -8, -6, -4]:
+			# The south statue is solid; go around it on the east before
+			# continuing the paved route.
+			for point in [Vector3(8, 0, 0), Vector3(8, 0, -4), Vector3(6, 0, -4)]:
 				check(
-					await walk_to(Vector3(6, 0, z) * session.active_location.place_scale),
+					await walk_to(point * session.active_location.place_scale),
 					"Pazo paving reaches waypoint"
 				)
 		else:

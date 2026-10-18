@@ -153,7 +153,7 @@ def exercise_world(stack, client, jar, ws, character):
             break
     else:
         raise AssertionError("Lucas Maconheiro patrol is frozen")
-    for x, z in [(8.4, 10.8), (6.72, 10.8), (4.2, 10.8), (.6, 10.8), (-.72, 4.56)]:
+    for x, z in [(8.4, 15.6), (.6, 15.6), (.6, 10.8), (-.72, 4.56)]:
         walk_to(x, z)
     cross_portal(-2.82, 4.56, True)
     walk_to(-88.3, 5.8)
@@ -162,7 +162,7 @@ def exercise_world(stack, client, jar, ws, character):
     send(ws, "talk_end")
     walk_to(-90, 5.9)
     cross_portal(-90, 7.95, False)
-    for x, z in [(.6, 10.8), (4.2, 10.8), (8.4, 10.8), (10.8, 10.8), (10.8, 0)]:
+    for x, z in [(.6, 15.6), (8.4, 15.6), (8.4, 10.8), (10.8, 10.8), (10.8, 0)]:
         walk_to(x, z)
     walk_to(7.2, -4.8)
     travel("street")
