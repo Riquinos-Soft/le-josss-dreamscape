@@ -1,5 +1,16 @@
 # Development setup and verified baseline
 
+## Pazo south stair clearance — 2026-10-19
+
+The first post-push CI run found that the new solid south statue pedestal
+intersected the legacy Lourizán exterior test route. The route now walks east of
+the pedestal while preserving its collision. The stair-end railing post collider
+was also removed to keep the authored entrance clear, matching the visible route.
+The focused Godot 4.7.2 suite passes: `test_lourizan_exterior.gd` (42 checks, 0
+failures). `gdformat`/`gdlint` are not installed in this local shell, so CI remains
+the source for those checks. The previous workflow's static deploy was skipped
+after the test failure; a new push is needed to rerun CI and publishing.
+
 ## Pazo collision and account NPC facing — 2026-10-18
 
 Developer reported walking through visible Pazo objects and Lucas Maconheiro using

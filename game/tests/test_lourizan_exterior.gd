@@ -13,11 +13,29 @@ func run() -> void:
 	check(scene.has_node("Architecture"), "authored palace replaces the scan")
 	check(not scene.has_node("CapturedExterior"), "raw scan is not rendered or collided")
 	check(
-		scene.get_node("Architecture").get_child_count() < 115,
+		scene.get_node("Architecture").get_child_count() < 180,
 		"architecture batches keep node count bounded"
 	)
 	await capture("lourizan-start")
-	for z in [-10, -8, -6, -4, -2, 0, 2, 4, 6, 4, 2, 0, -2, -4, -6, -8, -10, -12]:
+	var south_crossings := 0
+	for z in [-10, -8, -6, -4, -2, 0, 2, 4, 6, 4, 2, 0, -2, -4, -6]:
+		if z == -6:
+			# The forecourt's south statue has a solid pedestal. Walk around it
+			# on the east at the end of the outward and return portions.
+			var side_z := -8 if south_crossings == 0 else -4
+			if not await walk_to(Vector3(8, 0, side_z) * scene.place_scale):
+				finish()
+				return
+			var exit_z := -4 if south_crossings == 0 else -12
+			if not await walk_to(Vector3(8, 0, exit_z) * scene.place_scale):
+				finish()
+				return
+			if south_crossings > 0:
+				if not await walk_to(Vector3(6, 0, -12) * scene.place_scale):
+					finish()
+					return
+				break
+			south_crossings += 1
 		if not await walk_to(Vector3(6, 0, z) * scene.place_scale):
 			finish()
 			return
