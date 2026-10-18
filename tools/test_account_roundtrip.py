@@ -169,7 +169,15 @@ def exercise_world(stack, client, jar, ws, character):
     send(ws, "talk_end")
     walk_to(-90, 5.9)
     cross_portal(-90, 7.95, False)
-    for x, z in [(3.5, 9.0), (6.0, 9.0), (8.0, 9.0), (8.0, -4.0), (6.0, -4.0)]:
+    for x, z in [
+        (.5, 9.0),
+        (1.5, 9.0),
+        (3.5, 9.0),
+        (6.0, 9.0),
+        (8.0, 9.0),
+        (8.0, -4.0),
+        (6.0, -4.0),
+    ]:
         walk_to(x, z)
     walk_to(7.2, -4.8)
     travel("street")
