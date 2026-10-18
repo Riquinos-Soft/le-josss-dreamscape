@@ -55,9 +55,9 @@ def post(client, jar, path, data=None):
     body = urllib.parse.urlencode({**(data or {}), "csrfmiddlewaretoken": token}).encode()
     return client.open(urllib.request.Request(origin + path, body, headers={"Referer": origin + path})).read()
 
-def login():
+def login(alias="test"):
     client, jar = browser()
-    post(client, jar, "/", {"email": "test", "password": "test"})
+    post(client, jar, "/", {"email": alias, "password": alias})
     return client, jar
 
 def join(stack, client, jar):
@@ -88,6 +88,84 @@ def start_authority(stack):
         with socket.create_connection(("127.0.0.1", 9090), timeout=.1): return True
     wait_for(probe)
     return process
+
+def exercise_presence(stack, client, jar, ws, character):
+    second, second_jar = login("test2")
+    assert b'Crea tu personaje' in second.open(origin).read()
+    post(second, second_jar, "/character/create/", {
+        "name": "Segundo Viajero", "face": "plain", "hair": "short",
+        "skin_palette": "deep", "hair_palette": "blond", "upper_palette": "navy", "lower_palette": "earth"})
+    other_ws, other, _ = join(stack, second, second_jar)
+    assert other["id"] != character["id"] and other["appearance"] != character["appearance"]
+
+    def presence(socket, identifier, present=True, predicate=lambda value: True):
+        deadline = time.monotonic() + 8
+        while time.monotonic() < deadline:
+            snapshot = receive(socket, "snapshot")
+            players = snapshot["players"]
+            if (identifier in players) == present and (not present or predicate(players[identifier])):
+                return snapshot
+        raise AssertionError("Remote presence did not converge")
+
+    public = {"name", "appearance", "position", "direction", "walking"}
+    first_view = presence(ws, other["id"])
+    second_view = presence(other_ws, character["id"])
+    assert set(first_view["players"]) == {other["id"]}
+    assert set(second_view["players"]) == {character["id"]}
+    assert set(first_view["players"][other["id"]]) == public
+    assert set(second_view["players"][character["id"]]) == public
+    assert first_view["players"][other["id"]]["appearance"] == other["appearance"]
+    assert second_view["players"][character["id"]]["appearance"] == character["appearance"]
+    start = other["position"]
+    sequence = 1
+    # A forged actor ID and position cannot move the observer's character.
+    send(other_ws, "move", sequence=sequence, intent=[0, 1], character_id=character["id"], position=[999, 999, 999])
+    moving = presence(ws, other["id"], predicate=lambda value: value["walking"] and value["position"][2] > start[2] + .25)
+    assert abs(moving["position"][0] - first_view["position"][0]) < .01
+    assert abs(moving["position"][2] - first_view["position"][2]) < .01
+    sequence += 1
+    send(other_ws, "move", sequence=sequence, intent=[0, 0])
+    stopped = presence(ws, other["id"], predicate=lambda value: not value["walking"])
+    saved_position = stopped["players"][other["id"]]["position"]
+    other_ws.close()
+    presence(ws, other["id"], present=False)
+    other_ws, resumed, _ = join(stack, second, second_jar)
+    assert resumed["id"] == other["id"] and resumed["appearance"] == other["appearance"]
+    assert all(abs(a-b) < .03 for a, b in zip(resumed["position"], saved_position))
+    presence(ws, other["id"])
+    sequence = 0
+    position = resumed["position"]
+    for x, z in [(9.6, -4), (8, -4), (7.2, -4.8)]:
+        deadline = time.monotonic() + 10
+        while math.hypot(position[0] - x, position[2] - z) > .2:
+            assert time.monotonic() < deadline, ("Second player route blocked", position, [x, z])
+            dx, dz = x - position[0], z - position[2]
+            distance = math.hypot(dx, dz)
+            sequence += 1
+            scale = min(1, distance * 2) / distance
+            send(other_ws, "move", sequence=sequence, intent=[dx * scale, dz * scale])
+            position = receive(other_ws, "snapshot")["position"]
+    send(other_ws, "move", sequence=sequence + 1, intent=[0, 0])
+    send(other_ws, "travel", destination="street")
+    assert receive(other_ws, "travelled")["place"] == "street"
+    presence(ws, other["id"], present=False)
+    assert receive(other_ws, "snapshot")["players"] == {}
+    send(other_ws, "leave")
+    receive(other_ws, "left")
+    other_ws.close()
+    post(second, second_jar, "/logout/")
+    returning, returning_jar = login("test2")
+    other_ws, restored, _ = join(stack, returning, returning_jar)
+    assert restored["id"] == other["id"] and restored["place"] == "street"
+    assert restored["appearance"] == other["appearance"]
+    send(other_ws, "leave")
+    receive(other_ws, "left")
+    other_ws.close()
+    post(returning, returning_jar, "/logout/")
+    print("PASS: two accounts see canonical public appearances and movement/stop; self/private data excluded,")
+    print("forged actor cannot move the observer, disconnect/rejoin removes/restores presence, travel isolates places,")
+    print("and the second account resumes its independent identity/appearance/destination.")
+
 
 def exercise_world(stack, client, jar, ws, character):
     """Use real intents/exits, not privileged teleports, across all public maps."""
@@ -219,7 +297,7 @@ try:
     with ExitStack() as stack:
         import sys
         manage = [sys.executable, str(ROOT / "backend/manage.py")]
-        for command in (["migrate", "--noinput"], ["seed_test_account"]):
+        for command in (["migrate", "--noinput"], ["seed_test_account"], ["seed_test_account", "--second"]):
             subprocess.run(manage + command, env=env, check=True, stdout=subprocess.DEVNULL)
         service_log = stack.enter_context(open(logs / "roundtrip-service.log", "w"))
         service = subprocess.Popen(manage + ["runserver", "127.0.0.1:8018", "--noreload"], env=env,
@@ -270,6 +348,7 @@ try:
         assert edited["id"] == final["id"] and edited["appearance"]["hair"] == "short"
         assert edited["name"] == "Viajero Nuevo"
         assert all(abs(a - b) < .01 for a, b in zip(edited["position"], final["position"]))
+        exercise_presence(stack, fresh, fresh_jar, edited_ws, edited)
         edited_ws = exercise_world(stack, fresh, fresh_jar, edited_ws, edited)
         send(edited_ws, "leave")
         receive(edited_ws, "left")

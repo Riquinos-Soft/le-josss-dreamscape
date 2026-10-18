@@ -130,6 +130,7 @@ func _process(delta: float) -> void:
 						"type": "snapshot",
 						"place": peer.character.place,
 						"position": vector_array(peer.actor.position),
+						"players": player_states(peer),
 						"npcs": npc_states(peer)
 					}
 				)
@@ -174,6 +175,10 @@ func poll_peer(peer: Dictionary, now: int) -> void:
 		):
 			peer.actor.set_movement_intent(Vector3.ZERO)
 		var position: Vector3 = peer.actor.position
+		var motion: Vector3 = peer.actor.get_real_velocity()
+		motion.y = 0
+		if motion.length() > 0.06:
+			peer.facing_motion = motion.normalized()
 		if peer.actor.is_on_floor() and Destinations.valid_position(peer.character.place, position):
 			peer.safe = position
 		if not peer.busy and not peer.leaving and not peer.get("travelling", false):
@@ -301,6 +306,30 @@ func remove_peer(peer: Dictionary) -> void:
 
 func vector_array(value: Vector3) -> Array:
 	return [value.x, value.y, value.z]
+
+
+func player_states(observer: Dictionary) -> Dictionary:
+	var result := {}
+	for peer in peers:
+		if (
+			peer == observer
+			or peer.actor == null
+			or peer.failed
+			or peer.leaving
+			or peer.get("travelling", false)
+			or peer.character.place != observer.character.place
+		):
+			continue
+		var motion: Vector3 = peer.actor.get_real_velocity()
+		motion.y = 0
+		result[peer.character.id] = {
+			"name": peer.character.name,
+			"appearance": peer.character.appearance,
+			"position": vector_array(peer.actor.position),
+			"direction": vector_array(peer.get("facing_motion", Vector3.BACK)),
+			"walking": motion.length() > 0.06
+		}
+	return result
 
 
 func request_travel(peer: Dictionary, destination: Variant) -> void:

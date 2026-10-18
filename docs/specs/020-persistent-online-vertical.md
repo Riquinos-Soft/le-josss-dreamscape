@@ -4,6 +4,45 @@ Status: in-progress
 Updated: 2026-10-19
 Language: en
 
+## Current increment — two-player presence, 2026-10-19
+
+Developer authorized visible online players and a second independent `test2:test2`
+account, plus removing the connecting banner. This supersedes the earlier
+other-player replication exclusion only for movement/presence in existing places.
+Keep the current authority, same-account session fencing and durable checkpoints.
+No shared inventory, trading, combat or new networking infrastructure is included.
+
+Design fit: reuse the account player's canonical Joss appearance presenter,
+0.0375 pixel size, 1.05m sprite offset, camera-relative eight-way walking and
+continuous step phase. Remote players use the same catalog and lighting; name
+labels reuse the existing NPC marker's font, outline and pixel scale. Compare
+two differently customized characters beside one another in the authored Pazo,
+walking/turning/stopping at the same camera scale. No replacement character art.
+
+Acceptance:
+- Two distinct accounts in the same place see each other's authoritative name,
+  appearance, position and walking/direction; exclude the local character and
+  accounts, credentials, tickets and private session/checkpoint metadata.
+- Remote actors cannot drive local input or collision. Join/leave, failed/replaced
+  sessions, travel and reconnect update presence without ghost characters or
+  showing players in other places. Existing intent-only movement validation stays.
+- Provision `test2:test2` explicitly and idempotently without resetting either
+  account or creating a character before its first creation screen.
+- Hide connecting/recovering banners during normal startup and reconnect attempts;
+  retain actionable connection errors and the reconnect button on failure.
+- Verify two real HTTP/WebSocket sessions: reciprocal presence, distinct appearance,
+  movement/stop, place isolation, disconnect/rejoin and independent saved identity.
+  Run relevant backend/Godot tests and Web export; physical iPhone art review stays
+  separate from automated/protocol evidence.
+
+Implementation/acceptance checkpoint: local implementation and second-account
+provisioning complete. Nineteen backend tests, 25 Godot suites, the extended real
+two-account HTTP/WebSocket/PostgreSQL roundtrip, connection-UI transitions and Web
+export pass. The focused native renderer has 30 checks; an in-world capture shows
+both canonical characters with distinct customization. Production publication and
+physical iPhone acceptance remain pending. Evidence/commands are recorded in
+[development](../development.md).
+
 Deployment follow-up (2026-10-19): validate and publish the account client at
 `account-game/`, matching the CI export and existing account-service mount.
 The retired `v2/` laboratory export must not block publication. Acceptance requires
@@ -19,8 +58,8 @@ provider selection and production replacement are not implied by writing the pla
 The developer subsequently authorized beginning execution and pushing increments
 on 2026-10-14. Acceptance: P0 inventory/build reference and P2 laboratory implementation
 complete; the account-entry/character-checkpoint test slice is deployed on OVH,
-with HTTPS/WSS creation, movement, logout/resume and restart recovery verified. Inventory, quests
-and multiplayer replication remain unimplemented. P1 technical contracts
+with HTTPS/WSS creation, movement, logout/resume and restart recovery verified. Inventory and quests
+remain unimplemented; two-player presence is the current increment above. P1 technical contracts
 are now reviewed in ADRs 006/007; P2 awaits visual/gameplay review. The physical target is iPhone 16 Pro + Chrome; physical
 acceptance and D4 launch choices remain open. See [baseline inventory](../refactor-baseline.md).
 

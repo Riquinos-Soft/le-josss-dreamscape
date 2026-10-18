@@ -103,6 +103,31 @@ class AccountTests(TestCase):
             self.client.post("/", {"email": "test", "password": "wrong"})
         self.assertContains(Client().post("/", {"email": "test", "password": "test"}), "Demasiados intentos")
 
+    def test_second_account_is_independent_and_seed_preserves_both(self):
+        self.create_character()
+        first = Character.objects.get()
+        call_command("seed_test_account", second=True)
+        second = Client()
+        self.assertEqual(second.post("/", {"email": "test2", "password": "test2"}).status_code, 302)
+        self.assertRedirects(second.get("/"), "/character/create/", fetch_redirect_response=False)
+        second.post("/character/create/", {"name": "Segundo", **DEFAULT, "hair_palette": "blond"})
+        other = Character.objects.exclude(id=first.id).get()
+        account = other.account
+        password = account.password
+        call_command("seed_test_account", second=True)
+        call_command("seed_test_account")
+        account.refresh_from_db()
+        first.refresh_from_db()
+        other.refresh_from_db()
+        self.assertEqual(account.password, password)
+        self.assertEqual(first.account_id, self.user.id)
+        self.assertNotEqual(first.account_id, other.account_id)
+        self.assertEqual(first.appearance, DEFAULT)
+        self.assertEqual(other.appearance["hair_palette"], "blond")
+        response = second.get("/play/")
+        self.assertContains(response, 'role="status" hidden')
+        self.assertNotContains(response, "Conectando")
+
     @override_settings(REGISTRATION_ENABLED=True)
     def test_registration_verification_and_duplicate(self):
         data = {"email": "NEW@example.invalid", "password": "A-strong-8430-password", "confirmation": "A-strong-8430-password"}

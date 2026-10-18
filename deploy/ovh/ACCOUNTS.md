@@ -7,6 +7,27 @@ now authorized public registration; it remains disabled until outgoing mail and
 the documented public launch requirements below are configured and verified.
 The static-only Actions deployment cannot create services or migrate PostgreSQL.
 
+## Two-player testing
+
+The online-presence increment adds same-place player snapshots to the authority
+and renders them through the canonical account character presenter. Update both
+the authority/backend images and the `account-game/` export together. Preserve
+existing accounts, secrets, character records and migration history.
+
+After installing the tested source and updating the account service, explicitly
+provision the second requested account without resetting either user:
+
+```sh
+sudo docker compose -f compose.yaml -f compose.accounts.yaml exec -T accounts python manage.py seed_test_account --second
+```
+
+Use `test:test` and `test2:test2` on different devices, browser profiles, or a normal
+and private browser window. Two tabs in the same browser profile share a login
+cookie; they are not independent accounts. `test2` creates its own character on
+first entry. Both characters must be in the same place to see each other. Opening
+the same character twice still fences its older session. Appearance/positions
+remain independent; this does not add trading, combat or shared item state.
+
 ## Reviewable deployment
 
 Use the tested commit, copy its checkout to `/opt/dreamscape/source`, and copy

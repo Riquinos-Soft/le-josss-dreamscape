@@ -1,5 +1,57 @@
 # Development setup and verified baseline
 
+## Two-account online presence and quiet connection UI — 2026-10-19
+
+Spec 020's newly authorized increment adds a public `players` snapshot keyed by
+character ID, filtered by place and active session. It excludes self, failed,
+leaving and travelling peers and exposes only name, appearance, local position,
+last movement direction and walking. No session/account/ticket metadata is
+replicated. Intent validation, world collisions and individual saves are retained.
+Remote characters reuse the canonical presenter/catalog and camera-relative
+direction helper with collision/physics/input disabled, interpolated position and
+explicit removal on disconnect/travel. Name labels reuse the NPC marker style.
+
+`seed_test_account --second` idempotently provisions the developer-requested
+`test2:test2` login alias without changing `test` or precreating a character.
+Startup/reconnect banners are hidden; actual errors/timeouts keep their reconnect
+action. The play adapter asset URL is versioned to refresh cached scripts.
+
+Validation (actual commands/results):
+- `python3 tools/account_dev.py build/account-venv/bin/python backend/manage.py test accounts --verbosity 1`:
+  19 tests pass, including independent aliases and seed preservation.
+- `python3 tools/account_dev.py build/account-venv/bin/python tools/test_account_roundtrip.py --godot /Applications/Godot.app/Contents/MacOS/Godot`:
+  two real sessions pass reciprocal presence/appearance, movement/stop, forged
+  actor ID isolation, disconnect/rejoin, map isolation and independent resume;
+  existing travel/NPC/dialogue/fencing/restart tests also pass.
+- `make test GODOT=/Applications/Godot.app/Contents/MacOS/Godot`: 25 suites pass,
+  with no runtime errors/warnings in this run. This is not a fix claim for the
+  historical intermittent Jolt warning. Final expanded native remote-player
+  fixture passes 30 checks, covering all eight directions, idle, appearance
+  replacement/canonical frame reuse, collision isolation and cache cleanup.
+- `node tools/test_play_connection.cjs`: quiet startup/reconnect and actionable
+  errors/timeouts pass; CI now includes it. Five deployment-safety tests pass.
+- Account Web export to `build/online-web` succeeds. Changed scripts pass
+  formatting/lint and docs/diff checks. Pinned gdtoolkit emits the existing
+  `pkg_resources` deprecation warning; an initial ad-hoc tool environment without
+  the required setuptools failed, then the pinned requirements environment passed.
+
+Evidence: `build/verification/online/{backend,roundtrip,full-godot,native,export}.log`,
+`two-characters.png`. Native in-world capture inspected: both customized characters
+retain canonical detail and scale; this is a fixture capture, not a manual
+two-browser or physical-iPhone claim. The first capture's remote was behind a tree;
+the fixture was moved to a clear comparison spot. The initial frame assertion ran
+before sprite presentation and was corrected to await processing.
+
+Local web launchers 94245/94246 (children 94249/94248) now serve updated source and
+`build/online-web` on localhost/LAN port 8008. Existing authority supervisor 85557
+restarted its child to 94278 after the web restart; no second authority was added.
+Live local logins confirm hidden connection UI and untouched first creation for
+`test2`. Existing test character data was preserved. LAN HTTP remains subject to
+the previously documented Godot secure-context limitation on phones; use public
+HTTPS after authorized publication. Production remains at `80e35e2`: these new
+services/client/test2 have not been published. See [account deployment](../deploy/ovh/ACCOUNTS.md)
+for the matching-service and second-account provisioning steps.
+
 ## OVH authored-world activation — 2026-10-19
 
 CI run 39172967662 passed all gates and published static release `ed232de`.

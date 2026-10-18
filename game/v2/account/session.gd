@@ -26,6 +26,7 @@ var facing: StringName = &"down"
 var last_packet := 0
 var connection_started := false
 var world_view: Node3D
+var remote_players: Node3D
 
 
 func _ready() -> void:
@@ -84,6 +85,9 @@ func _ready() -> void:
 	world_view.name = "WorldView"
 	world_view.session = self
 	add_child(world_view)
+	remote_players = preload("res://v2/account/remote_players.gd").new()
+	remote_players.session = self
+	add_child(remote_players)
 	if OS.has_feature("web"):
 		(
 			JavaScriptBridge
@@ -177,6 +181,7 @@ func connect_game(url: String, game_ticket: String) -> void:
 func handle_packet(message: Dictionary) -> void:
 	match message.get("type", ""):
 		"welcome":
+			remote_players.clear()
 			var character: Dictionary = message.character
 			var config: Dictionary = character.appearance
 			config.version = int(config.version)
@@ -208,10 +213,12 @@ func handle_packet(message: Dictionary) -> void:
 			world_view.refresh_controls()
 			notify_parent({"type": "joined", "saved_at": character.saved_at})
 		"snapshot":
-			if admitted:
+			if admitted and message.get("place", String(current_id)) == String(current_id):
 				target_position = to_vector(message.position)
 				world_view.handle(message)
+				remote_players.update_players(message.get("players", {}))
 		"travelled":
+			remote_players.clear()
 			world_view.handle(message)
 			target_position = to_vector(message.position)
 			actor.position = target_position
@@ -222,6 +229,7 @@ func handle_packet(message: Dictionary) -> void:
 		"saved":
 			notify_parent(message)
 		"left":
+			remote_players.clear()
 			socket.close(1000, "saved")
 			connection_started = false
 			admitted = false
@@ -231,6 +239,7 @@ func handle_packet(message: Dictionary) -> void:
 
 
 func connection_error(reason: String) -> void:
+	remote_players.clear()
 	connection_started = false
 	admitted = false
 	world_view.reset_interactions()

@@ -108,6 +108,7 @@ jobs:
         run: |
           godot --headless --path game --script ../tools/export_appearance_fixture.gd
           node tools/test_appearance_preview.cjs
+          node tools/test_play_connection.cjs
 
       - name: Export Web build
         shell: bash

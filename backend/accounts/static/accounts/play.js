@@ -6,7 +6,7 @@
   const send=message=>frame.contentWindow.postMessage({channel:'dreamscape-account',...message},location.origin);
   function error(message){status.textContent=message;notice.hidden=false;reconnect.hidden=false;clearTimeout(timer);}
   async function connect(){
-    if(!ready||pending)return;pending=true;notice.hidden=false;reconnect.hidden=true;status.textContent='Recuperando tu personaje…';
+    if(!ready||pending)return;pending=true;clearTimeout(timer);notice.hidden=true;reconnect.hidden=true;status.textContent='';
     try{
       const response=await fetch('/api/ticket/',{method:'POST',credentials:'same-origin',headers:{'X-CSRFToken':auth.elements.csrfmiddlewaretoken.value}});
       if(response.status===401){location.assign('/');return;}

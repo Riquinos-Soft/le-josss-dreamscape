@@ -1,4 +1,4 @@
 {% load static %}<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>{{ character.name }} · Dreamscape</title><link rel="stylesheet" href="{% static 'accounts/account.css' %}?v=authored-world-1"></head>
-<body class="playing"><div id="connection" class="connection" role="status"><span id="connection-status">Conectando…</span><button id="reconnect" hidden>Reconectar</button></div><form id="ticket-auth" hidden>{% csrf_token %}</form>
+<body class="playing"><div id="connection" class="connection" role="status" hidden><span id="connection-status"></span><button id="reconnect" hidden>Reconectar</button></div><form id="ticket-auth" hidden>{% csrf_token %}</form>
 <iframe id="game" title="Dreamscape" src="/game/index.html" allow="autoplay; fullscreen" allowfullscreen></iframe>
-<script src="{% static 'accounts/play.js' %}?v=authored-world-1" defer></script></body></html>
+<script src="{% static 'accounts/play.js' %}?v=online-presence-1" defer></script></body></html>
