@@ -160,7 +160,6 @@ def exercise_world(stack, client, jar, ws, character):
         (6.0, 9.0),
         (3.5, 9.0),
         (.5, 9.0),
-        (-2.82, 4.56),
     ]:
         walk_to(x, z)
     cross_portal(-2.82, 4.56, True)
