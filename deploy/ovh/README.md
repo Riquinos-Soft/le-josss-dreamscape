@@ -119,7 +119,8 @@ after a release; this is not a seamless live-game update system.
 
 The tested release includes the account client under `account-game/`. CI builds
 it with `python3 tools/export_v2_laboratory.py --godot godot --scene account --output build/web/account-game`
-and checks its HTML/WASM/PCK before upload and over public HTTPS after publication.
+and checks its HTML/WASM/PCK before upload and through `/game/` over public HTTPS
+after publication.
 The former `v2/` laboratory export is no longer generated. The account entry flow
 uses this client through `/game/`; see [account service deployment](ACCOUNTS.md).
 The export uses a disposable project copy with the account main scene; release
