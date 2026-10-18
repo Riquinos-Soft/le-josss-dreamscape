@@ -9,6 +9,8 @@ Deployment follow-up (2026-10-19): validate and publish the account client at
 The retired `v2/` laboratory export must not block publication. Acceptance requires
 successful CI gates and the expected public HTTPS release SHA and account files;
 the account backend/authority rollout remains a separate operational step.
+The authority image must let its unprivileged build user create Godot's imported
+assets and must fail its build on import errors, including a zero Godot exit code.
 
 Authorization: developer requested a controlled rebuild plan on 2026-10-13,
 explicitly adding registration, character creation, online play and persistence.

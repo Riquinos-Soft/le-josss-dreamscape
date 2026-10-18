@@ -1,5 +1,35 @@
 # Development setup and verified baseline
 
+## OVH authored-world activation — 2026-10-19
+
+CI run 39172967662 passed all gates and published static release `ed232de`.
+The existing production account/authority source was still the older laboratory
+version. Prepared the tested checkout separately, preserved the old source,
+configuration and container images, and validated a fresh PostgreSQL archive
+before activating matching services. Migration `0002_lourizan_entry` relocated
+only laboratory characters. A before/after comparison confirmed identical
+character IDs, names and appearance; credentials were retained.
+
+The first authority image import silently failed: Docker's pre-existing WORKDIR
+remained root-owned despite COPY --chown, preventing the non-root build user from
+creating `.godot`. The image now owns that directory and rejects Godot import
+errors even with exit code zero. Rebuilt on OVH and verified clean startup
+(`Account zone ready`). Reloaded nginx after authority recreation to refresh the
+upstream address. Full remote logs: `/opt/dreamscape/build-authority-fixed.log`,
+`migrate-ed232de.log`, `activate-ed232de.log`, `authority-ed232de.log` (the latter
+records the initial failure, not the corrected process).
+
+Actual public HTTPS/WSS smoke passed login, game assets, authored NPC snapshots,
+Lucas moving/walking, leave acknowledgement, fresh login and identical character
+identity/appearance/place/committed position. No movement or appearance edits
+were sent. The first smoke ran during upstream replacement and got HTTP 502;
+after nginx reload, its position assertion initially compared the arrival height
+with the physically settled height. The corrected check waits for settled state
+before leave/resume. Evidence: `build/verification/ovh/public-smoke.log` and
+`smoke.py`. Five deployment-safety tests, docs and diff checks also pass.
+Physical iPhone/Chrome visual acceptance remains pending; no browser art approval
+is inferred from this protocol test. Registration/mail settings were not changed.
+
 ## Account artifact publication path — 2026-10-19
 
 Run 39171895957 for `13e2491` passed lint, Godot tests/Web export and the real
@@ -12,7 +42,8 @@ The initial TLS diagnosis was invalid: the diagnostic hostname omitted `.153`.
 The correct public hostname passes TLS and returns the old release SHA; its Caddy
 block targets the responding local static service. No VPS configuration change
 was needed to diagnose this deployment failure. Public static/account runtime
-verification remains pending the corrected CI run.
+verification was pending at this checkpoint; the activation record above
+supersedes that status.
 
 ## Pazo south stair clearance — 2026-10-19
 
