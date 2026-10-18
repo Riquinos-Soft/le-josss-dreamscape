@@ -1,5 +1,29 @@
 # Development setup and verified baseline
 
+## Local reconnect and Lucas patrol recovery — 2026-10-18
+
+Developer reported repeated reconnect and stationary Maconheiro. Django:8008 was
+alive but no world listener existed on:9080. Django logs showed a heartbeat gap
+followed by a 409 expired lease; the precise cause of the gap was not established.
+The local `account_dev.py authority [godot]` command now supervises failed world
+processes with a two-second restart delay. Stop signals terminate the child;
+strict lease/session fencing and authored NPC code remain unchanged.
+
+Validation: Python compilation and documentation/diff checks pass. Real disposable
+HTTP/WebSocket/PostgreSQL round trip passes, now requiring Lucas to both move over
+0.1m and advertise walking within six seconds; existing travel/dialogue/resume and
+authority replacement checks still pass. Evidence:
+`build/verification/v2/accounts/reconnect-patrol-roundtrip.log`.
+
+Suspended local Godot PID 78704 for 22 seconds, then resumed it past its lease.
+The process exited 1 and the supervisor restarted it as PID 78813, listening on 9080;
+log `local-authority.log` records both readiness messages and restart. The polling
+helper itself stopped on an unhandled empty `pgrep` result during the intended
+restart delay; subsequent process/listener inspection confirmed recovery. This is
+a controlled process-pause test, not a claim of physical Mac sleep/wake testing.
+Local character data was preserved. Production unchanged; no game/export changes.
+
+
 ## Authored account world restored locally — 2026-10-18
 
 Recovery/character commits: `a4a81a8` (model policy), `8028f69` (canonical Joss),

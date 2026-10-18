@@ -76,6 +76,16 @@ world camera, metre scale, sprite density and day/night components remain. Versi
 changed account scripts/styles so cached rejected preview code is not reused.
 Inventory, quests, companion/surf and other-player replication remain separate.
 
+### Local reconnect and patrol follow-up — 2026-10-18
+
+Developer reported repeated reconnect prompts and a stationary Maconheiro. The
+local world process was no longer listening; Django remained available. Logs show
+an expired authority lease after a heartbeat gap. Preserve strict lease fencing;
+run the local authority with restart supervision so sleep/wake does not leave the
+world permanently offline. Validate actual Lucas movement in network snapshots,
+using the original guide patrol/sprites as the reference. No character reset or
+replacement patrol implementation is authorized by this repair.
+
 ### Design fit and local acceptance
 
 - Character reference: `joss_walk.png`, `joss_idle.png`, `joss.tres` and Lucas.

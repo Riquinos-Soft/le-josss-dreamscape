@@ -27,7 +27,7 @@ python3 tools/account_dev.py manage seed_test_account
 python3 tools/export_v2_laboratory.py --godot /Applications/Godot.app/Contents/MacOS/Godot --scene account --output build/account-game
 python3 tools/account_dev.py manage runserver 127.0.0.1:8008 --noreload
 # In a second terminal:
-python3 tools/account_dev.py /Applications/Godot.app/Contents/MacOS/Godot --headless --path game res://v2/network/authority.tscn
+python3 tools/account_dev.py authority /Applications/Godot.app/Contents/MacOS/Godot
 ```
 
 Open http://127.0.0.1:8008/ and sign in as `test` / `test`. On the first visit,
@@ -97,3 +97,8 @@ public destinations, rejects Casa and verifies fresh-connection Scandale resume.
 It does not reset the development
 account. Logs go to ignored `build/verification/v2/accounts/`. CI runs both suites.
 See [deployment instructions](../deploy/ovh/ACCOUNTS.md) before enabling the service.
+
+The local `authority` command restarts failed world processes after a lost lease
+(for example after Mac sleep). Stop it with Ctrl+C. The web server alone cannot
+simulate movement or NPC patrols; keep both commands running. Production uses its
+existing service supervisor; lease fencing is unchanged.

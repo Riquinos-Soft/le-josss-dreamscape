@@ -144,6 +144,15 @@ def exercise_world(stack, client, jar, ws, character):
     assert receive(ws, "talk_error")["error"] == "unknown_speaker"
     snapshot = receive(ws, "snapshot")
     assert set(snapshot["npcs"]) == {"LucasMaconheiro", "InesBotanica", "NarciVisitante", "Salon/BraisAnfitrion"}
+    # A connected but frozen guide must not pass merely because it was spawned.
+    first_guide = snapshot["npcs"]["LucasMaconheiro"]["position"]
+    deadline = time.monotonic() + 6
+    while time.monotonic() < deadline:
+        guide = receive(ws, "snapshot")["npcs"]["LucasMaconheiro"]
+        if guide["walking"] and math.dist(first_guide, guide["position"]) > .1:
+            break
+    else:
+        raise AssertionError("Lucas Maconheiro patrol is frozen")
     for x, z in [(8.4, 10.8), (6.72, 10.8), (4.2, 10.8), (.6, 10.8), (-.72, 4.56)]:
         walk_to(x, z)
     cross_portal(-2.82, 4.56, True)
