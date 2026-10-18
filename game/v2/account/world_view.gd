@@ -103,17 +103,10 @@ func _process(delta: float) -> void:
 	for path in npc_targets:
 		var npc: Node3D = location.get_node(path)
 		var state: Dictionary = npc_targets[path]
-		var old := npc.global_position
 		npc.global_position = npc.global_position.lerp(
 			location.to_global(state.position), minf(15 * delta, 1)
 		)
-		if state.walking:
-			npc.facing = Direction.resolve_facing(
-				npc.global_position - old,
-				session.camera,
-				npc.facing,
-				String(npc.sprite.animation).begins_with("walk_")
-			)
+		npc.facing = state.facing
 		Direction.play_direction(npc.sprite, npc.facing, state.walking)
 		if npc.smoking != null:
 			npc.smoking.set_smoking(not state.walking and talking != path)
@@ -241,8 +234,17 @@ func handle(message: Dictionary) -> void:
 			for path in message.get("npcs", {}):
 				if path in Destinations.SPEAKERS[String(session.current_id)]:
 					var state: Dictionary = message.npcs[path]
+					var position: Vector3 = session.to_vector(state.position)
+					var npc: Node3D = location.get_node(path)
+					var previous: Dictionary = npc_targets.get(path, {})
+					var facing: StringName = npc.facing
+					if state.walking and not previous.is_empty():
+						var authoritative_motion: Vector3 = position - previous.position
+						facing = Direction.resolve_facing(
+							authoritative_motion, session.camera, npc.facing, true
+						)
 					npc_targets[path] = {
-						"position": session.to_vector(state.position), "walking": state.walking
+						"position": position, "walking": state.walking, "facing": facing
 					}
 		"travelled":
 			load_place(message.place)

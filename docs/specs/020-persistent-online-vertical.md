@@ -324,3 +324,14 @@ whitespace checks for this change; runtime acceptance is future work.
 - [V2 authority/persistence contract](../adr/007-authoritative-persistent-vertical.md)
 - [Current bag](012-eight-slot-bag.md), [beer loop](018-residents-and-beer-errand.md)
   and [pixel environments](019-coherent-pixel-environment.md)
+
+
+### Pazo collision and account facing correction — 2026-10-18
+
+Visible stair handrails, baluster posts and statue pedestals now have matching
+player collision. Existing vegetation trunks already block movement. Account NPCs
+resolve their original eight-direction facing from authoritative snapshot deltas
+projected through the account camera; position interpolation remains visual only.
+The updated account export is ready locally for developer review. Chrome/iPhone
+visual acceptance of blockers and all patrol directions remains open; production
+is unchanged.

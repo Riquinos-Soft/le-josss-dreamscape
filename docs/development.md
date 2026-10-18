@@ -1,5 +1,22 @@
 # Development setup and verified baseline
 
+## Pazo collision and account NPC facing — 2026-10-18
+
+Developer reported walking through visible Pazo objects and Lucas Maconheiro using
+his front walk pose for every route. Stair-baluster ornaments, sloped handrails and
+statue pedestals were render-only. Added narrow physical shapes matching those
+supports. Existing tree trunks already had colliders. Account NPC facing now uses
+authoritative position deltas projected through the account camera, so the eight
+original Lucas directions follow actual patrol motion instead of render smoothing.
+
+Account Web export succeeds with no Godot script or export errors:
+`build/verification/v2/accounts/collision-facing-export.log`. LAN page and game
+asset endpoints return HTTP 200. Local authority restarted from updated scene and listens
+on 9080; LAN web service remains at 192.168.1.49:8008. No automated gameplay tests
+were run in this step. Chrome/iPhone visual collision and all eight direction
+acceptance remains with the developer; instruct a full page reload for fresh assets.
+No production changes.
+
 ## Local reconnect and Lucas patrol recovery — 2026-10-18
 
 Developer reported repeated reconnect and stationary Maconheiro. Django:8008 was

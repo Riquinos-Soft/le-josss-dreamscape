@@ -83,9 +83,12 @@ func box(position: Vector3, size: Vector3, material: Material, solid := false) -
 		collision(position, shape)
 
 
-func collision(position: Vector3, shape: Shape3D) -> void:
+func collision(
+	position: Vector3, shape: Shape3D, rotation: Vector3 = Vector3.ZERO
+) -> void:
 	var body := StaticBody3D.new()
 	body.position = position
+	body.rotation = rotation
 	var collider := CollisionShape3D.new()
 	collider.shape = shape
 	body.add_child(collider)
@@ -218,7 +221,12 @@ func build_stairs() -> void:
 		for index in 9:
 			var angle := -PI / 2.0 + float(index) * PI / 8.0
 			var rail_position := Vector3(5.85 + cos(angle) * 2.0, 0.42, z + sin(angle) * 2.0)
-			carved_post(rail_position - Vector3.UP * 0.34, 0.90)
+			var post_base := rail_position - Vector3.UP * 0.34
+			carved_post(post_base, 0.90)
+			var post_shape := CylinderShape3D.new()
+			post_shape.height = 0.90
+			post_shape.radius = 0.13
+			collision(post_base + Vector3.UP * 0.45, post_shape)
 		for step in 18:
 			var height := (18 - step) * 0.2
 			box(Vector3(1.5 + step * 0.24, height / 2, z), Vector3(0.26, height, 4.2), stone)
@@ -239,11 +247,21 @@ func build_stairs() -> void:
 			for index in 13:
 				var x := 1.4 + index * 0.35
 				var y := 3.6 * (1.0 - float(index) / 12)
-				carved_post(Vector3(x, y + 0.08, z + side * 2.15), 0.88)
+				var post_base := Vector3(x, y + 0.08, z + side * 2.15)
+				carved_post(post_base, 0.88)
+				var post_shape := CylinderShape3D.new()
+				post_shape.height = 0.88
+				post_shape.radius = 0.13
+				collision(post_base + Vector3.UP * 0.44, post_shape)
 			# Continuous sloped handrail, following the real stair flights.
 			var rail := BoxMesh.new()
 			rail.size = Vector3(5.58, 0.16, 0.30)
-			piece(rail, Vector3(3.5, 2.82, z + side * 2.15), trim, Vector3(0, 0, -atan2(3.6, 4.2)))
+			var rail_at := Vector3(3.5, 2.82, z + side * 2.15)
+			var rail_rotation := Vector3(0, 0, -atan2(3.6, 4.2))
+			piece(rail, rail_at, trim, rail_rotation)
+			var rail_shape := BoxShape3D.new()
+			rail_shape.size = rail.size
+			collision(rail_at, rail_shape, rail_rotation)
 			statue(Vector3(5.9, 0, z + side * 2.25))
 
 
@@ -252,6 +270,9 @@ func statue(base: Vector3) -> void:
 	for height in [0.10, 0.83, 0.96]:
 		box(base + Vector3.UP * height, Vector3(0.85, 0.13, 0.85), trim)
 	box(base + Vector3.UP * 0.48, Vector3(0.66, 0.65, 0.66), stone)
+	var pedestal := BoxShape3D.new()
+	pedestal.size = Vector3(0.72, 0.96, 0.72)
+	collision(base + Vector3.UP * 0.48, pedestal)
 	ornament(base + Vector3(0.05, 1.72, 0), Vector2(0.90, 1.55), "statue", -PI / 4)
 
 
