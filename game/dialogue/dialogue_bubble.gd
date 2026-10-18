@@ -3,6 +3,7 @@ extends CanvasLayer
 
 signal closed
 signal choice_made(accepted: bool)
+const ScreenUnits = preload("res://ui/screen_units.gd")
 
 var is_open := false
 var page_index := 0
@@ -16,12 +17,14 @@ var close_button: Button
 var tail: Label
 var choice_active := false
 var decline_button: Button
+var ui_factor := 1.0
 
 
 func _ready() -> void:
 	layer = 20
 	build_ui()
-	get_viewport().size_changed.connect(update_layout)
+	get_viewport().size_changed.connect(_fit_ui)
+	_fit_ui()
 
 
 func build_ui() -> void:
@@ -164,21 +167,47 @@ func update_layout() -> void:
 	if camera == null:
 		return
 	var viewport_size := get_viewport().get_visible_rect().size
-	var compact := get_window().size.x < 900
-	var width := minf(520.0, viewport_size.x - 32.0)
-	var height := maxf(210.0 if compact else 190.0, panel.get_combined_minimum_size().y)
+	var compact := viewport_size.x / ui_factor < 900
+	var width := minf(520.0 * ui_factor, viewport_size.x - 32.0 * ui_factor)
+	var height := maxf(
+		(210.0 if compact else 190.0) * ui_factor, panel.get_combined_minimum_size().y
+	)
 	panel.size = Vector2(width, height)
-	body_label.add_theme_font_size_override("font_size", 16 if compact else 18)
+	body_label.add_theme_font_size_override(
+		"font_size", roundi((16 if compact else 18) * ui_factor)
+	)
 	var projected := camera.unproject_position(anchor.global_position)
-	var desired := projected + Vector2(-width / 2.0, -height - 34.0)
+	var desired := projected + Vector2(-width / 2.0, -height - 34.0 * ui_factor)
 	panel.position = Vector2(
-		clampf(desired.x, 16.0, viewport_size.x - width - 16.0),
-		clampf(desired.y, 16.0, viewport_size.y - height - 16.0)
+		clampf(desired.x, 16.0 * ui_factor, viewport_size.x - width - 16.0 * ui_factor),
+		clampf(desired.y, 16.0 * ui_factor, viewport_size.y - height - 16.0 * ui_factor)
 	)
 	tail.position = Vector2(
-		clampf(projected.x - 10.0, 18.0, viewport_size.x - 38.0),
+		clampf(
+			projected.x - 10.0 * ui_factor, 18.0 * ui_factor, viewport_size.x - 38.0 * ui_factor
+		),
 		panel.position.y + panel.size.y - 1.0
 	)
+
+
+func _fit_ui() -> void:
+	ui_factor = ScreenUnits.factor(get_viewport())
+	var theme := Theme.new()
+	theme.default_font_size = roundi(16 * ui_factor)
+	panel.theme = theme
+	panel.custom_minimum_size = Vector2(
+		minf(420 * ui_factor, get_viewport().get_visible_rect().size.x - 32 * ui_factor),
+		180 * ui_factor
+	)
+	speaker_label.add_theme_font_size_override("font_size", roundi(20 * ui_factor))
+	tail.add_theme_font_size_override("font_size", roundi(22 * ui_factor))
+	close_button.custom_minimum_size = Vector2(48, 42) * ui_factor
+	continue_button.custom_minimum_size = Vector2(150, 48) * ui_factor
+	decline_button.custom_minimum_size = Vector2(150, 48) * ui_factor
+	var margin := panel.get_child(0) as MarginContainer
+	for side in ["left", "right", "top", "bottom"]:
+		margin.add_theme_constant_override("margin_" + side, roundi(14 * ui_factor))
+	update_layout()
 
 
 func _unhandled_input(event: InputEvent) -> void:

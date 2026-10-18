@@ -1,5 +1,5 @@
 extends SceneTree
-## Full session route: street bag -> Pazo placement -> Casa -> Pazo recovery -> street.
+## Full session route: street bag -> Pazo placement -> Scandale -> Pazo recovery -> street.
 
 const Item = preload("res://items/item_instance.gd")
 const Definition = preload("res://items/item_definition.gd")
@@ -64,10 +64,10 @@ func run() -> void:
 	await capture("pazo-beers")
 	await enter_exit(session.active_location.get_node("Exit"))
 	session.open_map()
-	session.map_ui.select(&"home")
-	check(await session.travel_to(&"home"), "travel from Pazo to Casa")
+	session.map_ui.select(&"scandale")
+	check(await session.travel_to(&"scandale"), "travel from Pazo to Scandale")
 	await frames(10)
-	check(items.world_items.is_empty(), "new Casa starts without duplicate seed")
+	check(items.world_items.is_empty(), "new Scandale starts without duplicate seed")
 	check(items.location_records[&"lourizan"].size() == 2, "Pazo stores two world records")
 	var source_records: Array = items.location_records[&"lourizan"].duplicate()
 	await enter_exit(session.active_location.get_node("Exit"))
@@ -75,7 +75,7 @@ func run() -> void:
 	var original_path: String = session.location_paths[&"lourizan"]
 	session.location_paths[&"lourizan"] = "res://world/locations/missing.tscn"
 	check(not await session.travel_to(&"lourizan"), "failed destination rejected")
-	check(session.current_id == &"home", "failed travel keeps source location")
+	check(session.current_id == &"scandale", "failed travel keeps source location")
 	check(
 		items.location_records[&"lourizan"].size() == source_records.size(),
 		"failed travel keeps records"

@@ -2,7 +2,8 @@ extends Node3D
 ## One small zone. Only this process submits durable positions to the service.
 
 const Actor = preload("res://v2/characters/actor.gd")
-const Location = preload("res://v2/validation/location.gd")
+const Destinations = preload("res://v2/locations/destinations.gd")
+const History = preload("res://dialogue/lourizan_history.gd")
 const MAX_PEERS := 8
 var listener := TCPServer.new()
 var peers: Array[Dictionary] = []
@@ -13,11 +14,19 @@ var heartbeat_pending := false
 var next_heartbeat := 0
 var lease_until := 0
 var snapshot_elapsed := 0.0
+var zones := {}
 
 
 func _ready() -> void:
 	Engine.max_fps = 60
-	add_child(Location.new())
+	for place in Destinations.PATHS:
+		var zone := Node3D.new()
+		zone.position.x = zones.size() * 1000.0
+		add_child(zone)
+		var location := Destinations.create(place, null, false)
+		location.name = "Place"
+		zone.add_child(location)
+		zones[place] = zone
 	secret = OS.get_environment("AUTHORITY_SECRET")
 	if OS.has_environment("ACCOUNT_INTERNAL_URL"):
 		api = OS.get_environment("ACCOUNT_INTERNAL_URL")
@@ -114,8 +123,16 @@ func _process(delta: float) -> void:
 	if snapshot_elapsed >= 0.1:
 		snapshot_elapsed = 0.0
 		for peer in peers:
-			if peer.actor != null and not peer.failed:
-				send(peer, {"type": "snapshot", "position": vector_array(peer.actor.position)})
+			if peer.actor != null and not peer.failed and not peer.get("travelling", false):
+				send(
+					peer,
+					{
+						"type": "snapshot",
+						"place": peer.character.place,
+						"position": vector_array(peer.actor.position),
+						"npcs": npc_states(peer)
+					}
+				)
 
 
 func poll_peer(peer: Dictionary, now: int) -> void:
@@ -149,17 +166,18 @@ func poll_peer(peer: Dictionary, now: int) -> void:
 			break
 		handle_message(peer, message, now)
 	if peer.actor != null and not peer.failed:
-		if now - peer.last_input > 400 or peer.leaving:
+		if (
+			now - peer.last_input > 400
+			or peer.leaving
+			or peer.get("travelling", false)
+			or peer.has("speaker")
+		):
 			peer.actor.set_movement_intent(Vector3.ZERO)
 		var position: Vector3 = peer.actor.position
-		if (
-			peer.actor.is_on_floor()
-			and absf(position.x) <= 6.6
-			and absf(position.z) <= 5.6
-			and position.y >= -0.1
-			and position.y <= 1.1
-		):
+		if peer.actor.is_on_floor() and Destinations.valid_position(peer.character.place, position):
 			peer.safe = position
+		if not peer.busy and not peer.leaving and not peer.get("travelling", false):
+			check_passages(peer)
 		if (now >= peer.next_save or peer.leaving) and not peer.busy:
 			save_peer(peer)
 
@@ -174,30 +192,16 @@ func handle_message(peer: Dictionary, message: Dictionary, now: int) -> void:
 				return
 			admit(peer, message.ticket)
 		"move":
-			if peer.actor == null:
-				fail_peer(peer, "authentication_required")
-				return
-			var value: Variant = message.get("intent")
-			var sequence: Variant = message.get("sequence")
-			if (
-				not value is Array
-				or value.size() != 2
-				or not sequence is float
-				or sequence != floor(sequence)
-				or sequence <= peer.last_sequence
-				or sequence > 9007199254740991.0
-			):
-				return
-			if not value[0] is float or not value[1] is float:
-				return
-			var intent := Vector3(value[0], 0, value[1])
-			if not intent.is_finite() or intent.length() > 1.001:
-				return
-			peer.last_sequence = sequence
-			peer.last_input = now
-			peer.actor.set_movement_intent(intent)
+			apply_move(peer, message, now)
 		"leave":
+			release_speaker(peer)
 			peer.leaving = true
+		"travel":
+			request_travel(peer, message.get("destination"))
+		"talk":
+			request_talk(peer, message.get("speaker"))
+		"talk_end":
+			release_speaker(peer)
 		_:
 			fail_peer(peer, "unknown_command")
 
@@ -215,13 +219,14 @@ func admit(peer: Dictionary, ticket: String) -> void:
 	peer.character = result
 	var actor := Actor.new()
 	actor.position = Vector3(result.position[0], result.position[1], result.position[2])
-	add_child(actor)
+	zones[result.place].add_child(actor)
 	peer.actor = actor
 	peer.safe = actor.position
+	actor.spawn_position = actor.position
 	send(peer, {"type": "welcome", "character": result})
 
 
-func save_peer(peer: Dictionary) -> void:
+func save_peer(peer: Dictionary, travelled := false) -> void:
 	peer.busy = true
 	peer.save_sequence += 1
 	var result := await call_api(
@@ -230,7 +235,8 @@ func save_peer(peer: Dictionary) -> void:
 			"character_id": peer.character.id,
 			"generation": peer.character.generation,
 			"sequence": peer.save_sequence,
-			"position": vector_array(peer.safe)
+			"position": vector_array(peer.safe),
+			"place": peer.character.place
 		}
 	)
 	peer.busy = false
@@ -241,6 +247,17 @@ func save_peer(peer: Dictionary) -> void:
 		fail_peer(peer, result.error)
 	else:
 		send(peer, {"type": "saved", "revision": result.revision, "saved_at": result.saved_at})
+		if travelled:
+			peer.travelling = false
+			send(
+				peer,
+				{
+					"type": "travelled",
+					"place": result.place,
+					"position": result.position,
+					"saved_at": result.saved_at
+				}
+			)
 		if peer.leaving:
 			send(peer, {"type": "left"})
 			peer.failed = true
@@ -268,6 +285,7 @@ func fail_peer(peer: Dictionary, reason: String) -> void:
 	if peer.failed:
 		return
 	peer.failed = true
+	release_speaker(peer)
 	if peer.actor != null:
 		peer.actor.set_movement_intent(Vector3.ZERO)
 	send(peer, {"type": "error", "error": reason})
@@ -275,6 +293,7 @@ func fail_peer(peer: Dictionary, reason: String) -> void:
 
 
 func remove_peer(peer: Dictionary) -> void:
+	release_speaker(peer)
 	if peer.actor != null:
 		peer.actor.queue_free()
 	peers.erase(peer)
@@ -282,3 +301,137 @@ func remove_peer(peer: Dictionary) -> void:
 
 func vector_array(value: Vector3) -> Array:
 	return [value.x, value.y, value.z]
+
+
+func request_travel(peer: Dictionary, destination: Variant) -> void:
+	if peer.actor == null:
+		fail_peer(peer, "authentication_required")
+		return
+	if peer.busy or peer.get("travelling", false) or peer.has("speaker"):
+		send(peer, {"type": "travel_error", "error": "busy"})
+		return
+	if not destination is String or not Destinations.PATHS.has(destination):
+		send(peer, {"type": "travel_error", "error": "unknown_destination"})
+		return
+	var location: Node3D = zones[peer.character.place].get_node("Place")
+	if (
+		destination == peer.character.place
+		or not location.get_node("Exit").overlaps_body(peer.actor)
+	):
+		send(peer, {"type": "travel_error", "error": "exit_required"})
+		return
+	var marker: Marker3D = zones[destination].get_node("Place/Arrival")
+	transfer(peer, destination, marker.global_position)
+
+
+func transfer(peer: Dictionary, destination: String, point: Vector3) -> void:
+	# The client supplies an ID only; arrival/floor come from the authored scene.
+	var query := PhysicsRayQueryParameters3D.create(
+		point + Vector3.UP * 2, point - Vector3.UP * 3, 1
+	)
+	var hit := get_world_3d().direct_space_state.intersect_ray(query)
+	if hit.is_empty() or hit.normal.y < 0.6 or absf(hit.position.y - point.y) > 1.2:
+		send(peer, {"type": "travel_error", "error": "unsafe_arrival"})
+		return
+	var local: Vector3 = zones[destination].to_local(hit.position + Vector3.UP * 0.05)
+	if not Destinations.valid_position(destination, local):
+		send(peer, {"type": "travel_error", "error": "unsafe_arrival"})
+		return
+	peer.travelling = true
+	peer.actor.set_movement_intent(Vector3.ZERO)
+	peer.actor.velocity = Vector3.ZERO
+	if peer.actor.get_parent() != zones[destination]:
+		peer.actor.reparent(zones[destination], false)
+	peer.actor.position = local
+	peer.actor.spawn_position = local
+	peer.actor.reset_physics_interpolation()
+	peer.safe = local
+	peer.character.place = destination
+	save_peer(peer, true)
+
+
+func check_passages(peer: Dictionary) -> void:
+	if peer.character.place != "lourizan" or peer.has("speaker"):
+		return
+	var location: Node3D = zones.lourizan.get_node("Place")
+	for path in ["TerraceEntrance", "Salon/Exit"]:
+		var passage: Area3D = location.get_node(path)
+		if passage.overlaps_body(peer.actor):
+			var marker: Marker3D = passage.get_node(passage.destination)
+			transfer(peer, "lourizan", marker.global_position)
+			return
+
+
+func request_talk(peer: Dictionary, speaker: Variant) -> void:
+	if peer.actor == null:
+		fail_peer(peer, "authentication_required")
+		return
+	if peer.get("travelling", false) or peer.leaving or peer.has("speaker"):
+		return
+	if not speaker is String or speaker not in Destinations.SPEAKERS[peer.character.place]:
+		send(peer, {"type": "talk_error", "error": "unknown_speaker"})
+		return
+	var npc: Node3D = zones[peer.character.place].get_node("Place/" + speaker)
+	if npc.conversation_active or not npc.can_talk(peer.actor):
+		send(peer, {"type": "talk_error", "error": "out_of_reach"})
+		return
+	peer.speaker = npc
+	npc.set_conversation_active(true)
+	peer.actor.set_movement_intent(Vector3.ZERO)
+	var pages: Array = []
+	if npc.has_method("next_dialogue_pages"):
+		pages = npc.next_dialogue_pages()
+	elif not npc.dialogue_pages.is_empty():
+		pages.assign(npc.dialogue_pages)
+	else:
+		var previous := int(npc.get_meta("history_index", -1))
+		var chosen := History.choose_dialogue(previous)
+		npc.set_meta("history_index", chosen)
+		pages = History.DIALOGUES[chosen]
+	send(peer, {"type": "talked", "speaker": speaker, "pages": pages})
+
+
+func release_speaker(peer: Dictionary) -> void:
+	if peer.has("speaker"):
+		if is_instance_valid(peer.speaker):
+			peer.speaker.set_conversation_active(false)
+		peer.erase("speaker")
+
+
+func npc_states(peer: Dictionary) -> Dictionary:
+	var states := {}
+	var location: Node3D = zones[peer.character.place].get_node("Place")
+	for path in Destinations.SPEAKERS[peer.character.place]:
+		var npc: Node3D = location.get_node(path)
+		states[path] = {
+			"position": vector_array(location.to_local(npc.global_position)),
+			"walking": String(npc.sprite.animation).begins_with("walk_")
+		}
+	return states
+
+
+func apply_move(peer: Dictionary, message: Dictionary, now: int) -> void:
+	if peer.actor == null:
+		fail_peer(peer, "authentication_required")
+		return
+	if peer.get("travelling", false) or peer.has("speaker"):
+		return
+	var value: Variant = message.get("intent")
+	var sequence: Variant = message.get("sequence")
+	if (
+		not value is Array
+		or value.size() != 2
+		or not sequence is float
+		or sequence != floor(sequence)
+		or sequence <= peer.last_sequence
+		or sequence > 9007199254740991.0
+	):
+		return
+	if not value[0] is float or not value[1] is float:
+		return
+	var intent := Vector3(value[0], 0, value[1])
+	if not intent.is_finite() or intent.length() > 1.001:
+		return
+	peer.last_sequence = sequence
+	peer.last_input = now
+	peer.actor.set_movement_intent(intent)

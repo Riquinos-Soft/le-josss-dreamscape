@@ -1,10 +1,82 @@
 # Development setup and verified baseline
 
+## Authored account world restored locally — 2026-10-18
+
+Recovery/character commits: `a4a81a8` (model policy), `8028f69` (canonical Joss),
+`fdbb2d4` (handoff exclusion). The account-world correction now restores the original
+Pazo/salon, Calle Jacobo Risa and Scandale scenes, Lucas/Inés/Narci/Brais and the
+bartender with conversations/patrol. Casa is removed from legacy and account maps
+and rejected by trusted travel. No new place art or character template was drawn.
+The original street supports a narrow location-only instance, reusing its geometry
+without its legacy player/UI. The account player survives scene changes.
+
+The existing authority simulates three fixed scenes with separated origins and
+keeps character positions local to their destination. Travel requires an authored
+exit overlap; salon thresholds and NPC reach/line-of-sight are validated server-side.
+Only IDs/intents arrive from the client. Place/position checkpoint together before
+travel acknowledgement, with movement frozen during commit and existing generation/
+lease fencing preserved. Native NPC movement is presented from authoritative snapshots.
+The lab-only migration preserves identity/appearance and already-saved real progress.
+No upper character/logout bar remains in local play; reconnect clears stale modals.
+
+Verified after integration:
+
+- **All 24 Godot suites pass**, `make test GODOT=/Applications/Godot.app/Contents/MacOS/Godot`;
+  log `build/verification/v2/accounts/world-suite-final.log`. Includes 54 account-world
+  route/UI/reconnect checks,195 appearance checks,112 legacy travel,36 bag travel,
+ 21 place-support,184 dialogue and125 Scandale checks. The runner now sets a1280×720
+  headless window explicitly; Godot's64×64 headless fallback distorted pixel sizing.
+  Superseded tests expecting Casa were updated to the actual public Scandale floor.
+- **18 Django/PostgreSQL tests pass**; `makemigrations --check --dry-run` reports none.
+  Logs `world-backend-final.log` and the previous migration output. Tests cover
+  atomic place/position commits, invalid/home destinations, finite bounds, fresh
+  resume, old-session fencing and one-time lab relocation without resetting progress.
+- Extended real HTTP/WebSocket/PostgreSQL round trip passes. It drives actual
+  movement up/down the palace stairs, commits both salon passages, talks to Brais,
+  traverses street/Scandale/Pazo, obtains non-repeating bartender jokes, rejects
+  forged/home travel and resumes the same appearance/identity/position in Scandale
+  after a fresh connection. Log `world-roundtrip-final.log`; the test uses a new
+  disposable database, never the developer's local character.
+- **120 editor/Godot RGBA frames match**; `make test-preview GODOT=...`, log
+  `preview-parity-final.log`. CI uses the Makefile suite and this parity check.
+- Two updated **default native runs passed 50 checks without warnings**, including
+  stairs, all residents, dialogues, marked map exits, day/night and844×390/390×844
+  views. Logs `world-native-default.log` / `world-native-final.log`; captures under
+  `build/verification/v2/lourizan/` were inspected. Later headless checks add screen
+  target/font sizing and reconnection assertions. UI uses window/CSS pixel units
+  without changing the world camera/scale. The tiny portrait map was corrected.
+- Account Web export succeeds at `build/account-lourizan-web`. Chrome desktop UI
+  automation inspected the detailed editor, walk/turn controls, fullscreen Pazo/NPCs,
+  map selection and actual acknowledged travel to Scandale.844×390 and 390×844 map
+  screenshots were inspected in Chrome; the viewport override was reset. The
+  browser initially reused old preview JavaScript; versioned script/style URLs
+  corrected the visible mismatch after reload. Captured Chrome error-level logs
+  were empty; unrelated extension listener warnings were observed separately.
+- Full GDScript format/lint, documentation/diff checks and five deployment safety
+  tests pass. gdtoolkit still emits its existing `pkg_resources` deprecation warning.
+
+Known limitation: an earlier default native run reproduced the Jolt maximum-job
+warning and was stopped after taking a stack sample. A temporary single-worker
+native diagnostic finished 50 checks but still warned. The override was removed;
+no permanent physics/thread setting changed. Subsequent default passes do not
+establish a cause or fix. Preserve this risk for dedicated diagnosis/release review.
+Logs `world-native.log`, `world-native.sample.txt`, `world-native-single-worker.log`.
+
+Local services were refreshed with the current code on 127.0.0.1:8008/9080 and the
+final Web export. Existing local identity/name/appearance were preserved; manual
+local gameplay travelled to Scandale. Production remains the previous release;
+no push/deploy, SMTP send or new provider configuration occurred. Physical iPhone
+16 Pro/Safari, persistent inventory/quests/companions and mail sender setup remain
+separate. The local handoff records the next concrete release/acceptance step.
+
+
 ## Recovery and canonical character implementation — 2026-10-18
+
+Historical character-phase checkpoint; superseded by the integrated restoration above.
 
 Recovered on main at `f231247`; preserved every inherited runtime change. The
 model/recovery policy is now in AGENTS and Spec003 (commit `a4a81a8`), superseding
-the old Grok preference/blanket Astra gate. Developer confirmed Sol6.1 for the
+the old Grok preference/blanket Astra gate. Developer confirmed Sol 6.1 for the
 active task. `.codex/SESSION_HANDOFF.md` is local, excluded through Git info/exclude
 and never automatically staged. Global Orca instructions were not configured.
 
@@ -17,7 +89,7 @@ pipeline and tests have been replaced, including regenerated per-pose metadata.
 
 Checks/evidence:
 
-- Appearance test: **195 checks, 0 failures**, including all40 original visible
+- Appearance test: **195 checks, 0 failures**, including all 40 original visible
   RGBA/alpha poses, idle/walk0 identity, grounding, cache/fallback/phase continuity.
   Initial exact-byte failures exposed padded RGB under alpha0 and partial idle
   alpha being blended twice. The compositor now copies material RGBA; comparison
@@ -381,7 +453,7 @@ separate root-game/touch failure remain pending; this proves the previously miss
 public laboratory entry works, not an unobserved phone result.
 
 Release verification is enforced by the workflow after publication. Reproduce:
-`gh run list --branch main`, inspect the new run's gates/deploy result, then verify
+`gh run list --branch main `, inspect the new run's gates/deploy result, then verify
 `/release.txt` and open
 https://dreamscape.198.244.233.153.sslip.io/v2/ in Chrome. Use "Verificar recorrido"
 for 19/19 before the iPhone 16 Pro + Chrome physical review. This preview is a
@@ -530,7 +602,7 @@ GODOT=/Applications/Godot.app/Contents/MacOS/Godot`), documentation and whitespa
 checks pass. Production entry point remains unchanged. Web export packages the
 laboratory; no Chrome/Safari or physical-device playtest is claimed. Successful
 Godot runs contain no warnings/errors. Existing gdtoolkit `pkg_resources`
-deprecation remains; tools were found at `/private/tmp/dreamscape-dev/bin` after
+deprecation remains; tools were found at `/private/tmp/dreamscape-dev/bin ` after
 bare commands were unavailable. Initial test/lint failures were fixed before commit.
 
 Next: P2b shared pose anchors and compatible body/face/hair/clothing parts, two
@@ -815,7 +887,7 @@ inspection caught and corrected an initial near-depth placement before completio
 Sofa seats/backs now fit between the arms (2.4m width), eliminating coincident
 outer faces at x=+/-1.4m that produced depth fighting. This keeps outer dimensions
 and blocks traversal through the furniture. The reported face mismatch matches
-old production assets: `git ls-remote origin refs/heads/main` returned `45af87e`,
+old production assets: `git ls-remote origin refs/heads/main ` returned `45af87e`,
 before local canonical character fix `eaae8ba`. That fix remains intact.
 
 Godot 4.7.2 import and `make export-web` succeeded. Native scene captures at
@@ -1032,7 +1104,7 @@ that were untracked before work began remain untouched and unstaged.
 ## Historical planning handoff — Lucas and Pazo, 2026-10-07
 
 Goal: execute [Plan 014](plans/014-lucas-atlas-and-pazo-refinement.md) on an
-available economical model. Base before planning: `e6c835b` on `main`. Five
+available economical model. Base before planning: `e6c835b` on `main `. Five
 pre-existing untracked Lucas assets/helpers are inventoried in the plan and
 were not modified or committed. Runtime still uses v02; pending v03 images are
 256×512 walk and 256×128 idle (`sips -g pixelWidth -g pixelHeight`). Helper source
@@ -1292,7 +1364,7 @@ mobile controls and the developer's final art approval remain unverified.
 
 ## Deployment queue and map guidance — 2026-10-05
 
-Investigation found two independent causes. GitHub's public status reported a major Actions outage while push run `37370450215` remained queued before its Godot job; the live `/release.txt` stayed at `5d69bb0`. A separate manual `workflow_dispatch` run `37371913850` on the same commit completed lint and Godot/Web export, but its deploy job was skipped by the workflow's `push`-only condition. The workflow now permits a manual dispatch on `main` to deploy the same tested artifact after both gates, while PRs and other branches remain excluded. Verify a fresh dispatch and the live release SHA before calling production updated.
+Investigation found two independent causes. GitHub's public status reported a major Actions outage while push run `37370450215` remained queued before its Godot job; the live `/release.txt` stayed at `5d69bb0`. A separate manual `workflow_dispatch` run `37371913850` on the same commit completed lint and Godot/Web export, but its deploy job was skipped by the workflow's `push`-only condition. The workflow now permits a manual dispatch on `main ` to deploy the same tested artifact after both gates, while PRs and other branches remain excluded. Verify a fresh dispatch and the live release SHA before calling production updated.
 
 The local UX issue was also real: the street exit sits about 30 m from spawn and the near-exit button overlapped the existing top-left HUD. The map now shows a persistent direction/distance guide in the upper right; near the exit it switches to an unobscured `M · Abrir mapa` button. `test_location_travel.gd` checks the guide, prompt location and travel behavior. Native screenshots `build/verification/lourizan/street-production.png` and `street-map-exit.png` were inspected. The latest local Web export rendered the guide in Chrome. `make check` passed with **725 checks, zero failures**; log: `build/verification/lourizan/map-guide-check.log`. Chrome validation here covers boot and the visible guide, not a manual full route.
 
@@ -1310,7 +1382,7 @@ The integration test now uses normal player movement for the first street approa
 
 ## Production street and Lourizán integration — 2026-10-05
 
-Fetched `origin/main` at `5d69bb0` and reconciled the local capture/travel work with the actual pixel-art production street. The current local default scene is `world/dreamscape.tscn`, hosting the existing Jacobo Risa scene, Joss sprite, orthographic camera, 180-row world pixel pass, touch HUD and item loop. A marked southern street edge opens a three-destination map; the captured home and Lourizán use the same player and renderer. The physical home-to-bar route remains pending real layout references. Earlier entries below describe historical branch states and are superseded where they identify a different main scene.
+Fetched `origin/main ` at `5d69bb0` and reconciled the local capture/travel work with the actual pixel-art production street. The current local default scene is `world/dreamscape.tscn`, hosting the existing Jacobo Risa scene, Joss sprite, orthographic camera, 180-row world pixel pass, touch HUD and item loop. A marked southern street edge opens a three-destination map; the captured home and Lourizán use the same player and renderer. The physical home-to-bar route remains pending real layout references. Earlier entries below describe historical branch states and are superseded where they identify a different main scene.
 
 - `PATH=/private/tmp/lourizan-author313/bin:$PATH make lint`: docs 0 errors, formatter clean, linter clean. The pinned gdtoolkit emits its existing `pkg_resources` deprecation warning.
 - `make test GODOT=/Applications/Godot.app/Contents/MacOS/Godot`: 694 checks, 0 failures, including touch, items, scans, production street and 72 map/travel checks over three round trips. Log: `build/verification/lourizan/production-final-check.log`.
@@ -1364,7 +1436,7 @@ The sections below retain earlier environment and verification evidence. Their p
 
 ## Local inspection — 2026-09-07
 
-- Repository: only `.git/` initially, `main` with no commits, no remotes, and no existing project instructions found in the checked ancestor locations.
+- Repository: only `.git/` initially, `main ` with no commits, no remotes, and no existing project instructions found in the checked ancestor locations.
 - macOS 26.5.1, arm64. MacBook Air / 16 GB is user-provided information; sandbox restrictions prevented independently reading RAM with `sysctl`.
 - Git 2.50.1 (Apple Git-155), `/usr/bin/git`.
 - Godot CLI: **`4.7.2.stable.official.ed1daf0bf`**, standard non-.NET editor at `/Applications/Godot.app/Contents/MacOS/Godot`. Universal Mach-O includes arm64 and x86_64. Native renderer identifies `Apple - Apple M5`. The app was present on reinspection for this task; it was not found during the earlier foundation session.

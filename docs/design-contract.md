@@ -75,14 +75,12 @@ and keep the visible result unaccepted.
 
 ## Current checkpoint
 
-The production character editor exists, but its simplified V2 art is rejected.
-The local canonical correction now reproduces the original default poses and
-retains configurable material/face/hair choices; comparisons and evidence are in
-the development log. Developer acceptance and account-world integration remain.
-The Lourizán replacement and removal of the upper play bar remain local; native
-validation is intermittent. The shared animation review is now closed in ADR 006:
-preserve the original per-phase pixels and derive compatible layers/masks, rather
-than enforce a new fixed-head walk. The local character checks pass; integrated world/browser checks remain. Do
-not describe these corrections as deployed. Registration/mail setup remains separate.
-See the active spec and development log for the next unresolved step. Update this
-checkpoint when it is superseded; do not turn this contract into a second roadmap.
+The local correction restores canonical Joss poses/customization and the authored
+street, Pazo/salon and Scandale with original NPCs, conversations and marked map
+exits. Casa is excluded. The upper character/logout bar and public test-room entry
+are removed in this local correction. Default-pose, composition, route/persistence,
+native and Chrome responsive evidence is recorded in the active spec/development log.
+Developer/physical-device acceptance remains separate. The intermittent native Jolt
+warning has successful default retries but no established cause or permanent fix.
+Production still serves the previous rejected editor/test-room build; do not call
+this correction deployed. Mail/sender configuration remains separate.

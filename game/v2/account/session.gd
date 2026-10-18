@@ -10,6 +10,9 @@ var socket := WebSocketPeer.new()
 var actor: CharacterBody3D
 var input_adapter: Control
 var camera: Camera3D
+var camera_rig: Node3D
+var current_id: StringName = &"lourizan"
+var inside_salon := false
 var presenter: AnimatedSprite3D
 var catalog := Catalog.new()
 var ticket := ""
@@ -22,25 +25,51 @@ var target_position := Vector3.ZERO
 var facing: StringName = &"down"
 var last_packet := 0
 var connection_started := false
+var world_view: Node3D
 
 
 func _ready() -> void:
-	add_child(preload("res://v2/validation/location.gd").new())
 	var environment := WorldEnvironment.new()
+	environment.name = "AccountEnvironment"
 	environment.environment = Environment.new()
 	environment.environment.background_mode = Environment.BG_COLOR
-	environment.environment.background_color = Color("263c45")
+	environment.environment.background_color = Color(0.12, 0.16, 0.19)
+	environment.environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+	environment.environment.ambient_light_color = Color(0.82, 0.86, 0.92)
+	environment.environment.ambient_light_energy = 0.65
 	add_child(environment)
-	camera = Camera3D.new()
-	add_child(camera)
-	camera.position = Vector3(9, 12, 12).normalized() * 60 + Vector3.UP * 0.9
-	camera.look_at(Vector3.UP * 0.9)
-	camera.projection = Camera3D.PROJECTION_ORTHOGONAL
-	camera.size = 13.5
-	camera.far = 200
-	camera.current = true
+	var sun := DirectionalLight3D.new()
+	sun.rotation_degrees = Vector3(-55, -30, 0)
+	sun.light_energy = 0.7
+	add_child(sun)
 	actor = Actor.new()
 	add_child(actor)
+	camera_rig = preload("res://player/camera_rig.tscn").instantiate()
+	camera_rig.target = actor
+	camera_rig.avoid_world_geometry = true
+	camera = camera_rig.get_node("Camera")
+	camera.projection = Camera3D.PROJECTION_ORTHOGONAL
+	camera.size = 13.5
+	add_child(camera_rig)
+	var backdrop := preload("res://world/dream_castles.gd").new()
+	backdrop.name = "DreamCastles"
+	add_child(backdrop)
+	var pixel_pass := CanvasLayer.new()
+	pixel_pass.name = "PixelPass"
+	pixel_pass.layer = -1
+	add_child(pixel_pass)
+	var screen := ColorRect.new()
+	screen.name = "Screen"
+	screen.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	screen.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var grade := ShaderMaterial.new()
+	grade.shader = preload("res://world/street_pixel.gdshader")
+	screen.material = grade
+	pixel_pass.add_child(screen)
+	var daylight := preload("res://world/daylight.gd").new()
+	daylight.name = "Daylight"
+	daylight.screen_path = NodePath("PixelPass/Screen")
+	add_child(daylight)
 	actor.set_physics_process(false)
 	actor.visible = false
 	var hud := CanvasLayer.new()
@@ -51,6 +80,10 @@ func _ready() -> void:
 	hud.add_child(input_adapter)
 	input_adapter.set_physics_process(false)
 	input_adapter.set_process_input(false)
+	world_view = preload("res://v2/account/world_view.gd").new()
+	world_view.name = "WorldView"
+	world_view.session = self
+	add_child(world_view)
 	if OS.has_feature("web"):
 		(
 			JavaScriptBridge
@@ -101,9 +134,10 @@ func _process(delta: float) -> void:
 		actor.position = actor.position.lerp(target_position, minf(delta * 15.0, 1.0))
 		var movement := (actor.position - old) / maxf(delta, 0.001)
 		movement.y = 0
-		var walking := movement.length() > 0.08
+		var was_walking := String(presenter.animation).begins_with("walk_")
+		var walking := movement.length() > (0.06 if was_walking else 0.12)
 		if walking:
-			facing = DirectionalAnimation.resolve_facing(movement, camera, facing, true)
+			facing = DirectionalAnimation.resolve_facing(movement, camera, facing, was_walking)
 		DirectionalAnimation.play_direction(presenter, facing, walking)
 
 
@@ -146,6 +180,8 @@ func handle_packet(message: Dictionary) -> void:
 			var character: Dictionary = message.character
 			var config: Dictionary = character.appearance
 			config.version = int(config.version)
+			world_view.load_place(character.get("place", "lourizan"))
+			world_view.reset_interactions()
 			if presenter == null:
 				presenter = Presenter.new()
 				presenter.catalog = catalog
@@ -166,14 +202,23 @@ func handle_packet(message: Dictionary) -> void:
 				presenter.apply_appearance(config)
 			target_position = to_vector(character.position)
 			actor.position = target_position
+			camera_rig.snap_to_target()
 			actor.visible = true
 			admitted = true
-			input_adapter.set_physics_process(true)
-			input_adapter.set_process_input(true)
+			world_view.refresh_controls()
 			notify_parent({"type": "joined", "saved_at": character.saved_at})
 		"snapshot":
 			if admitted:
 				target_position = to_vector(message.position)
+				world_view.handle(message)
+		"travelled":
+			world_view.handle(message)
+			target_position = to_vector(message.position)
+			actor.position = target_position
+			actor.reset_physics_interpolation()
+			camera_rig.snap_to_target()
+		"travel_error", "talked", "talk_error":
+			world_view.handle(message)
 		"saved":
 			notify_parent(message)
 		"left":
@@ -188,6 +233,7 @@ func handle_packet(message: Dictionary) -> void:
 func connection_error(reason: String) -> void:
 	connection_started = false
 	admitted = false
+	world_view.reset_interactions()
 	input_adapter.clear_input()
 	input_adapter.set_physics_process(false)
 	input_adapter.set_process_input(false)
@@ -198,6 +244,8 @@ func connection_error(reason: String) -> void:
 
 
 func send(data: Dictionary) -> void:
+	if socket.get_ready_state() != WebSocketPeer.STATE_OPEN:
+		return
 	data["version"] = 1
 	socket.send_text(JSON.stringify(data))
 

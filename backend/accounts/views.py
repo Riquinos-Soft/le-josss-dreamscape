@@ -21,6 +21,7 @@ from django.views.decorators.http import require_POST
 from .catalog import DEFAULT
 from .forms import CharacterForm, Credentials, Registration
 from .models import Account, Character, GameTicket, LoginBucket
+from .places import ARRIVAL
 
 
 def limited(request, identity=""):
@@ -143,7 +144,7 @@ def create(request):
         with transaction.atomic():
             Account.objects.select_for_update().get(pk=request.user.pk)
             Character.objects.get_or_create(account=request.user, defaults={
-                "name": form.cleaned_data["name"], "appearance": form.appearance(), "position": [-2, 0.05, 1]})
+                "name": form.cleaned_data["name"], "appearance": form.appearance(), "position": ARRIVAL})
         return redirect("play")
     return render(request, "accounts/create.html", {"form": form, "appearance": DEFAULT})
 

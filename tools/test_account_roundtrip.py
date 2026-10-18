@@ -3,6 +3,7 @@ import argparse
 from contextlib import ExitStack
 import http.cookiejar
 import json
+import math
 import os
 from pathlib import Path
 import secrets
@@ -88,6 +89,106 @@ def start_authority(stack):
     wait_for(probe)
     return process
 
+def exercise_world(stack, client, jar, ws, character):
+    """Use real intents/exits, not privileged teleports, across all public maps."""
+    state = {"sequence": 0, "position": character["position"]}
+
+    def move(intent):
+        state["sequence"] += 1
+        send(ws, "move", sequence=state["sequence"], intent=intent)
+
+    def walk_to(x, z, timeout=15):
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            px, _, pz = state["position"]
+            dx, dz = x - px, z - pz
+            distance = math.hypot(dx, dz)
+            if distance < .22:
+                move([0, 0])
+                state["position"] = receive(ws, "snapshot")["position"]
+                return
+            scale = min(1, distance * 2) / distance
+            move([dx * scale, dz * scale])
+            state["position"] = receive(ws, "snapshot")["position"]
+        raise AssertionError(("Route blocked", state["position"], [x, z]))
+
+    def travel(destination):
+        send(ws, "travel", destination=destination, position=[999, 999, 999])
+        message = receive(ws, "travelled")
+        assert message["place"] == destination
+        state["position"] = message["position"]
+        return message
+
+    def cross_portal(x, z, entering):
+        deadline = time.monotonic() + 8
+        while time.monotonic() < deadline:
+            message = json.loads(ws.recv(timeout=8))
+            assert message["type"] != "error", message
+            if message["type"] == "travelled":
+                assert message["place"] == "lourizan"
+                state["position"] = message["position"]
+                assert (state["position"][0] < -70) == entering
+                return
+            if message["type"] == "snapshot":
+                state["position"] = message["position"]
+                dx, dz = x - state["position"][0], z - state["position"][2]
+                length = math.hypot(dx, dz)
+                move([dx / max(length, .01), dz / max(length, .01)])
+        raise AssertionError(("Portal did not commit", state["position"]))
+
+    send(ws, "travel", destination="home")
+    assert receive(ws, "travel_error")["error"] == "unknown_destination"
+    send(ws, "travel", destination="scandale")
+    assert receive(ws, "travel_error")["error"] == "exit_required"
+    send(ws, "talk", speaker="../arbitrary")
+    assert receive(ws, "talk_error")["error"] == "unknown_speaker"
+    snapshot = receive(ws, "snapshot")
+    assert set(snapshot["npcs"]) == {"LucasMaconheiro", "InesBotanica", "NarciVisitante", "Salon/BraisAnfitrion"}
+    for x, z in [(8.4, 10.8), (6.72, 10.8), (4.2, 10.8), (.6, 10.8), (-.72, 4.56)]:
+        walk_to(x, z)
+    cross_portal(-2.82, 4.56, True)
+    walk_to(-88.3, 5.8)
+    send(ws, "talk", speaker="Salon/BraisAnfitrion")
+    assert receive(ws, "talked")["pages"]
+    send(ws, "talk_end")
+    walk_to(-90, 5.9)
+    cross_portal(-90, 7.95, False)
+    for x, z in [(.6, 10.8), (4.2, 10.8), (8.4, 10.8), (10.8, 10.8), (10.8, 0)]:
+        walk_to(x, z)
+    walk_to(7.2, -4.8)
+    travel("street")
+    for x, z in [(4.2, -5), (4.1, -10), (3.5, -15), (2.5, -20), (2.5, -25), (2.5, -30)]:
+        walk_to(x * 1.45, z * 1.45)
+    travel("scandale")
+    send(ws, "talk", speaker="Bartender")
+    assert receive(ws, "talk_error")["error"] == "out_of_reach"
+    walk_to(1, -.5)
+    walk_to(.05, -.5)
+    send(ws, "talk", speaker="Bartender")
+    first_joke = receive(ws, "talked")["pages"]
+    assert first_joke
+    send(ws, "talk_end")
+    send(ws, "talk", speaker="Bartender")
+    assert receive(ws, "talked")["pages"] != first_joke
+    send(ws, "talk_end")
+    send(ws, "leave")
+    receive(ws, "left")
+    ws.close()
+    ws, resumed, _ = join(stack, client, jar)
+    assert resumed["id"] == character["id"] and resumed["appearance"] == character["appearance"]
+    assert resumed["place"] == "scandale"
+    assert all(abs(a-b) < .02 for a, b in zip(resumed["position"], state["position"]))
+    state.update(sequence=0, position=resumed["position"])
+    walk_to(1, -.5)
+    walk_to(1, 3.5)
+    walk_to(0, 4.6)
+    travel("lourizan")
+    print("PASS: server-validated exits, street/Scandale/Pazo travel, salon entry/return and Brais,")
+    print("all NPC spawns,")
+    print("Casa/forged destinations rejected, reachable non-repeating bartender dialogue,")
+    print("and fresh-connection destination/position/identity/appearance resume.")
+    return ws
+
 admin = psycopg.connect(dbname="postgres", autocommit=True)
 admin.execute(sql.SQL("CREATE DATABASE {}").format(sql.Identifier(database)))
 try:
@@ -123,7 +224,7 @@ try:
         restored_ws, restored, _ = join(stack, fresh, fresh_jar)
         assert restored["id"] == first["id"] and restored["appearance"] == first["appearance"]
         assert restored["position"][2] > first["position"][2] + 1, (first, restored)
-        assert abs(restored["position"][0]) < 7 and restored["revision"] > 0
+        assert -25 <= restored["position"][0] <= 29.8 and restored["revision"] > 0
         # A new connection fences the previous one immediately.
         replacement, newest, _ = join(stack, fresh, fresh_jar)
         assert receive(restored_ws, "error")["error"] == "session_replaced"
@@ -145,6 +246,7 @@ try:
         assert edited["id"] == final["id"] and edited["appearance"]["hair"] == "short"
         assert edited["name"] == "Viajero Nuevo"
         assert all(abs(a - b) < .01 for a, b in zip(edited["position"], final["position"]))
+        edited_ws = exercise_world(stack, fresh, fresh_jar, edited_ws, edited)
         send(edited_ws, "leave")
         receive(edited_ws, "left")
         edited_ws.close()

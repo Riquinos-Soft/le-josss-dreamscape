@@ -4,12 +4,10 @@ extends CanvasLayer
 signal open_requested
 signal cancel_requested
 signal destination_confirmed(destination: StringName)
+const ScreenUnits = preload("res://ui/screen_units.gd")
 
 const NAMES := {
-	&"street": "Calle Jacobo Risa",
-	&"home": "Casa",
-	&"lourizan": "Pazo de Lourizán",
-	&"scandale": "Bar Scandale"
+	&"street": "Calle Jacobo Risa", &"lourizan": "Pazo de Lourizán", &"scandale": "Bar Scandale"
 }
 var current: StringName = &"street"
 var selected: StringName = &""
@@ -22,15 +20,21 @@ var overlay: ColorRect
 var title: Label
 var status: Label
 var street_button: Button
-var home_button: Button
 var lourizan_button: Button
 var scandale_button: Button
 var scandale_dot: ColorRect
 var travel_button: Button
 var back_button: Button
 var street_dot: ColorRect
-var home_dot: ColorRect
 var lourizan_dot: ColorRect
+var map_center: CenterContainer
+var map_panel: PanelContainer
+var map_hint: Label
+var map_diagram: Control
+var map_rows: VBoxContainer
+var map_margin: MarginContainer
+var ui_theme := Theme.new()
+var map_actions: HBoxContainer
 
 
 func _ready() -> void:
@@ -65,11 +69,20 @@ func _ready() -> void:
 	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(overlay)
+	var scroll := ScrollContainer.new()
+	scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.follow_focus = true
+	overlay.add_child(scroll)
 	var center := CenterContainer.new()
-	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	overlay.add_child(center)
+	map_center = center
+	center.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	center.custom_minimum_size.y = get_viewport().get_visible_rect().size.y
+	scroll.add_child(center)
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(440, 360)
+	map_panel = panel
+	panel.custom_minimum_size.x = minf(440, get_viewport().get_visible_rect().size.x - 24)
+	get_viewport().size_changed.connect(_fit_map_card)
 	var panel_style := StyleBoxFlat.new()
 	panel_style.bg_color = Color(0.08, 0.13, 0.16, 1)
 	panel_style.border_color = Color(0.14, 0.73, 0.67, 1)
@@ -78,27 +91,30 @@ func _ready() -> void:
 	panel.add_theme_stylebox_override("panel", panel_style)
 	center.add_child(panel)
 	var margin := MarginContainer.new()
+	map_margin = margin
 	margin.add_theme_constant_override("margin_left", 18)
 	margin.add_theme_constant_override("margin_right", 18)
 	margin.add_theme_constant_override("margin_top", 18)
 	margin.add_theme_constant_override("margin_bottom", 18)
 	panel.add_child(margin)
 	var rows := VBoxContainer.new()
+	map_rows = rows
 	rows.add_theme_constant_override("separation", 10)
 	margin.add_child(rows)
 	title = Label.new()
 	title.text = "MAPA · LE JOSS'S DREAMSCAPE"
+	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	rows.add_child(title)
 	var hint := Label.new()
+	map_hint = hint
 	hint.text = "Elige a dónde viajar desde esta salida"
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	rows.add_child(hint)
-	rows.add_child(make_map_diagram())
+	map_diagram = make_map_diagram()
+	rows.add_child(map_diagram)
 	street_button = Button.new()
 	street_button.pressed.connect(func(): select(&"street"))
 	rows.add_child(street_button)
-	home_button = Button.new()
-	home_button.pressed.connect(func(): select(&"home"))
-	rows.add_child(home_button)
 	lourizan_button = Button.new()
 	lourizan_button.pressed.connect(func(): select(&"lourizan"))
 	rows.add_child(lourizan_button)
@@ -108,6 +124,7 @@ func _ready() -> void:
 	status = Label.new()
 	rows.add_child(status)
 	var actions := HBoxContainer.new()
+	map_actions = actions
 	rows.add_child(actions)
 	travel_button = Button.new()
 	travel_button.text = "Viajar"
@@ -117,6 +134,9 @@ func _ready() -> void:
 	back_button.text = "Volver · Esc"
 	back_button.pressed.connect(func(): cancel_requested.emit())
 	actions.add_child(back_button)
+	for button in [street_button, lourizan_button, scandale_button, travel_button, back_button]:
+		button.custom_minimum_size.y = 44
+	_fit_map_card()
 	overlay.hide()
 
 
@@ -138,13 +158,12 @@ func open_map(location: StringName) -> void:
 	guide.hide()
 	status.text = "Estás aquí: %s" % NAMES[current]
 	street_button.disabled = current == &"street"
-	home_button.disabled = current == &"home"
 	lourizan_button.disabled = current == &"lourizan"
 	scandale_button.disabled = current == &"scandale"
 	travel_button.disabled = true
 	back_button.disabled = false
 	update_labels()
-	(street_button if current != &"street" else home_button).grab_focus()
+	(street_button if current != &"street" else lourizan_button).grab_focus()
 
 
 func select(destination: StringName) -> void:
@@ -161,7 +180,6 @@ func set_loading() -> void:
 	status.text = "Cargando destino…"
 	travel_button.disabled = true
 	street_button.disabled = true
-	home_button.disabled = true
 	lourizan_button.disabled = true
 	scandale_button.disabled = true
 	back_button.disabled = true
@@ -171,7 +189,6 @@ func show_error(message: String) -> void:
 	status.text = message
 	back_button.disabled = false
 	street_button.disabled = current == &"street"
-	home_button.disabled = current == &"home"
 	lourizan_button.disabled = current == &"lourizan"
 	scandale_button.disabled = current == &"scandale"
 	travel_button.disabled = selected == &""
@@ -189,7 +206,7 @@ func close_map() -> void:
 
 func update_labels() -> void:
 	scandale_button.text = (
-		("✓ " if selected == &"scandale" else "")
+		("> " if selected == &"scandale" else "")
 		+ "Bar Scandale"
 		+ (" · Estás aquí" if current == &"scandale" else "")
 	)
@@ -203,62 +220,75 @@ func update_labels() -> void:
 		if current == &"street" or selected == &"street"
 		else Color(0.52, 0.65, 0.68)
 	)
-	home_dot.color = (
-		Color(0.22, 0.96, 0.81)
-		if current == &"home" or selected == &"home"
-		else Color(0.52, 0.65, 0.68)
-	)
 	lourizan_dot.color = (
 		Color(0.22, 0.96, 0.81)
 		if current == &"lourizan" or selected == &"lourizan"
 		else Color(0.52, 0.65, 0.68)
 	)
 	street_button.text = (
-		("✓ " if selected == &"street" else "")
+		("> " if selected == &"street" else "")
 		+ "Calle Jacobo Risa"
 		+ (" · Estás aquí" if current == &"street" else "")
 	)
-	home_button.text = (
-		("✓ " if selected == &"home" else "")
-		+ "Casa"
-		+ (" · Estás aquí" if current == &"home" else "")
-	)
 	lourizan_button.text = (
-		("✓ " if selected == &"lourizan" else "")
+		("> " if selected == &"lourizan" else "")
 		+ "Pazo de Lourizán"
 		+ (" · Estás aquí" if current == &"lourizan" else "")
 	)
 
 
 func make_map_diagram() -> Control:
-	var diagram := Control.new()
-	diagram.custom_minimum_size = Vector2(390, 86)
-	var line := Line2D.new()
-	line.points = PackedVector2Array([Vector2(45, 29), Vector2(345, 29)])
-	line.width = 3.0
-	line.default_color = Color(0.31, 0.64, 0.64, 1)
-	diagram.add_child(line)
+	var diagram := HBoxContainer.new()
+	diagram.custom_minimum_size.y = 58
 	var dots: Array[ColorRect] = []
-	var labels := ["Calle", "Casa", "Lourizán", "Scandale"]
-	for i in 4:
+	var labels := ["Calle", "Lourizán", "Scandale"]
+	for i in 3:
+		var column := VBoxContainer.new()
+		column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		diagram.add_child(column)
+		var center := CenterContainer.new()
+		column.add_child(center)
 		var dot := ColorRect.new()
-		dot.position = Vector2(39 + i * 100, 23)
-		dot.size = Vector2(12, 12)
-		diagram.add_child(dot)
+		dot.custom_minimum_size = Vector2(12, 12)
+		center.add_child(dot)
 		dots.append(dot)
 		var label := Label.new()
-		label.position = Vector2(7 + i * 100, 43)
-		label.size.x = 76
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		label.text = labels[i]
-		diagram.add_child(label)
+		column.add_child(label)
 	street_dot = dots[0]
-	home_dot = dots[1]
-	lourizan_dot = dots[2]
-	scandale_dot = dots[3]
-	var scale_note := Label.new()
-	scale_note.position = Vector2(105, 65)
-	scale_note.text = "Esquema · no a escala"
-	scale_note.add_theme_color_override("font_color", Color(0.68, 0.76, 0.76, 1))
-	diagram.add_child(scale_note)
+	lourizan_dot = dots[1]
+	scandale_dot = dots[2]
 	return diagram
+
+
+func _fit_map_card() -> void:
+	var unit := ScreenUnits.factor(get_viewport())
+	var view := get_viewport().get_visible_rect().size
+	var compact := view.y / unit < 500
+	ui_theme.default_font_size = roundi(16 * unit)
+	for control in [map_panel, guide, prompt]:
+		control.theme = ui_theme
+	map_panel.custom_minimum_size.x = minf(440 * unit, view.x - 24 * unit)
+	map_center.custom_minimum_size.y = view.y
+	map_hint.visible = not compact
+	map_diagram.visible = not compact
+	map_actions.add_theme_constant_override("separation", roundi(12 * unit))
+	map_rows.add_theme_constant_override("separation", roundi((6 if compact else 10) * unit))
+	for side in ["left", "right", "top", "bottom"]:
+		map_margin.add_theme_constant_override(
+			"margin_" + side, roundi((12 if compact else 18) * unit)
+		)
+	for button in [street_button, lourizan_button, scandale_button, travel_button, back_button]:
+		button.custom_minimum_size.y = 44 * unit
+	for dot in [street_dot, lourizan_dot, scandale_dot]:
+		dot.custom_minimum_size = Vector2.ONE * 12 * unit
+	map_diagram.custom_minimum_size.y = 58 * unit
+	guide.offset_left = -345 * unit
+	guide.offset_right = -16 * unit
+	guide.offset_top = 16 * unit
+	guide.offset_bottom = 76 * unit
+	prompt.offset_left = -195 * unit
+	prompt.offset_right = -16 * unit
+	prompt.offset_top = 16 * unit
+	prompt.offset_bottom = 60 * unit

@@ -4,5 +4,5 @@
 <div class="creator"><div class="portrait"><canvas id="preview" width="64" height="64" aria-label="Vista previa de tu personaje"></canvas><p id="preview-status" role="status">Cargando personaje…</p><button id="turn" type="button" class="secondary">Girar</button><button id="walk" type="button" class="secondary">Caminar</button></div>
 <form method="post" id="creator">{% csrf_token %}{{ form.as_p }}<button id="create-button">{% if editing %}Guardar y entrar{% else %}Crear y entrar{% endif %}</button>{% if editing %}<nav><a href="/play/">Continuar sin cambios</a></nav>{% endif %}</form></div>
 <form method="post" action="/logout/">{% csrf_token %}<button class="secondary">Cerrar sesión</button></form>
-{{ appearance|json_script:'initial-appearance' }}<script src="{% static 'accounts/preview.js' %}" defer></script>
+{{ appearance|json_script:'initial-appearance' }}<script src="{% static 'accounts/preview.js' %}?v=canonical-rgba-1" defer></script>
 {% endblock %}

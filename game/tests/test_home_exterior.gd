@@ -10,6 +10,8 @@ var failures := 0
 
 
 func _initialize() -> void:
+	# Headless windows otherwise default to 64x64, unlike the gameplay baseline.
+	root.set_deferred("size", Vector2i(1280, 720))
 	call_deferred("run")
 
 

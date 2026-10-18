@@ -1,19 +1,24 @@
 import json
+import importlib
 import re
 from datetime import timedelta
 from pathlib import Path
 from unittest.mock import patch
+from types import SimpleNamespace
 
 from django.conf import settings
+from django.apps import apps
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import identify_hasher
 from django.core import mail
 from django.core.management import call_command
 from django.test import Client, TestCase, override_settings
+from django.db import connection
 from django.utils import timezone
 
 from .catalog import DEFAULT, OPTIONS, valid_appearance
 from .models import Authority, Character, GameTicket, LoginBucket
+from .places import ARRIVAL, PLACE_ID
 
 
 @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
@@ -187,6 +192,57 @@ class AccountTests(TestCase):
         self.client.post("/logout/")
         self.assertFalse(GameTicket.objects.exists())
         self.assertGreater(Character.objects.get().generation, char["generation"])
+
+    def test_lourizan_checkpoint_and_fullscreen_play(self):
+        epoch, _, char = self.connect()
+        self.assertEqual(char["place"], PLACE_ID)
+        self.assertEqual(char["position"], ARRIVAL)
+        page = self.client.get("/play/")
+        self.assertNotContains(page, "<header")
+        self.assertNotContains(page, "Cerrar sesión")
+        self.assertNotContains(page, "Mi personaje")
+        body = {"epoch": epoch, "character_id": char["id"], "generation": char["generation"], "sequence": 1, "position": [9.6, 0, 15]}
+        self.assertEqual(self.private("checkpoint", body).json()["position"], [9.6, 0, 15])
+        self.assertEqual(self.private("checkpoint", {**body, "sequence": 2, "position": [35, 0, 0]}).status_code, 400)
+        self.assertEqual(Character.objects.get().position, [9.6, 0, 15])
+
+    def test_test_room_migration_preserves_identity_and_real_world_progress(self):
+        self.create_character()
+        original = Character.objects.get()
+        Character.objects.filter(pk=original.id).update(place="laboratory_v1", position=[-2, 0.05, 1])
+        self.client.post("/api/ticket/")
+        other = get_user_model().objects.create_user("settled@example.invalid", "safe-password-3278")
+        settled = Character.objects.create(account=other, name="Estable", appearance=DEFAULT, place=PLACE_ID, position=[12, 0, 16], revision=8)
+        migrate = importlib.import_module("accounts.migrations.0002_lourizan_entry").relocate_test_characters
+        migrate(apps, SimpleNamespace(connection=connection))
+        migrated = Character.objects.get(account=self.user)
+        self.assertEqual((migrated.id, migrated.name, migrated.appearance), (original.id, original.name, original.appearance))
+        self.assertEqual((migrated.place, migrated.position), (PLACE_ID, ARRIVAL))
+        self.assertEqual(migrated.generation, original.generation + 1)
+        self.assertFalse(GameTicket.objects.filter(character=migrated).exists())
+        migrate(apps, SimpleNamespace(connection=connection))
+        self.assertEqual(Character.objects.get(account=self.user).generation, migrated.generation)
+        settled.refresh_from_db()
+        self.assertEqual((settled.position, settled.revision), ([12, 0, 16], 8))
+
+    def test_destination_and_position_commit_atomically_and_resume(self):
+        epoch, _, char = self.connect()
+        body = {"epoch": epoch, "character_id": char["id"], "generation": char["generation"],
+                "sequence": 1, "place": "scandale", "position": [1, .05, 3.5]}
+        saved = self.private("checkpoint", body).json()
+        self.assertEqual((saved["place"], saved["position"]), ("scandale", [1, .05, 3.5]))
+        for place, position in [("home", [0, 0, 0]), ("invented", [0, 0, 0]),
+                                ("scandale", [20, 0, 0]), ("street", [0, float("nan"), 0])]:
+            self.assertEqual(self.private("checkpoint", {**body, "sequence": 2,
+                             "place": place, "position": position}).status_code, 400)
+            current = Character.objects.get()
+            self.assertEqual((current.place, current.position), ("scandale", [1, .05, 3.5]))
+        ticket = self.client.post("/api/ticket/").json()["ticket"]
+        resumed = self.private("consume", {"epoch": epoch, "ticket": ticket}).json()
+        self.assertEqual((resumed["id"], resumed["place"], resumed["position"]),
+                         (char["id"], "scandale", [1, .05, 3.5]))
+        body.update(generation=resumed["generation"], sequence=1, place="lourizan", position=[-90, .05, 5.9])
+        self.assertEqual(self.private("checkpoint", body).json()["position"], [-90, .05, 5.9])
 
     def test_checkpoint_replay_generation_restart_and_ownership(self):
         epoch, _, char = self.connect()

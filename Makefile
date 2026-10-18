@@ -5,6 +5,7 @@ TESTS := \
 	test_scandale.gd \
 	test_v2_appearance.gd \
 	test_v2_laboratory.gd \
+	test_account_location.gd \
 	test_touch_controls.gd \
 	test_movement_direction.gd \
 	test_keyboard_input.gd \
@@ -26,7 +27,7 @@ TESTS := \
 	test_street_item.gd \
 	test_street_scene.gd
 
-.PHONY: lint format import test export-web check
+.PHONY: lint format import test test-preview export-web check
 
 lint:
 	$(PYTHON) tools/check_docs.py
@@ -41,7 +42,7 @@ import:
 
 test:
 	@for test in $(TESTS); do \
-		"$(GODOT)" --headless --path game --fixed-fps 60 --script "res://tests/$$test" || exit $$?; \
+		"$(GODOT)" --headless --resolution 1280x720 --path game --fixed-fps 60 --script "res://tests/$$test" || exit $$?; \
 	done
 
 export-web:
@@ -51,4 +52,8 @@ export-web:
 	test -f build/web/index.wasm
 	test -f build/web/index.pck
 
-check: lint import test export-web
+test-preview:
+	"$(GODOT)" --headless --path game --script ../tools/export_appearance_fixture.gd
+	node tools/test_appearance_preview.cjs
+
+check: lint import test test-preview export-web

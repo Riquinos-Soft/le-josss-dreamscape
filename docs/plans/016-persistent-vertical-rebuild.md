@@ -74,7 +74,12 @@ acceptance and full browser flow remain separate; see development evidence.
   editor to gameplay. Record warnings and visual limitations separately from
   passing counts. Do not commit the candidate as finished on static sheets alone.
 
-**C2 — Native route diagnosis, in progress.**
+**C2 — Native route diagnosis, intermittent warning still open.**
+
+Two updated default native runs passed 50 checks without warnings. A temporary
+single-worker diagnostic also passed 50 but emitted the Jolt maximum-job warning;
+it did not establish a cause and was removed. No permanent physics setting changed.
+Keep this limitation for release review; see development evidence.
 
 - Allowed: the existing `game/tests/test_account_location.gd`, ignored diagnostic
   drivers/logs and the directly implicated runtime code if a cause is demonstrated.
@@ -86,7 +91,12 @@ acceptance and full browser flow remain separate; see development evidence.
   dimensions; confirm errors/warnings and no orphan test process. Engine change
   or global physics/thread tuning is outside this package without new evidence.
 
-**C3 — Account-world integration and rollout, waiting for C1/C2.**
+**C3 — Account-world integration locally verified; OVH rollout pending.**
+
+Expanded developer authorization restores the original NPCs, street/Pazo/salon and
+Scandale, excluding Casa. Local backend, full Godot suite, HTTP/WebSocket travel/
+dialogue/resume, native capture, Web export and Chrome desktop/responsive checks
+pass. Production is unchanged; rollout remains subject to C2 and acceptance.
 
 - Own the inherited account place/migration/UI/authority/CI/nginx files already
   listed in the development checkpoint. Keep the durable character ID, appearance

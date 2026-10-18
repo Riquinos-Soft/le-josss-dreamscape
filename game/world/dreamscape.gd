@@ -4,7 +4,6 @@ extends Node3D
 const LourizanHistory = preload("res://dialogue/lourizan_history.gd")
 const LOCATION_PATHS := {
 	&"scandale": "res://world/locations/scandale.tscn",
-	&"home": "res://world/locations/home.tscn",
 	&"lourizan": "res://world/locations/lourizan.tscn",
 }
 const MAP_DIRECTIONS := [

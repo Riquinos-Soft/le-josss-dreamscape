@@ -1,5 +1,5 @@
 extends SceneTree
-## Active-location support validation for street, Casa and Lourizán terrain.
+## Active-location support validation for street, Scandale and Lourizán terrain.
 
 var checks := 0
 var failures := 0
@@ -28,21 +28,21 @@ func run() -> void:
 	check(street_target != items.INVALID_TARGET, "street surface supports footprint")
 	check(items.valid_pose(street_target, 0.0), "street surface validates")
 	items.cancel_placement()
-	await travel(&"home")
-	check(items.active_location_id == &"home", "Casa support context active")
-	check(not items.support_bodies.is_empty(), "Casa exposes captured terrain supports")
-	check(items.begin_placement(0), "Casa preview starts")
-	var home_target: Vector3 = items.supported_pose(
+	await travel(&"scandale")
+	check(items.active_location_id == &"scandale", "Scandale support context active")
+	check(not items.support_bodies.is_empty(), "Scandale exposes authored floor supports")
+	check(items.begin_placement(0), "Scandale preview starts")
+	var bar_target: Vector3 = items.supported_pose(
 		player.global_position + Vector3(0, 0, -0.8), 0.0
 	)
-	check(home_target != items.INVALID_TARGET, "Casa path supports footprint")
-	check(items.valid_pose(home_target, 0.0), "Casa path validates")
+	check(bar_target != items.INVALID_TARGET, "Scandale path supports footprint")
+	check(items.valid_pose(bar_target, 0.0), "Scandale path validates")
 	check(
 		(
 			items.supported_pose(player.global_position + Vector3(100, 0, 100), 0.0)
 			== items.INVALID_TARGET
 		),
-		"Casa empty edge rejects placement"
+		"Scandale empty edge rejects placement"
 	)
 	items.cancel_placement()
 	await travel(&"lourizan")

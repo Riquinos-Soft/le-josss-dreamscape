@@ -11,6 +11,8 @@ var map_ui: CanvasLayer
 
 
 func _initialize() -> void:
+	# Headless windows otherwise default to 64x64, unlike the gameplay baseline.
+	root.set_deferred("size", Vector2i(1280, 720))
 	call_deferred("run")
 
 
@@ -148,26 +150,28 @@ func run() -> void:
 	await enter_exit(session.get_node("Street/Exit"))
 	session.open_map()
 	map_ui.select(&"home")
-	check(await session.travel_to(&"home"), "travel to captured home")
+	check(map_ui.selected == &"", "Casa cannot be selected")
+	check(not await session.travel_to(&"home"), "Casa travel is rejected")
+	map_ui.select(&"scandale")
+	check(await session.travel_to(&"scandale"), "travel to captured Scandale")
 	await frames(12)
-	await capture("home-pixel-pass")
-	check(session.current_id == &"home" and player.is_on_floor(), "home arrival grounded")
+	await capture("Scandale-pixel-pass")
+	check(session.current_id == &"scandale" and player.is_on_floor(), "Scandale arrival grounded")
 	check(
-		presentation.get_shader_parameter("world_pixel_height") == 0.0, "home keeps clear rendering"
+		presentation.get_shader_parameter("world_pixel_height") == 0.0,
+		"Scandale keeps clear rendering"
 	)
-	check(player.get_instance_id() == original_player, "home retains production player")
-	check(session.get_node("Street/PixelPass").visible, "home uses world pixel pass")
-	for z in [10, 8, 6, 4, 2, 0, -2, -4, -6, -8]:
-		check(
-			await walk_to(Vector3(8, 0, z) * session.active_location.place_scale),
-			"home path reaches waypoint"
-		)
-	check(session.near_exit != null, "home path reaches map exit")
+	check(player.get_instance_id() == original_player, "Scandale retains production player")
+	check(session.get_node("Street/PixelPass").visible, "Scandale uses world pixel pass")
+	check(await walk_to(Vector3(0, 0, 4.6)), "Scandale path reaches exit")
+	check(session.near_exit != null, "Scandale path reaches map exit")
 	session.open_map()
 	map_ui.select(&"street")
-	check(await session.travel_to(&"street"), "return from home")
+	check(await session.travel_to(&"street"), "return from Scandale")
 	await frames(12)
-	check(session.current_id == &"street" and player.is_on_floor(), "street restored after home")
+	check(
+		session.current_id == &"street" and player.is_on_floor(), "street restored after Scandale"
+	)
 	check(
 		presentation.get_shader_parameter("world_pixel_height") == 0.0,
 		"return keeps clear rendering"
@@ -191,7 +195,7 @@ func run() -> void:
 	await frames(1)
 	var destination_touch := InputEventScreenTouch.new()
 	destination_touch.index = 2
-	destination_touch.position = map_ui.home_button.get_global_rect().get_center()
+	destination_touch.position = map_ui.scandale_button.get_global_rect().get_center()
 	destination_touch.pressed = true
 	root.push_input(destination_touch, true)
 	Input.flush_buffered_events()
@@ -199,7 +203,7 @@ func run() -> void:
 	root.push_input(destination_touch, true)
 	Input.flush_buffered_events()
 	await frames(2)
-	check(map_ui.selected == &"home", "touch selects destination in map")
+	check(map_ui.selected == &"scandale", "touch selects destination in map")
 	destination_touch.index = 3
 	destination_touch.position = map_ui.travel_button.get_global_rect().get_center()
 	destination_touch.pressed = true
@@ -209,7 +213,7 @@ func run() -> void:
 	root.push_input(destination_touch, true)
 	Input.flush_buffered_events()
 	await frames(15)
-	check(session.current_id == &"home", "touch confirms travel to captured home")
+	check(session.current_id == &"scandale", "touch confirms travel to captured Scandale")
 	check(touch_controls.input_enabled, "touch movement returns after travel")
 	print("Location travel: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)

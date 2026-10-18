@@ -10,6 +10,8 @@ var dialogue: CanvasLayer
 
 
 func _initialize() -> void:
+	# Headless windows otherwise default to 64x64, unlike the gameplay baseline.
+	root.set_deferred("size", Vector2i(1280, 720))
 	call_deferred("run")
 
 
@@ -268,10 +270,22 @@ func run() -> void:
 		"compact bubble stays vertically visible"
 	)
 	check(
-		dialogue.body_label.get_theme_font_size("font_size") == 16,
+		(
+			absf(
+				(
+					(
+						dialogue.body_label.get_theme_font_size("font_size")
+						* float(root.size.x)
+						/ logical_size.x
+					)
+					- 16.0
+				)
+			)
+			< 0.6
+		),
 		"compact window uses readable compact typography"
 	)
-	root.size = Vector2i(1280, 720)
+	root.set_deferred("size", Vector2i(1280, 720))
 	await frames(2)
 	await capture("lucas-dialogue")
 	for _page in dialogue.pages.size():

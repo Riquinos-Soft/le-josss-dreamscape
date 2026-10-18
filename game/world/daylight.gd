@@ -3,13 +3,14 @@ extends Node
 ## HUD layers are drawn afterwards and retain their original contrast.
 
 @export_range(-1.0, 24.0) var preview_hour := -1.0
+@export var screen_path := NodePath("Street/PixelPass/Screen")
 var material: ShaderMaterial
 var elapsed := 0.0
 var daylight := 1.0
 
 
 func _ready() -> void:
-	var screen: ColorRect = get_parent().get_node("Street/PixelPass/Screen")
+	var screen: ColorRect = get_parent().get_node(screen_path)
 	material = screen.material.duplicate()
 	screen.material = material
 	_update_light()

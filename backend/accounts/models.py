@@ -29,7 +29,7 @@ class Character(models.Model):
     account = models.OneToOneField(Account, on_delete=models.CASCADE)
     name = models.CharField(max_length=24)
     appearance = models.JSONField()
-    place = models.CharField(max_length=40, default="laboratory_v1")
+    place = models.CharField(max_length=40, default="lourizan")
     position = models.JSONField(default=list)
     revision = models.PositiveBigIntegerField(default=0)
     generation = models.PositiveBigIntegerField(default=0)

@@ -67,6 +67,8 @@ const GARAGE_APPROACH: Array[Vector3] = [
 
 @export var study_material: ShaderMaterial
 @export var paving_material: Material
+@export var location_only := false
+var tracked_player: Node3D
 var facade_materials: Array[ShaderMaterial] = []
 
 @onready var street_visual: Node3D = $StreetVisual
@@ -85,11 +87,12 @@ func _ready() -> void:
 	build_garage()
 	build_pixel_decor()
 	rescale_place()
-	$Player/Visual.hide()
-	$CameraRig/Camera.projection = Camera3D.PROJECTION_ORTHOGONAL
-	$CameraRig/Camera.size = 13.5
-	$CameraRig.base_orthographic_size = 13.5
-	$CameraRig.snap_to_target()
+	if not location_only:
+		$Player/Visual.hide()
+		$CameraRig/Camera.projection = Camera3D.PROJECTION_ORTHOGONAL
+		$CameraRig/Camera.size = 13.5
+		$CameraRig.base_orthographic_size = 13.5
+		$CameraRig.snap_to_target()
 
 
 func to_world(point: Vector3) -> Vector3:
@@ -108,17 +111,21 @@ func rescale_place() -> void:
 		get_node(name).scale = Vector3.ONE * PLACE_SCALE
 	$Arrival.position = to_world($Arrival.position)
 	$Exit.position = to_world($Exit.position)
-	$Player.position = to_world($Player.position)
-	$Player.spawn_transform = $Player.transform
-	$Player.reset_physics_interpolation()
-	$ItemLoop.initial_item_position = to_world($ItemLoop.initial_item_position)
+	if not location_only:
+		$Player.position = to_world($Player.position)
+		$Player.spawn_transform = $Player.transform
+		$Player.reset_physics_interpolation()
+		$ItemLoop.initial_item_position = to_world($ItemLoop.initial_item_position)
 	paving_material.set_shader_parameter("place_scale", PLACE_SCALE)
 
 
 func _process(_delta: float) -> void:
-	study_material.set_shader_parameter("player_position", $Player.global_position)
+	var subject := tracked_player if location_only else get_node("Player") as Node3D
+	if not is_instance_valid(subject):
+		return
+	study_material.set_shader_parameter("player_position", subject.global_position)
 	for material in facade_materials:
-		material.set_shader_parameter("player_position", $Player.global_position)
+		material.set_shader_parameter("player_position", subject.global_position)
 
 
 func build_garage() -> void:

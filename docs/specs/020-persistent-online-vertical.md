@@ -44,63 +44,64 @@ This correction is deployed. Fifteen account tests and the local real HTTP/WSS
 round trip pass; production Chrome loaded the editor and preview. Full physical
 phone acceptance remains open. Public signup still awaits working outgoing mail.
 
-## Current correction — remove the public test room, 2026-10-17
+## Current correction — restore the authored game, 2026-10-18
 
-2026-10-18 scope update: the developer explicitly requested restoring the detailed
-Joss character, original NPCs and map travel to all existing authored destinations
-except Casa. Include Calle Jacobo Risa, Pazo de Lourizán (including its salon) and
-Bar Scandale. Reuse their existing art, speakers/dialogue and marked exits. Casa
-must not be selectable or reachable through a forged destination request. This
-supersedes the earlier deferral of NPC/travel migration for this correction.
-Account play must retain identity and save both destination and position; a separate
-legacy preview is not completion of the account-world restoration. Keep server
-authority over movement and travel; do not trust client-submitted coordinates.
+The developer requested the original detailed Joss design/walk, NPCs and map travel
+to every existing destination except Casa, superseding the temporary laboratory
+and the earlier deferral of NPC/travel migration. Restore Calle Jacobo Risa, Pazo
+de Lourizán (including its dream salon) and Bar Scandale using their existing scenes,
+art, speakers, conversations and marked exits. Casa is absent from both map choices
+and the authority's finite destination set. Keep internal regression fixtures;
+never publish the laboratory preview route/export as a player destination.
 
-The developer explicitly rejected entering the validation room and requested its
-removal from public play, together with the upper character/logout bar. This
-supersedes the temporary laboratory destination and the in-game personalization
-button described above. Use the existing authored Lourizán exterior as the bounded
-account destination, with the same visible geometry/collision on client and trusted
-authority. Preserve one owned character and its appearance; relocate only existing
-`laboratory_v1` saves to Lourizán's safe arrival through an additive data migration.
-Subsequent Lourizán saves must resume without relocation. Reuse the existing scene,
-camera, background and day/night components instead of importing the legacy world
-root or inventing new art. Travel/NPC/economy migration remains separate.
+The canonical character implementation is committed locally in `8028f69`: unchanged
+Joss default visible RGBA/alpha in all 40 poses, compatible customization IDs and
+shared palette/pixel rules for the editor/game. ADR006's review is closed; do not
+reopen it or replace the original art with another body template.
 
-Play must fill the page without a permanent top bar, character label or logout
-button. Show a reconnect notice only while connecting or after a connection error;
-hide it when play is connected. Keep character personalization at account entry.
-Stop publishing the laboratory preview route/export. Collision fixtures may remain
-internal automated test inputs; they are not player destinations. Current status:
-in progress. Seventeen backend tests, the local HTTP/WSS round trip, headless
-25-check route and account Web export pass. One native route run passed 25 checks,
-but repeated native runs intermittently stall with a Jolt job-system warning.
-The V2 character design/walk has also been explicitly rejected. Next: resolve the
-canonical-animation/shared-pose conflict and native stall before OVH rollout.
-The developer authorized the requested review on 2026-10-17. The decision is now
-closed in [ADR 006](../adr/006-v2-character-and-scene-contract.md): derive lossless
-layers and explicit material masks from the original per-phase Joss pixels;
-preserve existing appearance IDs, actor, direction helper and cadence. Replace
-the incorrect fixed-head oracle with exact default reconstruction of the canonical
-poses and matching editor/game compositions. The canonical character implementation is locally verified (195 appearance
-checks, 120 HTML/Godot composition matches, 382 native motion checks and account
-Web export); developer art acceptance and full account-world browser checks remain.
-Full NPC/map integration is pending; keep the prepared runtime correction local until the character
-correction and native failure investigation pass. Plan 016 records the bounded
-execution sequence. No further architecture approval is needed for that sequence.
+Preserve the owned character ID, name, appearance and existing real-world position.
+Migration0002 relocates only `laboratory_v1` saves once, fencing old tickets/sessions;
+it does not reset already-saved Lourizán progress. Authority owns movement, floor,
+exit and NPC reach checks. Three fixed, separated scene instances in the existing
+headless process share the original geometry; player actors are siblings of places,
+with local positions stored per place. Client sends destination/speaker IDs and
+movement intent. The authority selects arrivals and commits destination/position
+atomically before acknowledging travel, including salon passage. No extra service,
+registry framework, player replication or new art direction is introduced.
 
-### Design fit for the character correction
+Account entry retains creation/personalization. Play fills the viewport with no
+permanent upper character/logout bar; connection errors/reconnect remain temporary.
+Reuse the original map and dialogue UI with readable window/CSS pixel sizing;
+world camera, metre scale, sprite density and day/night components remain. Version
+changed account scripts/styles so cached rejected preview code is not reused.
+Inventory, quests, companion/surf and other-player replication remain separate.
 
-- Exact reference: `game/assets/art/characters/joss_walk.png`, `joss_idle.png`
-  and `joss.tres`; Lucas is the second style reference.
-- Preserve original silhouette, clusters, per-phase motion, eight directions,
-  8 fps walk, idle/walk0 upper-body identity, grounding and turn/stop continuity.
-  Personalization changes only authored material masks and compatible overlays.
-- Reuse the existing presenter, actor, direction helper and cache. Keep saved
-  appearance IDs and all offered choices; no new identity or animation system.
-- Compare reference/default/alternate in motion at the same gameplay camera and
-  in the editor, all eight directions. Default composition must exactly reproduce
-  the original pixels. Compare HTML and Godot output pixels as well as appearance.
+### Design fit and local acceptance
+
+- Character reference: `joss_walk.png`, `joss_idle.png`, `joss.tres` and Lucas.
+  Preserve clusters, shading, silhouette, each original phase, eight directions,
+  8 fps, idle/walk0 identity, grounding and uninterrupted turns. Modifications use
+  explicit material masks and compatible accessories, preserving stored IDs.
+- Place references: original `world/locations/lourizan.tscn`, salon, Jacobo Risa
+  street and Scandale scenes. Reuse geometry, collision, NPC resources and exits.
+  Keep an account player/controller alive across scene changes.
+- Local verification: all 24 Makefile Godot suites, 18 backend tests, the expanded
+  real HTTP/WebSocket/PostgreSQL route, 120 editor/Godot RGBA compositions and Web
+  export pass. Native default runs passed 50 route/UI checks; the final headless
+  account test adds sizing/reconnection checks (54 total).
+- Chrome desktop visibly loaded the corrected editor, walking/turning controls,
+  fullscreen Pazo and original NPCs, then travelled through the actual map to
+  Scandale. Chrome map views were inspected at 844×390 and 390×844; overrides reset.
+  This is desktop responsive validation, not physical iPhone or Safari acceptance.
+- The intermittent native Jolt maximum-job warning remains recorded. One diagnostic
+  native run with a temporary single-worker override finished 50 checks but still
+  warned; the override was removed. Subsequent default runs passed without it.
+  No cause or permanent engine fix is claimed; retain this risk before OVH rollout.
+
+Status: local restoration implemented and reviewable; production remains unchanged.
+Next: developer visual/physical-device acceptance, dedicated native-warning follow-up
+before production release, and separately the already-authorized outgoing-mail setup
+once sender information is available. See Plan016 and development evidence.
 
 ## Objective
 

@@ -1,7 +1,6 @@
 """Private simulation boundary. Never route /internal/ through the public proxy."""
 import hashlib
 import json
-import math
 import secrets
 import uuid
 from datetime import timedelta
@@ -18,6 +17,7 @@ from django.views.decorators.http import require_POST
 
 from .models import Account, Authority, Character, GameTicket
 from .views import character_json
+from .places import valid_position
 
 
 def private(view):
@@ -82,6 +82,8 @@ def consume(request, data):
     if not valid_session(ticket.session_key, character.account):
         ticket.delete()
         return JsonResponse({"error": "session_expired"}, status=401)
+    if not valid_position(character.position, character.place):
+        return JsonResponse({"error": "place_unavailable"}, status=409)
     character.generation += 1
     character.checkpoint_sequence = 0
     character.active_session = ticket.session_key
@@ -103,12 +105,12 @@ def checkpoint(request, data):
     if sequence <= character.checkpoint_sequence:
         return JsonResponse(character_json(character))
     position = data["position"]
-    if (not isinstance(position, list) or len(position) != 3
-            or any(type(v) not in (int, float) or not math.isfinite(v) for v in position)
-            or abs(position[0]) > 6.6 or abs(position[2]) > 5.6 or not -0.1 <= position[1] <= 1.1):
+    place = data.get("place", character.place)
+    if not isinstance(place, str) or not valid_position(position, place):
         raise ValueError()
     # Only the trusted Godot authority supplies positions, after floor/collision validation.
     character.position = position
+    character.place = place
     character.checkpoint_sequence = sequence
     character.revision += 1
     character.save()
