@@ -39,8 +39,11 @@ Implementation/acceptance checkpoint: local implementation and second-account
 provisioning complete. Nineteen backend tests, 25 Godot suites, the extended real
 two-account HTTP/WebSocket/PostgreSQL roundtrip, connection-UI transitions and Web
 export pass. The focused native renderer has 30 checks; an in-world capture shows
-both canonical characters with distinct customization. Production publication and
-physical iPhone acceptance remain pending. Evidence/commands are recorded in
+both canonical characters with distinct customization. Developer subsequently
+authorized push/deployment: CI run 39177946492 passed and OVH now runs `97c9c3f`.
+Real public HTTPS/WSS two-player presence/movement/stop and leave/resume pass;
+temporary probes were removed, and `test2` still opens first creation. Physical
+iPhone acceptance remains pending. Evidence/commands are recorded in
 [development](../development.md).
 
 Deployment follow-up (2026-10-19): validate and publish the account client at

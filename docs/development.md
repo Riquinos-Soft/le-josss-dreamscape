@@ -1,5 +1,32 @@
 # Development setup and verified baseline
 
+## Online presence published on OVH — 2026-10-19
+
+Developer explicitly authorized push/deployment. CI run 39177946492 passed all
+gates and published runtime release `97c9c3f52588dbe37872061e1733d307b54717af`;
+public HTTPS `release.txt` matches. Rebuilt/activated matching backend, authority
+and web services from `/opt/dreamscape/source-97c9c3f`. Validated a fresh database
+archive first and kept the preceding source link/images for rollback. Applied
+the normal migration command (no new migration) and explicitly provisioned
+`test2:test2`. Character IDs/names/appearance/place/positions matched before/after
+the activation boundary. Authority startup reports `Account zone ready` without
+runtime errors. Existing mail/registration settings were retained.
+
+Actual public HTTPS/WSS smoke used two isolated temporary probe accounts, leaving
+the requested test accounts' characters untouched. Reciprocal public appearance,
+self/private-field exclusion, authoritative movement/stop, departure/rejoin and
+independent identity/position resume passed. Both play pages omit the connecting
+banner. The real `test2:test2` login opens first-character creation; no character
+was precreated for it. Probe accounts/characters and generated credential files
+were removed after verification. This is protocol/HTTP evidence, not a manual
+two-browser or physical-iPhone art acceptance claim.
+
+Evidence: `build/verification/online/production-{ci,smoke}.log` and
+`public_two_player_smoke.py`; remote `build-97c9c3f.log`, `migrate-97c9c3f.log`,
+`activate-97c9c3f.log`, `probes-cleanup-97c9c3f.log`. The CI artifact action warns
+about deprecated Node20 metadata being run on Node24; all jobs still pass.
+This documentation-only checkpoint does not change the validated runtime payload.
+
 ## Two-account online presence and quiet connection UI — 2026-10-19
 
 Spec 020's newly authorized increment adds a public `players` snapshot keyed by
@@ -48,8 +75,8 @@ restarted its child to 94278 after the web restart; no second authority was adde
 Live local logins confirm hidden connection UI and untouched first creation for
 `test2`. Existing test character data was preserved. LAN HTTP remains subject to
 the previously documented Godot secure-context limitation on phones; use public
-HTTPS after authorized publication. Production remains at `80e35e2`: these new
-services/client/test2 have not been published. See [account deployment](../deploy/ovh/ACCOUNTS.md)
+HTTPS after publication. This historical local checkpoint preceded the successful
+OVH rollout recorded above. See [account deployment](../deploy/ovh/ACCOUNTS.md)
 for the matching-service and second-account provisioning steps.
 
 ## OVH authored-world activation — 2026-10-19
