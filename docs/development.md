@@ -1,5 +1,19 @@
 # Development setup and verified baseline
 
+## Account artifact publication path — 2026-10-19
+
+Run 39171895957 for `13e2491` passed lint, Godot tests/Web export and the real
+HTTP/WebSocket/PostgreSQL account roundtrip. Both deployment attempts then exited
+before SSH because their file checks still required `build/web/v2/`, while CI
+exports `build/web/account-game/`. Publication now checks and verifies the actual
+account artifact. Production still served `b5e9089` before this correction.
+
+The initial TLS diagnosis was invalid: the diagnostic hostname omitted `.153`.
+The correct public hostname passes TLS and returns the old release SHA; its Caddy
+block targets the responding local static service. No VPS configuration change
+was needed to diagnose this deployment failure. Public static/account runtime
+verification remains pending the corrected CI run.
+
 ## Pazo south stair clearance — 2026-10-19
 
 The first post-push CI run found that the new solid south statue pedestal

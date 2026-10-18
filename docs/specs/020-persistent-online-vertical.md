@@ -1,8 +1,14 @@
 # Spec 020 — Persistent online vertical rebuild
 
 Status: in-progress
-Updated: 2026-10-17
+Updated: 2026-10-19
 Language: en
+
+Deployment follow-up (2026-10-19): validate and publish the account client at
+`account-game/`, matching the CI export and existing account-service mount.
+The retired `v2/` laboratory export must not block publication. Acceptance requires
+successful CI gates and the expected public HTTPS release SHA and account files;
+the account backend/authority rollout remains a separate operational step.
 
 Authorization: developer requested a controlled rebuild plan on 2026-10-13,
 explicitly adding registration, character creation, online play and persistence.

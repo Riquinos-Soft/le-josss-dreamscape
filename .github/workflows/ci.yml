@@ -171,9 +171,9 @@ jobs:
           test -s build/web/index.html
           test -s build/web/index.wasm
           test -s build/web/index.pck
-          test -s build/web/v2/index.html
-          test -s build/web/v2/index.wasm
-          test -s build/web/v2/index.pck
+          test -s build/web/account-game/index.html
+          test -s build/web/account-game/index.wasm
+          test -s build/web/account-game/index.pck
           tar -C build/web -czf "$RUNNER_TEMP/web.tar.gz" .
           ssh -i ~/.ssh/dreamscape -o IdentitiesOnly=yes -o BatchMode=yes \
             -o StrictHostKeyChecking=yes -o ConnectTimeout=15 \
@@ -185,7 +185,7 @@ jobs:
           test "$actual" = "$RELEASE_SHA"
           for file in index.html index.wasm index.pck; do
             curl --fail --silent --show-error --head --retry 3 --max-time 30 \
-              "https://dreamscape.198.244.233.153.sslip.io/v2/$file" > /dev/null
+              "https://dreamscape.198.244.233.153.sslip.io/account-game/$file" > /dev/null
           done
 
       - name: Remove SSH key

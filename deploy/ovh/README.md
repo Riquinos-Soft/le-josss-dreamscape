@@ -115,16 +115,16 @@ releases explicitly, preserving the active and previous versions. Revalidation
 avoids retaining an old cached build across visits, but players should reload
 after a release; this is not a seamless live-game update system.
 
-## V2 laboratory preview
+## Account client export
 
-The same tested release includes the isolated P2 laboratory at
-https://dreamscape.198.244.233.153.sslip.io/v2/ . CI builds it with
-`python3 tools/export_v2_laboratory.py --godot godot --output build/web/v2`, runs
-both V2 tests, and verifies the preview HTML/WASM/PCK after publication. The root
-still launches the existing production world. The preview uses a disposable copy
-with its own main scene; release templates reject scene-path overrides.
-This makes physical review possible over HTTPS without a local-network server.
-It does not deploy accounts, replace the live world or imply visual/mobile approval.
+The tested release includes the account client under `account-game/`. CI builds
+it with `python3 tools/export_v2_laboratory.py --godot godot --scene account --output build/web/account-game`
+and checks its HTML/WASM/PCK before upload and over public HTTPS after publication.
+The former `v2/` laboratory export is no longer generated. The account entry flow
+uses this client through `/game/`; see [account service deployment](ACCOUNTS.md).
+The export uses a disposable project copy with the account main scene; release
+templates reject scene-path overrides. Static publication does not deploy the
+account backend/authority or imply visual/mobile approval.
 The receiver already supports nested regular files and retains its 256 MiB limit.
 
 ## Database and backups
