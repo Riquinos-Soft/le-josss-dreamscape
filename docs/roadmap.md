@@ -1,8 +1,21 @@
 # Roadmap and current checkpoint
 
-Updated: 2026-10-17. This is the entry point for current priorities. Spec numbers
+Updated: 2026-11-05. This is the entry point for current priorities. Spec numbers
 are identifiers, not execution order. Proposed work below is not implementation
 authorization. Older roadmap wording is retained in Git history.
+
+## Current bounded increment: public beta entry
+
+Developer authorized one focused PR for documented `beta:beta` login and verified
+new-character entry at the existing Pazo de Lourizán. Reuse Spec020's account
+runtime and migration0002; preserve all valid saved positions and existing world.
+The public character has one active game session: simultaneous visitors require
+independent accounts. No anonymous entry, general password exception, automatic
+merge/deployment or registration/mail change. Local implementation and verification complete; PR review/release pending. See [Spec020](specs/020-persistent-online-vertical.md) for acceptance.
+
+The earlier mission/mount restoration remains uncommitted in the original
+checkout and is outside this isolated branch. The older “P2 room” checkpoint
+below is historical: current account play already uses the authored destinations.
 
 ## 1. Current priority: controlled persistent online rebuild
 

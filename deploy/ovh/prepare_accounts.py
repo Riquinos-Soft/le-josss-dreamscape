@@ -72,3 +72,4 @@ else:
     subprocess.run(account_compose + ["run", "--rm", "--no-deps", "-e", "PGUSER", "-e", "PGPASSWORD", "accounts",
                                      "python", "manage.py", "migrate", "--noinput"], env=env, cwd=root, check=True)
     subprocess.run(account_compose + ["run", "--rm", "--no-deps", "accounts", "python", "manage.py", "seed_test_account"], cwd=root, check=True)
+    subprocess.run(account_compose + ["run", "--rm", "--no-deps", "accounts", "python", "manage.py", "seed_beta_account"], cwd=root, check=True)
