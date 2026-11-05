@@ -38,8 +38,11 @@ documentation. Reconsider transport only if measured P6 interaction latency fail
 
 ## Account/session boundary
 
-- Email and password registration/login; one character per account, enforced by
-  a database uniqueness constraint. Display name is separate from account identity.
+- Updated by explicit developer direction on 2026-11-05: new signup uses username,
+  password and repetition, immediately active without email/verification. Legacy
+  email accounts retain login/recovery compatibility. Username-only accounts have
+  no email recovery; general password validation, CSRF and fencing are unchanged.
+  One character per account, enforced by a database uniqueness constraint. Display name is separate from account identity.
   Creation validates name length/content and every appearance ID before committing.
 - Use Django session authentication. Web session cookies are Secure, HttpOnly and
   SameSite; state-changing HTTPS calls require CSRF validation and allowed Origin.
@@ -57,7 +60,8 @@ documentation. Reconsider transport only if measured P6 interaction latency fail
 - One active game connection per character. A newly authenticated connection
   revokes the prior connection using a durable connection generation; old commands
   cannot mutate state. Browser tabs are not separate characters.
-- Email verification/recovery delivery must work before public registration.
+- Historical email-signup launch gate (superseded for username signup on
+  2026-11-05): email verification/recovery delivery must work before email signup.
   Development may use a local mail sink; do not claim this delivers recovery mail.
   Provider, retention/deletion and offsite backup configuration remain D4 launch
   decisions. No provider purchase or production account enablement in P1.

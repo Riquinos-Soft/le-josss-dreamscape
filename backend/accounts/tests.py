@@ -90,8 +90,8 @@ class AccountTests(TestCase):
         self.assertEqual(client.post("/logout/").status_code, 403)
         self.assertTrue(client.cookies["sessionid"]["httponly"])
 
-    def test_registration_disabled_and_seed_idempotent(self):
-        self.assertEqual(self.client.get("/register/").status_code, 503)
+    def test_registration_public_and_seed_idempotent(self):
+        self.assertEqual(self.client.get("/register/").status_code, 200)
         self.create_character()
         before = Character.objects.get().id
         call_command("seed_test_account")
@@ -128,42 +128,36 @@ class AccountTests(TestCase):
         self.assertContains(response, 'role="status" hidden')
         self.assertNotContains(response, "Conectando")
 
-    @override_settings(REGISTRATION_ENABLED=True)
-    def test_registration_verification_and_duplicate(self):
-        data = {"email": "NEW@example.invalid", "password": "A-strong-8430-password", "confirmation": "A-strong-8430-password"}
-        self.client.post("/register/", data)
-        account = get_user_model().objects.get(email="new@example.invalid")
-        self.assertFalse(account.is_active)
-        self.client.post("/register/", {**data, "email": "new@example.invalid"})
-        self.assertEqual(len(mail.outbox), 1)
-        url = re.search(r"http[^\s]+", mail.outbox[0].body)[0].split(settings.PUBLIC_ORIGIN)[1]
-        self.client.get(url)
-        account.refresh_from_db()
-        self.assertFalse(account.is_active)
-        self.client.post(url)
-        account.refresh_from_db()
+    def test_username_registration_is_active_without_mail_and_duplicate_preserved(self):
+        data = {"username": "NEW_player", "password": "A-strong-8430-password", "confirmation": "A-strong-8430-password"}
+        response = self.client.post("/register/", data)
+        self.assertRedirects(response, "/character/create/")
+        account = get_user_model().objects.get(username="new_player")
         self.assertTrue(account.is_active)
+        self.assertIsNone(account.email)
+        self.assertFalse(account.is_staff or account.is_superuser)
+        self.assertEqual(len(mail.outbox), 0)
+        self.assertEqual(self.client.session["_auth_user_id"], str(account.id))
+        self.client.post("/logout/")
+        self.assertContains(self.client.post("/register/", {**data, "username": "new_PLAYER"}), "ya está en uso")
+        self.assertEqual(get_user_model().objects.filter(username="new_player").count(), 1)
+        account.refresh_from_db()
+        self.assertTrue(account.check_password(data["password"]))
 
-    @override_settings(REGISTRATION_ENABLED=True)
     def test_registered_account_creates_and_resumes_owned_character(self):
-        data = {"email": "traveler@example.invalid", "password": "A-strong-8430-password", "confirmation": "A-strong-8430-password"}
+        data = {"username": "traveler", "password": "A-strong-8430-password", "confirmation": "A-strong-8430-password"}
         self.client.post("/register/", data)
-        account = get_user_model().objects.get(email=data["email"])
-        self.client.post("/", data)
-        self.assertNotIn("_auth_user_id", self.client.session)
-        url = re.search(r"http[^\s]+", mail.outbox[0].body)[0].split(settings.PUBLIC_ORIGIN)[1]
-        self.client.post(url)
-        self.client.post("/", data)
+        account = get_user_model().objects.get(username=data["username"])
         self.assertRedirects(self.client.get("/"), "/character/create/", fetch_redirect_response=False)
         self.client.post("/character/create/", {"name": "Viajera", **DEFAULT})
         character = Character.objects.get(account=account)
+        self.assertEqual((character.place, character.position), (PLACE_ID, ARRIVAL))
         self.client.post("/logout/")
         fresh = Client()
-        fresh.post("/", data)
+        fresh.post("/", {"email": "TRAVELER", "password": data["password"]})
         self.assertRedirects(fresh.get("/"), "/character/edit/", fetch_redirect_response=False)
         self.assertContains(fresh.get("/play/"), "Viajera")
         self.assertEqual(Character.objects.get(account=account).id, character.id)
-        self.assertFalse(Character.objects.filter(account=self.user).exists())
 
     def test_edit_preserves_progress_and_fences_previous_game(self):
         epoch, _, char = self.connect()

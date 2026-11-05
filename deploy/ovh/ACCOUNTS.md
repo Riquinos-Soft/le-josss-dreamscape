@@ -7,6 +7,27 @@ now authorized public registration; it remains disabled until outgoing mail and
 the documented public launch requirements below are configured and verified.
 The static-only Actions deployment cannot create services or migrate PostgreSQL.
 
+## Username signup (2026-11-05; supersedes the mail launch gate for new accounts)
+
+Public `/register/` now accepts only username, password and repetition. Successful
+signup creates an active regular account, signs it in and opens character creation;
+no SMTP or verification is involved. The retired `REGISTRATION_ENABLED=0` setting
+no longer disables this path. It still gates legacy email recovery only. Normal
+Django password validation, CSRF, throttling, sessions and tickets remain required.
+Usernames are lowercase, case-insensitively unique; test/test2/beta are reserved.
+
+Before releasing these images, apply additive `0004_username_accounts` through
+`prepare_accounts.py migrate`; it adds nullable usernames/optional emails without
+changing existing identities, hashes, characters or saves. `0003` is reserved by
+unfinished gameplay work outside this PR, so this branch's migration depends on
+`0002`. If both independent migration branches are later integrated, reconcile
+migration leaves explicitly; do not reset either history/data. No deployment here.
+
+Existing email logins and previously issued verification/reset links remain
+compatible. New username-only accounts have no email recovery; the interface
+states this and does not invent a reset path. Outgoing email is optional legacy
+functionality, not a prerequisite for the requested new signup flow.
+
 ## Deliberate public beta account
 
 The login page documents username **`beta`**, password **`beta`**. Its optional

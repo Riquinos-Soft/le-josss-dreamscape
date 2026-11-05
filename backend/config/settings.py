@@ -54,6 +54,7 @@ EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
 EMAIL_TIMEOUT = 10
 DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "Dreamscape <noreply@localhost>")
 PUBLIC_ORIGIN = os.environ.get("PUBLIC_ORIGIN", "http://127.0.0.1:8008")
+# Legacy email recovery only; public username signup does not require email.
 REGISTRATION_ENABLED = os.environ.get("REGISTRATION_ENABLED") == "1"
 AUTHORITY_SECRET = os.environ["AUTHORITY_SECRET"]
 GAME_SOCKET_URL = os.environ.get("GAME_SOCKET_URL", "ws://127.0.0.1:9080")

@@ -1,4 +1,5 @@
 from django import forms
+from django.core.validators import RegexValidator
 from django.contrib.auth import password_validation
 from .models import Account
 from .catalog import OPTIONS, LABELS, SPANISH, DEFAULT
@@ -10,19 +11,27 @@ class Credentials(forms.Form):
                               widget=forms.PasswordInput(attrs={"autocomplete": "current-password"}))
 
 
-class Registration(Credentials):
-    email = forms.EmailField(label="Correo", max_length=254, widget=forms.EmailInput(attrs={"autocomplete": "email"}))
+class Registration(forms.Form):
+    username = forms.CharField(label="Usuario", min_length=3, max_length=24,
+        validators=[RegexValidator(r"^[a-zA-Z][a-zA-Z0-9_]*$", "Empieza con una letra; usa letras, números o guion bajo.")],
+        widget=forms.TextInput(attrs={"autocomplete": "username", "autocapitalize": "none"}))
     password = forms.CharField(label="Contraseña", max_length=128, strip=False,
                               widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}))
     confirmation = forms.CharField(label="Repite la contraseña", max_length=128, strip=False,
                                   widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}))
+
+    def clean_username(self):
+        username = self.cleaned_data["username"].lower()
+        if username in {"test", "test2", "beta"} or Account.objects.filter(username__iexact=username).exists():
+            raise forms.ValidationError("Ese usuario ya está en uso. Elige otro.")
+        return username
 
     def clean(self):
         data = super().clean()
         if data.get("password") != data.get("confirmation"):
             self.add_error("confirmation", "Las contraseñas no coinciden.")
         if data.get("password"):
-            password_validation.validate_password(data["password"], Account(email=data.get("email", "")))
+            password_validation.validate_password(data["password"], Account(username=data.get("username", "")))
         return data
 
 

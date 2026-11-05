@@ -4,6 +4,16 @@ Updated: 2026-11-05. This is the entry point for current priorities. Spec number
 are identifiers, not execution order. Proposed work below is not implementation
 authorization. Older roadmap wording is retained in Git history.
 
+## Current bounded follow-ups
+
+Developer authorized username/password/repeated-password registration without
+email or verification. This explicitly supersedes the mail launch gate below for
+new username accounts; preserve legacy accounts and normal session/ticket safety.
+Local signup implementation, 24 account tests and real route/presence roundtrip pass.
+This is isolated from the optional third-person camera prototype, which
+also remains active in its own branch/PR. No merge or deployment authorized.
+See [Spec020](specs/020-persistent-online-vertical.md) for current signup criteria.
+
 ## Current bounded increment: public beta entry
 
 Developer authorized one focused PR for documented `beta:beta` login and verified
