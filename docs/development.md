@@ -1,5 +1,80 @@
 # Development setup and verified baseline
 
+## Optional third-person camera — 2026-11-05
+
+Spec024, branch `feat/third-person-camera` from remote main `bcbd70d`; one bounded
+client experiment. Existing `player/camera_rig.{gd,tscn}`, canonical art, authority,
+backend, location geometry and wire protocol are untouched. Separate username
+signup and earlier unfinished mission/mount changes are not bundled in this PR.
+
+Controls: **C** toggles (orthographic starts by default), **hold right mouse and
+drag** orbits, **wheel** adjusts distance 2.8–8m. Pitch is bounded 5–60 degrees
+above the ground. No pointer lock; ordinary left click/UI and mobile touch stick
+stay available. Camera input is blocked by dialogue/map/pending/disconnect; focus
+loss releases orbit. Held keyboard motion survives toggling; touch intent is
+cleared when changing view. Mobile defaults to the original view; experimental
+orbit is mouse-only and C requires a keyboard (no new touch gesture).
+
+One optional Camera3D on a SpringArm3D sphere sweep (.22m, .12m margin, world
+collision layer 1, Joss excluded), smooth focus/orbit/zoom, target snap on travel/
+respawn/rejoin. The active camera is assigned together to input, local/remote
+presenters and NPC movement views. Preserve world-space facing when orbiting at
+rest; no trusting camera transforms/positions at the authority. Perspective-only
+foliage reveal reuses existing wall-fade shader uniforms. Passage labels are
+capped by distance. When a wall compresses the arm below 1.4m, hide only the local
+billboard until clearance; restore it immediately in the default view. All
+original material/sign settings restore; no per-frame foliage work when disabled.
+
+Verification on macOS, Godot 4.7.2 standard Compatibility:
+
+- `Godot --path game --resolution 1280x720 --fixed-fps 60 --script res://tests/test_camera_mode.gd -- --capture`:
+  61 checks pass in the focused suite (also headless). C/default restoration,
+  real mouse/key/touch input, pitch/distance clamps, smooth follow, solid obstacle
+  compression/recovery, local near-view visibility, idle local/NPC/remote facing,
+  held input, modal/focus/disconnect/rejoin, stairs up/down, public travel and
+  restored foliage/sign settings. Tests use the original Pazo and actor; staged
+  inspection points are fixture teleports, not a claim of client teleport ability.
+- `make test GODOT=/Applications/Godot.app/Contents/MacOS/Godot`: all 26 suites pass,
+  including canonical characters, touch, collision, bag/item interactions, original
+  camera clearance, online players, NPC/dialogue/salon and travel.
+- `python3 tools/account_dev.py build/account-venv/bin/python tools/test_account_roundtrip.py --godot /Applications/Godot.app/Contents/MacOS/Godot`:
+  original real HTTP/WebSocket/PostgreSQL creation/resume/logout/restart/fencing,
+  world-space movement validation, two-player presence and Pazo/salon/street/
+  Scandale routes pass. Camera packets were neither added nor changed.
+- `python3 tools/export_v2_laboratory.py --godot /Applications/Godot.app/Contents/MacOS/Godot --scene account --output build/account-game`:
+  final account Web export passes. Pinned gdformat/gdlint, docs and diff checks pass.
+- Actual embedded Chromium: authenticated test account, created Joss, loaded WebGL,
+  pressed C, right-drag orbited toward the palace, released and pressed C again.
+  Inspected perspective/default captures; final page console had no captured
+  errors. Initial Web review found the static residents lacked `idle_up` etc.;
+  corrected the view adapter to retain their authored front pose and added four
+  resident pose regressions. Native review also found oversized passage labels,
+  near-wall face close-ups and bush occlusion; corrected using the existing art/
+  uniforms and conditional local visibility, without changing the original mode.
+
+Comparison captures (same original scene/character; daytime native fixture):
+
+- Forecourt: [orthographic](images/camera/forecourt-orthographic.png), [perspective](images/camera/forecourt-perspective.png).
+- Stair/terrace: [orthographic](images/camera/terrace-orthographic.png), [perspective](images/camera/terrace-perspective.png).
+- Garden/NPC: [orthographic](images/camera/garden-orthographic.png), [perspective](images/camera/garden-perspective.png).
+- Salon: [orthographic](images/camera/salon-orthographic.png), [perspective](images/camera/salon-perspective.png).
+- Actual Web: [orthographic](images/camera/web-orthographic.png), [perspective](images/camera/web-perspective.png).
+
+Observed limits: Joss/Lucas retain all eight idle/walk directions and crisp nearest
+pixels; Inés/Narci/Brais (and the bartender) are original single-front-pose art,
+so the prototype does not invent missing back/side sprites. Foliage remains flat
+billboards, nearby low planters can occlude legs, and the salon is intentionally
+a cutaway with low camera-facing walls/open roof. Reverse/low orbit exposes this
+original composition; no complete 360-degree art acceptance is claimed. Developer
+review/physical iPhone 16 Pro + Chrome remain pending; C returns the original view.
+
+Ignored detailed logs/captures: `build/verification/camera/` and underlying route
+logs in `build/verification/v2/accounts/`. Initial typed-GDScript parse errors and
+an eye-plane guide projection error were fixed before final checks. Existing
+startup TCP probe can log a missing WebSocket-upgrade header; authenticated peers
+pass. Pinned gdtoolkit still warns pkg_resources is deprecated. No production
+merge/deployment or new assets/engine/renderer are part of this increment.
+
 ## Username signup without email — 2026-11-05
 
 Developer explicitly requested username/password/repetition, no email or approval.

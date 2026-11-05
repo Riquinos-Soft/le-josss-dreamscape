@@ -72,13 +72,14 @@ func update_players(snapshot: Dictionary) -> void:
 				return
 		state.target = position
 		state.label.text = data.name
-		state.facing = Direction.resolve_facing(
-			session.to_vector(data.direction), session.camera, state.facing, state.walking
-		)
+		state.direction = session.to_vector(data.direction)
 		state.walking = data.walking
 
 
 func _process(delta: float) -> void:
 	for state in players.values():
 		state.actor.position = state.actor.position.lerp(state.target, minf(15 * delta, 1))
+		state.facing = Direction.resolve_facing(
+			state.direction, session.camera, state.facing, state.walking
+		)
 		Direction.play_direction(state.presenter, state.facing, state.walking)

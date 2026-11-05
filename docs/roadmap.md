@@ -4,6 +4,21 @@ Updated: 2026-11-05. This is the entry point for current priorities. Spec number
 are identifiers, not execution order. Proposed work below is not implementation
 authorization. Older roadmap wording is retained in Git history.
 
+## Current bounded experiment: optional perspective camera
+
+[Spec024](specs/024-third-person-camera.md) adds an opt-in C-toggle perspective
+camera to the V2 account world. Existing orthographic is still the default;
+right-mouse drag orbits, wheel zooms, and the same world-space authority/network
+contract remains. Native and Web comparison, collision/input tests and original
+route/presence checks are recorded in development. Developer/physical-device
+acceptance remains open. No merge/deployment authorized.
+
+The developer additionally requested username/password/repetition signup without
+email; that change is isolated in another branch/PR, not bundled into the camera
+experiment. Prior uncommitted mission/mount restoration remains untouched.
+The older P2-room and mail launch checkpoints below are historical observations;
+current account play uses the authored destinations.
+
 ## Current bounded follow-ups
 
 Developer authorized username/password/repeated-password registration without
