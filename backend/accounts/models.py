@@ -5,23 +5,34 @@ from django.db.models.functions import Lower
 
 
 class AccountManager(BaseUserManager):
-    def create_user(self, email, password=None, **extra):
-        user = self.model(email=email.strip().lower(), **extra)
+    def create_user(self, email=None, password=None, **extra):
+        if not email and not extra.get("username"):
+            raise ValueError("An email or username is required.")
+        user = self.model(email=email.strip().lower() if email else None, **extra)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
 
+    def get_by_natural_key(self, identifier):
+        identifier = identifier.strip().lower()
+        return self.get(**({"email": identifier} if "@" in identifier else {"username": identifier}))
+
+
 class Account(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    username = None
-    email = models.EmailField(unique=True)
+    username = models.CharField(max_length=24, unique=True, null=True, blank=True)
+    email = models.EmailField(unique=True, null=True, blank=True)
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
     objects = AccountManager()
 
+    def get_username(self):
+        return self.username or self.email or ""
+
     class Meta:
-        constraints = [models.UniqueConstraint(Lower("email"), name="account_email_case_unique")]
+        constraints = [models.UniqueConstraint(Lower("email"), name="account_email_case_unique"),
+                       models.UniqueConstraint(Lower("username"), name="account_username_case_unique")]
 
 
 class Character(models.Model):

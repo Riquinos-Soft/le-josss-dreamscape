@@ -4,6 +4,47 @@ Status: in-progress
 Updated: 2026-11-05
 Language: en
 
+## Current release operation — 2026-11-05
+
+Developer explicitly authorized resolving conflicts, merging PRs2/3 and deploying
+username signup plus the optional camera to production. This supersedes earlier
+no-merge/no-deployment notes for this bounded release only. Preserve accounts,
+characters/saves and existing domain/secrets. Validate merged beta/signup contracts
+and camera, back up the database, apply additive migration0004 and publish matching
+backend/static assets. Do not include unfinished mission/mount work.
+
+## Current increment — username signup without email, 2026-11-05
+
+Developer explicitly superseded the email/verification launch gate: signup is
+username, password and repeated password, immediately active, with no email or
+verification step. Preserve Django hashing/validation, CSRF, throttling, sessions,
+character ownership, ticket/generation fencing and legacy account login.
+
+Design fit: reuse the current earthy/gold account card and form controls; only
+three signup fields. Successful submission signs in through Django and opens the
+existing canonical Joss creator, then authored Lourizán. No new game UI/art.
+
+- AC1: public signup works without SMTP or the retired REGISTRATION_ENABLED flag;
+  matching valid passwords create one regular active username account and sign in.
+- AC2: usernames are normalized lowercase, 3–24 ASCII letters/digits/underscore,
+  start with a letter. Unique case-insensitively in PostgreSQL; reserve test/test2/
+  beta so existing demo aliases cannot be hijacked. Reject duplicate, malformed,
+  mismatched and weak-password submissions without overwriting any existing user.
+- AC3: email is optional only for new username accounts; preserve existing emails,
+  hashes, sessions and characters. New accounts never send/need verification mail.
+  Legacy email recovery remains compatible; username-only accounts have no email
+  recovery and the interface states this without promising a reset mechanism.
+- AC4: verify CSRF, no anonymous tickets, create/resume/logout, same-account fencing,
+  first Lourizán entry and independent multiplayer/route regression. Inspect forms.
+
+Status: implemented locally. Twenty-four PostgreSQL account tests and the real
+HTTP/WebSocket signup → creator → gameplay → logout/rejoin/restart/presence/travel
+roundtrip pass. Existing mail-less deployment flag does not block signup. Actual
+mobile-size browser form submitted successfully without email; creator and Web
+entry opened normally. Screenshot and commands in development. Physical-device
+acceptance and explicit migration/release remain pending. Camera prototype is
+separate; no production merge/deployment authorized.
+
 ## Current increment — public beta entry, 2026-11-05
 
 Authorized by the developer's Public Beta Login + Lourizán Default Spawn request.

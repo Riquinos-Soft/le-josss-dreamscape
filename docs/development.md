@@ -75,6 +75,45 @@ startup TCP probe can log a missing WebSocket-upgrade header; authenticated peer
 pass. Pinned gdtoolkit still warns pkg_resources is deprecated. No production
 merge/deployment or new assets/engine/renderer are part of this increment.
 
+## Username signup without email — 2026-11-05
+
+Developer explicitly requested username/password/repetition, no email or approval.
+Branch `feat/username-signup` from remote main `bcbd70d`, separate from camera and
+beta PRs and the original unfinished mission/mount checkout. No production change.
+
+Implementation: nullable unique username/optional email via additive
+`0004_username_accounts` (0003 reserved by separate unfinished gameplay work),
+case-insensitive database constraint, normalized validated usernames, immediate
+regular active account and Django login. Existing email identity/hash/character
+records unchanged. No synthetic email, SMTP call or verification token for new
+signup. Legacy mail recovery remains separate; username-only accounts explicitly
+have no email recovery. Reserved demo aliases cannot be registered. The old
+REGISTRATION_ENABLED setting no longer controls public username signup.
+
+Checks (Godot 4.7.2, Python 3.13/Django 5.2.18/PostgreSQL 18.4 locally):
+
+- `python3 tools/account_dev.py build/account-venv/bin/python backend/manage.py test accounts --verbosity 1`:
+  24 pass, including malformed/duplicate/case uniqueness, mismatched/weak password,
+  reserved aliases, CSRF/throttle, no mail, immediate login, first Lourizán
+  character, logout/resume and legacy accounts/session/ticket fencing.
+- `python3 tools/account_dev.py build/account-venv/bin/python tools/test_account_roundtrip.py --godot /Applications/Godot.app/Contents/MacOS/Godot`:
+  real public username signup, same-origin authenticated ticket, character creation,
+  world-space authority movement/rejection, restart/fenced reconnect, independent
+  second account presence and original Pazo/salon/street/Scandale routes pass.
+  First attempt preceded Godot imports and could not start authority; imported
+  project, then full roundtrip passed. No runtime/game code was changed.
+- `python3 tools/account_dev.py build/account-venv/bin/python backend/manage.py makemigrations --check --dry-run`:
+  no pending changes. `python3 tools/check_docs.py` and `git diff --check`: pass.
+- Actual embedded Chromium at 402×874: inspected [three-field form](images/signup/username-mobile.png),
+  submitted new account, landed directly in original creator, created character,
+  opened actual Web game without a mail step. Reused the already validated
+  unchanged account export; no new game/export claim for this backend-only PR.
+
+Detailed ignored evidence: `build/verification/signup/{backend,roundtrip,preview}.log`
+and `build/verification/v2/accounts/`. No physical phone/production HTTPS check.
+No merge/deployment; apply migration before releasing the matching backend image.
+Old email verification/recovery sections below are historical for username signup.
+
 ## Public beta entry — 2026-11-05
 
 Focused increment against remote main `bcbd70d`: public `beta:beta` regular player,

@@ -1,5 +1,4 @@
-from django.core.management.base import BaseCommand, CommandError
-from django.conf import settings
+from django.core.management.base import BaseCommand
 from accounts.models import Account
 
 
@@ -10,8 +9,6 @@ class Command(BaseCommand):
         parser.add_argument("--second", action="store_true", help="Provision the second independent test account.")
 
     def handle(self, *args, **options):
-        if settings.REGISTRATION_ENABLED:
-            raise CommandError("Disable public registration before provisioning the shared test account.")
         alias = "test2" if options["second"] else "test"
         email = alias + "@example.invalid"
         if Account.objects.filter(email=email).exists():
