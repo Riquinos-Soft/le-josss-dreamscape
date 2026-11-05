@@ -39,6 +39,70 @@ and `build/verification/v2/accounts/`. No physical phone/production HTTPS check.
 No merge/deployment; apply migration before releasing the matching backend image.
 Old email verification/recovery sections below are historical for username signup.
 
+## Public beta entry — 2026-11-05
+
+Focused increment against remote main `bcbd70d`: public `beta:beta` regular player,
+fill-only login panel, idempotent bootstrap through `prepare_accounts.py migrate`.
+No runtime/world architecture change. Existing `lourizan` arrival `[9.6,.05,0]`
+and laboratory-only migration0002 already satisfy entry and valid-save recovery;
+verified instead of duplicating/resetting them. Local-only domain commit `2fca7da`
+and unfinished mission/mount restoration remain outside this PR, untouched.
+
+Verification in the isolated `dreamscape-public-beta` worktree, Godot 4.7.2,
+Python 3.13/Django/PostgreSQL 18.4 (local Docker; disposable test/preview databases):
+
+- `python3 tools/account_dev.py build/account-venv/bin/python backend/manage.py test accounts --verbosity 1`:
+  24 tests pass, including successful/rejected/CSRF-protected beta login, first
+  character creation, idempotent seed/password/character preservation, rejected
+  privileged/inactive identity collisions, unchanged general password validation,
+  valid-save resume, lab migration, tickets/logout/fencing/checkpoints.
+- `python3 tools/account_dev.py build/account-venv/bin/python backend/manage.py makemigrations --check --dry-run`:
+  no changes. No new database migration or data reset.
+- `python3 tools/account_dev.py build/account-venv/bin/python tools/test_account_roundtrip.py --godot /Applications/Godot.app/Contents/MacOS/Godot`:
+  real beta/test2 auth, double provisioning, exact initial place/position,
+  authoritative movement/forged-position rejection, logout/rejoin/restart,
+  duplicate-session fencing, reciprocal presence/private-field exclusion,
+  both independent saves and existing NPC/salon/street/Scandale/travel routes pass.
+- `make test GODOT=/Applications/Godot.app/Contents/MacOS/Godot`: all 25 suites pass.
+  Native `--resolution 1280x720 --fixed-fps 60 --script res://tests/test_account_location.gd -- --capture`:
+  54 checks pass, arrival grounded, stairs traversable, saved bounds/camera follow,
+  original NPCs/salon and all three public destinations retained.
+- `python3 tools/export_v2_laboratory.py --godot /Applications/Godot.app/Contents/MacOS/Godot --scene account --output build/account-game`:
+  account Web export passes. First attempt failed with editor debug-adapter
+  `Malformed message!`; isolated retry passed without hiding the error.
+- Pinned `uv run --with-requirements requirements-dev.txt gdformat --check game`
+  and `gdlint game`, `node tools/test_play_connection.cjs`,
+  `python3 -m unittest discover -s deploy/ovh -p 'test_*.py'` (5 tests),
+  `python3 tools/check_docs.py` and `git diff --check`: pass.
+
+Rendered review: actual local browser login (1280×900,402×874) preserves the earthy
+card/gold palette. Fill button inserts both fields, focuses Entrar, stays on `/`
+and does not authenticate until normal submission. Mobile has no horizontal
+overflow and the button is 44 CSS px high. Submitted normal login, created Beta
+Viajero, loaded actual WebGL game, observed Lucas walking next to the arrival,
+and returned through `/` to the existing owned-character editor. Game iframe
+fills 1280×720 and 874×402 with admitted connection notice hidden. The authored
+facade and monumental stairs are visible at the unchanged outdoor spawn.
+
+- [Desktop login](images/beta-entry/login-desktop.png)
+- [Mobile login](images/beta-entry/login-mobile.png)
+- [Actual Web arrival at Lourizán](images/beta-entry/lourizan-web.png)
+- [Native daytime arrival comparison](images/beta-entry/lourizan-native-day.png)
+
+Detailed ignored logs: `build/verification/beta/{backend,roundtrip,native,
+godot-tests,export-retry,lint,format,preview}.log`; underlying route-service logs
+in `build/verification/v2/accounts/`. The existing raw TCP startup probe can log
+an invalid WebSocket upgrade on the authority; authenticated test peers pass.
+Pinned gdtoolkit still warns that pkg_resources is deprecated. Initial Docker
+was stopped and was started locally; no production operations performed.
+
+Limitations: shared beta has one public character/active game session and normal
+login throttling; the next visitor replaces the prior session. Independent
+accounts are required for simultaneous testers. No personal data belongs here.
+Actual browser review used local HTTP on trusted localhost; production HTTPS/WSS
+configuration and authentication were preserved, not exercised or deployed by
+this PR. Physical iPhone 16 Pro + Chrome and developer art acceptance remain open.
+
 
 ## Online presence published on OVH — 2026-10-19
 

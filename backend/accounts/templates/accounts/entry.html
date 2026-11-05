@@ -1,7 +1,17 @@
-{% extends 'accounts/base.html' %}{% block content %}
+{% extends 'accounts/base.html' %}{% load static %}{% block content %}
 <p class="eyebrow">LE JOSSS · DREAMSCAPE</p>
 <h1>{% if register %}Crear cuenta{% else %}Vuelve a tu mundo{% endif %}</h1>
 <p class="muted">{% if register %}Elige un usuario y una contraseña. No necesitas correo ni verificar la cuenta.{% else %}Tu personaje te espera donde lo dejaste.{% endif %}</p>
+{% if not register %}
+<section class="beta-access" aria-labelledby="beta-title">
+  <div><h2 id="beta-title">Acceso a la beta</h2>
+    <p>Usuario: <code>beta</code> <span>Contraseña: <code>beta</code></span></p>
+  </div>
+  <button type="button" id="use-beta" class="secondary">Usar cuenta beta</button>
+  <p class="beta-note">Cuenta pública con un personaje compartido. Solo una persona puede jugar con ella a la vez: si entra otra, se cerrará la sesión de juego anterior. Para jugar juntos, usad cuentas distintas. No guardes datos personales en esta cuenta.</p>
+</section>
+<script src="{% static 'accounts/beta.js' %}" defer></script>
+{% endif %}
 <form method="post" class="credentials">{% csrf_token %}{{ form.as_p }}<button type="submit">{% if register %}Registrarme{% else %}Entrar{% endif %}</button></form>
 <p class="muted">Las cuentas creadas sin correo no tienen recuperación por email. Conserva tu contraseña.</p>
 <nav>{% if register %}<a href="/">Ya tengo cuenta</a>{% else %}<a href="/register/">Crear cuenta</a><a href="/recover/">Recuperar contraseña</a>{% endif %}</nav>

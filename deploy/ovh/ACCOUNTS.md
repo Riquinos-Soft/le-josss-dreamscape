@@ -28,6 +28,35 @@ compatible. New username-only accounts have no email recovery; the interface
 states this and does not invent a reset path. Outgoing email is optional legacy
 functionality, not a prerequisite for the requested new signup flow.
 
+## Deliberate public beta account
+
+The login page documents username **`beta`**, password **`beta`**. Its optional
+fill button does not submit or bypass normal HTTPS session/CSRF/ticket checks.
+The internal identity is `beta@example.invalid`, never an administrator.
+`prepare_accounts.py migrate` provisions it after the existing migrations/test
+seed. Operators can also explicitly run the existing application image:
+
+```sh
+sudo docker compose -f compose.yaml -f compose.accounts.yaml exec -T accounts python manage.py seed_beta_account
+```
+
+The command preserves character identity, appearance, committed place/position,
+and progress; repeated runs retain a matching password hash. It sets/restores
+only this deliberate demo account's public password. Inactive or privileged
+identity collisions fail without modification and require operator investigation.
+Normal registration/reset validators, login throttling and session fencing remain.
+No new migration is needed: `lourizan` arrival `[9.6,0.05,0]` and migration0002
+already create/move only new/legacy-laboratory characters; valid saves resume.
+
+**Sharing limitation:** beta has one persistent public character and one active
+game connection. A second visitor fences the first; visitors see/edit the same
+character and its progress. Never use private information here. Use independent
+accounts for simultaneous play; browser profiles/devices must also be separate.
+The existing account/IP throttle applies even to beta, so rapid repeated logins
+can temporarily block this shared account. This increment does not enable signup,
+remove fencing or add a parallel-session workaround. Release remains an explicit
+operator operation after PR review; no production deployment is authorized here.
+
 ## Two-player testing
 
 The online-presence increment adds same-place player snapshots to the authority
@@ -63,8 +92,8 @@ The overlay adds Django and a headless Godot authority on an internal applicatio
 network. Only Django joins the data network. Neither exposes a host port.
 The existing loopback Web host and Caddy HTTPS route are retained. The new nginx
 configuration denies `/internal/`, forwards account pages and `/ws/`, and serves
-`/game/`, `/static/` and `/parts/`. `/legacy/` preserves the old world and `/v2/`
-preserves the character laboratory. The normal static-only Compose remains a
+`/game/`, `/static/` and `/parts/`. `/legacy/` preserves the old world; the retired `/v2/` laboratory is not a public
+playable destination. The normal static-only Compose remains a
 rollback path; activating this overlay is a separate explicit operator step.
 
 On the host, after reviewing the checked-in helper and configuration:

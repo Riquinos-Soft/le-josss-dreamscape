@@ -4,6 +4,15 @@ Status: in-progress
 Updated: 2026-11-05
 Language: en
 
+## Current release operation — 2026-11-05
+
+Developer explicitly authorized resolving conflicts, merging PRs2/3 and deploying
+username signup plus the optional camera to production. This supersedes earlier
+no-merge/no-deployment notes for this bounded release only. Preserve accounts,
+characters/saves and existing domain/secrets. Validate merged beta/signup contracts
+and camera, back up the database, apply additive migration0004 and publish matching
+backend/static assets. Do not include unfinished mission/mount work.
+
 ## Current increment — username signup without email, 2026-11-05
 
 Developer explicitly superseded the email/verification launch gate: signup is
@@ -35,6 +44,46 @@ mobile-size browser form submitted successfully without email; creator and Web
 entry opened normally. Screenshot and commands in development. Physical-device
 acceptance and explicit migration/release remain pending. Camera prototype is
 separate; no production merge/deployment authorized.
+
+## Current increment — public beta entry, 2026-11-05
+
+Authorized by the developer's Public Beta Login + Lourizán Default Spawn request.
+One focused branch/PR; no automatic merge or production deployment.
+
+Design fit: reuse `accounts/entry.html`, its earthy/gold card and 44px controls,
+canonical account Joss presenter and existing authored Pazo/camera. Compare login
+at desktop/mobile sizes and the native initial camera at the palace forecourt.
+No art, movement, camera, NPC or travel redesign.
+
+- AC1: display “Acceso a la beta”, username/password `beta`, and a fill-only
+  “Usar cuenta beta” button. Authenticate normally through Django HTTPS/CSRF,
+  session and single-use game ticket; anonymous play remains rejected.
+- AC2: bootstrap the dedicated `beta@example.invalid` regular account idempotently,
+  without character resets or privilege escalation. Reject privileged/inactive
+  collisions. Only this explicit provisioning command sets the demo password;
+  general registration/reset validators and throttling remain unchanged.
+- AC3: reuse stable `lourizan` and safe outdoor arrival `[9.6, 0.05, 0]`, near the
+  main entrance/stairs. Preserve valid saved locations/positions; migration0002
+  moves only `laboratory_v1`, fences old sessions and removes their tickets.
+- AC4: retain one character/active game connection per account. Explain that the
+  public beta character is shared and another visitor replaces its game session;
+  independent simultaneous play requires distinct accounts. No fencing bypass.
+- AC5: verify auth rejection/success, provisioning twice, creation/resume/logout,
+  authoritative movement, collision/camera, migration, NPC/travel/presence and Web
+  export. Inspect rendered login and arrival; physical-device acceptance separate.
+
+Checkpoint: implemented locally. Twenty-four account tests, all 25 Godot suites,
+the real beta/test2 HTTP/WebSocket/PostgreSQL route/presence roundtrip and account
+Web export pass. Native arrival/stair/camera suite: 54 checks. Inspected actual
+login at 1280×900 and 402×874 (no horizontal overflow, 44px fill button), then
+normal login → creator → Web game → return editor in Orca's embedded Chromium.
+The game fills both 1280×720 and 874×402 viewports; connection notice stays hidden
+while admitted. Palace/stairs and canonical character are visible at arrival.
+[Screenshots and detailed evidence](../development.md#public-beta-entry--2026-11-05).
+No additional spawn/migration code was needed: the existing rules passed.
+Physical iPhone acceptance, PR review and explicit release remain pending.
+Earlier mission/mount restoration is isolated uncommitted work in the original
+checkout, outside this PR.
 
 ## Current increment — two-player presence, 2026-10-19
 

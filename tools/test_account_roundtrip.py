@@ -297,7 +297,8 @@ try:
     with ExitStack() as stack:
         import sys
         manage = [sys.executable, str(ROOT / "backend/manage.py")]
-        for command in (["migrate", "--noinput"], ["seed_test_account"], ["seed_test_account", "--second"]):
+        for command in (["migrate", "--noinput"], ["seed_test_account"], ["seed_test_account", "--second"],
+                        ["seed_beta_account"], ["seed_beta_account"]):
             subprocess.run(manage + command, env=env, check=True, stdout=subprocess.DEVNULL)
         service_log = stack.enter_context(open(logs / "roundtrip-service.log", "w"))
         service = subprocess.Popen(manage + ["runserver", "127.0.0.1:8018", "--noreload"], env=env,
@@ -312,6 +313,7 @@ try:
         post(client, jar, "/character/create/", {"name": "Test Viajero", "face": "freckles", "hair": "tied",
              "skin_palette": "olive", "hair_palette": "ink", "upper_palette": "ochre", "lower_palette": "earth"})
         ws, first, ticket = join(stack, client, jar)
+        assert first["place"] == "lourizan" and first["position"] == [9.6, .05, 0], first
         # Replay is rejected, and supplying a position cannot change the simulation.
         replay = stack.enter_context(connect("ws://127.0.0.1:9090", origin=origin))
         send(replay, "hello", ticket=ticket)
