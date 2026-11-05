@@ -94,6 +94,8 @@ func load_place(place: String) -> void:
 		if npc.smoking != null:
 			npc.smoking.set_smoking(true)
 	pending = false
+	if session.camera_mode != null:
+		session.camera_mode.track_place()
 
 
 func _process(delta: float) -> void:
@@ -106,6 +108,13 @@ func _process(delta: float) -> void:
 		npc.global_position = npc.global_position.lerp(
 			location.to_global(state.position), minf(15 * delta, 1)
 		)
+		state.facing = Direction.resolve_facing(
+			state.direction, session.camera, state.facing, state.walking
+		)
+		var animation := StringName(("walk_" if state.walking else "idle_") + String(state.facing))
+		# Some authored stationary residents have a single front pose, not eight views.
+		if not npc.sprite.sprite_frames.has_animation(animation):
+			state.facing = &"down"
 		npc.facing = state.facing
 		Direction.play_direction(npc.sprite, npc.facing, state.walking)
 		if npc.smoking != null:
@@ -139,10 +148,21 @@ func _process(delta: float) -> void:
 		map_ui.prompt.hide()
 		return
 	var exit: Node3D = location.get_node("Salon/Exit" if session.inside_salon else "Exit")
-	var screen_offset: Vector2 = (
-		session.camera.unproject_position(exit.global_position)
-		- session.camera.unproject_position(session.actor.global_position)
-	)
+	var screen_offset: Vector2
+	if session.camera_mode.enabled:
+		# Perspective targets can be behind/on the eye plane; do not project those.
+		var offset: Vector3 = exit.global_position - session.actor.global_position
+		offset.y = 0
+		var right: Vector3 = session.camera.global_basis.x
+		var forward: Vector3 = -session.camera.global_basis.z
+		right.y = 0
+		forward.y = 0
+		screen_offset = Vector2(offset.dot(right.normalized()), -offset.dot(forward.normalized()))
+	else:
+		screen_offset = (
+			session.camera.unproject_position(exit.global_position)
+			- session.camera.unproject_position(session.actor.global_position)
+		)
 	var index := wrapi(roundi(screen_offset.angle() / (PI / 4)), 0, 8)
 	var metres: int = roundi(
 		(
@@ -238,13 +258,19 @@ func handle(message: Dictionary) -> void:
 					var npc: Node3D = location.get_node(path)
 					var previous: Dictionary = npc_targets.get(path, {})
 					var facing: StringName = npc.facing
+					var direction: Vector3 = previous.get(
+						"direction", session.camera_mode.world_from_facing(facing)
+					)
 					if state.walking and not previous.is_empty():
-						var authoritative_motion: Vector3 = position - previous.position
-						facing = Direction.resolve_facing(
-							authoritative_motion, session.camera, npc.facing, true
-						)
+						var motion: Vector3 = position - previous.position
+						motion.y = 0
+						if motion.length_squared() > 0.000001:
+							direction = motion.normalized()
 					npc_targets[path] = {
-						"position": position, "walking": state.walking, "facing": facing
+						"position": position,
+						"walking": state.walking,
+						"facing": facing,
+						"direction": direction
 					}
 		"travelled":
 			load_place(message.place)

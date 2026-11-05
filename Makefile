@@ -2,6 +2,7 @@ GODOT ?= godot
 PYTHON ?= python3
 
 TESTS := \
+	test_camera_mode.gd \
 	test_online_players.gd \
 	test_scandale.gd \
 	test_v2_appearance.gd \

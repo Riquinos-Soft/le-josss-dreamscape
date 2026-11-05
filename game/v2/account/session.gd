@@ -11,6 +11,9 @@ var actor: CharacterBody3D
 var input_adapter: Control
 var camera: Camera3D
 var camera_rig: Node3D
+var camera_mode: Node3D
+var world_facing := Vector3.BACK
+var reorient_pending := false
 var current_id: StringName = &"lourizan"
 var inside_salon := false
 var presenter: AnimatedSprite3D
@@ -88,6 +91,10 @@ func _ready() -> void:
 	remote_players = preload("res://v2/account/remote_players.gd").new()
 	remote_players.session = self
 	add_child(remote_players)
+	camera_mode = preload("res://v2/account/camera_mode.gd").new()
+	camera_mode.session = self
+	add_child(camera_mode)
+	world_facing = camera_mode.world_from_facing(facing)
 	if OS.has_feature("web"):
 		(
 			JavaScriptBridge
@@ -137,12 +144,19 @@ func _process(delta: float) -> void:
 		var old := actor.position
 		actor.position = actor.position.lerp(target_position, minf(delta * 15.0, 1.0))
 		var movement := (actor.position - old) / maxf(delta, 0.001)
-		movement.y = 0
-		var was_walking := String(presenter.animation).begins_with("walk_")
-		var walking := movement.length() > (0.06 if was_walking else 0.12)
-		if walking:
-			facing = DirectionalAnimation.resolve_facing(movement, camera, facing, was_walking)
-		DirectionalAnimation.play_direction(presenter, facing, walking)
+		present_motion(movement)
+
+
+func present_motion(movement: Vector3) -> void:
+	movement.y = 0
+	var was_walking := String(presenter.animation).begins_with("walk_")
+	var walking := movement.length() > (0.06 if was_walking else 0.12)
+	if walking:
+		world_facing = movement.normalized()
+	if walking or camera_mode.enabled or reorient_pending:
+		facing = DirectionalAnimation.resolve_facing(world_facing, camera, facing, was_walking)
+	reorient_pending = false
+	DirectionalAnimation.play_direction(presenter, facing, walking)
 
 
 func poll_parent() -> void:
@@ -208,6 +222,7 @@ func handle_packet(message: Dictionary) -> void:
 			target_position = to_vector(character.position)
 			actor.position = target_position
 			camera_rig.snap_to_target()
+			camera_mode.snap_to_target()
 			actor.visible = true
 			admitted = true
 			world_view.refresh_controls()
@@ -224,6 +239,7 @@ func handle_packet(message: Dictionary) -> void:
 			actor.position = target_position
 			actor.reset_physics_interpolation()
 			camera_rig.snap_to_target()
+			camera_mode.snap_to_target()
 		"travel_error", "talked", "talk_error":
 			world_view.handle(message)
 		"saved":

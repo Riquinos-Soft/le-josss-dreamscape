@@ -48,7 +48,9 @@ See [the roadmap](../roadmap.md) for the single current priority sequence.
 | 022 | [Lucas surf arcade](022-lucas-surf-arcade.md) | implemented | Complete-round and physical-device acceptance |
 | 023 | [Bar Scandale and bartender jokes](023-bar-scandale.md) | implemented | Developer art review and browser/physical-device gameplay |
 
-Next available spec ID: **024**. Recompute from this registry before reserving;
+| 024 | [Optional third-person camera prototype](024-third-person-camera.md) | implemented | Native/Web comparison complete; developer/physical-device review pending |
+
+Next available spec ID: **025**. Recompute from this registry before reserving;
 this line is not a standing reservation for an agent or a feature.
 
 ## Language and file naming
