@@ -58,7 +58,7 @@ def entry(request):
             form.add_error(None, "Demasiados intentos. Espera 15 minutos.")
         elif form.is_valid():
             identifier = form.cleaned_data["email"].strip().lower()
-            if identifier in ("test", "test2"):
+            if identifier in ("test", "test2", "beta"):
                 identifier += "@example.invalid"
             user = authenticate(request, email=identifier, password=form.cleaned_data["password"])
             if user:

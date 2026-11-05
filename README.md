@@ -1,6 +1,19 @@
 # Le Joss's Dreamscape
 
-[Play the Web prototype](https://dreamscape.198.244.233.153.sslip.io/)
+[Play the Web prototype](https://dreamscape.laialabs.com/)
+
+## Public beta access
+
+Log in with **username `beta` / password `beta`**. Authentication is required.
+First entry creates a character outdoors at the existing Pazo de Lourizán;
+return visits open its editor and resume its last committed location.
+
+This is a public, shared character: another beta visitor replaces the previous
+active game session. Do not enter personal information. Use distinct accounts
+(e.g. the existing `test` and `test2` test accounts) for simultaneous multiplayer.
+Public registration still depends on configured verification email delivery.
+The beta login is available after this increment is reviewed and provisioned;
+this PR does not deploy it. See [account operations](deploy/ovh/ACCOUNTS.md).
 
 ![Le Joss's Dreamscape concept art: a dreamlike plaza with a physical item placement preview](docs/images/dreamscape-concept.png)
 

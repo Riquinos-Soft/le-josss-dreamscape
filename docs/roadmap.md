@@ -19,6 +19,19 @@ experiment. Prior uncommitted mission/mount restoration remains untouched.
 The older P2-room and mail launch checkpoints below are historical observations;
 current account play uses the authored destinations.
 
+## Current bounded increment: public beta entry
+
+Developer authorized one focused PR for documented `beta:beta` login and verified
+new-character entry at the existing Pazo de Lourizán. Reuse Spec020's account
+runtime and migration0002; preserve all valid saved positions and existing world.
+The public character has one active game session: simultaneous visitors require
+independent accounts. No anonymous entry, general password exception, automatic
+merge/deployment or registration/mail change. Local implementation and verification complete; PR review/release pending. See [Spec020](specs/020-persistent-online-vertical.md) for acceptance.
+
+The earlier mission/mount restoration remains uncommitted in the original
+checkout and is outside this isolated branch. The older “P2 room” checkpoint
+below is historical: current account play already uses the authored destinations.
+
 ## 1. Current priority: controlled persistent online rebuild
 
 The developer requested the V2 refactor plan, including registration, character
