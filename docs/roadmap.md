@@ -4,6 +4,15 @@ Updated: 2026-11-05. This is the entry point for current priorities. Spec number
 are identifiers, not execution order. Proposed work below is not implementation
 authorization. Older roadmap wording is retained in Git history.
 
+## Latest release: username signup and optional camera live
+
+Explicit developer release authorization completed: PRs2/3 merged, runtime
+`a99a512` deployed at https://dreamscape.laialabs.com/ with matching backend and
+migration. Public signup no longer needs email; C toggles the optional camera,
+while orthographic remains default. HTTPS/WSS two-player and actual camera
+checks pass; previous accounts/characters are preserved. See development for
+backup and evidence. Earlier release restrictions below are historical.
+
 ## Current bounded experiment: optional perspective camera
 
 [Spec024](specs/024-third-person-camera.md) adds an opt-in C-toggle perspective

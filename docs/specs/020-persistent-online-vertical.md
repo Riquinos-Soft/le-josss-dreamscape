@@ -13,6 +13,13 @@ characters/saves and existing domain/secrets. Validate merged beta/signup contra
 and camera, back up the database, apply additive migration0004 and publish matching
 backend/static assets. Do not include unfinished mission/mount work.
 
+Release outcome: complete at runtime `a99a512`; both PRs merged and final main CI
+passed. Matching OVH backend/authority/client activated; additive migration0004
+preserves every preexisting account/committed character fingerprint. Public
+HTTPS/WSS signup, two-player presence, movement/fencing, logout/resume and camera
+browser checks pass; disposable probes removed. See development for backup and
+evidence. Physical-device acceptance remains separate.
+
 ## Current increment — username signup without email, 2026-11-05
 
 Developer explicitly superseded the email/verification launch gate: signup is

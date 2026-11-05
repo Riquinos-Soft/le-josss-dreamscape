@@ -5,8 +5,10 @@ Updated: 2026-11-05
 Language: en
 
 Authorization: developer requested a reversible account-world camera experiment,
-C toggle, mouse orbit, zoom, smoothing and SpringArm3D. One independent PR; no
-merge or deployment. Username signup is a separate authorized increment/PR.
+C toggle, mouse orbit, zoom, smoothing and SpringArm3D. Initially one independent
+PR without release; subsequently the developer explicitly authorized conflict
+resolution, merging both camera/signup PRs and production deployment.
+Username signup remains a separate bounded increment.
 
 ## Objective
 
@@ -92,6 +94,12 @@ salon walls/open roof and billboard foliage reveal the original orthographic
 composition under reverse orbit; no geometry or assets were recreated. These are
 experimental limits, not acceptance of a permanent perspective art direction.
 Physical iPhone review and developer visual acceptance remain open.
+
+Production checkpoint: PR3 merged at `a99a512` and final CI/deployment passes.
+Actual HTTPS game C → right-drag orbit → C was visually inspected with no captured
+runtime errors. Default orthographic and saved character resume remain intact.
+Production evidence/backup are recorded in development. This is deployment,
+not permanent perspective art acceptance or a physical-device review.
 
 ## Open questions
 

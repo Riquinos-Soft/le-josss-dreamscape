@@ -1,5 +1,57 @@
 # Development setup and verified baseline
 
+## Username signup and camera deployed — 2026-11-05
+
+Developer explicitly authorized conflicts, both merges and production deployment.
+PR2 merged as `e0af607`; PR3 merged as runtime `a99a51251ee35991056d4806576dd5a5fa8d534e`.
+Conflict resolution preserves public beta entry plus immediate username signup,
+original account data and the optional camera. Final combined 29 account tests,
+26 Godot suites/61 camera checks, real route/presence and Web export pass.
+Exact integration trees passed CI 42061399966 and42061523933; final main
+[CI 42062029882](https://github.com/Riquinos-Soft/le-josss-dreamscape/actions/runs/42062029882)
+passed all gates and deployment. Superseded intermediate mainCI 42061985821 was
+cancelled to prevent an older client overwriting the final release.
+
+The static Actions job alone does not update Django. Built matching accounts and
+authority images on OVH, preserved domain/proxy/secrets, applied additive 0004,
+and activated `/opt/dreamscape/source-a99a512`. The public
+[release](https://dreamscape.laialabs.com/release.txt) matches a99a512. DB/accounts/
+web healthy; authority ready. Application logs checked without warnings/errors.
+
+Verified backup/rollback points:
+`/opt/dreamscape/backups/username-camera-20261105T161016Z/` contains database.dump,
+old configs, source/static links and running image IDs/tags. Restored the dump
+with pg_restore into a uniquely named disposable database, verified account/
+character ownership and removed that verification database. Before/after migration
+fingerprints preserve the 1 previously committed character and 2 existing account identity/
+password/privilege rows. The public beta seed adds a regular account without
+creating/resetting a character. Keep the backup; no database restore or credential
+rotation was performed. Code rollback retains additive DB state, not a data reset.
+
+Actual public HTTPS/WSS smoke used only two new disposable probe accounts:
+username signup with matching passwords/no email, Secure/HttpOnly session,
+character creation at Lourizán, reciprocal presence/public-field isolation,
+world-space movement ignoring forged position, acknowledged leave, fresh-login
+identity/appearance/location resume, same-character fencing and logout pass.
+Private internal and retired laboratory routes remain 404; all account Web assets
+return 200. Both probes/characters were removed by exact recorded username+UUID,
+without touching test/test2/beta or existing characters; local probe credentials
+were deleted. Public beta authentication confirmed active/non-admin separately.
+
+Actual production browser review: log in with a probe, resume its owned editor,
+enter the world, inspect original orthographic then C/right-drag perspective and
+C back; no captured runtime errors. Public mobile-size registration has only
+username/password/repetition. Captures: [orthographic](images/production-a99a512/orthographic.png),
+[perspective](images/production-a99a512/perspective.png),
+[registration](images/production-a99a512/signup-mobile.png).
+
+Detailed local evidence/scripts in ignored `build/verification/release/`; root-only
+migration fingerprints and service logs remain with the server backup. Original
+main checkout's unfinished mission/mount work and local domain commit remain
+untouched. Physical iPhone/developer art acceptance remains pending. This
+supersedes earlier no-deployment/pending-release notes for these increments.
+
+
 ## Optional third-person camera — 2026-11-05
 
 Spec024, branch `feat/third-person-camera` from remote main `bcbd70d`; one bounded
