@@ -71,26 +71,20 @@ def entry(request):
 def register(request):
     if request.user.is_authenticated:
         return redirect("entry")
-    if not settings.REGISTRATION_ENABLED:
-        return notice(request, "El registro todavía no está disponible.", 503)
     form = Registration(request.POST or None)
     if request.method == "POST":
-        if limited(request, request.POST.get("email", "")):
+        if limited(request, request.POST.get("username", "")):
             form.add_error(None, "Demasiados intentos. Espera 15 minutos.")
         elif form.is_valid():
-            email = form.cleaned_data["email"].strip().lower()
-            # Do not replace a password when an unverified address is registered again.
             try:
                 with transaction.atomic():
-                    account = Account.objects.create_user(email, form.cleaned_data["password"], is_active=False)
+                    account = Account.objects.create_user(password=form.cleaned_data["password"],
+                        username=form.cleaned_data["username"], is_active=True)
             except IntegrityError:
-                account = None
-            if account:
-                token = signing.dumps(str(account.id), salt="verify-account")
-                url = settings.PUBLIC_ORIGIN + "/verify/" + token + "/"
-                send_mail("Verifica tu cuenta de Dreamscape", "Confirma tu correo (enlace válido 24 h):\n" + url,
-                          settings.DEFAULT_FROM_EMAIL, [email])
-            return notice(request, "Si el correo es nuevo, recibirás un enlace para verificarlo. Si ya tienes cuenta, accede o recupera la contraseña.")
+                form.add_error("username", "Ese usuario ya está en uso. Elige otro.")
+            else:
+                login(request, account)
+                return redirect("create")
     return render(request, "accounts/entry.html", {"form": form, "register": True})
 
 
@@ -110,7 +104,7 @@ def verify(request, token):
 
 def recover(request):
     if not settings.REGISTRATION_ENABLED:
-        return notice(request, "En esta fase de pruebas solo está disponible la cuenta test.")
+        return notice(request, "La recuperación por correo no está configurada. Las cuentas creadas con usuario no tienen recuperación por email.")
     from django import forms
     class RecoveryForm(forms.Form):
         email = forms.EmailField(label="Correo", max_length=254)

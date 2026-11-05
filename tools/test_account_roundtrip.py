@@ -55,9 +55,9 @@ def post(client, jar, path, data=None):
     body = urllib.parse.urlencode({**(data or {}), "csrfmiddlewaretoken": token}).encode()
     return client.open(urllib.request.Request(origin + path, body, headers={"Referer": origin + path})).read()
 
-def login(alias="test"):
+def login(alias="adventurer"):
     client, jar = browser()
-    post(client, jar, "/", {"email": alias, "password": alias})
+    post(client, jar, "/", {"email": alias, "password": "A-strong-8430-password" if alias == "adventurer" else alias})
     return client, jar
 
 def join(stack, client, jar):
@@ -305,7 +305,9 @@ try:
         processes.append(service)
         wait_for(lambda: urllib.request.urlopen(origin).status == 200)
         authority = start_authority(stack)
-        client, jar = login()
+        client, jar = browser()
+        post(client, jar, "/register/", {"username": "adventurer", "password": "A-strong-8430-password",
+             "confirmation": "A-strong-8430-password"})
         assert b'Crea tu personaje' in client.open(origin).read()
         post(client, jar, "/character/create/", {"name": "Test Viajero", "face": "freckles", "hair": "tied",
              "skin_palette": "olive", "hair_palette": "ink", "upper_palette": "ochre", "lower_palette": "earth"})
